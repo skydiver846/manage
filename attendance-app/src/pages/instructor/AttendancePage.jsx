@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import QRCode from "qrcode";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { listPeriods, listUsersByCourse, listRecords, confirmPeriod } from "../../lib/firestore";
+import { encodeQrPayload } from "../../lib/qr";
 import { Card, Select, Button, Alert, Pill } from "../../components/ui";
 import { STATUS_LABEL } from "../../lib/ui";
 
@@ -16,6 +18,7 @@ export default function AttendancePage({ user, role }) {
   const [records, setRecords] = useState({});
   const [msg, setMsg] = useState("");
   const [confirming, setConfirming] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState(null);
 
   useEffect(() => {
     async function load() {
@@ -53,8 +56,14 @@ export default function AttendancePage({ user, role }) {
   }, [courseId, periodId]);
 
   const course = courses.find((c) => c.id === courseId);
+  const period = periods.find((p) => p.id === periodId);
   const canConfirm = role === "INS" && course?.instructorUid === user.uid;
   const anyLocked = students.some((s) => records[s.id]?.locked);
+
+  async function handleShowQr() {
+    const url = await QRCode.toDataURL(encodeQrPayload(courseId, periodId), { width: 320, margin: 1 });
+    setQrDataUrl(url);
+  }
 
   async function handleConfirm() {
     setConfirming(true);
@@ -107,12 +116,42 @@ export default function AttendancePage({ user, role }) {
             style={{ width: 200 }}
             options={periods.map((p) => ({ value: p.id, label: `${p.no} · ${p.subject}` }))}
           />
+          {period?.authMethod === "qr" && (
+            <Button variant="secondary" onClick={handleShowQr}>QR 코드 표시</Button>
+          )}
           {canConfirm && (
             <Button style={{ marginLeft: "auto" }} disabled={confirming || periods.length === 0 || anyLocked} loading={confirming} onClick={handleConfirm}>
               {anyLocked ? "확정 완료" : "이 교시 일괄 확정"}
             </Button>
           )}
         </Card>
+      )}
+
+      {qrDataUrl && (
+        <div
+          style={{
+            position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)",
+            display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50,
+          }}
+          onClick={() => setQrDataUrl(null)}
+        >
+          <div
+            style={{
+              background: "var(--surface-card)", borderRadius: "var(--radius-xl)", padding: "var(--space-6)",
+              display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>
+              {course?.name} · {period?.no} {period?.subject}
+            </span>
+            <img src={qrDataUrl} alt="출석 QR코드" width={320} height={320} />
+            <span style={{ font: "var(--type-caption)", color: "var(--text-muted)", textAlign: "center" }}>
+              교육생이 각자 스마트폰 카메라로 스캔하면 자동 출석 처리됩니다.
+            </span>
+            <Button variant="secondary" onClick={() => setQrDataUrl(null)}>닫기</Button>
+          </div>
+        </div>
       )}
       {msg && <Alert tone={msg.startsWith("오류") ? "danger" : "success"}>{msg}</Alert>}
 

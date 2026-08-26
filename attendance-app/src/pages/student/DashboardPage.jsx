@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import jsQR from "jsqr";
 import { getUserDoc, getCourse, listPeriods, getMyRecord, checkIn } from "../../lib/firestore";
+import { decodeQrPayload } from "../../lib/qr";
 import { Card, Button, Alert, Pill } from "../../components/ui";
 import { STATUS_LABEL } from "../../lib/ui";
 
@@ -12,6 +14,7 @@ export default function DashboardPage({ user }) {
   const [records, setRecords] = useState({});
   const [busyPeriod, setBusyPeriod] = useState(null);
   const [msg, setMsg] = useState("");
+  const [scanPeriodId, setScanPeriodId] = useState(null);
 
   async function reload() {
     const myDoc = await getUserDoc(user.uid);
@@ -32,12 +35,12 @@ export default function DashboardPage({ user }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.uid]);
 
-  async function handleCheckIn(periodId) {
+  async function handleCheckIn(periodId, method = "manual") {
     setBusyPeriod(periodId);
     setMsg("");
     try {
-      await checkIn(me.courseId, today, periodId, user.uid, { method: "manual" });
-      setMsg("출석 신청이 완료되었습니다 — 교관 확정 대기");
+      await checkIn(me.courseId, today, periodId, user.uid, { method });
+      setMsg(method === "qr" ? "QR 스캔으로 출석 처리되었습니다." : "출석 신청이 완료되었습니다 — 교관 확정 대기");
     } catch (err) {
       setMsg("오류: " + err.message);
       setBusyPeriod(null);
@@ -45,6 +48,12 @@ export default function DashboardPage({ user }) {
     }
     setBusyPeriod(null);
     reload().catch((e) => console.error(e));
+  }
+
+  function handleQrMatched() {
+    const periodId = scanPeriodId;
+    setScanPeriodId(null);
+    handleCheckIn(periodId, "qr");
   }
 
   if (me === null) return <p style={{ color: "var(--text-muted)" }}>불러오는 중...</p>;
@@ -98,19 +107,117 @@ export default function DashboardPage({ user }) {
                   ) : (
                     <Pill status="excused">미체크</Pill>
                   )}
-                  <Button
-                    size="sm"
-                    disabled={busyPeriod === p.id || (status && status !== "pending")}
-                    onClick={() => handleCheckIn(p.id)}
-                  >
-                    {busyPeriod === p.id ? "처리 중..." : status === "pending" ? "재신청" : "출석체크"}
-                  </Button>
+                  {p.authMethod === "qr" ? (
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      disabled={busyPeriod === p.id || (status && status !== "pending")}
+                      onClick={() => setScanPeriodId(p.id)}
+                    >
+                      {busyPeriod === p.id ? "처리 중..." : "QR 스캔"}
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      disabled={busyPeriod === p.id || (status && status !== "pending")}
+                      onClick={() => handleCheckIn(p.id)}
+                    >
+                      {busyPeriod === p.id ? "처리 중..." : status === "pending" ? "재신청" : "출석체크"}
+                    </Button>
+                  )}
                 </div>
               </div>
             );
           })}
         </div>
       </Card>
+
+      {scanPeriodId && (
+        <QrScanModal
+          expected={{ courseId: me.courseId, periodId: scanPeriodId }}
+          onMatched={handleQrMatched}
+          onClose={() => setScanPeriodId(null)}
+        />
+      )}
+    </div>
+  );
+}
+
+function QrScanModal({ expected, onMatched, onClose }) {
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const rafRef = useRef(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    let stream = null;
+
+    function tick() {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      if (video && canvas && video.readyState === video.HAVE_ENOUGH_DATA) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, imageData.width, imageData.height);
+        if (code) {
+          const payload = decodeQrPayload(code.data);
+          if (payload && payload.courseId === expected.courseId && payload.periodId === expected.periodId) {
+            onMatched();
+            return;
+          }
+          if (payload) setError("다른 교시의 QR코드입니다. 올바른 QR을 스캔해주세요.");
+        }
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    }
+
+    navigator.mediaDevices
+      .getUserMedia({ video: { facingMode: "environment" } })
+      .then((s) => {
+        if (cancelled) {
+          s.getTracks().forEach((t) => t.stop());
+          return;
+        }
+        stream = s;
+        videoRef.current.srcObject = s;
+        videoRef.current.play();
+        tick();
+      })
+      .catch(() => setError("카메라를 사용할 수 없습니다. 브라우저 카메라 권한을 확인해주세요."));
+
+    return () => {
+      cancelled = true;
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (stream) stream.getTracks().forEach((t) => t.stop());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [expected.courseId, expected.periodId]);
+
+  return (
+    <div
+      style={{
+        position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)",
+        display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50,
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          background: "var(--surface-card)", borderRadius: "var(--radius-xl)", padding: "var(--space-6)",
+          display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)", maxWidth: 340,
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>QR코드를 카메라에 비춰주세요</span>
+        <video ref={videoRef} muted playsInline style={{ width: 280, borderRadius: "var(--radius-md)", background: "#000" }} />
+        <canvas ref={canvasRef} style={{ display: "none" }} />
+        {error && <Alert tone="danger">{error}</Alert>}
+        <Button variant="secondary" onClick={onClose}>취소</Button>
+      </div>
     </div>
   );
 }
