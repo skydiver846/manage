@@ -4,6 +4,7 @@ import { functions } from "./firebase";
 const bootstrapFirstAdminFn = httpsCallable(functions, "bootstrapFirstAdmin");
 const createAccountFn = httpsCallable(functions, "createAccount");
 const deactivateAccountFn = httpsCallable(functions, "deactivateAccount");
+const resetPasswordFn = httpsCallable(functions, "resetPassword");
 
 /** 최초 1회만 동작하는 관리자 계정 생성. 관리자가 이미 있으면 already-exists 에러를 던진다. */
 export async function bootstrapFirstAdmin({ loginId, password, name }) {
@@ -19,4 +20,9 @@ export async function createAccount({ loginId, name, role, courseId, org, phone 
 export async function deactivateAccount(uid) {
   const res = await deactivateAccountFn({ uid });
   return res.data;
+}
+
+export async function resetPassword(uid) {
+  const res = await resetPasswordFn({ uid });
+  return res.data; // { tempPassword }
 }

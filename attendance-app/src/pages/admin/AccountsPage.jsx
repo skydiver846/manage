@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { listAllUsers, listCourses } from "../../lib/firestore";
-import { createAccount, deactivateAccount } from "../../lib/account";
+import { createAccount, deactivateAccount, resetPassword } from "../../lib/account";
 import { Card, Input, Select, Button, Alert, Pill } from "../../components/ui";
 
 const ROLE_OPTS = [
@@ -22,6 +22,9 @@ export default function AccountsPage() {
   const [created, setCreated] = useState(null);
   const [busyUid, setBusyUid] = useState(null);
   const [bulkCourseId, setBulkCourseId] = useState("");
+  const [resetBusyUid, setResetBusyUid] = useState(null);
+  const [resetMsg, setResetMsg] = useState("");
+  const [resetInfo, setResetInfo] = useState(null);
 
   async function reload() {
     setUsers(await listAllUsers());
@@ -70,6 +73,22 @@ export default function AccountsPage() {
     }
     setBusyUid(null);
     reload().catch((e) => console.error(e));
+  }
+
+  async function handleResetPassword(uid, name, loginId) {
+    if (!window.confirm(`${name} 계정의 비밀번호를 초기화하시겠습니까? 기존 비밀번호는 즉시 사용할 수 없게 됩니다.`)) return;
+    setResetBusyUid(uid);
+    setResetMsg("");
+    setResetInfo(null);
+    try {
+      const res = await resetPassword(uid);
+      setResetInfo({ loginId, tempPassword: res.tempPassword });
+    } catch (err) {
+      setResetMsg("오류: " + err.message);
+      setResetBusyUid(null);
+      return;
+    }
+    setResetBusyUid(null);
   }
 
   return (
@@ -134,6 +153,21 @@ export default function AccountsPage() {
         <div style={{ padding: "var(--space-4) var(--space-5)", borderBottom: "1px solid var(--border-subtle)", font: "var(--type-label)", color: "var(--text-strong)" }}>
           전체 계정 ({users?.length ?? 0})
         </div>
+        {resetMsg && (
+          <div style={{ padding: "var(--space-3) var(--space-5)" }}>
+            <Alert tone="danger">{resetMsg}</Alert>
+          </div>
+        )}
+        {resetInfo && (
+          <div style={{ padding: "var(--space-3) var(--space-5)" }}>
+            <Alert tone="success">
+              비밀번호 초기화 완료 — 로그인 ID: <strong>{resetInfo.loginId}</strong> / 새 임시 비밀번호:{" "}
+              <strong style={{ fontFamily: "var(--font-mono)" }}>{resetInfo.tempPassword}</strong>
+              <br />
+              (SMS 자동발송 미연동 — 지금은 이 화면에서 직접 전달해주세요)
+            </Alert>
+          </div>
+        )}
         <div style={{ display: "flex", flexDirection: "column" }}>
           {users === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
           {users?.map((u) => (
@@ -151,13 +185,18 @@ export default function AccountsPage() {
               <strong>{u.name}</strong>
               <span style={{ color: "var(--text-muted)" }}>{u.loginId}</span>
               {u.org && <span style={{ color: "var(--text-muted)" }}>{u.org}</span>}
-              <span style={{ marginLeft: "auto" }}>
+              <span style={{ marginLeft: "auto", display: "flex", gap: "var(--space-2)" }}>
                 {u.status === "expired" ? (
                   <Pill tone="bad">만료됨</Pill>
                 ) : (
-                  <Button variant="secondary" size="sm" disabled={busyUid === u.id} onClick={() => handleDeactivate(u.id, u.name)} style={{ color: "var(--danger-500)", borderColor: "var(--danger-500)" }}>
-                    {busyUid === u.id ? "처리 중..." : "비활성화"}
-                  </Button>
+                  <>
+                    <Button variant="secondary" size="sm" disabled={resetBusyUid === u.id} onClick={() => handleResetPassword(u.id, u.name, u.loginId)}>
+                      {resetBusyUid === u.id ? "처리 중..." : "비밀번호 초기화"}
+                    </Button>
+                    <Button variant="secondary" size="sm" disabled={busyUid === u.id} onClick={() => handleDeactivate(u.id, u.name)} style={{ color: "var(--danger-500)", borderColor: "var(--danger-500)" }}>
+                      {busyUid === u.id ? "처리 중..." : "비활성화"}
+                    </Button>
+                  </>
                 )}
               </span>
             </div>

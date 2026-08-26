@@ -191,6 +191,27 @@ exports.deactivateAccount = onCall(async (request) => {
   return { ok: true };
 });
 
+/** 행정담당자/시스템관리자가 계정 비밀번호를 새 임시 비밀번호로 초기화 */
+exports.resetPassword = onCall(async (request) => {
+  const caller = request.auth;
+  if (!caller || !["ADM", "SYS"].includes(caller.token.role)) {
+    throw new HttpsError("permission-denied", "행정담당자 또는 시스템관리자만 비밀번호를 초기화할 수 있습니다.");
+  }
+  const { uid } = request.data || {};
+  if (!uid) throw new HttpsError("invalid-argument", "uid는 필수입니다.");
+
+  const tempPassword = generateTempPassword();
+  await admin.auth().updateUser(uid, { password: tempPassword });
+  await admin.firestore().doc(`users/${uid}`).set(
+    { mustChangePassword: true }, { merge: true }
+  );
+  await writeAudit({
+    actorUid: caller.uid, actorRole: caller.token.role, target: `users/${uid}`,
+    action: "비밀번호 초기화", category: "계정 변경",
+  });
+  return { tempPassword };
+});
+
 async function assertInstructorOrAdmin(caller, courseId) {
   if (!caller) throw new HttpsError("unauthenticated", "로그인이 필요합니다.");
   if (["ADM", "SYS"].includes(caller.token.role)) return;
