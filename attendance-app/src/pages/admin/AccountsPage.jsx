@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { listAllUsers, listCourses } from "../../lib/firestore";
 import { createAccount, deactivateAccount } from "../../lib/account";
 import { Card, Input, Select, Button, Alert, Pill } from "../../components/ui";
@@ -12,6 +13,7 @@ const ROLE_OPTS = [
 ];
 
 export default function AccountsPage() {
+  const navigate = useNavigate();
   const [users, setUsers] = useState(null);
   const [courses, setCourses] = useState([]);
   const [form, setForm] = useState({ loginId: "", name: "", role: "STU", courseId: "", org: "", phone: "" });
@@ -19,6 +21,7 @@ export default function AccountsPage() {
   const [msg, setMsg] = useState("");
   const [created, setCreated] = useState(null);
   const [busyUid, setBusyUid] = useState(null);
+  const [bulkCourseId, setBulkCourseId] = useState("");
 
   async function reload() {
     setUsers(await listAllUsers());
@@ -72,6 +75,29 @@ export default function AccountsPage() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 900 }}>
       <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>계정 관리</h1>
+
+      <Card>
+        <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>교육생 대량 업로드</span>
+        <div style={{ marginTop: "var(--space-3)", display: "flex", gap: "var(--space-3)", alignItems: "flex-end", flexWrap: "wrap" }}>
+          <Select
+            label="대상 과정"
+            value={bulkCourseId}
+            onChange={(e) => setBulkCourseId(e.target.value)}
+            style={{ width: 260 }}
+            options={[{ value: "", label: "과정을 선택하세요" }, ...courses.map((c) => ({ value: c.id, label: c.name }))]}
+          />
+          <Button
+            variant="secondary"
+            disabled={!bulkCourseId}
+            onClick={() => navigate(`/admin/courses/${bulkCourseId}/upload`)}
+          >
+            엑셀로 수강생 명단 업로드
+          </Button>
+        </div>
+        <span style={{ display: "block", marginTop: "var(--space-2)", font: "var(--type-caption)", color: "var(--text-muted)" }}>
+          교육생 계정은 과정에 소속돼야 하므로, 먼저 업로드할 과정을 선택하세요.
+        </span>
+      </Card>
 
       <Card>
         <form onSubmit={handleCreate} style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
