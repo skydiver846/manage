@@ -1,0 +1,150 @@
+import { useEffect, useState } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../lib/firebase";
+import { listPeriods, listUsersByCourse, listRecords, confirmPeriod } from "../../lib/firestore";
+import { Card, Select, Button, Alert, Pill } from "../../components/ui";
+import { STATUS_LABEL } from "../../lib/ui";
+
+const today = new Date().toISOString().slice(0, 10);
+
+export default function AttendancePage({ user, role }) {
+  const [courses, setCourses] = useState([]);
+  const [courseId, setCourseId] = useState("");
+  const [periods, setPeriods] = useState([]);
+  const [periodId, setPeriodId] = useState("");
+  const [students, setStudents] = useState([]);
+  const [records, setRecords] = useState({});
+  const [msg, setMsg] = useState("");
+  const [confirming, setConfirming] = useState(false);
+
+  useEffect(() => {
+    async function load() {
+      const base = collection(db, "courses");
+      const q = role === "INS" ? query(base, where("instructorUid", "==", user.uid)) : base;
+      const snap = await getDocs(q);
+      const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      setCourses(list);
+      if (list.length) setCourseId(list[0].id);
+    }
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user.uid, role]);
+
+  useEffect(() => {
+    if (!courseId) return;
+    listPeriods(courseId).then((p) => {
+      setPeriods(p);
+      setPeriodId(p[0]?.id || "");
+    });
+    listUsersByCourse(courseId).then(setStudents);
+  }, [courseId]);
+
+  async function reloadRecords() {
+    if (!courseId || !periodId) return;
+    const list = await listRecords(courseId, today, periodId);
+    const map = {};
+    for (const r of list) map[r.uid] = r;
+    setRecords(map);
+  }
+
+  useEffect(() => {
+    reloadRecords();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseId, periodId]);
+
+  const course = courses.find((c) => c.id === courseId);
+  const canConfirm = role === "INS" && course?.instructorUid === user.uid;
+  const anyLocked = students.some((s) => records[s.id]?.locked);
+
+  async function handleConfirm() {
+    setConfirming(true);
+    setMsg("");
+    try {
+      const finalRecords = students.map((s) => {
+        const rec = records[s.id];
+        const status = rec?.status === "pending" ? "present" : rec?.status || "absent";
+        return { uid: s.id, status };
+      });
+      await confirmPeriod(courseId, today, periodId, finalRecords, user.uid);
+      setMsg("출결을 확정했습니다 — 확정 후에는 정정 절차를 거쳐야 합니다.");
+    } catch (err) {
+      setMsg("오류: " + err.message);
+      setConfirming(false);
+      return;
+    }
+    setConfirming(false);
+    reloadRecords().catch((e) => console.error(e));
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 900 }}>
+      <div>
+        <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>실시간 출석현황</h1>
+        <span style={{ font: "var(--type-body-sm)", color: "var(--text-muted)" }}>{today}</span>
+      </div>
+
+      {courses.length === 0 && (
+        <Card>
+          <span style={{ color: "var(--text-muted)" }}>
+            {role === "INS" ? "담당으로 지정된 과정이 없습니다." : "등록된 과정이 없습니다."}
+          </span>
+        </Card>
+      )}
+
+      {courses.length > 0 && (
+        <Card style={{ display: "flex", gap: "var(--space-4)", alignItems: "flex-end", flexWrap: "wrap" }}>
+          <Select
+            label="과정"
+            value={courseId}
+            onChange={(e) => setCourseId(e.target.value)}
+            style={{ width: 220 }}
+            options={courses.map((c) => ({ value: c.id, label: c.name }))}
+          />
+          <Select
+            label="교시"
+            value={periodId}
+            onChange={(e) => setPeriodId(e.target.value)}
+            style={{ width: 200 }}
+            options={periods.map((p) => ({ value: p.id, label: `${p.no} · ${p.subject}` }))}
+          />
+          {canConfirm && (
+            <Button style={{ marginLeft: "auto" }} disabled={confirming || periods.length === 0 || anyLocked} loading={confirming} onClick={handleConfirm}>
+              {anyLocked ? "확정 완료" : "이 교시 일괄 확정"}
+            </Button>
+          )}
+        </Card>
+      )}
+      {msg && <Alert tone={msg.startsWith("오류") ? "danger" : "success"}>{msg}</Alert>}
+
+      {periods.length > 0 && (
+        <Card padding="none">
+          <div style={{ padding: "var(--space-4) var(--space-5)", borderBottom: "1px solid var(--border-subtle)", font: "var(--type-label)", color: "var(--text-strong)" }}>
+            수강생 출결 ({students.length}명)
+          </div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            {students.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>등록된 수강생이 없습니다.</span>}
+            {students.map((s) => {
+              const rec = records[s.id];
+              const status = rec?.status;
+              return (
+                <div
+                  key={s.id}
+                  style={{
+                    display: "flex", justifyContent: "space-between", alignItems: "center",
+                    padding: "var(--space-3) var(--space-5)", borderBottom: "1px solid var(--border-subtle)",
+                  }}
+                >
+                  <div>
+                    <strong style={{ font: "var(--type-body-sm)" }}>{s.name}</strong>
+                    <span style={{ color: "var(--text-muted)", font: "var(--type-caption)", marginLeft: "var(--space-2)" }}>{s.loginId}</span>
+                  </div>
+                  <Pill status={status || "excused"}>{status ? STATUS_LABEL[status] || status : "미체크"}</Pill>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+      )}
+    </div>
+  );
+}

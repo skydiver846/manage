@@ -1,0 +1,22 @@
+/* 인쇄/PDF 저장 시 적용되는 규칙 — window.print()로 "PDF로 저장"할 때 사용됨 */
+@media print {
+  @page {
+    size: A4;
+    margin: 16mm 14mm;
+  }
+  body {
+    background: #fff;
+  }
+  [data-no-print] {
+    display: none !important;
+  }
+  [data-print-area] {
+    display: block !important;
+    position: static !important;
+    padding: 0 !important;
+    max-width: none !important;
+  }
+  * {
+    box-shadow: none !important;
+  }
+}

@@ -1,0 +1,108 @@
+import { useEffect, useState } from "react";
+import { listAuditLogs, getUserDoc } from "../../lib/firestore";
+import { Card, Pill } from "../../components/ui";
+
+const CATEGORY_TONE = {
+  "계정 변경": "info",
+  "출석 확정": "ok",
+  "출결 변경": "warn",
+  "정정 승인": "ok",
+  "정정 반려": "bad",
+  "보고서": "info",
+};
+
+function formatAt(at) {
+  if (!at?.toDate) return "-";
+  const d = at.toDate();
+  return d.toLocaleString("ko-KR", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
+}
+
+export default function AuditLogPage() {
+  const [logs, setLogs] = useState(null);
+  const [names, setNames] = useState({});
+  const [category, setCategory] = useState("전체");
+
+  useEffect(() => {
+    listAuditLogs(200).then(async (list) => {
+      setLogs(list);
+      const nameMap = {};
+      for (const l of list) {
+        if (l.actorUid && !nameMap[l.actorUid]) {
+          const u = await getUserDoc(l.actorUid);
+          nameMap[l.actorUid] = u?.name || l.actorUid;
+        }
+      }
+      setNames(nameMap);
+    });
+  }, []);
+
+  const categories = ["전체", ...new Set((logs || []).map((l) => l.category).filter(Boolean))];
+  const filtered = logs?.filter((l) => category === "전체" || l.category === category);
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 960 }}>
+      <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>감사로그 조회</h1>
+
+      {logs && (
+        <div style={{ display: "flex", gap: "var(--space-2)", flexWrap: "wrap" }}>
+          {categories.map((c) => (
+            <button
+              key={c}
+              onClick={() => setCategory(c)}
+              style={{
+                font: "var(--type-caption)", fontWeight: 600, padding: "6px 12px",
+                borderRadius: "var(--radius-pill)", cursor: "pointer", whiteSpace: "nowrap",
+                background: category === c ? "var(--green-500)" : "var(--surface-card)",
+                color: category === c ? "#fff" : "var(--text-muted)",
+                border: `1px solid ${category === c ? "var(--green-500)" : "var(--border-subtle)"}`,
+              }}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <Card padding="none">
+        <div style={{ padding: "var(--space-4) var(--space-5)", borderBottom: "1px solid var(--border-subtle)", font: "var(--type-label)", color: "var(--text-strong)" }}>
+          변경 이력 ({filtered?.length ?? 0}건)
+        </div>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", minWidth: 700, borderCollapse: "collapse" }}>
+            <thead>
+              <tr style={{ background: "var(--surface-sunken)" }}>
+                {["일시", "행위자", "대상", "행위", "사유", "구분"].map((h) => (
+                  <th key={h} style={{ textAlign: "left", font: "var(--type-caption)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", padding: "10px var(--space-5)", whiteSpace: "nowrap" }}>
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {logs === null && (
+                <tr><td colSpan={6} style={{ padding: "var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</td></tr>
+              )}
+              {filtered?.length === 0 && (
+                <tr><td colSpan={6} style={{ padding: "var(--space-5)", color: "var(--text-muted)" }}>기록이 없습니다.</td></tr>
+              )}
+              {filtered?.map((l, i) => (
+                <tr key={l.id} style={{ background: i % 2 ? "var(--neutral-50)" : "var(--surface-card)", borderBottom: "1px solid var(--border-subtle)" }}>
+                  <td style={{ padding: "10px var(--space-5)", font: "var(--type-body-sm)", whiteSpace: "nowrap" }}>{formatAt(l.at)}</td>
+                  <td style={{ padding: "10px var(--space-5)", font: "var(--type-body-sm)", whiteSpace: "nowrap" }}>
+                    {names[l.actorUid] || "-"} <span style={{ color: "var(--text-subtle)", font: "var(--type-caption)" }}>({l.actorRole})</span>
+                  </td>
+                  <td style={{ padding: "10px var(--space-5)", font: "var(--type-caption)", color: "var(--text-muted)", fontFamily: "var(--font-mono)", maxWidth: 260, overflow: "hidden", textOverflow: "ellipsis" }}>{l.target}</td>
+                  <td style={{ padding: "10px var(--space-5)", font: "var(--type-body-sm)" }}>{l.action}</td>
+                  <td style={{ padding: "10px var(--space-5)", font: "var(--type-body-sm)", color: "var(--text-muted)" }}>{l.reason || "-"}</td>
+                  <td style={{ padding: "10px var(--space-5)" }}>
+                    {l.category && <Pill tone={CATEGORY_TONE[l.category] || "mute"}>{l.category}</Pill>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+    </div>
+  );
+}

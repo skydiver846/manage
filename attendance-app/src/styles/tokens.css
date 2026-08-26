@@ -1,0 +1,165 @@
+/* 소방학교 출석관리시스템 — 디자인 토큰
+ * Claude Design 프로토타입("푸른느낌" 디자인 시스템)의 그린/에코 톤 팔레트를 그대로 이식.
+ * Latin: Mulish / Korean: IBM Plex Sans KR
+ */
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* ---- 브랜드 그린 스케일 ---- */
+  --green-50:  #f0f7f3;
+  --green-100: #d9ece2;
+  --green-200: #a7d8c4;
+  --green-300: #76c0a4;
+  --green-400: #4aa183;
+  --green-500: #1f6f5c;
+  --green-600: #1a5d4d;
+  --green-700: #15493d;
+  --green-800: #0e3b30;
+  --green-900: #082620;
+
+  --neutral-0:   #ffffff;
+  --neutral-50:  #f7f9f8;
+  --neutral-100: #eef2f0;
+  --neutral-200: #dfe5e2;
+  --neutral-300: #c5cecb;
+  --neutral-400: #9aa6a2;
+  --neutral-500: #6f7c78;
+  --neutral-600: #515c59;
+  --neutral-700: #3a4340;
+  --neutral-800: #262d2b;
+  --neutral-900: #161b1a;
+
+  --clay-400:  #d98f6b;
+  --clay-500:  #c4684a;
+  --amber-400: #e0a64b;
+  --amber-500: #cf8a2b;
+  --sky-400:   #5aa9d6;
+  --sky-500:   #2f7db8;
+  --moss-500:  #7a8b3c;
+
+  --success-500: var(--green-500);
+  --success-50:  var(--green-50);
+  --warning-500: var(--amber-500);
+  --warning-50:  #fcf4e4;
+  --danger-500:  #c4503a;
+  --danger-50:   #fbedea;
+  --info-500:    var(--sky-500);
+  --info-50:     #e9f3fa;
+
+  /* ---- 시맨틱 별칭 ---- */
+  --text-strong:   var(--neutral-900);
+  --text-body:     var(--neutral-700);
+  --text-muted:    var(--neutral-500);
+  --text-subtle:   var(--neutral-400);
+  --text-inverse:  var(--neutral-0);
+  --text-brand:    var(--green-600);
+  --text-on-brand: #ffffff;
+
+  --surface-page:    var(--neutral-50);
+  --surface-card:    var(--neutral-0);
+  --surface-sunken:  var(--neutral-100);
+  --surface-raised:  var(--neutral-0);
+  --surface-brand:   var(--green-500);
+  --surface-brand-subtle: var(--green-50);
+  --surface-inverse: var(--green-900);
+
+  --border-subtle:  var(--neutral-200);
+  --border-default: var(--neutral-300);
+  --border-strong:  var(--neutral-400);
+  --border-brand:   var(--green-500);
+  --border-focus:   var(--green-400);
+
+  --action-primary:        var(--green-500);
+  --action-primary-hover:  var(--green-600);
+  --action-primary-active: var(--green-700);
+  --action-ghost-hover:    var(--green-50);
+
+  --ring: 0 0 0 3px color-mix(in srgb, var(--green-400) 45%, transparent);
+
+  /* ---- 반경 ---- */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-pill: 999px;
+
+  /* ---- 그림자 ---- */
+  --shadow-xs: 0 1px 2px rgba(14, 59, 48, 0.06);
+  --shadow-sm: 0 2px 6px rgba(14, 59, 48, 0.07);
+  --shadow-md: 0 6px 18px rgba(14, 59, 48, 0.09);
+  --shadow-lg: 0 16px 40px rgba(14, 59, 48, 0.12);
+
+  /* ---- 모션 ---- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --transition-base: all var(--duration-base) var(--ease-out);
+
+  /* ---- 간격 (4px 기준) ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  --control-sm: 32px;
+  --control-md: 40px;
+  --control-lg: 48px;
+  --sidebar-width: 248px;
+
+  /* ---- 타이포그래피 ---- */
+  --font-sans: "Mulish", "IBM Plex Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  --text-2xs: 0.6875rem;
+  --text-xs:  0.75rem;
+  --text-sm:  0.875rem;
+  --text-md:  1rem;
+  --text-lg:  1.125rem;
+  --text-xl:  1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+
+  --leading-tight: 1.12;
+  --leading-snug: 1.3;
+  --leading-normal: 1.55;
+
+  --tracking-tight: -0.02em;
+  --tracking-wide: 0.04em;
+
+  --type-h1:       var(--weight-bold) var(--text-3xl)/var(--leading-tight) var(--font-sans);
+  --type-h2:       var(--weight-bold) var(--text-2xl)/var(--leading-snug) var(--font-sans);
+  --type-h3:       var(--weight-semibold) var(--text-xl)/var(--leading-snug) var(--font-sans);
+  --type-body:     400 var(--text-md)/var(--leading-normal) var(--font-sans);
+  --type-body-sm:  400 var(--text-sm)/var(--leading-normal) var(--font-sans);
+  --type-label:    var(--weight-semibold) var(--text-sm)/1.2 var(--font-sans);
+  --type-caption:  var(--weight-medium) var(--text-xs)/1.4 var(--font-sans);
+  --type-mono:     400 var(--text-sm)/1.4 var(--font-mono);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: var(--type-body);
+  color: var(--text-body);
+  background: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, p { margin: 0; }
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+  border-radius: var(--radius-sm);
+}

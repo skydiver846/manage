@@ -1,0 +1,9 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // 기본값: 로그인한 사용자만 읽기/쓰기 가능 (추후 firebase 연동 가이드.md 7절 규칙으로 세분화)
+    match /{allPaths=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
