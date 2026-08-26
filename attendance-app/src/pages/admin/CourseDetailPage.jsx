@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { getCourse, listPeriods, addPeriod, listAllUsers } from "../../lib/firestore";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
@@ -61,11 +61,16 @@ export default function CourseDetailPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 900 }}>
-      <div>
-        <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>{course.name}</h1>
-        <span style={{ font: "var(--type-body-sm)", color: "var(--text-muted)" }}>
-          {course.type} · {course.startDate}~{course.endDate}
-        </span>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "var(--space-3)" }}>
+        <div>
+          <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>{course.name}</h1>
+          <span style={{ font: "var(--type-body-sm)", color: "var(--text-muted)" }}>
+            {course.type} · {course.startDate}~{course.endDate}
+          </span>
+        </div>
+        <Link to={`/admin/courses/${courseId}/upload`}>
+          <Button variant="secondary">수강생 명단 엑셀 업로드</Button>
+        </Link>
       </div>
 
       <Card>

@@ -6,6 +6,7 @@ import Layout from "./components/Layout";
 import CoursesPage from "./pages/admin/CoursesPage";
 import CourseDetailPage from "./pages/admin/CourseDetailPage";
 import AccountsPage from "./pages/admin/AccountsPage";
+import BulkUploadPage from "./pages/admin/BulkUploadPage";
 import AdminReportsPage from "./pages/admin/ReportsPage";
 import AuditLogPage from "./pages/admin/AuditLogPage";
 import StatisticsPage from "./pages/admin/StatisticsPage";
@@ -53,6 +54,7 @@ function App() {
           <Route path="/instructor/reports" element={<InstructorReportsPage user={user} role={role} />} />
           <Route path="/admin/courses" element={<CoursesPage />} />
           <Route path="/admin/courses/:courseId" element={<CourseDetailPage />} />
+          <Route path="/admin/courses/:courseId/upload" element={<BulkUploadPage />} />
           <Route path="/admin/accounts" element={<AccountsPage />} />
           <Route path="/admin/reports" element={<AdminReportsPage />} />
           <Route path="/admin/statistics" element={<StatisticsPage />} />
