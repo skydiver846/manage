@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import QRCode from "qrcode";
 import { getCourse, listPeriods, addPeriod, listAllUsers } from "../../lib/firestore";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
@@ -21,6 +22,7 @@ export default function CourseDetailPage() {
   const [form, setForm] = useState({
     no: "", startTime: "", endTime: "", subject: "", kind: "이론", place: "", authMethod: "manual",
   });
+  const [enrollQr, setEnrollQr] = useState(null); // { periodId, dataUrl }
 
   async function reload() {
     const [c, p] = await Promise.all([getCourse(courseId), listPeriods(courseId)]);
@@ -53,6 +55,14 @@ export default function CourseDetailPage() {
       return;
     }
     reload().catch((e) => console.error(e));
+  }
+
+  async function handleShowEnrollQr(periodId) {
+    // 첫날 공통 QR — 아직 로그인하지 않은 교육생이 스마트폰 카메라로 바로 스캔해서
+    // 열 수 있도록 실제 URL을 인코딩한다 (src/pages/EnrollPage.jsx가 이 링크를 받는다).
+    const url = `${window.location.origin}/enroll?c=${courseId}&p=${periodId}`;
+    const dataUrl = await QRCode.toDataURL(url, { width: 320, margin: 1 });
+    setEnrollQr({ periodId, dataUrl });
   }
 
   if (!course) return <p style={{ color: "var(--text-muted)" }}>불러오는 중...</p>;
@@ -129,13 +139,45 @@ export default function CourseDetailPage() {
               <strong style={{ minWidth: 48 }}>{p.no}</strong>
               <span style={{ font: "var(--type-mono)" }}>{p.startTime}–{p.endTime}</span>
               <span>{p.subject}</span>
-              <span style={{ color: "var(--text-muted)", marginLeft: "auto" }}>
+              <span style={{ color: "var(--text-muted)" }}>
                 {p.kind} · {p.place} · {AUTH_OPTS.find((o) => o.value === p.authMethod)?.label}
               </span>
+              <Button size="sm" variant="secondary" style={{ marginLeft: "auto" }} onClick={() => handleShowEnrollQr(p.id)}>
+                첫날 등록 QR
+              </Button>
             </div>
           ))}
         </div>
       </Card>
+
+      {enrollQr && (
+        <div
+          style={{
+            position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)",
+            display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50,
+          }}
+          onClick={() => setEnrollQr(null)}
+        >
+          <div
+            style={{
+              background: "var(--surface-card)", borderRadius: "var(--radius-xl)", padding: "var(--space-6)",
+              display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)", maxWidth: 360,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>
+              {course.name} — 첫날 입교등록 QR
+            </span>
+            <img src={enrollQr.dataUrl} alt="첫날 등록 QR코드" width={320} height={320} />
+            <span style={{ font: "var(--type-caption)", color: "var(--text-muted)", textAlign: "center" }}>
+              교육생이 각자 휴대폰 카메라(앱 설치·로그인 불필요)로 이 QR을 스캔하면,
+              로그인ID와 휴대전화 뒷자리 4자리 입력만으로 입교등록과 오늘 출석이 함께 처리됩니다.
+              입구에 출력해서 붙여두거나 화면에 띄워두세요.
+            </span>
+            <Button variant="secondary" onClick={() => setEnrollQr(null)}>닫기</Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { subscribeAuthState } from "./lib/auth";
 import Login from "./pages/Login";
+import EnrollPage from "./pages/EnrollPage";
 import Layout from "./components/Layout";
 import CoursesPage from "./pages/admin/CoursesPage";
 import CourseDetailPage from "./pages/admin/CourseDetailPage";
@@ -43,6 +44,10 @@ function App() {
   }, []);
 
   if (state.loading) return null;
+
+  // /enroll(첫날 공통 QR로 들어오는 화면)은 로그인 여부와 무관하게 항상 접근 가능해야 한다.
+  if (window.location.pathname === "/enroll") return <EnrollPage />;
+
   if (!state.user) return <Login />;
 
   const { user, role } = state;

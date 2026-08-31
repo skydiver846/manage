@@ -8,6 +8,10 @@ setGlobalOptions({ region: "asia-northeast3" });
 
 const VALID_ROLES = ["STU", "INS", "ADM", "APR", "SYS"];
 const EMAIL_DOMAIN = "fireacademy.local";
+// 5회 로그인 실패 시 잠기는 시간. 기존에는 10년(사실상 영구 잠금)이었으나,
+// 관리자 본인 계정이 잠기면 아무도 풀 수 없는 문제가 있어 30분 자동 해제로 변경.
+const LOGIN_LOCK_DURATION_MS = 1000 * 60 * 30; // 30분
+const ADMIN_ROLES = ["ADM", "SYS"];
 
 function toEmail(loginId) {
   return `${loginId}@${EMAIL_DOMAIN}`;
@@ -112,6 +116,76 @@ exports.createAccount = onCall(async (request) => {
   return { uid: userRecord.uid, loginId, tempPassword };
 });
 
+/**
+ * 첫날 공통 QR로 본인이 직접 가입(계정 활성화) + 입교등록 + 그날 출석을 한 번에 처리.
+ * 관리자가 엑셀로 미리 만들어둔 계정(로그인ID·이름·전화번호가 users 문서에 있는 상태)을
+ * 교육생 본인이 "로그인ID + 휴대전화 뒷자리 4자리"로 확인·활성화한다.
+ * 인증 없이 호출 가능 — 대신 전화번호 뒷자리 일치 여부로 본인 확인을 대신한다.
+ *
+ * Firebase Auth는 비밀번호 최소 6자를 요구하므로, 실제 비밀번호는
+ * `로그인ID_전화번호뒷4자리` 형태로 만든다. 화면에서는 사용자가 뒷자리 4자리만
+ * 입력하면 되고, 이 조합은 프론트엔드가 로그인 시에도 동일하게 만들어 써야 한다
+ * (아래 makePassword와 반드시 같은 규칙을 프론트엔드에도 적용할 것).
+ */
+function makePassword(loginId, phoneLast4) {
+  return `${loginId}_${phoneLast4}`;
+}
+
+exports.selfEnrollAndCheckIn = onCall(async (request) => {
+  const { loginId, phoneLast4, courseId, periodId } = request.data || {};
+  if (!loginId || !phoneLast4 || !courseId || !periodId) {
+    throw new HttpsError("invalid-argument", "loginId, phoneLast4, courseId, periodId는 필수입니다.");
+  }
+  if (!/^\d{4}$/.test(phoneLast4)) {
+    throw new HttpsError("invalid-argument", "휴대전화 뒷자리는 숫자 4자리여야 합니다.");
+  }
+
+  const usersSnap = await admin.firestore().collection("users")
+    .where("loginId", "==", loginId).limit(1).get();
+  if (usersSnap.empty) {
+    throw new HttpsError("not-found", "등록되지 않은 로그인ID입니다. 관리자에게 문의하세요.");
+  }
+  const userDoc = usersSnap.docs[0];
+  const userData = userDoc.data();
+
+  if (userData.status !== "active") {
+    throw new HttpsError("failed-precondition", "비활성화된 계정입니다. 관리자에게 문의하세요.");
+  }
+  if (!userData.phone || !userData.phone.endsWith(phoneLast4)) {
+    throw new HttpsError("permission-denied", "휴대전화 뒷자리 4자리가 일치하지 않습니다.");
+  }
+  if (userData.courseId && userData.courseId !== courseId) {
+    throw new HttpsError("permission-denied", "이 과정에 등록된 계정이 아닙니다.");
+  }
+
+  const uid = userDoc.id;
+  const newPassword = makePassword(loginId, phoneLast4);
+
+  await admin.auth().updateUser(uid, { password: newPassword });
+  await userDoc.ref.set(
+    { selfClaimed: true, mustChangePassword: false, claimedAt: FieldValue.serverTimestamp() },
+    { merge: true }
+  );
+
+  // 그날 출석을 "신청(pending)" 상태로 기록 — 다른 체크인 방식과 동일하게
+  // 교관이 교시 종료 후 일괄 확정한다. uid가 문서ID라 다시 스캔해도 중복되지 않는다.
+  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  await admin.firestore()
+    .doc(`attendance/${courseId}/${today}/${periodId}/records/${uid}`)
+    .set({ status: "pending", checkedInAt: FieldValue.serverTimestamp(), method: "selfEnroll" }, { merge: true });
+
+  await writeAudit({
+    actorUid: uid, actorRole: userData.role, target: `users/${uid}`,
+    action: "본인 계정 활성화(입교등록) + 첫날 출석", category: "계정 변경",
+  });
+
+  // 프론트엔드가 signInWithCustomToken()으로 즉시 로그인 처리할 수 있도록 커스텀 토큰 발급.
+  // 계정 생성 시 이미 설정된 role 등의 커스텀 클레임은 그대로 유지된다.
+  const customToken = await admin.auth().createCustomToken(uid);
+
+  return { customToken, name: userData.name, role: userData.role };
+});
+
 /** 로그인 시도 전에 호출 — 5회 실패 잠금 여부 확인 */
 exports.checkLoginAllowed = onCall(async (request) => {
   const { loginId } = request.data || {};
@@ -121,7 +195,11 @@ exports.checkLoginAllowed = onCall(async (request) => {
   const snap = await ref.get();
   const data = snap.data();
   if (data?.lockedUntil && data.lockedUntil.toMillis() > Date.now()) {
-    throw new HttpsError("permission-denied", "5회 로그인 실패로 계정이 잠겼습니다. 행정담당자에게 문의하세요.");
+    const remainingMin = Math.ceil((data.lockedUntil.toMillis() - Date.now()) / 60000);
+    throw new HttpsError(
+      "permission-denied",
+      `5회 로그인 실패로 계정이 잠겼습니다. 약 ${remainingMin}분 후 다시 시도하거나, 행정담당자에게 잠금 해제를 요청하세요.`
+    );
   }
   return { allowed: true };
 });
@@ -136,7 +214,7 @@ exports.recordLoginFailure = onCall(async (request) => {
     const doc = await tx.get(ref);
     const count = (doc.data()?.count || 0) + 1;
     const patch = { count, lastFailAt: FieldValue.serverTimestamp() };
-    if (count >= 5) patch.lockedUntil = Timestamp.fromMillis(Date.now() + 1000 * 60 * 60 * 24 * 3650);
+    if (count >= 5) patch.lockedUntil = Timestamp.fromMillis(Date.now() + LOGIN_LOCK_DURATION_MS);
     tx.set(ref, patch, { merge: true });
     return { count, locked: count >= 5 };
   });
@@ -178,6 +256,24 @@ exports.deactivateAccount = onCall(async (request) => {
   }
   const { uid } = request.data || {};
   if (!uid) throw new HttpsError("invalid-argument", "uid는 필수입니다.");
+
+  // 마지막 남은 관리자(ADM/SYS) 계정은 비활성화할 수 없다 — 관리자가 0명이 되면
+  // 이후 잠금·비밀번호 문제가 생겼을 때 아무도 앱 화면으로 복구할 수 없기 때문이다.
+  const targetSnap = await admin.firestore().doc(`users/${uid}`).get();
+  const targetData = targetSnap.data();
+  if (targetData && ADMIN_ROLES.includes(targetData.role) && targetData.status !== "expired") {
+    const otherActiveAdmins = await admin.firestore().collection("users")
+      .where("role", "in", ADMIN_ROLES)
+      .where("status", "==", "active")
+      .get();
+    const remaining = otherActiveAdmins.docs.filter((d) => d.id !== uid);
+    if (remaining.length === 0) {
+      throw new HttpsError(
+        "failed-precondition",
+        "마지막 남은 관리자(행정담당자/시스템관리자) 계정은 비활성화할 수 없습니다. 먼저 다른 관리자 계정을 만드세요."
+      );
+    }
+  }
 
   await admin.auth().updateUser(uid, { disabled: true });
   await admin.firestore().doc(`users/${uid}`).set(
