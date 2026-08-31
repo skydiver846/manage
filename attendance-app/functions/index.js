@@ -82,17 +82,23 @@ exports.createAccount = onCall(async (request) => {
   if (!caller || !["ADM", "SYS"].includes(caller.token.role)) {
     throw new HttpsError("permission-denied", "행정담당자 또는 시스템관리자만 계정을 생성할 수 있습니다.");
   }
-  const { loginId, name, role, courseId, org, phone } = request.data || {};
+  const { loginId, name, role, courseId, org, phone, password } = request.data || {};
   if (!loginId || !name || !VALID_ROLES.includes(role)) {
     throw new HttpsError("invalid-argument", "loginId, name, role(STU/INS/ADM/APR/SYS)은 필수입니다.");
   }
+  // 관리자가 비밀번호를 직접 지정할 수도 있고(권장), 비워두면 기존처럼 임시 비밀번호를 자동 생성한다.
+  // (교육생 계정은 어차피 첫날 QR 자가등록 시 비밀번호가 재설정되므로 자동생성으로 충분하다.)
+  if (password && password.length < 8) {
+    throw new HttpsError("invalid-argument", "비밀번호는 8자 이상이어야 합니다.");
+  }
 
   const email = toEmail(loginId);
-  const tempPassword = generateTempPassword();
+  const setByAdmin = !!password;
+  const finalPassword = password || generateTempPassword();
 
   let userRecord;
   try {
-    userRecord = await admin.auth().createUser({ email, password: tempPassword, displayName: name });
+    userRecord = await admin.auth().createUser({ email, password: finalPassword, displayName: name });
   } catch (e) {
     if (e.code === "auth/email-already-exists") {
       throw new HttpsError("already-exists", `이미 사용 중인 계정ID입니다: ${loginId}`);
@@ -103,7 +109,7 @@ exports.createAccount = onCall(async (request) => {
 
   await admin.firestore().doc(`users/${userRecord.uid}`).set({
     loginId, name, role, courseId: courseId || null, org: org || null, phone: phone || null,
-    status: "active", mustChangePassword: true,
+    status: "active", mustChangePassword: !setByAdmin,
     createdAt: FieldValue.serverTimestamp(), createdBy: caller.uid,
   });
 
@@ -113,7 +119,8 @@ exports.createAccount = onCall(async (request) => {
   });
 
   // TODO: 실제 운영 시 여기서 SMS 발송 API(알리고/NCP SENS 등) 연동
-  return { uid: userRecord.uid, loginId, tempPassword };
+  // setByAdmin이 true면 관리자가 이미 그 비밀번호를 알고 있으므로 굳이 화면에 다시 노출하지 않는다.
+  return { uid: userRecord.uid, loginId, tempPassword: setByAdmin ? null : finalPassword, setByAdmin };
 });
 
 /**

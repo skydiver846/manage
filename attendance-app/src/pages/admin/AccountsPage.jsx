@@ -4,6 +4,15 @@ import { listAllUsers, listCourses } from "../../lib/firestore";
 import { createAccount, deactivateAccount, resetPassword } from "../../lib/account";
 import { Card, Input, Select, Button, Alert, Pill } from "../../components/ui";
 
+// 관리자가 "무작위 생성" 버튼을 눌렀을 때 화면에서 바로 채워줄 임시 비밀번호.
+// 실제 비밀번호 생성/저장은 서버(createAccount)에서 다시 검증하며, 이건 입력 편의용이다.
+function generateRandomPassword() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+  let out = "";
+  for (let i = 0; i < 10; i++) out += chars[Math.floor(Math.random() * chars.length)];
+  return out;
+}
+
 const ROLE_OPTS = [
   { value: "STU", label: "교육생" },
   { value: "INS", label: "담당 교관" },
@@ -16,7 +25,7 @@ export default function AccountsPage() {
   const navigate = useNavigate();
   const [users, setUsers] = useState(null);
   const [courses, setCourses] = useState([]);
-  const [form, setForm] = useState({ loginId: "", name: "", role: "STU", courseId: "", org: "", phone: "" });
+  const [form, setForm] = useState({ loginId: "", name: "", role: "STU", courseId: "", org: "", phone: "", password: "" });
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState("");
   const [created, setCreated] = useState(null);
@@ -48,9 +57,10 @@ export default function AccountsPage() {
         courseId: form.role === "STU" ? form.courseId || null : null,
         org: form.org || null,
         phone: form.phone || null,
+        password: form.password || null,
       });
       setCreated(res);
-      setForm({ loginId: "", name: "", role: "STU", courseId: "", org: "", phone: "" });
+      setForm({ loginId: "", name: "", role: "STU", courseId: "", org: "", phone: "", password: "" });
     } catch (err) {
       setMsg("오류: " + err.message);
       setSaving(false);
@@ -135,15 +145,48 @@ export default function AccountsPage() {
             )}
             <Input label="소속기관" value={form.org} onChange={(e) => setForm({ ...form, org: e.target.value })} placeholder="예: 중부소방서" />
             <Input label="연락처" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="010-0000-0000" />
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-1)", gridColumn: "1 / -1" }}>
+              <div style={{ display: "flex", gap: "var(--space-2)", alignItems: "flex-end" }}>
+                <div style={{ flex: 1 }}>
+                  <Input
+                    label="초기 비밀번호 (선택, 8자 이상)"
+                    value={form.password}
+                    onChange={(e) => setForm({ ...form, password: e.target.value })}
+                    placeholder="비워두면 자동 생성됩니다"
+                  />
+                </div>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => setForm((f) => ({ ...f, password: generateRandomPassword() }))}
+                >
+                  무작위 생성
+                </Button>
+              </div>
+              <span style={{ font: "var(--type-caption)", color: "var(--text-muted)" }}>
+                여기에 직접 입력하면 그 비밀번호로 계정이 만들어집니다. 비워두면 서버가 임시 비밀번호를 자동
+                생성해서 생성 완료 후 화면에 한 번 보여줍니다 (교육생 계정은 어차피 첫날 QR 자가등록 시
+                비밀번호가 새로 설정되므로 비워두어도 무방합니다).
+              </span>
+            </div>
           </div>
           <Button type="submit" loading={saving} style={{ width: 140 }}>계정 생성</Button>
           {msg && <Alert tone="danger">{msg}</Alert>}
           {created && (
             <Alert tone="success">
-              생성 완료 — 로그인 ID: <strong>{created.loginId}</strong> / 초기 비밀번호:{" "}
-              <strong style={{ fontFamily: "var(--font-mono)" }}>{created.tempPassword}</strong>
-              <br />
-              (SMS 자동발송 미연동 — 지금은 이 화면에서 직접 전달해주세요)
+              {created.setByAdmin ? (
+                <>
+                  생성 완료 — 로그인 ID: <strong>{created.loginId}</strong> / 방금 입력하신 비밀번호로 바로
+                  로그인할 수 있습니다.
+                </>
+              ) : (
+                <>
+                  생성 완료 — 로그인 ID: <strong>{created.loginId}</strong> / 초기 비밀번호:{" "}
+                  <strong style={{ fontFamily: "var(--font-mono)" }}>{created.tempPassword}</strong>
+                  <br />
+                  (SMS 자동발송 미연동 — 지금은 이 화면에서 직접 전달해주세요)
+                </>
+              )}
             </Alert>
           )}
         </form>

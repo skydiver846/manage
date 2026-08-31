@@ -13,9 +13,13 @@ export async function bootstrapFirstAdmin({ loginId, password, name }) {
   return res.data; // { uid, email }
 }
 
-export async function createAccount({ loginId, name, role, courseId, org, phone }) {
-  const res = await createAccountFn({ loginId, name, role, courseId, org, phone });
-  return res.data; // { uid, loginId, tempPassword }
+/**
+ * 계정 생성. password를 직접 넘기면 관리자가 지정한 비밀번호로 생성되고,
+ * 비워두면(undefined/null/"") 서버가 임시 비밀번호를 자동 생성한다.
+ */
+export async function createAccount({ loginId, name, role, courseId, org, phone, password }) {
+  const res = await createAccountFn({ loginId, name, role, courseId, org, phone, password: password || undefined });
+  return res.data; // { uid, loginId, tempPassword, setByAdmin }
 }
 
 export async function deactivateAccount(uid) {
