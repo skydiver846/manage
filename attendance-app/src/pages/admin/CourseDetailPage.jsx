@@ -19,10 +19,15 @@ export default function CourseDetailPage() {
   const [periods, setPeriods] = useState([]);
   const [instructors, setInstructors] = useState([]);
   const [msg, setMsg] = useState("");
+  const [quickMsg, setQuickMsg] = useState("");
   const [form, setForm] = useState({
     no: "", startTime: "", endTime: "", subject: "", kind: "이론", place: "", authMethod: "manual",
   });
   const [enrollQr, setEnrollQr] = useState(null); // { periodId, dataUrl }
+  // 여러 과목을 세분화하지 않고, 하루 "출석 1회 + 퇴실 1회"만 체크하는 전문과정(1일~1주 등)을 위한
+  // 단축 생성 폼. 교시는 특정 날짜에 묶이지 않고 과정 전체 기간(startDate~endDate)에 매일 동일하게
+  // 적용되므로, 여기서 딱 한 번만 만들면 며칠짜리 과정이든 그대로 적용된다.
+  const [quickTimes, setQuickTimes] = useState({ checkIn: "09:00", checkOut: "18:00" });
 
   async function reload() {
     const [c, p] = await Promise.all([getCourse(courseId), listPeriods(courseId)]);
@@ -52,6 +57,30 @@ export default function CourseDetailPage() {
       setMsg("교시를 추가했습니다.");
     } catch (err) {
       setMsg("오류: " + err.message);
+      return;
+    }
+    reload().catch((e) => console.error(e));
+  }
+
+  async function handleQuickCreatePeriods(e) {
+    e.preventDefault();
+    setQuickMsg("");
+    if (periods.some((p) => p.no === "출석" || p.no === "퇴실")) {
+      setQuickMsg("오류: 이미 \"출석\" 또는 \"퇴실\" 교시가 있습니다. 아래 시간표에서 확인해주세요.");
+      return;
+    }
+    try {
+      await addPeriod(courseId, {
+        no: "출석", startTime: quickTimes.checkIn, endTime: quickTimes.checkIn,
+        subject: "-", kind: "출석", place: "-", authMethod: "qr",
+      });
+      await addPeriod(courseId, {
+        no: "퇴실", startTime: quickTimes.checkOut, endTime: quickTimes.checkOut,
+        subject: "-", kind: "퇴실", place: "-", authMethod: "qr",
+      });
+      setQuickMsg("출석·퇴실 교시를 만들었습니다. 과정 시작일부터 종료일까지 매일 동일하게 적용됩니다.");
+    } catch (err) {
+      setQuickMsg("오류: " + err.message);
       return;
     }
     reload().catch((e) => console.error(e));
@@ -100,8 +129,35 @@ export default function CourseDetailPage() {
       </Card>
 
       <Card>
+        <form onSubmit={handleQuickCreatePeriods} style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
+          <div>
+            <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>출석·퇴실 교시 자동 생성 (전문과정 추천)</span>
+            <span style={{ display: "block", marginTop: "var(--space-2)", font: "var(--type-body-sm)", color: "var(--text-muted)" }}>
+              과목별로 시간표를 세분화하지 않고, 하루 "출석" 1회 + "퇴실" 1회만 QR로 체크하면 되는 짧은
+              과정(1일~1주 등)에 적합합니다. 아래에서 한 번만 만들면 과정 시작일부터 종료일까지 매일
+              동일하게 적용됩니다.
+            </span>
+          </div>
+          <div style={{ display: "flex", gap: "var(--space-4)", alignItems: "flex-end", flexWrap: "wrap" }}>
+            <Input
+              type="time" label="출석 시간" required
+              value={quickTimes.checkIn}
+              onChange={(e) => setQuickTimes({ ...quickTimes, checkIn: e.target.value })}
+            />
+            <Input
+              type="time" label="퇴실 시간" required
+              value={quickTimes.checkOut}
+              onChange={(e) => setQuickTimes({ ...quickTimes, checkOut: e.target.value })}
+            />
+            <Button type="submit" variant="secondary">출석·퇴실 교시 자동 생성</Button>
+          </div>
+          {quickMsg && <Alert tone={quickMsg.startsWith("오류") ? "danger" : "success"}>{quickMsg}</Alert>}
+        </form>
+      </Card>
+
+      <Card>
         <form onSubmit={handleAddPeriod} style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
-          <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>교시 추가</span>
+          <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>교시 직접 추가 (정규 과정 · 과목별 세부 시간표용)</span>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "var(--space-4)" }}>
             <Input label="교시" required value={form.no} onChange={(e) => setForm({ ...form, no: e.target.value })} placeholder="1교시" />
             <Input type="time" label="시작시간" required value={form.startTime} onChange={(e) => setForm({ ...form, startTime: e.target.value })} />
