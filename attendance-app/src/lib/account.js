@@ -6,6 +6,9 @@ const createAccountFn = httpsCallable(functions, "createAccount");
 const deactivateAccountFn = httpsCallable(functions, "deactivateAccount");
 const resetPasswordFn = httpsCallable(functions, "resetPassword");
 const selfEnrollAndCheckInFn = httpsCallable(functions, "selfEnrollAndCheckIn");
+const unlockAccountFn = httpsCallable(functions, "unlockAccount");
+const unlockEnrollAttemptFn = httpsCallable(functions, "unlockEnrollAttempt");
+const completePasswordChangeFn = httpsCallable(functions, "completePasswordChange");
 
 /** 최초 1회만 동작하는 관리자 계정 생성. 관리자가 이미 있으면 already-exists 에러를 던진다. */
 export async function bootstrapFirstAdmin({ loginId, password, name }) {
@@ -39,4 +42,25 @@ export async function resetPassword(uid) {
 export async function selfEnrollAndCheckIn({ loginId, phoneLast4, courseId, periodId }) {
   const res = await selfEnrollAndCheckInFn({ loginId, phoneLast4, courseId, periodId });
   return res.data; // { customToken, name, role }
+}
+
+/** 5회 로그인 실패로 잠긴 계정의 잠금 해제 (loginId 기준). */
+export async function unlockAccount(loginId) {
+  const res = await unlockAccountFn({ loginId });
+  return res.data; // { ok: true }
+}
+
+/**
+ * 첫날 자가등록(selfEnrollAndCheckIn) 시도 잠금 해제.
+ * 휴대전화 뒷자리를 여러 번 잘못 입력해 잠긴 교육생 계정을 관리자가 풀어줄 때 사용.
+ */
+export async function unlockEnrollAttempt(loginId) {
+  const res = await unlockEnrollAttemptFn({ loginId });
+  return res.data; // { ok: true }
+}
+
+/** 최초 로그인 시 임시 비밀번호를 새 비밀번호로 변경 완료 처리 (mustChangePassword 플래그 해제). */
+export async function completePasswordChange() {
+  const res = await completePasswordChangeFn();
+  return res.data; // { ok: true }
 }

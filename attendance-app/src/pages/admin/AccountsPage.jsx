@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { listAllUsers, listCourses } from "../../lib/firestore";
-import { createAccount, deactivateAccount, resetPassword } from "../../lib/account";
+import { createAccount, deactivateAccount, resetPassword, unlockAccount, unlockEnrollAttempt } from "../../lib/account";
 import { Card, Input, Select, Button, Alert, Pill } from "../../components/ui";
 
 // 관리자가 "무작위 생성" 버튼을 눌렀을 때 화면에서 바로 채워줄 임시 비밀번호.
@@ -34,6 +34,8 @@ export default function AccountsPage() {
   const [resetBusyUid, setResetBusyUid] = useState(null);
   const [resetMsg, setResetMsg] = useState("");
   const [resetInfo, setResetInfo] = useState(null);
+  const [unlockBusyUid, setUnlockBusyUid] = useState(null);
+  const [unlockMsg, setUnlockMsg] = useState("");
 
   async function reload() {
     setUsers(await listAllUsers());
@@ -99,6 +101,30 @@ export default function AccountsPage() {
       return;
     }
     setResetBusyUid(null);
+  }
+
+  async function handleUnlockAccount(uid, loginId, name) {
+    if (!window.confirm(`${name}(${loginId}) 계정의 로그인 잠금을 해제하시겠습니까?`)) return;
+    setUnlockBusyUid(uid + ":login");
+    setUnlockMsg("");
+    try {
+      await unlockAccount(loginId);
+    } catch (err) {
+      setUnlockMsg("오류: " + err.message);
+    }
+    setUnlockBusyUid(null);
+  }
+
+  async function handleUnlockEnroll(uid, loginId, name) {
+    if (!window.confirm(`${name}(${loginId})의 첫날 입교등록(자가등록) 시도 잠금을 해제하시겠습니까?`)) return;
+    setUnlockBusyUid(uid + ":enroll");
+    setUnlockMsg("");
+    try {
+      await unlockEnrollAttempt(loginId);
+    } catch (err) {
+      setUnlockMsg("오류: " + err.message);
+    }
+    setUnlockBusyUid(null);
   }
 
   return (
@@ -211,6 +237,11 @@ export default function AccountsPage() {
             </Alert>
           </div>
         )}
+        {unlockMsg && (
+          <div style={{ padding: "var(--space-3) var(--space-5)" }}>
+            <Alert tone="danger">{unlockMsg}</Alert>
+          </div>
+        )}
         <div style={{ display: "flex", flexDirection: "column" }}>
           {users === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
           {users?.map((u) => (
@@ -228,11 +259,24 @@ export default function AccountsPage() {
               <strong>{u.name}</strong>
               <span style={{ color: "var(--text-muted)" }}>{u.loginId}</span>
               {u.org && <span style={{ color: "var(--text-muted)" }}>{u.org}</span>}
-              <span style={{ marginLeft: "auto", display: "flex", gap: "var(--space-2)" }}>
+              {u.role === "STU" && (
+                u.selfClaimed
+                  ? <Pill tone="ok">입교등록 완료</Pill>
+                  : <Pill tone="warn">첫날 QR 미등록</Pill>
+              )}
+              <span style={{ marginLeft: "auto", display: "flex", gap: "var(--space-2)", flexWrap: "wrap", justifyContent: "flex-end" }}>
                 {u.status === "expired" ? (
                   <Pill tone="bad">만료됨</Pill>
                 ) : (
                   <>
+                    <Button variant="secondary" size="sm" disabled={unlockBusyUid === u.id + ":login"} onClick={() => handleUnlockAccount(u.id, u.loginId, u.name)}>
+                      {unlockBusyUid === u.id + ":login" ? "처리 중..." : "로그인 잠금 해제"}
+                    </Button>
+                    {u.role === "STU" && (
+                      <Button variant="secondary" size="sm" disabled={unlockBusyUid === u.id + ":enroll"} onClick={() => handleUnlockEnroll(u.id, u.loginId, u.name)}>
+                        {unlockBusyUid === u.id + ":enroll" ? "처리 중..." : "입교등록 잠금 해제"}
+                      </Button>
+                    )}
                     <Button variant="secondary" size="sm" disabled={resetBusyUid === u.id} onClick={() => handleResetPassword(u.id, u.name, u.loginId)}>
                       {resetBusyUid === u.id ? "처리 중..." : "비밀번호 초기화"}
                     </Button>

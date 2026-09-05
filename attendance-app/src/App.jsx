@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { subscribeAuthState } from "./lib/auth";
+import { getUserDoc } from "./lib/firestore";
 import Login from "./pages/Login";
 import EnrollPage from "./pages/EnrollPage";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
 import Layout from "./components/Layout";
 import CoursesPage from "./pages/admin/CoursesPage";
 import CourseDetailPage from "./pages/admin/CourseDetailPage";
@@ -34,11 +36,17 @@ function RequireRole({ roles, role, children }) {
 }
 
 function App() {
-  const [state, setState] = useState({ loading: true, user: null, role: null });
+  const [state, setState] = useState({ loading: true, user: null, role: null, mustChangePassword: false });
 
   useEffect(() => {
-    const unsub = subscribeAuthState(({ user, role }) => {
-      setState({ loading: false, user, role });
+    const unsub = subscribeAuthState(async ({ user, role }) => {
+      if (!user) {
+        setState({ loading: false, user: null, role: null, mustChangePassword: false });
+        return;
+      }
+      // mustChangePassword는 커스텀 클레임이 아니라 Firestore users 문서에 있으므로 별도 조회가 필요하다.
+      const userDoc = await getUserDoc(user.uid);
+      setState({ loading: false, user, role, mustChangePassword: !!userDoc?.mustChangePassword });
     });
     return unsub;
   }, []);
@@ -49,6 +57,15 @@ function App() {
   if (window.location.pathname === "/enroll") return <EnrollPage />;
 
   if (!state.user) return <Login />;
+
+  // 관리자가 임시 비밀번호로 계정을 만들었다면, 다른 화면보다 먼저 비밀번호 변경을 강제한다.
+  if (state.mustChangePassword) {
+    return (
+      <ChangePasswordPage
+        onDone={() => setState((s) => ({ ...s, mustChangePassword: false }))}
+      />
+    );
+  }
 
   const { user, role } = state;
   const home = DEFAULT_ROUTE[role] || "/student";

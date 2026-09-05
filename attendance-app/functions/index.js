@@ -2,6 +2,7 @@ const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { setGlobalOptions } = require("firebase-functions/v2");
 const admin = require("firebase-admin");
 const { FieldValue, Timestamp } = require("firebase-admin/firestore");
+const crypto = require("node:crypto");
 
 admin.initializeApp();
 setGlobalOptions({ region: "asia-northeast3" });
@@ -12,6 +13,9 @@ const EMAIL_DOMAIN = "fireacademy.local";
 // 관리자 본인 계정이 잠기면 아무도 풀 수 없는 문제가 있어 30분 자동 해제로 변경.
 const LOGIN_LOCK_DURATION_MS = 1000 * 60 * 30; // 30분
 const ADMIN_ROLES = ["ADM", "SYS"];
+// 첫날 자가등록(selfEnrollAndCheckIn)의 휴대전화 뒷자리 4자리 무차별 대입 방지용 잠금.
+const ENROLL_LOCK_DURATION_MS = 1000 * 60 * 30; // 30분
+const ENROLL_MAX_ATTEMPTS = 5;
 
 function toEmail(loginId) {
   return `${loginId}@${EMAIL_DOMAIN}`;
@@ -20,7 +24,7 @@ function toEmail(loginId) {
 function generateTempPassword() {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
   let out = "";
-  for (let i = 0; i < 10; i++) out += chars[Math.floor(Math.random() * chars.length)];
+  for (let i = 0; i < 10; i++) out += chars[crypto.randomInt(chars.length)];
   return out;
 }
 
@@ -147,9 +151,34 @@ exports.selfEnrollAndCheckIn = onCall(async (request) => {
     throw new HttpsError("invalid-argument", "휴대전화 뒷자리는 숫자 4자리여야 합니다.");
   }
 
+  // 뒷자리 4자리(경우의 수 10,000)는 무차별 대입이 쉬우므로, 인증 없이 호출 가능한
+  // 이 함수는 loginId 기준으로 실패 횟수를 세어 잠근다(로그인 5회 실패 잠금과 동일한 패턴).
+  const attemptRef = admin.firestore().doc(`enrollAttempts/${loginId}`);
+  const attemptSnap = await attemptRef.get();
+  const attemptData = attemptSnap.data();
+  if (attemptData?.lockedUntil && attemptData.lockedUntil.toMillis() > Date.now()) {
+    const remainingMin = Math.ceil((attemptData.lockedUntil.toMillis() - Date.now()) / 60000);
+    throw new HttpsError(
+      "permission-denied",
+      `입력 시도 횟수를 초과했습니다. 약 ${remainingMin}분 후 다시 시도하거나 관리자에게 문의하세요.`
+    );
+  }
+  async function recordAttemptFailure() {
+    await admin.firestore().runTransaction(async (tx) => {
+      const doc = await tx.get(attemptRef);
+      const count = (doc.data()?.count || 0) + 1;
+      const patch = { count, lastFailAt: FieldValue.serverTimestamp() };
+      if (count >= ENROLL_MAX_ATTEMPTS) {
+        patch.lockedUntil = Timestamp.fromMillis(Date.now() + ENROLL_LOCK_DURATION_MS);
+      }
+      tx.set(attemptRef, patch, { merge: true });
+    });
+  }
+
   const usersSnap = await admin.firestore().collection("users")
     .where("loginId", "==", loginId).limit(1).get();
   if (usersSnap.empty) {
+    await recordAttemptFailure();
     throw new HttpsError("not-found", "등록되지 않은 로그인ID입니다. 관리자에게 문의하세요.");
   }
   const userDoc = usersSnap.docs[0];
@@ -158,10 +187,21 @@ exports.selfEnrollAndCheckIn = onCall(async (request) => {
   if (userData.status !== "active") {
     throw new HttpsError("failed-precondition", "비활성화된 계정입니다. 관리자에게 문의하세요.");
   }
+  // 이미 첫날 자가등록을 마친 계정은 이 함수를 다시 쓸 수 없게 막는다 — 그렇지 않으면
+  // loginId+휴대전화 뒷자리만 알면 언제든 비밀번호를 재설정하고 로그인할 수 있는
+  // 영구 백도어가 되어버린다. 이후 로그인은 정식 로그인 화면(비밀번호)을 사용해야 한다.
+  if (userData.selfClaimed) {
+    throw new HttpsError(
+      "failed-precondition",
+      "이미 입교등록이 완료된 계정입니다. 등록 시 설정된 비밀번호로 로그인해주세요."
+    );
+  }
   if (!userData.phone || !userData.phone.endsWith(phoneLast4)) {
+    await recordAttemptFailure();
     throw new HttpsError("permission-denied", "휴대전화 뒷자리 4자리가 일치하지 않습니다.");
   }
   if (userData.courseId && userData.courseId !== courseId) {
+    await recordAttemptFailure();
     throw new HttpsError("permission-denied", "이 과정에 등록된 계정이 아닙니다.");
   }
 
@@ -173,6 +213,7 @@ exports.selfEnrollAndCheckIn = onCall(async (request) => {
     { selfClaimed: true, mustChangePassword: false, claimedAt: FieldValue.serverTimestamp() },
     { merge: true }
   );
+  await attemptRef.set({ count: 0, lockedUntil: null }, { merge: true });
 
   // 그날 출석을 "신청(pending)" 상태로 기록 — 다른 체크인 방식과 동일하게
   // 교관이 교시 종료 후 일괄 확정한다. uid가 문서ID라 다시 스캔해도 중복되지 않는다.
@@ -228,10 +269,21 @@ exports.recordLoginFailure = onCall(async (request) => {
   return result;
 });
 
-/** 로그인 성공 시 호출 — 실패 카운터 초기화 */
+/**
+ * 로그인 성공 시 호출 — 실패 카운터 초기화.
+ * 이 함수 자체는 인증 여부를 강제하지 않으면 "성공 시에만 호출"이라는 약속을
+ * 클라이언트가 어겨도(또는 공격자가 직접 호출해도) 막을 방법이 없어, 5회 실패
+ * 잠금 자체가 무력화된다. 따라서 반드시 "지금 loginId 본인 계정으로 로그인된
+ * 상태"일 때만 허용한다 — 이는 실제로 비밀번호를 맞혀 Firebase Auth 로그인에
+ * 성공한 경우에만 성립하므로, 잠금 우회 목적으로는 쓸 수 없다.
+ */
 exports.resetLoginFailures = onCall(async (request) => {
+  const caller = request.auth;
   const { loginId } = request.data || {};
   if (!loginId) throw new HttpsError("invalid-argument", "loginId는 필수입니다.");
+  if (!caller || caller.token.email !== toEmail(loginId)) {
+    throw new HttpsError("permission-denied", "본인 계정의 실패 카운터만 초기화할 수 있습니다.");
+  }
   await admin.firestore().doc(`loginAttempts/${loginId}`).set(
     { count: 0, lockedUntil: null }, { merge: true });
   return { ok: true };
@@ -251,6 +303,24 @@ exports.unlockAccount = onCall(async (request) => {
   await writeAudit({
     actorUid: caller.uid, actorRole: caller.token.role, target: `loginAttempts/${loginId}`,
     action: "계정 잠금 해제", category: "계정 변경",
+  });
+  return { ok: true };
+});
+
+/** 행정담당자/시스템관리자가 첫날 자가등록(selfEnrollAndCheckIn) 시도 잠금을 해제 */
+exports.unlockEnrollAttempt = onCall(async (request) => {
+  const caller = request.auth;
+  if (!caller || !["ADM", "SYS"].includes(caller.token.role)) {
+    throw new HttpsError("permission-denied", "행정담당자 또는 시스템관리자만 잠금을 해제할 수 있습니다.");
+  }
+  const { loginId } = request.data || {};
+  if (!loginId) throw new HttpsError("invalid-argument", "loginId는 필수입니다.");
+
+  await admin.firestore().doc(`enrollAttempts/${loginId}`).set(
+    { count: 0, lockedUntil: null }, { merge: true });
+  await writeAudit({
+    actorUid: caller.uid, actorRole: caller.token.role, target: `enrollAttempts/${loginId}`,
+    action: "입교등록(첫날 자가등록) 시도 잠금 해제", category: "계정 변경",
   });
   return { ok: true };
 });
@@ -313,6 +383,25 @@ exports.resetPassword = onCall(async (request) => {
     action: "비밀번호 초기화", category: "계정 변경",
   });
   return { tempPassword };
+});
+
+/**
+ * 본인이 임시 비밀번호(mustChangePassword:true)를 최초 로그인 직후 새 비밀번호로 변경 완료했음을 기록.
+ * 실제 Firebase Auth 비밀번호 변경은 클라이언트가 updatePassword()로 직접 처리하고,
+ * users 문서는 클라이언트 쓰기가 막혀 있으므로(firestore.rules) 그 이후 이 함수로 플래그만 내린다.
+ */
+exports.completePasswordChange = onCall(async (request) => {
+  const caller = request.auth;
+  if (!caller) throw new HttpsError("unauthenticated", "로그인이 필요합니다.");
+
+  await admin.firestore().doc(`users/${caller.uid}`).set(
+    { mustChangePassword: false }, { merge: true }
+  );
+  await writeAudit({
+    actorUid: caller.uid, actorRole: caller.token.role, target: `users/${caller.uid}`,
+    action: "최초 로그인 비밀번호 변경 완료", category: "계정 변경",
+  });
+  return { ok: true };
 });
 
 async function assertInstructorOrAdmin(caller, courseId) {
