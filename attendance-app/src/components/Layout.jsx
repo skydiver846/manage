@@ -6,22 +6,21 @@ import { Avatar } from "./ui";
 const ROLE_LABELS = {
   STU: "교육생",
   INS: "담당 교수(교관)",
-  ADM: "행정담당자",
+  ADM: "관리자",
   APR: "결재권자",
-  SYS: "시스템관리자",
 };
 
 const NAV = [
   { group: "출결", path: "/student", label: "출결 대시보드", tab: "홈", roles: ["STU"] },
   { group: "출결", path: "/student/corrections", label: "출결 정정 요청", tab: "정정요청", roles: ["STU"] },
-  { group: "출결", path: "/instructor/attendance", label: "실시간 출석현황", tab: "출석현황", roles: ["INS", "ADM", "SYS"] },
-  { group: "출결", path: "/instructor/corrections", label: "정정 승인/반려", tab: "정정승인", roles: ["INS", "ADM", "SYS"] },
-  { group: "보고서", path: "/instructor/reports", label: "결과보고서 작성", tab: "보고서", roles: ["INS", "ADM", "SYS"] },
-  { group: "보고서", path: "/admin/reports", label: "결과보고서 관리", tab: "보고서관리", roles: ["ADM", "SYS"] },
-  { group: "관리", path: "/admin/courses", label: "과정 관리", tab: "과정", roles: ["ADM", "SYS"] },
-  { group: "관리", path: "/admin/accounts", label: "계정 관리", tab: "계정", roles: ["ADM", "SYS"] },
-  { group: "관리", path: "/admin/statistics", label: "통계", tab: "통계", roles: ["ADM", "SYS"] },
-  { group: "관리", path: "/admin/audit-log", label: "감사로그 조회", tab: "감사로그", roles: ["ADM", "SYS"] },
+  { group: "출결", path: "/instructor/attendance", label: "실시간 출석현황", tab: "출석현황", roles: ["INS", "ADM"] },
+  { group: "출결", path: "/instructor/corrections", label: "정정 승인/반려", tab: "정정승인", roles: ["INS", "ADM"] },
+  { group: "보고서", path: "/instructor/reports", label: "결과보고서 작성", tab: "보고서", roles: ["INS", "ADM"] },
+  { group: "보고서", path: "/admin/reports", label: "결과보고서 관리", tab: "보고서관리", roles: ["ADM"] },
+  { group: "관리", path: "/admin/courses", label: "과정 관리", tab: "과정", roles: ["ADM"] },
+  { group: "관리", path: "/admin/accounts", label: "계정 관리", tab: "계정", roles: ["ADM"] },
+  { group: "관리", path: "/admin/statistics", label: "통계", tab: "통계", roles: ["ADM"] },
+  { group: "관리", path: "/admin/audit-log", label: "감사로그 조회", tab: "감사로그", roles: ["ADM"] },
   { group: "결재", path: "/approval", label: "결재 대기함", tab: "결재", roles: ["APR"] },
 ];
 

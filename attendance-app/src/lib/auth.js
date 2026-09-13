@@ -26,7 +26,7 @@ export async function loginWithId(loginId, password) {
     if (["auth/wrong-password", "auth/invalid-credential", "auth/user-not-found"].includes(e.code)) {
       const r = await recordLoginFailure({ loginId });
       if (r.data.locked) {
-        throw new Error("5회 로그인 실패로 계정이 잠겼습니다. 행정담당자에게 문의하세요.");
+        throw new Error("5회 로그인 실패로 계정이 잠겼습니다. 관리자에게 문의하세요.");
       }
       throw new Error(`아이디 또는 비밀번호가 올바르지 않습니다. (실패 ${r.data.count}/5회)`);
     }

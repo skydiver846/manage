@@ -25,7 +25,6 @@ const DEFAULT_ROUTE = {
   STU: "/student",
   INS: "/instructor/attendance",
   ADM: "/admin/courses",
-  SYS: "/admin/courses",
   APR: "/approval",
 };
 
@@ -82,40 +81,40 @@ function App() {
             <RequireRole roles={["STU"]} role={role}><StudentCorrectionsPage user={user} /></RequireRole>
           } />
           <Route path="/instructor/attendance" element={
-            <RequireRole roles={["INS", "ADM", "SYS"]} role={role}><AttendancePage user={user} role={role} /></RequireRole>
+            <RequireRole roles={["INS", "ADM"]} role={role}><AttendancePage user={user} role={role} /></RequireRole>
           } />
           <Route path="/instructor/corrections" element={
-            <RequireRole roles={["INS", "ADM", "SYS"]} role={role}><InstructorCorrectionsPage user={user} role={role} /></RequireRole>
+            <RequireRole roles={["INS", "ADM"]} role={role}><InstructorCorrectionsPage user={user} role={role} /></RequireRole>
           } />
           <Route path="/instructor/reports" element={
-            <RequireRole roles={["INS", "ADM", "SYS"]} role={role}><InstructorReportsPage user={user} role={role} /></RequireRole>
+            <RequireRole roles={["INS", "ADM"]} role={role}><InstructorReportsPage user={user} role={role} /></RequireRole>
           } />
           <Route path="/admin/courses" element={
-            <RequireRole roles={["ADM", "SYS"]} role={role}><CoursesPage /></RequireRole>
+            <RequireRole roles={["ADM"]} role={role}><CoursesPage /></RequireRole>
           } />
           <Route path="/admin/courses/:courseId" element={
-            <RequireRole roles={["ADM", "SYS"]} role={role}><CourseDetailPage /></RequireRole>
+            <RequireRole roles={["ADM"]} role={role}><CourseDetailPage /></RequireRole>
           } />
           <Route path="/admin/courses/:courseId/upload" element={
-            <RequireRole roles={["ADM", "SYS"]} role={role}><BulkUploadPage /></RequireRole>
+            <RequireRole roles={["ADM"]} role={role}><BulkUploadPage /></RequireRole>
           } />
           <Route path="/admin/accounts" element={
-            <RequireRole roles={["ADM", "SYS"]} role={role}><AccountsPage /></RequireRole>
+            <RequireRole roles={["ADM"]} role={role}><AccountsPage /></RequireRole>
           } />
           <Route path="/admin/reports" element={
-            <RequireRole roles={["ADM", "SYS"]} role={role}><AdminReportsPage /></RequireRole>
+            <RequireRole roles={["ADM"]} role={role}><AdminReportsPage /></RequireRole>
           } />
           <Route path="/admin/statistics" element={
-            <RequireRole roles={["ADM", "SYS"]} role={role}><StatisticsPage /></RequireRole>
+            <RequireRole roles={["ADM"]} role={role}><StatisticsPage /></RequireRole>
           } />
           <Route path="/admin/audit-log" element={
-            <RequireRole roles={["ADM", "SYS"]} role={role}><AuditLogPage /></RequireRole>
+            <RequireRole roles={["ADM"]} role={role}><AuditLogPage /></RequireRole>
           } />
           <Route path="/approval" element={
             <RequireRole roles={["APR"]} role={role}><ApprovalInboxPage /></RequireRole>
           } />
           <Route path="/reports/:reportId" element={
-            <RequireRole roles={["INS", "ADM", "APR", "SYS"]} role={role}><ReportDetailPage /></RequireRole>
+            <RequireRole roles={["INS", "ADM", "APR"]} role={role}><ReportDetailPage /></RequireRole>
           } />
           <Route path="*" element={<Navigate to={home} replace />} />
         </Route>

@@ -16,9 +16,8 @@ function generateRandomPassword() {
 const ROLE_OPTS = [
   { value: "STU", label: "교육생" },
   { value: "INS", label: "담당 교관" },
-  { value: "ADM", label: "행정담당자" },
+  { value: "ADM", label: "관리자" },
   { value: "APR", label: "결재권자" },
-  { value: "SYS", label: "시스템관리자" },
 ];
 
 export default function AccountsPage() {

@@ -7,12 +7,14 @@ const crypto = require("node:crypto");
 admin.initializeApp();
 setGlobalOptions({ region: "asia-northeast3" });
 
-const VALID_ROLES = ["STU", "INS", "ADM", "APR", "SYS"];
+// 이전에는 ADM(행정담당자)/SYS(시스템관리자)를 별도 역할로 뒀으나, 모든 권한 체크에서
+// 항상 둘을 동일하게 취급하고 있어 구분의 실익이 없어 "ADM" 하나로 통합했다.
+// (기존에 role:"SYS"로 만들어진 계정은 별도 마이그레이션 스크립트로 "ADM"으로 옮겨야 한다.)
+const VALID_ROLES = ["STU", "INS", "ADM", "APR"];
 const EMAIL_DOMAIN = "fireacademy.local";
 // 5회 로그인 실패 시 잠기는 시간. 기존에는 10년(사실상 영구 잠금)이었으나,
 // 관리자 본인 계정이 잠기면 아무도 풀 수 없는 문제가 있어 30분 자동 해제로 변경.
 const LOGIN_LOCK_DURATION_MS = 1000 * 60 * 30; // 30분
-const ADMIN_ROLES = ["ADM", "SYS"];
 // 첫날 자가등록(selfEnrollAndCheckIn)의 휴대전화 뒷자리 4자리 무차별 대입 방지용 잠금.
 const ENROLL_LOCK_DURATION_MS = 1000 * 60 * 30; // 30분
 const ENROLL_MAX_ATTEMPTS = 5;
@@ -42,7 +44,7 @@ async function writeAudit({ actorUid, actorRole, target, action, reason, categor
 
 /**
  * 최초 1회만 동작하는 관리자 부트스트랩.
- * users 컬렉션에 ADM 또는 SYS 역할이 하나라도 존재하면 이후 호출은 전부 거부된다.
+ * users 컬렉션에 ADM 역할이 하나라도 존재하면 이후 호출은 전부 거부된다.
  * 인증 없이 호출 가능하지만, 자기 자신을 잠그는(self-limiting) 구조라 안전하다.
  */
 exports.bootstrapFirstAdmin = onCall(async (request) => {
@@ -55,22 +57,22 @@ exports.bootstrapFirstAdmin = onCall(async (request) => {
   }
 
   const existingAdmins = await admin.firestore().collection("users")
-    .where("role", "in", ["ADM", "SYS"]).limit(1).get();
+    .where("role", "==", "ADM").limit(1).get();
   if (!existingAdmins.empty) {
     throw new HttpsError("already-exists", "이미 관리자 계정이 존재합니다. 이 부트스트랩은 최초 1회만 사용할 수 있습니다.");
   }
 
   const email = toEmail(loginId);
   const userRecord = await admin.auth().createUser({ email, password, displayName: name });
-  await admin.auth().setCustomUserClaims(userRecord.uid, { role: "SYS" });
+  await admin.auth().setCustomUserClaims(userRecord.uid, { role: "ADM" });
 
   await admin.firestore().doc(`users/${userRecord.uid}`).set({
-    loginId, name, role: "SYS", status: "active",
+    loginId, name, role: "ADM", status: "active",
     createdAt: FieldValue.serverTimestamp(), createdBy: "bootstrap",
   });
 
   await writeAudit({
-    actorUid: userRecord.uid, actorRole: "SYS", target: `users/${userRecord.uid}`,
+    actorUid: userRecord.uid, actorRole: "ADM", target: `users/${userRecord.uid}`,
     action: "최초 관리자 부트스트랩 생성", category: "계정 변경",
   });
 
@@ -78,17 +80,17 @@ exports.bootstrapFirstAdmin = onCall(async (request) => {
 });
 
 /**
- * 행정담당자(ADM)/시스템관리자(SYS)가 계정을 생성한다.
+ * 관리자(ADM)가 계정을 생성한다.
  * 역할·계정ID·이름은 필수, courseId/org/phone은 선택.
  */
 exports.createAccount = onCall(async (request) => {
   const caller = request.auth;
-  if (!caller || !["ADM", "SYS"].includes(caller.token.role)) {
-    throw new HttpsError("permission-denied", "행정담당자 또는 시스템관리자만 계정을 생성할 수 있습니다.");
+  if (!caller || caller.token.role !== "ADM") {
+    throw new HttpsError("permission-denied", "관리자만 계정을 생성할 수 있습니다.");
   }
   const { loginId, name, role, courseId, org, phone, password } = request.data || {};
   if (!loginId || !name || !VALID_ROLES.includes(role)) {
-    throw new HttpsError("invalid-argument", "loginId, name, role(STU/INS/ADM/APR/SYS)은 필수입니다.");
+    throw new HttpsError("invalid-argument", "loginId, name, role(STU/INS/ADM/APR)은 필수입니다.");
   }
   // 관리자가 비밀번호를 직접 지정할 수도 있고(권장), 비워두면 기존처럼 임시 비밀번호를 자동 생성한다.
   // (교육생 계정은 어차피 첫날 QR 자가등록 시 비밀번호가 재설정되므로 자동생성으로 충분하다.)
@@ -246,7 +248,7 @@ exports.checkLoginAllowed = onCall(async (request) => {
     const remainingMin = Math.ceil((data.lockedUntil.toMillis() - Date.now()) / 60000);
     throw new HttpsError(
       "permission-denied",
-      `5회 로그인 실패로 계정이 잠겼습니다. 약 ${remainingMin}분 후 다시 시도하거나, 행정담당자에게 잠금 해제를 요청하세요.`
+      `5회 로그인 실패로 계정이 잠겼습니다. 약 ${remainingMin}분 후 다시 시도하거나, 관리자에게 잠금 해제를 요청하세요.`
     );
   }
   return { allowed: true };
@@ -289,11 +291,11 @@ exports.resetLoginFailures = onCall(async (request) => {
   return { ok: true };
 });
 
-/** 시스템관리자가 계정 잠금을 해제 */
+/** 관리자가 계정 잠금을 해제 */
 exports.unlockAccount = onCall(async (request) => {
   const caller = request.auth;
-  if (!caller || !["ADM", "SYS"].includes(caller.token.role)) {
-    throw new HttpsError("permission-denied", "행정담당자 또는 시스템관리자만 잠금을 해제할 수 있습니다.");
+  if (!caller || caller.token.role !== "ADM") {
+    throw new HttpsError("permission-denied", "관리자만 잠금을 해제할 수 있습니다.");
   }
   const { loginId } = request.data || {};
   if (!loginId) throw new HttpsError("invalid-argument", "loginId는 필수입니다.");
@@ -307,11 +309,11 @@ exports.unlockAccount = onCall(async (request) => {
   return { ok: true };
 });
 
-/** 행정담당자/시스템관리자가 첫날 자가등록(selfEnrollAndCheckIn) 시도 잠금을 해제 */
+/** 관리자가 첫날 자가등록(selfEnrollAndCheckIn) 시도 잠금을 해제 */
 exports.unlockEnrollAttempt = onCall(async (request) => {
   const caller = request.auth;
-  if (!caller || !["ADM", "SYS"].includes(caller.token.role)) {
-    throw new HttpsError("permission-denied", "행정담당자 또는 시스템관리자만 잠금을 해제할 수 있습니다.");
+  if (!caller || caller.token.role !== "ADM") {
+    throw new HttpsError("permission-denied", "관리자만 잠금을 해제할 수 있습니다.");
   }
   const { loginId } = request.data || {};
   if (!loginId) throw new HttpsError("invalid-argument", "loginId는 필수입니다.");
@@ -325,29 +327,29 @@ exports.unlockEnrollAttempt = onCall(async (request) => {
   return { ok: true };
 });
 
-/** 행정담당자/시스템관리자가 계정을 즉시 만료(비활성화) 처리 — 감사 기록 보존을 위해 삭제 대신 비활성화 */
+/** 관리자가 계정을 즉시 만료(비활성화) 처리 — 감사 기록 보존을 위해 삭제 대신 비활성화 */
 exports.deactivateAccount = onCall(async (request) => {
   const caller = request.auth;
-  if (!caller || !["ADM", "SYS"].includes(caller.token.role)) {
-    throw new HttpsError("permission-denied", "행정담당자 또는 시스템관리자만 계정을 만료 처리할 수 있습니다.");
+  if (!caller || caller.token.role !== "ADM") {
+    throw new HttpsError("permission-denied", "관리자만 계정을 만료 처리할 수 있습니다.");
   }
   const { uid } = request.data || {};
   if (!uid) throw new HttpsError("invalid-argument", "uid는 필수입니다.");
 
-  // 마지막 남은 관리자(ADM/SYS) 계정은 비활성화할 수 없다 — 관리자가 0명이 되면
+  // 마지막 남은 관리자(ADM) 계정은 비활성화할 수 없다 — 관리자가 0명이 되면
   // 이후 잠금·비밀번호 문제가 생겼을 때 아무도 앱 화면으로 복구할 수 없기 때문이다.
   const targetSnap = await admin.firestore().doc(`users/${uid}`).get();
   const targetData = targetSnap.data();
-  if (targetData && ADMIN_ROLES.includes(targetData.role) && targetData.status !== "expired") {
+  if (targetData && targetData.role === "ADM" && targetData.status !== "expired") {
     const otherActiveAdmins = await admin.firestore().collection("users")
-      .where("role", "in", ADMIN_ROLES)
+      .where("role", "==", "ADM")
       .where("status", "==", "active")
       .get();
     const remaining = otherActiveAdmins.docs.filter((d) => d.id !== uid);
     if (remaining.length === 0) {
       throw new HttpsError(
         "failed-precondition",
-        "마지막 남은 관리자(행정담당자/시스템관리자) 계정은 비활성화할 수 없습니다. 먼저 다른 관리자 계정을 만드세요."
+        "마지막 남은 관리자 계정은 비활성화할 수 없습니다. 먼저 다른 관리자 계정을 만드세요."
       );
     }
   }
@@ -364,11 +366,11 @@ exports.deactivateAccount = onCall(async (request) => {
   return { ok: true };
 });
 
-/** 행정담당자/시스템관리자가 계정 비밀번호를 새 임시 비밀번호로 초기화 */
+/** 관리자가 계정 비밀번호를 새 임시 비밀번호로 초기화 */
 exports.resetPassword = onCall(async (request) => {
   const caller = request.auth;
-  if (!caller || !["ADM", "SYS"].includes(caller.token.role)) {
-    throw new HttpsError("permission-denied", "행정담당자 또는 시스템관리자만 비밀번호를 초기화할 수 있습니다.");
+  if (!caller || caller.token.role !== "ADM") {
+    throw new HttpsError("permission-denied", "관리자만 비밀번호를 초기화할 수 있습니다.");
   }
   const { uid } = request.data || {};
   if (!uid) throw new HttpsError("invalid-argument", "uid는 필수입니다.");
@@ -406,7 +408,7 @@ exports.completePasswordChange = onCall(async (request) => {
 
 async function assertInstructorOrAdmin(caller, courseId) {
   if (!caller) throw new HttpsError("unauthenticated", "로그인이 필요합니다.");
-  if (["ADM", "SYS"].includes(caller.token.role)) return;
+  if (caller.token.role === "ADM") return;
   if (caller.token.role === "INS") {
     const course = await admin.firestore().doc(`courses/${courseId}`).get();
     if (course.exists && course.data().instructorUid === caller.uid) return;
@@ -509,11 +511,11 @@ exports.createReport = onCall(async (request) => {
   return { id: reportRef.id, summary };
 });
 
-/** 행정담당자가 보고서를 결재권자에게 상신한다. */
+/** 관리자가 보고서를 결재권자에게 상신한다. */
 exports.forwardReport = onCall(async (request) => {
   const caller = request.auth;
-  if (!caller || !["ADM", "SYS"].includes(caller.token.role)) {
-    throw new HttpsError("permission-denied", "행정담당자 또는 시스템관리자만 상신할 수 있습니다.");
+  if (!caller || caller.token.role !== "ADM") {
+    throw new HttpsError("permission-denied", "관리자만 상신할 수 있습니다.");
   }
   const { reportId } = request.data || {};
   if (!reportId) throw new HttpsError("invalid-argument", "reportId는 필수입니다.");

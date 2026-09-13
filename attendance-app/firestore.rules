@@ -11,22 +11,22 @@ service cloud.firestore {
     }
 
     match /users/{uid} {
-      allow read: if isSignedIn() && (isOwner(uid) || role() in ['ADM','SYS','INS']);
+      allow read: if isSignedIn() && (isOwner(uid) || role() in ['ADM','INS']);
       allow write: if false; // 계정 생성/수정은 반드시 Cloud Functions(Admin SDK) 경유
     }
 
     match /courses/{courseId} {
       allow read: if isSignedIn();
-      allow write: if role() in ['ADM','SYS'];
+      allow write: if role() == 'ADM';
 
       match /periods/{periodId} {
         allow read: if isSignedIn();
-        allow write: if role() in ['ADM','SYS'];
+        allow write: if role() == 'ADM';
       }
     }
 
     match /attendance/{courseId}/{date}/{periodId}/records/{uid} {
-      allow read: if isSignedIn() && (isOwner(uid) || isInstructorOf(courseId) || role() in ['ADM','APR','SYS']);
+      allow read: if isSignedIn() && (isOwner(uid) || isInstructorOf(courseId) || role() in ['ADM','APR']);
 
       // 교육생 셀프 체크(신청) — 최초 생성 및 확정 전 재신청
       allow create: if role() == 'STU' && isOwner(uid)
@@ -45,13 +45,13 @@ service cloud.firestore {
     match /corrections/{id} {
       allow create: if isSignedIn() && role() == 'STU' && request.resource.data.uid == request.auth.uid
         && request.resource.data.status == 'pending';
-      allow read: if isSignedIn() && (resource.data.uid == request.auth.uid || role() in ['INS','ADM','SYS']);
+      allow read: if isSignedIn() && (resource.data.uid == request.auth.uid || role() in ['INS','ADM']);
       // 승인/반려는 반드시 decideCorrection Cloud Function(Admin SDK) 경유 — 잠긴 출결 레코드까지 함께 갱신해야 하기 때문
       allow update: if false;
     }
 
     match /reports/{id} {
-      allow read: if role() in ['INS','ADM','APR','SYS'];
+      allow read: if role() in ['INS','ADM','APR'];
       allow write: if false; // 생성·상태변경은 전부 Cloud Functions
     }
 
@@ -63,17 +63,17 @@ service cloud.firestore {
     }
 
     match /auditLogs/{id} {
-      allow read: if role() in ['ADM','SYS'];
+      allow read: if role() == 'ADM';
       allow write: if false; // 오직 Admin SDK(Cloud Functions)만 기록
     }
 
     match /devices/{id} {
-      allow read: if role() in ['ADM','SYS'];
-      allow write: if role() in ['ADM','SYS'];
+      allow read: if role() == 'ADM';
+      allow write: if role() == 'ADM';
     }
 
     match /orgNotifications/{id} {
-      allow read: if role() in ['INS','ADM','SYS'];
+      allow read: if role() in ['INS','ADM'];
       allow write: if false; // 발송은 반드시 notifyOrg Cloud Function 경유
     }
   }

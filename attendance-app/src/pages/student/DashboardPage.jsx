@@ -60,7 +60,7 @@ export default function DashboardPage({ user }) {
   if (!me.courseId) {
     return (
       <Card>
-        <p>아직 소속된 과정이 없습니다. 행정담당자에게 문의해주세요.</p>
+        <p>아직 소속된 과정이 없습니다. 관리자에게 문의해주세요.</p>
       </Card>
     );
   }

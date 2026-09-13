@@ -18,6 +18,10 @@ dist-ssr
 .env.local
 .env.*.local
 
+# 서비스 계정 키 및 일회성 관리자용 마이그레이션 스크립트 — 절대 커밋하지 않는다
+functions/serviceAccountKey.json
+functions/migrate-*.js
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
