@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { listReportsByCourse } from "../../lib/firestore";
-import { createReport } from "../../lib/reports";
+import { createReport, deleteReport } from "../../lib/reports";
 import { Card, Select, Input, Button, Alert, Pill } from "../../components/ui";
 import { REPORT_STATUS_LABEL } from "../../lib/ui";
 
@@ -15,6 +15,7 @@ export default function InstructorReportsPage({ user, role }) {
   const [date, setDate] = useState(today);
   const [reports, setReports] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
   const [msg, setMsg] = useState("");
 
   useEffect(() => {
@@ -55,6 +56,22 @@ export default function InstructorReportsPage({ user, role }) {
     reload().catch((e) => console.error(e));
   }
 
+  async function handleDelete(id, date) {
+    if (!window.confirm(`${date} 결과보고서를 삭제하시겠습니까? 되돌릴 수 없습니다.`)) return;
+    setDeletingId(id);
+    setMsg("");
+    try {
+      await deleteReport(id);
+      setMsg("보고서를 삭제했습니다.");
+    } catch (err) {
+      setMsg("오류: " + err.message);
+      setDeletingId(null);
+      return;
+    }
+    setDeletingId(null);
+    reload().catch((e) => console.error(e));
+  }
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 800 }}>
       <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>결과보고서</h1>
@@ -74,21 +91,33 @@ export default function InstructorReportsPage({ user, role }) {
           {reports === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
           {reports?.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>생성된 보고서가 없습니다.</span>}
           {reports?.map((r) => (
-            <Link
+            <div
               key={r.id}
-              to={`/reports/${r.id}`}
-              style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "var(--space-3) var(--space-5)", borderBottom: "1px solid var(--border-subtle)", flexWrap: "wrap", gap: "var(--space-2)", textDecoration: "none", color: "inherit" }}
+              style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "var(--space-3) var(--space-5)", borderBottom: "1px solid var(--border-subtle)", flexWrap: "wrap", gap: "var(--space-2)" }}
             >
-              <div>
+              <Link to={`/reports/${r.id}`} style={{ textDecoration: "none", color: "inherit", flex: 1 }}>
                 <strong style={{ font: "var(--type-body-sm)" }}>{r.date}</strong>
                 <span style={{ color: "var(--text-muted)", font: "var(--type-caption)", marginLeft: "var(--space-2)" }}>
                   재적 {r.summary?.total ?? 0} · 출석률 {r.summary?.rate ?? 0}%
                 </span>
+              </Link>
+              <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+                <Pill tone={r.status === "approved" ? "ok" : r.status === "rejected" ? "bad" : r.status === "reviewing" ? "info" : "warn"}>
+                  {REPORT_STATUS_LABEL[r.status] || r.status}
+                </Pill>
+                {role === "ADM" && r.status !== "approved" && (
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    disabled={deletingId === r.id}
+                    onClick={() => handleDelete(r.id, r.date)}
+                    style={{ color: "var(--danger-500)", borderColor: "var(--danger-500)" }}
+                  >
+                    {deletingId === r.id ? "삭제 중..." : "삭제"}
+                  </Button>
+                )}
               </div>
-              <Pill tone={r.status === "approved" ? "ok" : r.status === "rejected" ? "bad" : r.status === "reviewing" ? "info" : "warn"}>
-                {REPORT_STATUS_LABEL[r.status] || r.status}
-              </Pill>
-            </Link>
+            </div>
           ))}
         </div>
       </Card>

@@ -677,6 +677,34 @@ exports.decideReport = onCall(async (request) => {
 });
 
 /**
+ * 관리자가 결과보고서를 삭제한다 (오생성·테스트 보고서 정리용).
+ * 이미 승인(approved)된 보고서는 공식 결재 기록이므로 감사 추적을 위해 삭제를 막는다.
+ */
+exports.deleteReport = onCall(async (request) => {
+  const caller = request.auth;
+  if (!caller || caller.token.role !== "ADM") {
+    throw new HttpsError("permission-denied", "관리자만 보고서를 삭제할 수 있습니다.");
+  }
+  const { reportId } = request.data || {};
+  if (!reportId) throw new HttpsError("invalid-argument", "reportId는 필수입니다.");
+
+  const ref = admin.firestore().doc(`reports/${reportId}`);
+  const snap = await ref.get();
+  if (!snap.exists) throw new HttpsError("not-found", "보고서를 찾을 수 없습니다.");
+  if (snap.data().status === "approved") {
+    throw new HttpsError("failed-precondition", "이미 승인된 보고서는 삭제할 수 없습니다.");
+  }
+
+  await ref.delete();
+
+  await writeAudit({
+    actorUid: caller.uid, actorRole: caller.token.role, target: `reports/${reportId}`,
+    action: "결과보고서 삭제", category: "보고서",
+  });
+  return { ok: true };
+});
+
+/**
  * 교육생의 소속기관(예: 관할 소방서)에 출결 관련 사항을 통보한다.
  * 실제 SMS/이메일 발송 API(알리고, NCP SENS 등)는 아직 연동되지 않았다 — 발송 이력은
  * orgNotifications 컬렉션에 정식으로 기록되고 감사로그에도 남지만, 실제 문자/메일 전송은
