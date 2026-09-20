@@ -147,7 +147,8 @@ export default function AttendancePage({ user, role }) {
             </span>
             <img src={qrDataUrl} alt="출석 QR코드" width={320} height={320} />
             <span style={{ font: "var(--type-caption)", color: "var(--text-muted)", textAlign: "center" }}>
-              교육생이 각자 스마트폰 카메라로 스캔하면 자동 출석 처리됩니다.
+              교육생이 로그인 후 [출결 대시보드]의 "QR 스캔" 버튼으로 이 QR을 비추면 자동 출석 처리됩니다.
+              (휴대폰 카메라 앱으로 직접 스캔해도 열리지 않습니다 — 반드시 앱 안에서 스캔해주세요.)
             </span>
             <Button variant="secondary" onClick={() => setQrDataUrl(null)}>닫기</Button>
           </div>
