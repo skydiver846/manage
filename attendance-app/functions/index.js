@@ -92,15 +92,20 @@ exports.createAccount = onCall(async (request) => {
   if (!loginId || !name || !VALID_ROLES.includes(role)) {
     throw new HttpsError("invalid-argument", "loginId, name, role(STU/INS/ADM/APR)은 필수입니다.");
   }
-  // 관리자가 비밀번호를 직접 지정할 수도 있고(권장), 비워두면 기존처럼 임시 비밀번호를 자동 생성한다.
-  // (교육생 계정은 어차피 첫날 QR 자가등록 시 비밀번호가 재설정되므로 자동생성으로 충분하다.)
+  // 관리자가 비밀번호를 직접 지정할 수도 있고(권장), 비워두면 자동 생성한다.
   if (password && password.length < 8) {
     throw new HttpsError("invalid-argument", "비밀번호는 8자 이상이어야 합니다.");
   }
 
   const email = toEmail(loginId);
+  const phoneLast4 = phone && /\d{4}$/.test(String(phone)) ? String(phone).slice(-4) : null;
   const setByAdmin = !!password;
-  const finalPassword = password || generateTempPassword();
+  // 관리자가 비밀번호를 직접 지정하지 않으면, 첫날 QR 자가등록(selfEnrollAndCheckIn)과
+  // 동일한 규칙(로그인ID_휴대전화 뒷자리4자리)으로 만든다 — 자가등록 시 어차피 이 값으로
+  // 다시 덮어써지므로, 처음부터 같은 값을 쓰면 일괄등록 결과 엑셀에 적힌 "초기 비밀번호"와
+  // 실제 로그인 비밀번호가 달라지는 혼동이 없다. 전화번호가 없으면 규칙을 적용할 수
+  // 없으므로 무작위 임시 비밀번호로 대체한다.
+  const finalPassword = password || (phoneLast4 ? makePassword(loginId, phoneLast4) : generateTempPassword());
 
   let userRecord;
   try {
@@ -115,7 +120,7 @@ exports.createAccount = onCall(async (request) => {
 
   await admin.firestore().doc(`users/${userRecord.uid}`).set({
     loginId, name, role, courseId: courseId || null, org: org || null, phone: phone || null,
-    status: "active", mustChangePassword: !setByAdmin,
+    status: "active", mustChangePassword: !setByAdmin && !phoneLast4,
     createdAt: FieldValue.serverTimestamp(), createdBy: caller.uid,
   });
 
