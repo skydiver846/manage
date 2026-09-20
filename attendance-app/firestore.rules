@@ -29,16 +29,19 @@ service cloud.firestore {
       allow read: if isSignedIn() && (isOwner(uid) || isInstructorOf(courseId) || role() in ['ADM','APR']);
 
       // 교육생 셀프 체크(신청) — 최초 생성 및 확정 전 재신청
+      // resource.data.locked는 확정 전 문서에는 아예 없는 필드라, 점(.) 표기법으로 바로
+      // 읽으면 "존재하지 않는 속성" 평가 오류로 규칙 전체가 거부(permission denied)된다.
+      // get(field, default)로 안전하게 읽어야 한다.
       allow create: if role() == 'STU' && isOwner(uid)
         && request.resource.data.status in ['pending', 'earlyLeaveRequested'];
       allow update: if role() == 'STU' && isOwner(uid)
-        && resource.data.locked != true
+        && resource.data.get('locked', false) != true
         && request.resource.data.status in ['pending', 'earlyLeaveRequested'];
 
       // 담당 교관 또는 관리자 확정 — 미체크자(문서 없음) 결석 처리 생성 포함, 확정 전 문서 수정
       // (관리자는 교관이 부재중일 때 대신 확정할 수 있어야 하므로 모든 과정에 대해 허용)
       allow create: if isInstructorOf(courseId) || role() == 'ADM';
-      allow update: if (isInstructorOf(courseId) || role() == 'ADM') && resource.data.locked != true;
+      allow update: if (isInstructorOf(courseId) || role() == 'ADM') && resource.data.get('locked', false) != true;
 
       allow delete: if false;
     }
