@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import QRCode from "qrcode";
 import { getCourse, listPeriods, addPeriod, listAllUsers } from "../../lib/firestore";
+import { deleteCourse } from "../../lib/courses";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { Card, Input, Select, Button, Alert } from "../../components/ui";
@@ -15,11 +16,14 @@ const AUTH_OPTS = [
 
 export default function CourseDetailPage() {
   const { courseId } = useParams();
+  const navigate = useNavigate();
   const [course, setCourse] = useState(null);
   const [periods, setPeriods] = useState([]);
   const [instructors, setInstructors] = useState([]);
   const [msg, setMsg] = useState("");
   const [quickMsg, setQuickMsg] = useState("");
+  const [deleteMsg, setDeleteMsg] = useState("");
+  const [deleting, setDeleting] = useState(false);
   const [form, setForm] = useState({
     no: "", startTime: "", endTime: "", subject: "", kind: "이론", place: "", authMethod: "manual",
   });
@@ -86,6 +90,24 @@ export default function CourseDetailPage() {
     reload().catch((e) => console.error(e));
   }
 
+  async function handleDeleteCourse() {
+    if (!window.confirm(
+      `"${course.name}" 과정을 영구 삭제하시겠습니까?\n` +
+      "교시·출결기록·정정요청 이력까지 함께 삭제되며 되돌릴 수 없습니다. " +
+      "(이미 결과보고서가 작성된 과정은 삭제할 수 없습니다)"
+    )) return;
+    setDeleting(true);
+    setDeleteMsg("");
+    try {
+      await deleteCourse(courseId);
+    } catch (err) {
+      setDeleteMsg("오류: " + err.message);
+      setDeleting(false);
+      return;
+    }
+    navigate("/admin/courses");
+  }
+
   async function handleShowEnrollQr(periodId) {
     // 첫날 공통 QR — 아직 로그인하지 않은 교육생이 스마트폰 카메라로 바로 스캔해서
     // 열 수 있도록 실제 URL을 인코딩한다 (src/pages/EnrollPage.jsx가 이 링크를 받는다).
@@ -107,10 +129,21 @@ export default function CourseDetailPage() {
             {course.type} · {course.startDate}~{course.endDate}
           </span>
         </div>
-        <Link to={`/admin/courses/${courseId}/upload`}>
-          <Button variant="secondary">수강생 명단 엑셀 업로드</Button>
-        </Link>
+        <div style={{ display: "flex", gap: "var(--space-2)" }}>
+          <Link to={`/admin/courses/${courseId}/upload`}>
+            <Button variant="secondary">수강생 명단 엑셀 업로드</Button>
+          </Link>
+          <Button
+            variant="secondary"
+            disabled={deleting}
+            onClick={handleDeleteCourse}
+            style={{ color: "var(--danger-500)", borderColor: "var(--danger-500)" }}
+          >
+            {deleting ? "삭제 중..." : "과정 삭제"}
+          </Button>
+        </div>
       </div>
+      {deleteMsg && <Alert tone="danger">{deleteMsg}</Alert>}
 
       <Card>
         <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>담당 교관</span>

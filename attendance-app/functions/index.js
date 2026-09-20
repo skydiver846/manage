@@ -401,6 +401,58 @@ exports.deleteAccount = onCall(async (request) => {
   return { ok: true };
 });
 
+/**
+ * 관리자가 과정을 영구 삭제한다 — 교시(periods), 출결 기록(attendance 이하 전체), 정정 요청,
+ * 소속기관 통보 이력까지 함께 제거하고, 소속돼 있던 교육생 계정의 courseId는 비운다.
+ * 이미 결과보고서가 작성된 과정은 공식 기록으로 보고 삭제를 막는다(감사 목적 보존) —
+ * 그런 과정은 대신 교육생 계정 쪽 "비활성화"만 개별적으로 쓰도록 안내한다.
+ */
+exports.deleteCourse = onCall(async (request) => {
+  const caller = request.auth;
+  if (!caller || caller.token.role !== "ADM") {
+    throw new HttpsError("permission-denied", "관리자만 과정을 삭제할 수 있습니다.");
+  }
+  const { courseId } = request.data || {};
+  if (!courseId) throw new HttpsError("invalid-argument", "courseId는 필수입니다.");
+
+  const courseRef = admin.firestore().doc(`courses/${courseId}`);
+  const courseSnap = await courseRef.get();
+  if (!courseSnap.exists) throw new HttpsError("not-found", "과정을 찾을 수 없습니다.");
+  const courseData = courseSnap.data();
+
+  const reportsSnap = await admin.firestore().collection("reports")
+    .where("courseId", "==", courseId).limit(1).get();
+  if (!reportsSnap.empty) {
+    throw new HttpsError(
+      "failed-precondition",
+      "이미 결과보고서가 작성된 과정은 삭제할 수 없습니다 (감사 기록 보존 정책)."
+    );
+  }
+
+  await admin.firestore().recursiveDelete(courseRef.collection("periods"));
+  await admin.firestore().recursiveDelete(admin.firestore().collection("attendance").doc(courseId));
+
+  const correctionsSnap = await admin.firestore().collection("corrections")
+    .where("courseId", "==", courseId).get();
+  const orgNotifSnap = await admin.firestore().collection("orgNotifications")
+    .where("courseId", "==", courseId).get();
+  const enrolledStudentsSnap = await admin.firestore().collection("users")
+    .where("courseId", "==", courseId).get();
+
+  const batch = admin.firestore().batch();
+  correctionsSnap.docs.forEach((d) => batch.delete(d.ref));
+  orgNotifSnap.docs.forEach((d) => batch.delete(d.ref));
+  enrolledStudentsSnap.docs.forEach((d) => batch.update(d.ref, { courseId: null }));
+  batch.delete(courseRef);
+  await batch.commit();
+
+  await writeAudit({
+    actorUid: caller.uid, actorRole: caller.token.role, target: `courses/${courseId}`,
+    action: "과정 영구 삭제", reason: `name=${courseData.name}`, category: "계정 변경",
+  });
+  return { ok: true };
+});
+
 /** 관리자가 계정 비밀번호를 새 임시 비밀번호로 초기화 */
 exports.resetPassword = onCall(async (request) => {
   const caller = request.auth;
