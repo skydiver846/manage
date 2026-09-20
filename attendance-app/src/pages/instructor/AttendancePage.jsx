@@ -57,7 +57,8 @@ export default function AttendancePage({ user, role }) {
 
   const course = courses.find((c) => c.id === courseId);
   const period = periods.find((p) => p.id === periodId);
-  const canConfirm = role === "INS" && course?.instructorUid === user.uid;
+  // 담당 교관 본인, 또는 관리자(교관 부재 시 대신 확정)가 확정할 수 있다.
+  const canConfirm = (role === "INS" && course?.instructorUid === user.uid) || role === "ADM";
   const anyLocked = students.some((s) => records[s.id]?.locked);
 
   async function handleShowQr() {
