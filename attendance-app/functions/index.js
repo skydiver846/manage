@@ -231,9 +231,19 @@ exports.selfEnrollAndCheckIn = onCall(async (request) => {
 
   // 프론트엔드가 signInWithCustomToken()으로 즉시 로그인 처리할 수 있도록 커스텀 토큰 발급.
   // 계정 생성 시 이미 설정된 role 등의 커스텀 클레임은 그대로 유지된다.
-  const customToken = await admin.auth().createCustomToken(uid);
+  // 이 시점에는 입교등록(selfClaimed)과 오늘 출석 기록이 이미 커밋된 뒤이므로,
+  // 토큰 발급 자체가 실패하더라도(예: 런타임 서비스 계정에 IAM
+  // roles/iam.serviceAccountTokenCreator 권한이 없어 signBlob이 거부되는 경우)
+  // 등록 결과를 무효화된 것처럼 500 에러로 되돌리지 않는다 — 자동 로그인만 건너뛰고
+  // 성공 응답을 내려 프론트가 "직접 로그인해주세요" 안내를 보여줄 수 있게 한다.
+  let customToken = null;
+  try {
+    customToken = await admin.auth().createCustomToken(uid);
+  } catch (e) {
+    console.error("selfEnrollAndCheckIn: createCustomToken 실패 (등록/출석은 이미 완료됨)", e);
+  }
 
-  return { customToken, name: userData.name, role: userData.role };
+  return { customToken, name: userData.name, role: userData.role, autoLoginFailed: !customToken };
 });
 
 /** 로그인 시도 전에 호출 — 5회 실패 잠금 여부 확인 */
