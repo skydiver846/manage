@@ -18,6 +18,7 @@ export default function EnrollPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+  const [autoLoginFailed, setAutoLoginFailed] = useState(false);
 
   if (!courseId || !periodId) {
     return (
@@ -42,13 +43,20 @@ export default function EnrollPage() {
         courseId,
         periodId,
       });
-      await signInWithCustomToken(auth, res.customToken);
+      // 입교등록·오늘 출석은 서버에서 이미 완료된 뒤 응답이 온 것이므로, 자동 로그인용
+      // customToken 발급이 실패했더라도(res.autoLoginFailed) 등록 자체는 성공으로 처리하고
+      // 로그인 화면으로 보내 직접 로그인하도록 안내한다.
+      if (res.customToken) {
+        await signInWithCustomToken(auth, res.customToken);
+      } else {
+        setAutoLoginFailed(true);
+      }
       setDone(true);
       // 로그인 상태가 반영된 정상 화면으로 이동 — 전체 새로고침으로 이동해야
       // App.jsx가 "/enroll" 우회 분기를 벗어나 정상 라우팅을 시작한다.
       setTimeout(() => {
         window.location.href = "/";
-      }, 900);
+      }, res.customToken ? 900 : 2500);
     } catch (err) {
       setError(err.message || "등록에 실패했습니다. 입력값을 확인해주세요.");
     } finally {
@@ -60,7 +68,11 @@ export default function EnrollPage() {
     return (
       <CenterCard>
         <div style={{ padding: "var(--space-6)" }}>
-          <Alert tone="success">입교등록과 오늘 출석이 완료됐습니다. 잠시 후 이동합니다...</Alert>
+          <Alert tone="success">
+            {autoLoginFailed
+              ? `입교등록과 오늘 출석이 완료됐습니다. 자동 로그인에는 실패했으니, 로그인 화면에서 로그인ID "${loginId.trim()}", 비밀번호 "${loginId.trim()}_${phoneLast4.trim()}"로 로그인해주세요. 잠시 후 이동합니다...`
+              : "입교등록과 오늘 출석이 완료됐습니다. 잠시 후 이동합니다..."}
+          </Alert>
         </div>
       </CenterCard>
     );

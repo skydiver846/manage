@@ -111,7 +111,7 @@ export default function Login() {
           }}
         >
           <span style={{ font: "var(--type-caption)", color: "var(--text-muted)" }}>
-            문의 · 교육기획과 운영지원팀 내선 2204
+            문의 · 전남광주통합특별시 소방학교 교육운영과
           </span>
         </div>
       </form>
