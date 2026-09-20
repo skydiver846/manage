@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { listAllUsers, listCourses } from "../../lib/firestore";
-import { createAccount, deactivateAccount, resetPassword, unlockAccount, unlockEnrollAttempt } from "../../lib/account";
+import { createAccount, deactivateAccount, deleteAccount, resetPassword, unlockAccount, unlockEnrollAttempt } from "../../lib/account";
 import { Card, Input, Select, Button, Alert, Pill } from "../../components/ui";
 
 // 관리자가 "무작위 생성" 버튼을 눌렀을 때 화면에서 바로 채워줄 임시 비밀번호.
@@ -35,6 +35,8 @@ export default function AccountsPage() {
   const [resetInfo, setResetInfo] = useState(null);
   const [unlockBusyUid, setUnlockBusyUid] = useState(null);
   const [unlockMsg, setUnlockMsg] = useState("");
+  const [deleteBusyUid, setDeleteBusyUid] = useState(null);
+  const [deleteMsg, setDeleteMsg] = useState("");
 
   async function reload() {
     setUsers(await listAllUsers());
@@ -124,6 +126,24 @@ export default function AccountsPage() {
       setUnlockMsg("오류: " + err.message);
     }
     setUnlockBusyUid(null);
+  }
+
+  async function handleDelete(uid, name, loginId) {
+    if (!window.confirm(
+      `${name}(${loginId}) 계정을 영구 삭제하시겠습니까?\n` +
+      "계정 정보는 완전히 사라지며 되돌릴 수 없습니다. (과거 출결·보고서 기록 자체는 그대로 남습니다)"
+    )) return;
+    setDeleteBusyUid(uid);
+    setDeleteMsg("");
+    try {
+      await deleteAccount(uid);
+    } catch (err) {
+      setDeleteMsg("오류: " + err.message);
+      setDeleteBusyUid(null);
+      return;
+    }
+    setDeleteBusyUid(null);
+    reload().catch((e) => console.error(e));
   }
 
   return (
@@ -241,6 +261,11 @@ export default function AccountsPage() {
             <Alert tone="danger">{unlockMsg}</Alert>
           </div>
         )}
+        {deleteMsg && (
+          <div style={{ padding: "var(--space-3) var(--space-5)" }}>
+            <Alert tone="danger">{deleteMsg}</Alert>
+          </div>
+        )}
         <div style={{ display: "flex", flexDirection: "column" }}>
           {users === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
           {users?.map((u) => (
@@ -265,7 +290,12 @@ export default function AccountsPage() {
               )}
               <span style={{ marginLeft: "auto", display: "flex", gap: "var(--space-2)", flexWrap: "wrap", justifyContent: "flex-end" }}>
                 {u.status === "expired" ? (
-                  <Pill tone="bad">만료됨</Pill>
+                  <>
+                    <Pill tone="bad">만료됨</Pill>
+                    <Button variant="secondary" size="sm" disabled={deleteBusyUid === u.id} onClick={() => handleDelete(u.id, u.name, u.loginId)} style={{ color: "var(--danger-500)", borderColor: "var(--danger-500)" }}>
+                      {deleteBusyUid === u.id ? "처리 중..." : "영구 삭제"}
+                    </Button>
+                  </>
                 ) : (
                   <>
                     <Button variant="secondary" size="sm" disabled={unlockBusyUid === u.id + ":login"} onClick={() => handleUnlockAccount(u.id, u.loginId, u.name)}>

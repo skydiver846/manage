@@ -366,6 +366,41 @@ exports.deactivateAccount = onCall(async (request) => {
   return { ok: true };
 });
 
+/**
+ * 관리자가 이미 만료(비활성화)된 계정을 영구 삭제한다 — Auth 계정 + Firestore users 문서를 완전히 제거.
+ * 되돌릴 수 없으므로 status가 "expired"인 계정만 대상으로 허용한다(먼저 비활성화를 거치도록 강제).
+ * 출결·보고서·감사로그 등 과거 기록은 uid만 남기고 그대로 보존된다(법적 증적 목적) — 이 계정이
+ * 다시 등장하는 화면(실시간 통계 등)에서는 이름이 사라지고 uid만 보일 수 있다.
+ */
+exports.deleteAccount = onCall(async (request) => {
+  const caller = request.auth;
+  if (!caller || caller.token.role !== "ADM") {
+    throw new HttpsError("permission-denied", "관리자만 계정을 삭제할 수 있습니다.");
+  }
+  const { uid } = request.data || {};
+  if (!uid) throw new HttpsError("invalid-argument", "uid는 필수입니다.");
+
+  const targetSnap = await admin.firestore().doc(`users/${uid}`).get();
+  if (!targetSnap.exists) throw new HttpsError("not-found", "계정을 찾을 수 없습니다.");
+  const targetData = targetSnap.data();
+  if (targetData.status !== "expired") {
+    throw new HttpsError("failed-precondition", "먼저 계정을 비활성화(만료 처리)한 뒤에만 삭제할 수 있습니다.");
+  }
+
+  try {
+    await admin.auth().deleteUser(uid);
+  } catch (e) {
+    if (e.code !== "auth/user-not-found") throw e;
+  }
+  await targetSnap.ref.delete();
+
+  await writeAudit({
+    actorUid: caller.uid, actorRole: caller.token.role, target: `users/${uid}`,
+    action: "계정 영구 삭제", reason: `loginId=${targetData.loginId}`, category: "계정 변경",
+  });
+  return { ok: true };
+});
+
 /** 관리자가 계정 비밀번호를 새 임시 비밀번호로 초기화 */
 exports.resetPassword = onCall(async (request) => {
   const caller = request.auth;

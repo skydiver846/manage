@@ -4,6 +4,7 @@ import { functions } from "./firebase";
 const bootstrapFirstAdminFn = httpsCallable(functions, "bootstrapFirstAdmin");
 const createAccountFn = httpsCallable(functions, "createAccount");
 const deactivateAccountFn = httpsCallable(functions, "deactivateAccount");
+const deleteAccountFn = httpsCallable(functions, "deleteAccount");
 const resetPasswordFn = httpsCallable(functions, "resetPassword");
 const selfEnrollAndCheckInFn = httpsCallable(functions, "selfEnrollAndCheckIn");
 const unlockAccountFn = httpsCallable(functions, "unlockAccount");
@@ -27,6 +28,12 @@ export async function createAccount({ loginId, name, role, courseId, org, phone,
 
 export async function deactivateAccount(uid) {
   const res = await deactivateAccountFn({ uid });
+  return res.data;
+}
+
+/** 이미 만료(비활성화)된 계정을 영구 삭제. Auth 계정 + Firestore 문서를 완전히 제거하며 되돌릴 수 없다. */
+export async function deleteAccount(uid) {
+  const res = await deleteAccountFn({ uid });
   return res.data;
 }
 
