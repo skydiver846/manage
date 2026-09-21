@@ -86,6 +86,30 @@ export default function AttendancePage({ user, role }) {
     reloadRecords().catch((e) => console.error(e));
   }
 
+  // QR 스캔이 안 되는 상황(기기 문제, 네트워크 등)에서도 교관/관리자 권한으로 그 교시를
+  // 전원 출석 처리하고 바로 확정할 수 있게 하는 수단. 이미 개별 체크된 학생(지각·조퇴·결석 등)은
+  // 그대로 두고, 아직 미체크인 학생만 출석으로 채워서 확정한다.
+  async function handleMarkAllPresent() {
+    if (!window.confirm("QR 체크 없이 미체크 학생 전원을 출석으로 처리하고 확정하시겠습니까?")) return;
+    setConfirming(true);
+    setMsg("");
+    try {
+      const finalRecords = students.map((s) => {
+        const rec = records[s.id];
+        const status = rec?.status === "pending" ? "present" : rec?.status || "present";
+        return { uid: s.id, status };
+      });
+      await confirmPeriod(courseId, today, periodId, finalRecords, user.uid);
+      setMsg("QR 없이 전원 출석 처리 후 확정했습니다 — 확정 후에는 정정 절차를 거쳐야 합니다.");
+    } catch (err) {
+      setMsg("오류: " + err.message);
+      setConfirming(false);
+      return;
+    }
+    setConfirming(false);
+    reloadRecords().catch((e) => console.error(e));
+  }
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 900 }}>
       <div>
@@ -120,6 +144,16 @@ export default function AttendancePage({ user, role }) {
           {period?.authMethod === "qr" && (
             <Button variant="secondary" onClick={handleShowQr}>QR 코드 표시</Button>
           )}
+          {canConfirm && !anyLocked && (
+            <Button
+              variant="secondary"
+              disabled={confirming || periods.length === 0}
+              onClick={handleMarkAllPresent}
+              title="QR 스캔이 안 될 때, 미체크 학생 전원을 출석 처리하고 바로 확정합니다."
+            >
+              QR 없이 전원 출석 확정
+            </Button>
+          )}
           {canConfirm && (
             <Button style={{ marginLeft: "auto" }} disabled={confirming || periods.length === 0 || anyLocked} loading={confirming} onClick={handleConfirm}>
               {anyLocked ? "확정 완료" : "이 교시 일괄 확정"}
@@ -143,13 +177,19 @@ export default function AttendancePage({ user, role }) {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>
-              {course?.name} · {period?.no} {period?.subject}
-            </span>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+              <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>
+                {course?.name} · {period?.no} {period?.subject}
+              </span>
+              <span style={{ font: "var(--type-caption)", color: "var(--text-subtle)" }}>
+                교시별 출석 QR · 앱 내부 스캔 전용 (첫날 등록 QR과는 다른 용도입니다)
+              </span>
+            </div>
             <img src={qrDataUrl} alt="출석 QR코드" width={320} height={320} />
             <span style={{ font: "var(--type-caption)", color: "var(--text-muted)", textAlign: "center" }}>
-              교육생이 로그인 후 [출결 대시보드]의 "QR 스캔" 버튼으로 이 QR을 비추면 자동 출석 처리됩니다.
-              (휴대폰 카메라 앱으로 직접 스캔해도 열리지 않습니다 — 반드시 앱 안에서 스캔해주세요.)
+              이미 로그인된 교육생이 [출결 대시보드]의 "QR 스캔" 버튼을 눌러 이 QR을 비추면 자동 출석 처리됩니다.
+              휴대폰 기본 카메라 앱으로 직접 스캔해도 아무 일도 일어나지 않습니다 — 반드시 앱 안에서 스캔해야 합니다.
+              (로그인 없이 휴대폰 카메라로 바로 스캔하는 QR은 과정 관리 화면의 "첫날 등록 QR"입니다.)
             </span>
             <Button variant="secondary" onClick={() => setQrDataUrl(null)}>닫기</Button>
           </div>
