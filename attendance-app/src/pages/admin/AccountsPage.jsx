@@ -44,6 +44,7 @@ export default function AccountsPage() {
   const [selectedUids, setSelectedUids] = useState(() => new Set());
   const [bulkDeleting, setBulkDeleting] = useState(false);
   const [bulkMsg, setBulkMsg] = useState("");
+  const [createTab, setCreateTab] = useState(null); // null | "bulk" | "manual"
 
   async function reload() {
     setUsers(await listAllUsers());
@@ -207,32 +208,63 @@ export default function AccountsPage() {
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 900 }}>
       <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>계정 관리</h1>
 
-      <Card>
-        <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>교육생 대량 업로드</span>
-        <div style={{ marginTop: "var(--space-3)", display: "flex", gap: "var(--space-3)", alignItems: "flex-end", flexWrap: "wrap" }}>
-          <Select
-            label="대상 과정"
-            value={bulkCourseId}
-            onChange={(e) => setBulkCourseId(e.target.value)}
-            style={{ width: 260 }}
-            options={[{ value: "", label: "과정을 선택하세요" }, ...courses.map((c) => ({ value: c.id, label: c.name }))]}
-          />
-          <Button
-            variant="secondary"
-            disabled={!bulkCourseId}
-            onClick={() => navigate(`/admin/courses/${bulkCourseId}/upload`)}
+      <Card padding="none">
+        <div style={{ display: "flex" }}>
+          <button
+            type="button"
+            onClick={() => setCreateTab(createTab === "bulk" ? null : "bulk")}
+            style={{
+              flex: 1, textAlign: "left", padding: "var(--space-4) var(--space-5)",
+              background: createTab === "bulk" ? "var(--surface-card)" : "var(--surface-sunken)",
+              border: "none", borderBottom: `2px solid ${createTab === "bulk" ? "var(--green-600)" : "transparent"}`,
+              cursor: "pointer", font: "var(--type-label)",
+              color: createTab === "bulk" ? "var(--text-strong)" : "var(--text-muted)",
+            }}
           >
-            엑셀로 교육생 명단 업로드
-          </Button>
+            계정생성(교육생)
+          </button>
+          <button
+            type="button"
+            onClick={() => setCreateTab(createTab === "manual" ? null : "manual")}
+            style={{
+              flex: 1, textAlign: "left", padding: "var(--space-4) var(--space-5)",
+              background: createTab === "manual" ? "var(--surface-card)" : "var(--surface-sunken)",
+              border: "none", borderLeft: "1px solid var(--border-subtle)",
+              borderBottom: `2px solid ${createTab === "manual" ? "var(--green-600)" : "transparent"}`,
+              cursor: "pointer", font: "var(--type-label)",
+              color: createTab === "manual" ? "var(--text-strong)" : "var(--text-muted)",
+            }}
+          >
+            계정생성(교직원)
+          </button>
         </div>
-        <span style={{ display: "block", marginTop: "var(--space-2)", font: "var(--type-caption)", color: "var(--text-muted)" }}>
-          교육생 계정은 과정에 소속돼야 하므로, 먼저 업로드할 과정을 선택하세요.
-        </span>
-      </Card>
 
-      <Card>
-        <form onSubmit={handleCreate} style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
-          <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>계정 생성</span>
+        {createTab === "bulk" && (
+          <div style={{ padding: "var(--space-5)", borderTop: "1px solid var(--border-subtle)" }}>
+            <div style={{ display: "flex", gap: "var(--space-3)", alignItems: "flex-end", flexWrap: "wrap" }}>
+              <Select
+                label="대상 과정"
+                value={bulkCourseId}
+                onChange={(e) => setBulkCourseId(e.target.value)}
+                style={{ width: 260 }}
+                options={[{ value: "", label: "과정을 선택하세요" }, ...courses.map((c) => ({ value: c.id, label: c.name }))]}
+              />
+              <Button
+                variant="secondary"
+                disabled={!bulkCourseId}
+                onClick={() => navigate(`/admin/courses/${bulkCourseId}/upload`)}
+              >
+                엑셀로 교육생 명단 업로드
+              </Button>
+            </div>
+            <span style={{ display: "block", marginTop: "var(--space-2)", font: "var(--type-caption)", color: "var(--text-muted)" }}>
+              교육생 계정은 과정에 소속돼야 하므로, 먼저 업로드할 과정을 선택하세요.
+            </span>
+          </div>
+        )}
+
+        {createTab === "manual" && (
+        <form onSubmit={handleCreate} style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)", padding: "var(--space-5)", borderTop: "1px solid var(--border-subtle)" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "var(--space-4)" }}>
             <Input label="로그인 ID" required value={form.loginId} onChange={(e) => setForm({ ...form, loginId: e.target.value })} placeholder="사번 또는 교육생 번호" />
             <Input label="이름" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
@@ -294,6 +326,7 @@ export default function AccountsPage() {
             </Alert>
           )}
         </form>
+        )}
       </Card>
 
       <Card padding="none">
