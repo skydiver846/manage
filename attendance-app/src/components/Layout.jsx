@@ -101,17 +101,19 @@ export default function Layout({ user, role }) {
         <header
           style={{
             display: "flex", alignItems: "center", gap: "var(--space-3)",
-            justifyContent: isNarrow ? "space-between" : "flex-end",
+            justifyContent: "space-between",
             height: 64, padding: "0 var(--space-6)",
             background: "var(--surface-card)", borderBottom: "1px solid var(--border-subtle)",
             position: "sticky", top: 0, zIndex: 10,
           }}
         >
-          {isNarrow && (
+          {isNarrow ? (
             <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
               <img src="/emblem.png?v=2" alt="소방학교" style={{ height: 24, width: "auto" }} />
               <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>출석관리시스템</span>
             </div>
+          ) : (
+            <span style={{ font: "var(--type-body-sm)", color: "var(--text-muted)" }}>전남광주통합특별시 소방학교</span>
           )}
           <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
             <span style={{ font: "var(--type-body-sm)", color: "var(--text-strong)" }}>{user.displayName}</span>
