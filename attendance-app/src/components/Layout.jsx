@@ -112,9 +112,12 @@ export default function Layout({ role }) {
               <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>출석관리시스템</span>
             </div>
           ) : (
-            <span style={{ font: "var(--type-h3)", fontWeight: 800, color: "var(--text-strong)" }}>
-              전남광주통합특별시 소방학교
-            </span>
+            <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+              <img src="/emblem.png?v=2" alt="소방학교" style={{ height: 40, width: "auto" }} />
+              <span style={{ font: "var(--type-h3)", fontWeight: 800, color: "var(--text-strong)" }}>
+                전남광주통합특별시 소방학교
+              </span>
+            </div>
           )}
         </header>
 
@@ -178,12 +181,9 @@ export default function Layout({ role }) {
 
 function Brand({ role }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", padding: "0 var(--space-2)" }}>
-      <img src="/emblem.png?v=2" alt="소방학교" style={{ height: 28, width: "auto" }} />
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <span style={{ font: "var(--type-label)", color: "#fff" }}>출석관리시스템</span>
-        <span style={{ font: "var(--type-caption)", opacity: 0.6 }}>{ROLE_LABELS[role] || role}</span>
-      </div>
+    <div style={{ display: "flex", flexDirection: "column", padding: "0 var(--space-2)" }}>
+      <span style={{ font: "var(--type-label)", color: "#fff" }}>출석관리시스템</span>
+      <span style={{ font: "var(--type-caption)", opacity: 0.6 }}>{ROLE_LABELS[role] || role}</span>
     </div>
   );
 }
