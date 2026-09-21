@@ -1,18 +1,30 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { listReportsByStatus } from "../../lib/firestore";
+import { listReportsByStatus, listReportsByStatuses } from "../../lib/firestore";
 import { decideReport } from "../../lib/reports";
 import { Card, Input, Button, Alert, Pill } from "../../components/ui";
 import { REPORT_STATUS_LABEL } from "../../lib/ui";
 
+function formatTs(ts) {
+  if (!ts) return "-";
+  const d = ts.toDate ? ts.toDate() : new Date(ts.seconds * 1000);
+  return d.toLocaleString("ko-KR", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
+}
+
 export default function ApprovalInboxPage() {
   const [reports, setReports] = useState(null);
+  const [history, setHistory] = useState(null);
   const [busyId, setBusyId] = useState(null);
   const [noteDraft, setNoteDraft] = useState({});
   const [msg, setMsg] = useState("");
 
   async function reload() {
-    setReports(await listReportsByStatus("reviewing"));
+    const [pending, decided] = await Promise.all([
+      listReportsByStatus("reviewing"),
+      listReportsByStatuses(["approved", "rejected"]),
+    ]);
+    setReports(pending);
+    setHistory(decided);
   }
 
   useEffect(() => {
@@ -72,6 +84,39 @@ export default function ApprovalInboxPage() {
               </div>
             </div>
           ))}
+        </div>
+      </Card>
+
+      <Card padding="none">
+        <div style={{ padding: "var(--space-4) var(--space-5)", borderBottom: "1px solid var(--border-subtle)", font: "var(--type-label)", color: "var(--text-strong)" }}>
+          결재 완료 내역 ({history?.length ?? 0}건)
+        </div>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {history === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
+          {history?.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>아직 결재를 완료한 보고서가 없습니다.</span>}
+          {history?.map((r) => {
+            const decidedAt = (r.approvalPath || []).find((p) => p.step === "결재")?.at;
+            return (
+              <Link
+                key={r.id}
+                to={`/reports/${r.id}`}
+                style={{
+                  display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "var(--space-2)",
+                  padding: "var(--space-3) var(--space-5)", borderBottom: "1px solid var(--border-subtle)",
+                  textDecoration: "none", color: "inherit",
+                }}
+              >
+                <span style={{ font: "var(--type-body-sm)" }}>
+                  <strong>{r.courseName}</strong>
+                  <span style={{ color: "var(--text-muted)", marginLeft: "var(--space-2)" }}>{r.date} · 출석률 {r.summary?.rate ?? 0}%</span>
+                </span>
+                <span style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+                  <span style={{ font: "var(--type-caption)", color: "var(--text-muted)" }}>{formatTs(decidedAt)}</span>
+                  <Pill status={r.status}>{REPORT_STATUS_LABEL[r.status] || r.status}</Pill>
+                </span>
+              </Link>
+            );
+          })}
         </div>
       </Card>
     </div>

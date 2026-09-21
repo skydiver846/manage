@@ -174,6 +174,14 @@ export async function listReportsByStatus(status) {
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
 
+/** 여러 상태를 한 번에 조회 (예: 결재권자의 "결재 완료 내역" — approved/rejected). */
+export async function listReportsByStatuses(statuses) {
+  const snap = await getDocs(
+    query(collection(db, "reports"), where("status", "in", statuses), orderBy("createdAt", "desc"))
+  );
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+}
+
 export async function getReport(id) {
   const snap = await getDoc(doc(db, "reports", id));
   return snap.exists() ? { id: snap.id, ...snap.data() } : null;
