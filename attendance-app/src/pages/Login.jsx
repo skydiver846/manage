@@ -58,7 +58,7 @@ export default function Login() {
         }}
       >
         <div style={{ padding: "var(--space-5) var(--space-6)", background: "var(--green-800)" }}>
-          <div style={{ font: "var(--type-label)", color: "#fff" }}>출석관리시스템 로그인</div>
+          <div style={{ fontSize: "var(--text-lg)", fontWeight: 700, color: "#fff" }}>출석관리시스템 로그인</div>
         </div>
 
         <div style={{ padding: "var(--space-6)", display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
@@ -66,7 +66,7 @@ export default function Login() {
             label="아이디"
             value={loginId}
             onChange={(e) => setLoginId(e.target.value)}
-            placeholder="사번 또는 교육생 번호"
+            placeholder="관리자가 부여한 로그인 아이디"
             required
             autoFocus
             size="lg"
@@ -100,7 +100,7 @@ export default function Login() {
             borderTop: "1px solid var(--green-100)",
           }}
         >
-          <span style={{ font: "var(--type-caption)", color: "var(--text-muted)" }}>
+          <span style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>
             문의 · 전남광주통합특별시 소방학교 교육운영과
           </span>
         </div>
