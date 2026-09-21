@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getReport, getUserDoc } from "../../lib/firestore";
-import { Card, Button, Pill } from "../../components/ui";
+import { withdrawReport, refreshReportSummary } from "../../lib/reports";
+import { Card, Button, Pill, Alert } from "../../components/ui";
 import { REPORT_STATUS_LABEL } from "../../lib/ui";
 
 const STEP_LABEL = { 작성: "작성", "검토·상신": "검토·상신", 결재: "결재" };
@@ -12,40 +13,94 @@ function formatTs(ts) {
   return d.toLocaleString("ko-KR", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
 }
 
-export default function ReportDetailPage() {
+export default function ReportDetailPage({ role }) {
   const { reportId } = useParams();
   const navigate = useNavigate();
   const [report, setReport] = useState(null);
   const [names, setNames] = useState({});
   const [notFound, setNotFound] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
+
+  async function reload() {
+    const r = await getReport(reportId);
+    if (!r) { setNotFound(true); return; }
+    setReport(r);
+    const nameMap = {};
+    for (const step of r.approvalPath || []) {
+      if (step.who && !nameMap[step.who]) {
+        const u = await getUserDoc(step.who);
+        nameMap[step.who] = u?.name || step.who;
+      }
+    }
+    setNames(nameMap);
+  }
 
   useEffect(() => {
-    getReport(reportId).then(async (r) => {
-      if (!r) { setNotFound(true); return; }
-      setReport(r);
-      const nameMap = {};
-      for (const step of r.approvalPath || []) {
-        if (step.who && !nameMap[step.who]) {
-          const u = await getUserDoc(step.who);
-          nameMap[step.who] = u?.name || step.who;
-        }
-      }
-      setNames(nameMap);
-    });
+    reload().catch((e) => console.error(e));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reportId]);
+
+  async function handleWithdraw() {
+    if (!window.confirm("이 보고서의 상신을 취소하고 \"작성 완료\" 상태로 되돌리시겠습니까? 결재 대기함에서 사라집니다.")) return;
+    setBusy(true);
+    setMsg("");
+    try {
+      await withdrawReport(reportId);
+    } catch (err) {
+      setMsg("오류: " + err.message);
+      setBusy(false);
+      return;
+    }
+    setBusy(false);
+    reload().catch((e) => console.error(e));
+  }
+
+  async function handleRefresh() {
+    setBusy(true);
+    setMsg("");
+    try {
+      await refreshReportSummary(reportId);
+      setMsg("현재 출결 데이터로 집계를 다시 계산했습니다.");
+    } catch (err) {
+      setMsg("오류: " + err.message);
+      setBusy(false);
+      return;
+    }
+    setBusy(false);
+    reload().catch((e) => console.error(e));
+  }
 
   if (notFound) return <Card>보고서를 찾을 수 없습니다.</Card>;
   if (!report) return <p style={{ color: "var(--text-muted)" }}>불러오는 중...</p>;
 
   const s = report.summary || {};
   const docNo = `R-${report.date}-${report.id.slice(0, 6).toUpperCase()}`;
+  const canWithdraw = role === "ADM" && report.status === "reviewing";
+  const canRefresh = (role === "ADM" || role === "INS") && report.status === "submitted";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-5)", maxWidth: 760 }}>
-      <div data-no-print style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div data-no-print style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "var(--space-2)" }}>
         <Button variant="ghost" onClick={() => navigate(-1)}>← 목록으로</Button>
-        <Button onClick={() => window.print()}>PDF로 저장 / 인쇄</Button>
+        <div style={{ display: "flex", gap: "var(--space-2)" }}>
+          {canRefresh && (
+            <Button variant="secondary" disabled={busy} onClick={handleRefresh}>
+              {busy ? "처리 중..." : "출결 다시 집계(수정)"}
+            </Button>
+          )}
+          {canWithdraw && (
+            <Button
+              variant="secondary" disabled={busy} onClick={handleWithdraw}
+              style={{ color: "var(--danger-500)", borderColor: "var(--danger-500)" }}
+            >
+              {busy ? "처리 중..." : "상신취소"}
+            </Button>
+          )}
+          <Button onClick={() => window.print()}>PDF로 저장 / 인쇄</Button>
+        </div>
       </div>
+      {msg && <div data-no-print><Alert tone={msg.startsWith("오류") ? "danger" : "success"}>{msg}</Alert></div>}
 
       <div data-print-area>
         <Card style={{ padding: "var(--space-8)" }}>

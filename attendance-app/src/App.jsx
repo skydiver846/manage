@@ -114,7 +114,7 @@ function App() {
             <RequireRole roles={["APR"]} role={role}><ApprovalInboxPage /></RequireRole>
           } />
           <Route path="/reports/:reportId" element={
-            <RequireRole roles={["INS", "ADM", "APR"]} role={role}><ReportDetailPage /></RequireRole>
+            <RequireRole roles={["INS", "ADM", "APR"]} role={role}><ReportDetailPage role={role} /></RequireRole>
           } />
           <Route path="*" element={<Navigate to={home} replace />} />
         </Route>

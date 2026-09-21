@@ -5,6 +5,8 @@ const createReportFn = httpsCallable(functions, "createReport");
 const forwardReportFn = httpsCallable(functions, "forwardReport");
 const decideReportFn = httpsCallable(functions, "decideReport");
 const deleteReportFn = httpsCallable(functions, "deleteReport");
+const withdrawReportFn = httpsCallable(functions, "withdrawReport");
+const refreshReportSummaryFn = httpsCallable(functions, "refreshReportSummary");
 
 export async function createReport(courseId, date) {
   const res = await createReportFn({ courseId, date });
@@ -25,4 +27,16 @@ export async function decideReport(reportId, decision, note) {
 export async function deleteReport(reportId) {
   const res = await deleteReportFn({ reportId });
   return res.data;
+}
+
+/** 관리자 전용 — 결재 대기 중인 보고서를 "작성 완료" 상태로 되돌린다(상신취소). */
+export async function withdrawReport(reportId) {
+  const res = await withdrawReportFn({ reportId });
+  return res.data;
+}
+
+/** 아직 상신 전인 보고서의 집계를 현재 출결 데이터로 다시 계산 (수정). */
+export async function refreshReportSummary(reportId) {
+  const res = await refreshReportSummaryFn({ reportId });
+  return res.data; // { summary }
 }

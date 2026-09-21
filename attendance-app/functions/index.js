@@ -643,6 +643,83 @@ exports.forwardReport = onCall(async (request) => {
   return { ok: true };
 });
 
+/**
+ * 관리자가 상신했던 보고서를 다시 거둬들인다 — 결재권자의 결재 대기함에서 빠지고,
+ * "작성 완료" 상태로 돌아가 재집계(refreshReportSummary)나 재상신이 가능해진다.
+ * 이미 결재(승인/반려)된 보고서는 되돌릴 수 없다.
+ */
+exports.withdrawReport = onCall(async (request) => {
+  const caller = request.auth;
+  if (!caller || caller.token.role !== "ADM") {
+    throw new HttpsError("permission-denied", "관리자만 상신을 취소할 수 있습니다.");
+  }
+  const { reportId } = request.data || {};
+  if (!reportId) throw new HttpsError("invalid-argument", "reportId는 필수입니다.");
+
+  const ref = admin.firestore().doc(`reports/${reportId}`);
+  const snap = await ref.get();
+  if (!snap.exists) throw new HttpsError("not-found", "보고서를 찾을 수 없습니다.");
+  if (snap.data().status !== "reviewing") {
+    throw new HttpsError("failed-precondition", "결재 대기 중인 보고서만 상신취소할 수 있습니다.");
+  }
+
+  await ref.update({
+    status: "submitted",
+    approvalPath: FieldValue.arrayUnion({
+      step: "상신취소", who: caller.uid, at: Timestamp.now(), status: "완료",
+    }),
+  });
+
+  await writeAudit({
+    actorUid: caller.uid, actorRole: caller.token.role, target: `reports/${reportId}`,
+    action: "보고서 상신취소", category: "보고서",
+  });
+  return { ok: true };
+});
+
+/**
+ * 아직 상신 전(submitted) 상태인 보고서의 집계를 현재 출결 데이터로 다시 계산해 덮어쓴다.
+ * 교관이 출결을 확정하기 전에 보고서를 먼저 만들어버린 경우처럼, 실제 출결과 보고서
+ * 수치가 어긋났을 때 "수정" 용도로 쓴다 — createReport와 동일한 집계 로직을 재사용한다.
+ * 이미 상신된 보고서는 withdrawReport로 먼저 되돌려야 수정할 수 있다.
+ */
+exports.refreshReportSummary = onCall(async (request) => {
+  const caller = request.auth;
+  const { reportId } = request.data || {};
+  if (!reportId) throw new HttpsError("invalid-argument", "reportId는 필수입니다.");
+
+  const ref = admin.firestore().doc(`reports/${reportId}`);
+  const snap = await ref.get();
+  if (!snap.exists) throw new HttpsError("not-found", "보고서를 찾을 수 없습니다.");
+  const report = snap.data();
+  if (report.status !== "submitted") {
+    throw new HttpsError("failed-precondition", "상신 전(작성 완료) 상태인 보고서만 다시 집계할 수 있습니다.");
+  }
+  await assertInstructorOrAdmin(caller, report.courseId);
+
+  const periodsSnap = await admin.firestore().collection(`courses/${report.courseId}/periods`).get();
+  const summary = { total: 0, present: 0, late: 0, earlyLeave: 0, absent: 0, excused: 0, pending: 0 };
+  for (const p of periodsSnap.docs) {
+    const recordsSnap = await admin.firestore()
+      .collection(`attendance/${report.courseId}/${report.date}/${p.id}/records`).get();
+    for (const r of recordsSnap.docs) {
+      const status = r.data().status;
+      summary.total += 1;
+      if (summary[status] !== undefined) summary[status] += 1;
+    }
+  }
+  const denom = summary.total || 1;
+  summary.rate = Math.round(((summary.total - summary.absent) / denom) * 1000) / 10;
+
+  await ref.update({ summary, updatedAt: FieldValue.serverTimestamp(), updatedBy: caller.uid });
+
+  await writeAudit({
+    actorUid: caller.uid, actorRole: caller.token.role, target: `reports/${reportId}`,
+    action: "결과보고서 재집계(수정)", category: "보고서",
+  });
+  return { summary };
+});
+
 /** 결재권자가 보고서를 승인/반려한다. */
 exports.decideReport = onCall(async (request) => {
   const caller = request.auth;
