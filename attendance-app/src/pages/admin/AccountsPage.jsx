@@ -50,6 +50,7 @@ export default function AccountsPage() {
   const [bulkDeleting, setBulkDeleting] = useState(false);
   const [bulkMsg, setBulkMsg] = useState("");
   const [createTab, setCreateTab] = useState(null); // null | "bulk" | "manual"
+  const [accountGroupTab, setAccountGroupTab] = useState(null); // null | "STU" | "INS" | "APR" | "ADM"
 
   async function reload() {
     setUsers(await listAllUsers());
@@ -411,34 +412,43 @@ export default function AccountsPage() {
             <Button size="sm" variant="ghost" disabled={bulkDeleting} onClick={() => setSelectedUids(new Set())}>선택 해제</Button>
           </div>
         )}
+        {users !== null && (
+          <SectionTabs
+            tabs={ROLE_GROUP_ORDER
+              .filter((roleKey) => users.some((u) => u.role === roleKey))
+              .map((roleKey) => ({
+                key: roleKey,
+                label: `${ROLE_GROUP_LABEL[roleKey]} (${users.filter((u) => u.role === roleKey).length})`,
+              }))}
+            active={accountGroupTab}
+            onChange={setAccountGroupTab}
+          />
+        )}
         <div style={{ display: "flex", flexDirection: "column" }}>
           {users === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
-          {users !== null && ROLE_GROUP_ORDER.map((roleKey) => {
+          {users !== null && accountGroupTab && (() => {
+            const roleKey = accountGroupTab;
             const groupUsers = users.filter((u) => u.role === roleKey);
-            if (groupUsers.length === 0) return null;
             const expiredInGroup = groupUsers.filter((u) => u.status === "expired");
             const allExpiredSelected = expiredInGroup.length > 0 && expiredInGroup.every((u) => selectedUids.has(u.id));
             return (
               <div key={roleKey}>
-                <div
-                  style={{
-                    display: "flex", alignItems: "center", gap: "var(--space-3)",
-                    padding: "var(--space-2) var(--space-5)", background: "var(--surface-sunken)",
-                    borderBottom: "1px solid var(--border-subtle)",
-                  }}
-                >
-                  <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>
-                    {ROLE_GROUP_LABEL[roleKey]} ({groupUsers.length})
-                  </span>
-                  {expiredInGroup.length > 0 && (
+                {expiredInGroup.length > 0 && (
+                  <div
+                    style={{
+                      display: "flex", justifyContent: "flex-end",
+                      padding: "var(--space-2) var(--space-5)", background: "var(--surface-sunken)",
+                      borderBottom: "1px solid var(--border-subtle)",
+                    }}
+                  >
                     <Checkbox
                       label={`만료 계정 전체 선택 (${expiredInGroup.length})`}
                       checked={allExpiredSelected}
                       onChange={(e) => toggleSelectAllExpiredInGroup(groupUsers, e.target.checked)}
-                      style={{ marginLeft: "auto", font: "var(--type-caption)", color: "var(--text-muted)" }}
+                      style={{ font: "var(--type-caption)", color: "var(--text-muted)" }}
                     />
-                  )}
-                </div>
+                  </div>
+                )}
                 {groupUsers.map((u) => (
                   <div
                     key={u.id}
@@ -493,7 +503,7 @@ export default function AccountsPage() {
                 ))}
               </div>
             );
-          })}
+          })()}
         </div>
       </Card>
     </div>
