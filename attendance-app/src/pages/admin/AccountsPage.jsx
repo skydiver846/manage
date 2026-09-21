@@ -13,8 +13,9 @@ function generateRandomPassword() {
   return out;
 }
 
-const ROLE_OPTS = [
-  { value: "STU", label: "교육생" },
+// 이 화면의 "계정생성(교직원)" 탭 전용 — 교육생은 별도로 "계정생성(교육생)"(엑셀 일괄 업로드)로
+// 만들기 때문에 역할 선택지에서 제외한다.
+const STAFF_ROLE_OPTS = [
   { value: "INS", label: "담당 교관" },
   { value: "ADM", label: "관리자" },
   { value: "APR", label: "결재권자" },
@@ -28,7 +29,7 @@ export default function AccountsPage() {
   const navigate = useNavigate();
   const [users, setUsers] = useState(null);
   const [courses, setCourses] = useState([]);
-  const [form, setForm] = useState({ loginId: "", name: "", role: "STU", courseId: "", region: "", org: "", rank: "", phone: "", password: "" });
+  const [form, setForm] = useState({ loginId: "", name: "", role: "INS", org: "", phone: "", password: "" });
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState("");
   const [created, setCreated] = useState(null);
@@ -65,15 +66,12 @@ export default function AccountsPage() {
         loginId: form.loginId,
         name: form.name,
         role: form.role,
-        courseId: form.role === "STU" ? form.courseId || null : null,
-        region: form.region || null,
         org: form.org || null,
-        rank: form.rank || null,
         phone: form.phone || null,
         password: form.password || null,
       });
       setCreated(res);
-      setForm({ loginId: "", name: "", role: "STU", courseId: "", region: "", org: "", rank: "", phone: "", password: "" });
+      setForm({ loginId: "", name: "", role: "INS", org: "", phone: "", password: "" });
     } catch (err) {
       setMsg("오류: " + err.message);
       setSaving(false);
@@ -266,20 +264,10 @@ export default function AccountsPage() {
         {createTab === "manual" && (
         <form onSubmit={handleCreate} style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)", padding: "var(--space-5)", borderTop: "1px solid var(--border-subtle)" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "var(--space-4)" }}>
-            <Input label="로그인 ID" required value={form.loginId} onChange={(e) => setForm({ ...form, loginId: e.target.value })} placeholder="사번 또는 교육생 번호" />
+            <Input label="로그인 ID" required value={form.loginId} onChange={(e) => setForm({ ...form, loginId: e.target.value })} placeholder="사번" />
             <Input label="이름" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-            <Select label="역할" value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} options={ROLE_OPTS} />
-            {form.role === "STU" && (
-              <Select
-                label="소속 과정"
-                value={form.courseId}
-                onChange={(e) => setForm({ ...form, courseId: e.target.value })}
-                options={[{ value: "", label: "선택 안 함" }, ...courses.map((c) => ({ value: c.id, label: c.name }))]}
-              />
-            )}
-            <Input label="시도" value={form.region} onChange={(e) => setForm({ ...form, region: e.target.value })} placeholder="예: 서울" />
+            <Select label="역할" value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} options={STAFF_ROLE_OPTS} />
             <Input label="소속기관" value={form.org} onChange={(e) => setForm({ ...form, org: e.target.value })} placeholder="예: 중부소방서" />
-            <Input label="계급" value={form.rank} onChange={(e) => setForm({ ...form, rank: e.target.value })} placeholder="예: 소방교" />
             <Input label="연락처" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="010-0000-0000" />
             <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-1)", gridColumn: "1 / -1" }}>
               <div style={{ display: "flex", gap: "var(--space-2)", alignItems: "flex-end" }}>
@@ -301,8 +289,7 @@ export default function AccountsPage() {
               </div>
               <span style={{ font: "var(--type-caption)", color: "var(--text-muted)" }}>
                 여기에 직접 입력하면 그 비밀번호로 계정이 만들어집니다. 비워두면 서버가 임시 비밀번호를 자동
-                생성해서 생성 완료 후 화면에 한 번 보여줍니다 (교육생 계정은 어차피 첫날 QR 자가등록 시
-                비밀번호가 새로 설정되므로 비워두어도 무방합니다).
+                생성해서 생성 완료 후 화면에 한 번 보여줍니다.
               </span>
             </div>
           </div>
