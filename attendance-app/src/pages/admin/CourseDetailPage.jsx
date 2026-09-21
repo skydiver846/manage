@@ -260,9 +260,11 @@ export default function CourseDetailPage() {
               <span style={{ color: "var(--text-muted)" }}>
                 {p.kind} · {p.place} · {AUTH_OPTS.find((o) => o.value === p.authMethod)?.label}
               </span>
-              <Button size="sm" variant="secondary" style={{ marginLeft: "auto" }} onClick={() => handleShowEnrollQr(p.id)}>
-                첫날 등록 QR
-              </Button>
+              {p.kind !== "퇴실" && (
+                <Button size="sm" variant="secondary" style={{ marginLeft: "auto" }} onClick={() => handleShowEnrollQr(p.id)}>
+                  첫날 등록 QR
+                </Button>
+              )}
             </div>
           ))}
         </div>
