@@ -131,7 +131,7 @@ export default function CourseDetailPage() {
         </div>
         <div style={{ display: "flex", gap: "var(--space-2)" }}>
           <Link to={`/admin/courses/${courseId}/upload`}>
-            <Button variant="secondary">수강생 명단 엑셀 업로드</Button>
+            <Button variant="secondary">교육생 명단 엑셀 업로드</Button>
           </Link>
           <Button
             variant="secondary"

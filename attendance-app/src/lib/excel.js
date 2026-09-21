@@ -12,7 +12,7 @@ export function downloadStudentTemplate() {
   ws["!cols"] = [{ wch: 14 }, { wch: 10 }, { wch: 10 }, { wch: 24 }, { wch: 10 }, { wch: 16 }];
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "명단");
-  XLSX.writeFile(wb, "수강생_명단_양식.xlsx");
+  XLSX.writeFile(wb, "교육생_명단_양식.xlsx");
 }
 
 /**

@@ -200,10 +200,10 @@ export default function AttendancePage({ user, role }) {
       {periods.length > 0 && (
         <Card padding="none">
           <div style={{ padding: "var(--space-4) var(--space-5)", borderBottom: "1px solid var(--border-subtle)", font: "var(--type-label)", color: "var(--text-strong)" }}>
-            수강생 출결 ({students.length}명)
+            교육생 출결 ({students.length}명)
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            {students.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>등록된 수강생이 없습니다.</span>}
+            {students.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>등록된 교육생이 없습니다.</span>}
             {students.map((s) => {
               const rec = records[s.id];
               const status = rec?.status;

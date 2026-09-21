@@ -222,7 +222,7 @@ export default function AccountsPage() {
             disabled={!bulkCourseId}
             onClick={() => navigate(`/admin/courses/${bulkCourseId}/upload`)}
           >
-            엑셀로 수강생 명단 업로드
+            엑셀로 교육생 명단 업로드
           </Button>
         </div>
         <span style={{ display: "block", marginTop: "var(--space-2)", font: "var(--type-caption)", color: "var(--text-muted)" }}>

@@ -66,7 +66,7 @@ export default function BulkUploadPage() {
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 900 }}>
       <div>
         <Link to={`/admin/courses/${courseId}`} style={{ font: "var(--type-caption)", color: "var(--text-muted)" }}>← {course?.name || "과정"}으로 돌아가기</Link>
-        <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>수강생 명단 일괄 업로드</h1>
+        <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>교육생 명단 일괄 업로드</h1>
         <span style={{ font: "var(--type-body-sm)", color: "var(--text-muted)" }}>{course?.name}</span>
       </div>
 
