@@ -70,7 +70,7 @@ export default function Layout({ role }) {
             {g.name}
           </span>
           {g.items.map((it) => (
-            <NavLink key={it.path} to={it.path} style={navLinkStyle}>
+            <NavLink key={it.path} to={it.path} end style={navLinkStyle}>
               {it.label}
             </NavLink>
           ))}
@@ -138,6 +138,7 @@ export default function Layout({ role }) {
             <NavLink
               key={it.path}
               to={it.path}
+              end
               style={({ isActive }) => ({
                 flex: 1, minHeight: 56, display: "flex", flexDirection: "column",
                 alignItems: "center", justifyContent: "center", gap: 4,
