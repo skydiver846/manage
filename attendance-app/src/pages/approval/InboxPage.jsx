@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { listReportsByStatus, listReportsByStatuses } from "../../lib/firestore";
-import { decideReport } from "../../lib/reports";
+import { decideReport, deleteReport } from "../../lib/reports";
 import { Card, Input, Button, Alert, Pill, PageHeader, EmptyState } from "../../components/ui";
 import { REPORT_STATUS_LABEL, REPORT_TYPE_LABEL } from "../../lib/ui";
 
@@ -17,6 +17,7 @@ export default function ApprovalInboxPage() {
   const [busyId, setBusyId] = useState(null);
   const [noteDraft, setNoteDraft] = useState({});
   const [msg, setMsg] = useState("");
+  const [deletingId, setDeletingId] = useState(null);
 
   async function reload() {
     const [pending, decided] = await Promise.all([
@@ -44,6 +45,24 @@ export default function ApprovalInboxPage() {
     }
     setBusyId(null);
     reload().catch((e) => console.error(e));
+  }
+
+  async function handleDelete(e, id, courseName, date) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!window.confirm(`"${courseName}" ${date} 보고서를 영구 삭제하시겠습니까? 되돌릴 수 없습니다.`)) return;
+    setDeletingId(id);
+    setMsg("");
+    try {
+      await deleteReport(id);
+      setMsg("보고서를 삭제했습니다.");
+    } catch (err) {
+      setMsg("오류: " + err.message);
+      setDeletingId(null);
+      return;
+    }
+    setDeletingId(null);
+    reload().catch((e2) => console.error(e2));
   }
 
   return (
@@ -124,6 +143,13 @@ export default function ApprovalInboxPage() {
                 <span style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
                   <span style={{ font: "var(--type-caption)", color: "var(--text-muted)" }}>{formatTs(decidedAt)}</span>
                   <Pill status={r.status}>{REPORT_STATUS_LABEL[r.status] || r.status}</Pill>
+                  <Button
+                    size="sm" variant="secondary" disabled={deletingId === r.id}
+                    onClick={(e) => handleDelete(e, r.id, r.courseName, r.date)}
+                    style={{ color: "var(--danger-500)", borderColor: "var(--danger-500)" }}
+                  >
+                    {deletingId === r.id ? "삭제 중..." : "삭제"}
+                  </Button>
                 </span>
               </Link>
             );

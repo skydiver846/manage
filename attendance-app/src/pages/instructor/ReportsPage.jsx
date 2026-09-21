@@ -137,7 +137,7 @@ export default function InstructorReportsPage({ user, role }) {
                 <Pill tone={r.status === "approved" ? "ok" : r.status === "rejected" ? "bad" : r.status === "reviewing" ? "info" : "warn"}>
                   {REPORT_STATUS_LABEL[r.status] || r.status}
                 </Pill>
-                {role === "ADM" && r.status !== "approved" && (
+                {role === "ADM" && (
                   <Button
                     size="sm"
                     variant="secondary"

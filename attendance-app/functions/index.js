@@ -795,13 +795,15 @@ exports.decideReport = onCall(async (request) => {
 });
 
 /**
- * 관리자가 결과보고서를 삭제한다 (오생성·테스트 보고서 정리용).
- * 이미 승인(approved)된 보고서는 공식 결재 기록이므로 감사 추적을 위해 삭제를 막는다.
+ * 관리자 또는 결재권자가 결과보고서를 삭제한다 (오생성·테스트 보고서 정리용) — 상태(작성완료/
+ * 상신/결재중/승인/반려)와 무관하게 삭제 가능. 결재권자는 자신의 결재 완료 내역 화면에서
+ * 바로 정리할 수 있어야 하므로 포함. 삭제 사실 자체와 과정명·날짜·삭제 당시 상태는 감사로그
+ * (auditLogs)에 별도로 남으므로, 보고서가 지워져도 "누가 언제 무엇을 지웠는지"는 추적된다.
  */
 exports.deleteReport = onCall(async (request) => {
   const caller = request.auth;
-  if (!caller || caller.token.role !== "ADM") {
-    throw new HttpsError("permission-denied", "관리자만 보고서를 삭제할 수 있습니다.");
+  if (!caller || !["ADM", "APR"].includes(caller.token.role)) {
+    throw new HttpsError("permission-denied", "관리자 또는 결재권자만 보고서를 삭제할 수 있습니다.");
   }
   const { reportId } = request.data || {};
   if (!reportId) throw new HttpsError("invalid-argument", "reportId는 필수입니다.");
@@ -809,15 +811,14 @@ exports.deleteReport = onCall(async (request) => {
   const ref = admin.firestore().doc(`reports/${reportId}`);
   const snap = await ref.get();
   if (!snap.exists) throw new HttpsError("not-found", "보고서를 찾을 수 없습니다.");
-  if (snap.data().status === "approved") {
-    throw new HttpsError("failed-precondition", "이미 승인된 보고서는 삭제할 수 없습니다.");
-  }
+  const report = snap.data();
 
   await ref.delete();
 
   await writeAudit({
     actorUid: caller.uid, actorRole: caller.token.role, target: `reports/${reportId}`,
     action: "결과보고서 삭제", category: "보고서",
+    reason: `courseName=${report.courseName} date=${report.date} status=${report.status}`,
   });
   return { ok: true };
 });
