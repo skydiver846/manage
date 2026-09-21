@@ -112,8 +112,13 @@ export default function InstructorReportsPage({ user, role }) {
           보고서 이력
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          {reports === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
-          {reports?.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>생성된 보고서가 없습니다.</span>}
+          {!courseId && (
+            <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>
+              {courses.length === 0 ? "등록된 과정이 없습니다." : "먼저 위에서 과정을 선택해주세요."}
+            </span>
+          )}
+          {courseId && reports === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
+          {courseId && reports?.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>생성된 보고서가 없습니다.</span>}
           {reports?.map((r) => (
             <div
               key={r.id}
