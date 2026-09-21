@@ -186,7 +186,7 @@ function Brand({ role }) {
       style={{
         display: "flex", flexDirection: "column", gap: 2,
         padding: "var(--space-3) var(--space-3)",
-        background: "var(--green-500)", borderRadius: "var(--radius-md)",
+        background: "linear-gradient(135deg, #9a2d1f, #d3541f)", borderRadius: "var(--radius-md)",
         border: "1px solid rgba(255,255,255,0.3)", boxShadow: "var(--shadow-sm)",
       }}
     >
