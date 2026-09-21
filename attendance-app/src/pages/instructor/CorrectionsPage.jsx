@@ -76,8 +76,13 @@ export default function InstructorCorrectionsPage({ user, role }) {
           검토 대기 ({items?.length ?? 0}건)
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          {items === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
-          {items?.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>대기 중인 정정 요청이 없습니다.</span>}
+          {!courseId && (
+            <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>
+              {courses.length === 0 ? (role === "INS" ? "담당으로 지정된 과정이 없습니다." : "등록된 과정이 없습니다.") : "먼저 과정을 선택해주세요."}
+            </span>
+          )}
+          {courseId && items === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
+          {courseId && items?.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>대기 중인 정정 요청이 없습니다.</span>}
           {items?.map((c) => (
             <div key={c.id} style={{ padding: "var(--space-4) var(--space-5)", borderBottom: "1px solid var(--border-subtle)", display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "var(--space-2)" }}>
