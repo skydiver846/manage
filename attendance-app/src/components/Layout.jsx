@@ -182,9 +182,9 @@ export default function Layout({ role }) {
 
 function Brand({ role }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", padding: "0 var(--space-2)" }}>
-      <span style={{ font: "var(--type-label)", color: "#fff" }}>출석관리시스템</span>
-      <span style={{ font: "var(--type-caption)", opacity: 0.6 }}>{ROLE_LABELS[role] || role}</span>
+    <div style={{ display: "flex", flexDirection: "column", gap: 2, padding: "0 var(--space-2)" }}>
+      <span style={{ fontSize: "var(--text-lg)", lineHeight: 1.2, fontWeight: 800, color: "#fff" }}>출석관리시스템</span>
+      <span style={{ fontSize: "var(--text-sm)", lineHeight: 1.2, fontWeight: 500, opacity: 0.7 }}>{ROLE_LABELS[role] || role}</span>
     </div>
   );
 }
