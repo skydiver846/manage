@@ -8,3 +8,4 @@ export { default as Alert } from "./Alert";
 export { default as StatCard } from "./StatCard";
 export { default as Avatar } from "./Avatar";
 export { default as Pill } from "./Pill";
+export { default as SectionTabs } from "./SectionTabs";

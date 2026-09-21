@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { listAllUsers, listCourses } from "../../lib/firestore";
 import { createAccount, deactivateAccount, deleteAccount, resetPassword, unlockAccount, unlockEnrollAttempt } from "../../lib/account";
-import { Card, Input, Select, Button, Alert, Pill, Checkbox } from "../../components/ui";
+import { Card, Input, Select, Button, Alert, Pill, Checkbox, SectionTabs } from "../../components/ui";
 
 // 관리자가 "무작위 생성" 버튼을 눌렀을 때 화면에서 바로 채워줄 임시 비밀번호.
 // 실제 비밀번호 생성/저장은 서버(createAccount)에서 다시 검증하며, 이건 입력 편의용이다.
@@ -207,35 +207,14 @@ export default function AccountsPage() {
       <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>계정 관리</h1>
 
       <Card padding="none">
-        <div style={{ display: "flex" }}>
-          <button
-            type="button"
-            onClick={() => setCreateTab(createTab === "bulk" ? null : "bulk")}
-            style={{
-              flex: 1, textAlign: "left", padding: "var(--space-4) var(--space-5)",
-              background: createTab === "bulk" ? "var(--surface-card)" : "var(--surface-sunken)",
-              border: "none", borderBottom: `2px solid ${createTab === "bulk" ? "var(--green-600)" : "transparent"}`,
-              cursor: "pointer", font: "var(--type-label)",
-              color: createTab === "bulk" ? "var(--text-strong)" : "var(--text-muted)",
-            }}
-          >
-            계정생성(교육생)
-          </button>
-          <button
-            type="button"
-            onClick={() => setCreateTab(createTab === "manual" ? null : "manual")}
-            style={{
-              flex: 1, textAlign: "left", padding: "var(--space-4) var(--space-5)",
-              background: createTab === "manual" ? "var(--surface-card)" : "var(--surface-sunken)",
-              border: "none", borderLeft: "1px solid var(--border-subtle)",
-              borderBottom: `2px solid ${createTab === "manual" ? "var(--green-600)" : "transparent"}`,
-              cursor: "pointer", font: "var(--type-label)",
-              color: createTab === "manual" ? "var(--text-strong)" : "var(--text-muted)",
-            }}
-          >
-            계정생성(교직원)
-          </button>
-        </div>
+        <SectionTabs
+          tabs={[
+            { key: "bulk", label: "계정생성(교육생)" },
+            { key: "manual", label: "계정생성(교직원)" },
+          ]}
+          active={createTab}
+          onChange={setCreateTab}
+        />
 
         {createTab === "bulk" && (
           <div style={{ padding: "var(--space-5)", borderTop: "1px solid var(--border-subtle)" }}>

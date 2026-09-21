@@ -5,7 +5,7 @@ import { getCourse, listPeriods, addPeriod, listAllUsers } from "../../lib/fires
 import { deleteCourse } from "../../lib/courses";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
-import { Card, Input, Select, Button, Alert } from "../../components/ui";
+import { Card, Input, Select, Button, Alert, SectionTabs } from "../../components/ui";
 
 const AUTH_OPTS = [
   { value: "qr", label: "QR 스캔" },
@@ -163,35 +163,14 @@ export default function CourseDetailPage() {
       </Card>
 
       <Card padding="none">
-        <div style={{ display: "flex" }}>
-          <button
-            type="button"
-            onClick={() => setPeriodTab(periodTab === "quick" ? null : "quick")}
-            style={{
-              flex: 1, textAlign: "left", padding: "var(--space-4) var(--space-5)",
-              background: periodTab === "quick" ? "var(--surface-card)" : "var(--surface-sunken)",
-              border: "none", borderBottom: `2px solid ${periodTab === "quick" ? "var(--green-600)" : "transparent"}`,
-              cursor: "pointer", font: "var(--type-label)",
-              color: periodTab === "quick" ? "var(--text-strong)" : "var(--text-muted)",
-            }}
-          >
-            출석·퇴실 교시 자동 생성 (전문과정 추천)
-          </button>
-          <button
-            type="button"
-            onClick={() => setPeriodTab(periodTab === "manual" ? null : "manual")}
-            style={{
-              flex: 1, textAlign: "left", padding: "var(--space-4) var(--space-5)",
-              background: periodTab === "manual" ? "var(--surface-card)" : "var(--surface-sunken)",
-              border: "none", borderLeft: "1px solid var(--border-subtle)",
-              borderBottom: `2px solid ${periodTab === "manual" ? "var(--green-600)" : "transparent"}`,
-              cursor: "pointer", font: "var(--type-label)",
-              color: periodTab === "manual" ? "var(--text-strong)" : "var(--text-muted)",
-            }}
-          >
-            교시 직접 추가 (정규 과정 · 과목별 세부 시간표용)
-          </button>
-        </div>
+        <SectionTabs
+          tabs={[
+            { key: "quick", label: "출석·퇴실 교시 자동 생성 (전문과정 추천)" },
+            { key: "manual", label: "교시 직접 추가 (정규 과정 · 과목별 세부 시간표용)" },
+          ]}
+          active={periodTab}
+          onChange={setPeriodTab}
+        />
 
         {periodTab === "quick" && (
           <form onSubmit={handleQuickCreatePeriods} style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)", padding: "var(--space-5)", borderTop: "1px solid var(--border-subtle)" }}>
