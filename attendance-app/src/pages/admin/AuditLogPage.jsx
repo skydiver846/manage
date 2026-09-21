@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { listAuditLogs, getUserDoc } from "../../lib/firestore";
-import { Card, Pill } from "../../components/ui";
+import { Card, Pill, Button, Select } from "../../components/ui";
 
 const CATEGORY_TONE = {
   "계정 변경": "info",
@@ -21,6 +21,8 @@ export default function AuditLogPage() {
   const [logs, setLogs] = useState(null);
   const [names, setNames] = useState({});
   const [category, setCategory] = useState("전체");
+  const [pageSize, setPageSize] = useState(20);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
     listAuditLogs(200).then(async (list) => {
@@ -38,28 +40,51 @@ export default function AuditLogPage() {
 
   const categories = ["전체", ...new Set((logs || []).map((l) => l.category).filter(Boolean))];
   const filtered = logs?.filter((l) => category === "전체" || l.category === category);
+  const totalPages = Math.max(1, Math.ceil((filtered?.length ?? 0) / pageSize));
+  const pageItems = filtered?.slice(page * pageSize, page * pageSize + pageSize);
+
+  function handleCategoryChange(c) {
+    setCategory(c);
+    setPage(0);
+  }
+
+  function handlePageSizeChange(n) {
+    setPageSize(n);
+    setPage(0);
+  }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 960 }}>
       <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>감사로그 조회</h1>
 
       {logs && (
-        <div style={{ display: "flex", gap: "var(--space-2)", flexWrap: "wrap" }}>
-          {categories.map((c) => (
-            <button
-              key={c}
-              onClick={() => setCategory(c)}
-              style={{
-                font: "var(--type-caption)", fontWeight: 600, padding: "6px 12px",
-                borderRadius: "var(--radius-pill)", cursor: "pointer", whiteSpace: "nowrap",
-                background: category === c ? "var(--green-500)" : "var(--surface-card)",
-                color: category === c ? "#fff" : "var(--text-muted)",
-                border: `1px solid ${category === c ? "var(--green-500)" : "var(--border-subtle)"}`,
-              }}
-            >
-              {c}
-            </button>
-          ))}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "var(--space-3)" }}>
+          <div style={{ display: "flex", gap: "var(--space-2)", flexWrap: "wrap" }}>
+            {categories.map((c) => (
+              <button
+                key={c}
+                onClick={() => handleCategoryChange(c)}
+                style={{
+                  font: "var(--type-caption)", fontWeight: 600, padding: "6px 12px",
+                  borderRadius: "var(--radius-pill)", cursor: "pointer", whiteSpace: "nowrap",
+                  background: category === c ? "var(--green-500)" : "var(--surface-card)",
+                  color: category === c ? "#fff" : "var(--text-muted)",
+                  border: `1px solid ${category === c ? "var(--green-500)" : "var(--border-subtle)"}`,
+                }}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+          <Select
+            value={String(pageSize)}
+            onChange={(e) => handlePageSizeChange(Number(e.target.value))}
+            style={{ width: 120 }}
+            options={[
+              { value: "10", label: "10개씩 보기" },
+              { value: "20", label: "20개씩 보기" },
+            ]}
+          />
         </div>
       )}
 
@@ -85,7 +110,7 @@ export default function AuditLogPage() {
               {filtered?.length === 0 && (
                 <tr><td colSpan={6} style={{ padding: "var(--space-5)", color: "var(--text-muted)" }}>기록이 없습니다.</td></tr>
               )}
-              {filtered?.map((l, i) => (
+              {pageItems?.map((l, i) => (
                 <tr key={l.id} style={{ background: i % 2 ? "var(--neutral-50)" : "var(--surface-card)", borderBottom: "1px solid var(--border-subtle)" }}>
                   <td style={{ padding: "10px var(--space-5)", font: "var(--type-body-sm)", whiteSpace: "nowrap" }}>{formatAt(l.at)}</td>
                   <td style={{ padding: "10px var(--space-5)", font: "var(--type-body-sm)", whiteSpace: "nowrap" }}>
@@ -102,6 +127,13 @@ export default function AuditLogPage() {
             </tbody>
           </table>
         </div>
+        {filtered && filtered.length > 0 && (
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "var(--space-3)", padding: "var(--space-4) var(--space-5)", borderTop: "1px solid var(--border-subtle)" }}>
+            <Button variant="secondary" size="sm" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>이전</Button>
+            <span style={{ font: "var(--type-body-sm)", color: "var(--text-muted)" }}>{page + 1} / {totalPages} 페이지</span>
+            <Button variant="secondary" size="sm" disabled={page >= totalPages - 1} onClick={() => setPage((p) => p + 1)}>다음</Button>
+          </div>
+        )}
       </Card>
     </div>
   );
