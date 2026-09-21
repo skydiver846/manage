@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { listAllUsers, listCourses } from "../../lib/firestore";
 import { createAccount, deactivateAccount, deleteAccount, resetPassword, unlockAccount, unlockEnrollAttempt } from "../../lib/account";
-import { Card, Input, Select, Button, Alert, Pill } from "../../components/ui";
+import { Card, Input, Select, Button, Alert, Pill, Checkbox } from "../../components/ui";
 
 // 관리자가 "무작위 생성" 버튼을 눌렀을 때 화면에서 바로 채워줄 임시 비밀번호.
 // 실제 비밀번호 생성/저장은 서버(createAccount)에서 다시 검증하며, 이건 입력 편의용이다.
@@ -19,6 +19,10 @@ const ROLE_OPTS = [
   { value: "ADM", label: "관리자" },
   { value: "APR", label: "결재권자" },
 ];
+
+// 기수별로 자주 갱신되는 교육생을 가장 먼저, 그다음 교관·결재권자·관리자 순으로 묶어서 보여준다.
+const ROLE_GROUP_ORDER = ["STU", "INS", "APR", "ADM"];
+const ROLE_GROUP_LABEL = { STU: "교육생", INS: "교관", APR: "결재권자", ADM: "관리자" };
 
 export default function AccountsPage() {
   const navigate = useNavigate();
@@ -37,6 +41,9 @@ export default function AccountsPage() {
   const [unlockMsg, setUnlockMsg] = useState("");
   const [deleteBusyUid, setDeleteBusyUid] = useState(null);
   const [deleteMsg, setDeleteMsg] = useState("");
+  const [selectedUids, setSelectedUids] = useState(() => new Set());
+  const [bulkDeleting, setBulkDeleting] = useState(false);
+  const [bulkMsg, setBulkMsg] = useState("");
 
   async function reload() {
     setUsers(await listAllUsers());
@@ -143,6 +150,54 @@ export default function AccountsPage() {
       return;
     }
     setDeleteBusyUid(null);
+    reload().catch((e) => console.error(e));
+  }
+
+  function toggleSelected(uid) {
+    setSelectedUids((prev) => {
+      const next = new Set(prev);
+      if (next.has(uid)) next.delete(uid);
+      else next.add(uid);
+      return next;
+    });
+  }
+
+  function toggleSelectAllExpiredInGroup(groupUsers, checked) {
+    const expiredIds = groupUsers.filter((u) => u.status === "expired").map((u) => u.id);
+    setSelectedUids((prev) => {
+      const next = new Set(prev);
+      for (const id of expiredIds) {
+        if (checked) next.add(id);
+        else next.delete(id);
+      }
+      return next;
+    });
+  }
+
+  async function handleBulkDelete() {
+    const targets = (users || []).filter((u) => selectedUids.has(u.id));
+    if (targets.length === 0) return;
+    if (!window.confirm(
+      `선택한 ${targets.length}개 계정을 영구 삭제하시겠습니까?\n` +
+      "계정 정보는 완전히 사라지며 되돌릴 수 없습니다. (과거 출결·보고서 기록 자체는 그대로 남습니다)"
+    )) return;
+    setBulkDeleting(true);
+    setBulkMsg("");
+    const failures = [];
+    for (const u of targets) {
+      try {
+        await deleteAccount(u.id);
+      } catch (err) {
+        failures.push(`${u.name}(${u.loginId}): ${err.message}`);
+      }
+    }
+    setBulkDeleting(false);
+    setSelectedUids(new Set());
+    setBulkMsg(
+      failures.length === 0
+        ? `${targets.length}건 영구 삭제를 완료했습니다.`
+        : `${targets.length - failures.length}건 삭제 완료, ${failures.length}건 실패 — ${failures.join(" / ")}`
+    );
     reload().catch((e) => console.error(e));
   }
 
@@ -266,57 +321,106 @@ export default function AccountsPage() {
             <Alert tone="danger">{deleteMsg}</Alert>
           </div>
         )}
+        {bulkMsg && (
+          <div style={{ padding: "var(--space-3) var(--space-5)" }}>
+            <Alert tone={bulkMsg.includes("실패") ? "danger" : "success"}>{bulkMsg}</Alert>
+          </div>
+        )}
+        {selectedUids.size > 0 && (
+          <div style={{ padding: "var(--space-3) var(--space-5)", background: "var(--danger-50)", display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+            <span style={{ font: "var(--type-body-sm)", color: "var(--text-strong)" }}>{selectedUids.size}건 선택됨</span>
+            <Button
+              size="sm" variant="secondary" disabled={bulkDeleting} onClick={handleBulkDelete}
+              style={{ color: "var(--danger-500)", borderColor: "var(--danger-500)" }}
+            >
+              {bulkDeleting ? "삭제 중..." : `선택 항목 영구 삭제 (${selectedUids.size})`}
+            </Button>
+            <Button size="sm" variant="ghost" disabled={bulkDeleting} onClick={() => setSelectedUids(new Set())}>선택 해제</Button>
+          </div>
+        )}
         <div style={{ display: "flex", flexDirection: "column" }}>
           {users === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
-          {users?.map((u) => (
-            <div
-              key={u.id}
-              style={{
-                display: "flex", gap: "var(--space-3)", alignItems: "center",
-                padding: "var(--space-3) var(--space-5)", borderBottom: "1px solid var(--border-subtle)",
-                font: "var(--type-body-sm)",
-              }}
-            >
-              <span style={{ font: "var(--type-mono)", fontSize: 11, background: "var(--surface-sunken)", borderRadius: "var(--radius-xs)", padding: "2px 6px", color: "var(--text-muted)" }}>
-                {u.role}
-              </span>
-              <strong>{u.name}</strong>
-              <span style={{ color: "var(--text-muted)" }}>{u.loginId}</span>
-              {u.org && <span style={{ color: "var(--text-muted)" }}>{u.org}</span>}
-              {u.role === "STU" && (
-                u.selfClaimed
-                  ? <Pill tone="ok">입교등록 완료</Pill>
-                  : <Pill tone="warn">첫날 QR 미등록</Pill>
-              )}
-              <span style={{ marginLeft: "auto", display: "flex", gap: "var(--space-2)", flexWrap: "wrap", justifyContent: "flex-end" }}>
-                {u.status === "expired" ? (
-                  <>
-                    <Pill tone="bad">만료됨</Pill>
-                    <Button variant="secondary" size="sm" disabled={deleteBusyUid === u.id} onClick={() => handleDelete(u.id, u.name, u.loginId)} style={{ color: "var(--danger-500)", borderColor: "var(--danger-500)" }}>
-                      {deleteBusyUid === u.id ? "처리 중..." : "영구 삭제"}
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button variant="secondary" size="sm" disabled={unlockBusyUid === u.id + ":login"} onClick={() => handleUnlockAccount(u.id, u.loginId, u.name)}>
-                      {unlockBusyUid === u.id + ":login" ? "처리 중..." : "로그인 잠금 해제"}
-                    </Button>
-                    {u.role === "STU" && (
-                      <Button variant="secondary" size="sm" disabled={unlockBusyUid === u.id + ":enroll"} onClick={() => handleUnlockEnroll(u.id, u.loginId, u.name)}>
-                        {unlockBusyUid === u.id + ":enroll" ? "처리 중..." : "입교등록 잠금 해제"}
-                      </Button>
+          {users !== null && ROLE_GROUP_ORDER.map((roleKey) => {
+            const groupUsers = users.filter((u) => u.role === roleKey);
+            if (groupUsers.length === 0) return null;
+            const expiredInGroup = groupUsers.filter((u) => u.status === "expired");
+            const allExpiredSelected = expiredInGroup.length > 0 && expiredInGroup.every((u) => selectedUids.has(u.id));
+            return (
+              <div key={roleKey}>
+                <div
+                  style={{
+                    display: "flex", alignItems: "center", gap: "var(--space-3)",
+                    padding: "var(--space-2) var(--space-5)", background: "var(--surface-sunken)",
+                    borderBottom: "1px solid var(--border-subtle)",
+                  }}
+                >
+                  <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>
+                    {ROLE_GROUP_LABEL[roleKey]} ({groupUsers.length})
+                  </span>
+                  {expiredInGroup.length > 0 && (
+                    <Checkbox
+                      label={`만료 계정 전체 선택 (${expiredInGroup.length})`}
+                      checked={allExpiredSelected}
+                      onChange={(e) => toggleSelectAllExpiredInGroup(groupUsers, e.target.checked)}
+                      style={{ marginLeft: "auto", font: "var(--type-caption)", color: "var(--text-muted)" }}
+                    />
+                  )}
+                </div>
+                {groupUsers.map((u) => (
+                  <div
+                    key={u.id}
+                    style={{
+                      display: "flex", gap: "var(--space-3)", alignItems: "center",
+                      padding: "var(--space-3) var(--space-5)", borderBottom: "1px solid var(--border-subtle)",
+                      font: "var(--type-body-sm)",
+                    }}
+                  >
+                    {u.status === "expired" && (
+                      <Checkbox checked={selectedUids.has(u.id)} onChange={() => toggleSelected(u.id)} />
                     )}
-                    <Button variant="secondary" size="sm" disabled={resetBusyUid === u.id} onClick={() => handleResetPassword(u.id, u.name, u.loginId)}>
-                      {resetBusyUid === u.id ? "처리 중..." : "비밀번호 초기화"}
-                    </Button>
-                    <Button variant="secondary" size="sm" disabled={busyUid === u.id} onClick={() => handleDeactivate(u.id, u.name)} style={{ color: "var(--danger-500)", borderColor: "var(--danger-500)" }}>
-                      {busyUid === u.id ? "처리 중..." : "비활성화"}
-                    </Button>
-                  </>
-                )}
-              </span>
-            </div>
-          ))}
+                    <span style={{ font: "var(--type-mono)", fontSize: 11, background: "var(--surface-card)", borderRadius: "var(--radius-xs)", padding: "2px 6px", color: "var(--text-muted)" }}>
+                      {u.role}
+                    </span>
+                    <strong>{u.name}</strong>
+                    <span style={{ color: "var(--text-muted)" }}>{u.loginId}</span>
+                    {u.org && <span style={{ color: "var(--text-muted)" }}>{u.org}</span>}
+                    {u.role === "STU" && (
+                      u.selfClaimed
+                        ? <Pill tone="ok">입교등록 완료</Pill>
+                        : <Pill tone="warn">첫날 QR 미등록</Pill>
+                    )}
+                    <span style={{ marginLeft: "auto", display: "flex", gap: "var(--space-2)", flexWrap: "wrap", justifyContent: "flex-end" }}>
+                      {u.status === "expired" ? (
+                        <>
+                          <Pill tone="bad">만료됨</Pill>
+                          <Button variant="secondary" size="sm" disabled={deleteBusyUid === u.id} onClick={() => handleDelete(u.id, u.name, u.loginId)} style={{ color: "var(--danger-500)", borderColor: "var(--danger-500)" }}>
+                            {deleteBusyUid === u.id ? "처리 중..." : "영구 삭제"}
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Button variant="secondary" size="sm" disabled={unlockBusyUid === u.id + ":login"} onClick={() => handleUnlockAccount(u.id, u.loginId, u.name)}>
+                            {unlockBusyUid === u.id + ":login" ? "처리 중..." : "로그인 잠금 해제"}
+                          </Button>
+                          {u.role === "STU" && (
+                            <Button variant="secondary" size="sm" disabled={unlockBusyUid === u.id + ":enroll"} onClick={() => handleUnlockEnroll(u.id, u.loginId, u.name)}>
+                              {unlockBusyUid === u.id + ":enroll" ? "처리 중..." : "입교등록 잠금 해제"}
+                            </Button>
+                          )}
+                          <Button variant="secondary" size="sm" disabled={resetBusyUid === u.id} onClick={() => handleResetPassword(u.id, u.name, u.loginId)}>
+                            {resetBusyUid === u.id ? "처리 중..." : "비밀번호 초기화"}
+                          </Button>
+                          <Button variant="secondary" size="sm" disabled={busyUid === u.id} onClick={() => handleDeactivate(u.id, u.name)} style={{ color: "var(--danger-500)", borderColor: "var(--danger-500)" }}>
+                            {busyUid === u.id ? "처리 중..." : "비활성화"}
+                          </Button>
+                        </>
+                      )}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            );
+          })}
         </div>
       </Card>
     </div>
