@@ -28,6 +28,7 @@ export default function CourseDetailPage() {
     no: "", startTime: "", endTime: "", subject: "", kind: "이론", place: "", authMethod: "manual",
   });
   const [enrollQr, setEnrollQr] = useState(null); // { periodId, dataUrl }
+  const [periodTab, setPeriodTab] = useState(null); // null | "quick" | "manual"
   // 여러 과목을 세분화하지 않고, 하루 "출석 1회 + 퇴실 1회"만 체크하는 전문과정(1일~1주 등)을 위한
   // 단축 생성 폼. 교시는 특정 날짜에 묶이지 않고 과정 전체 기간(startDate~endDate)에 매일 동일하게
   // 적용되므로, 여기서 딱 한 번만 만들면 며칠짜리 과정이든 그대로 적용된다.
@@ -161,53 +162,81 @@ export default function CourseDetailPage() {
         </div>
       </Card>
 
-      <Card>
-        <form onSubmit={handleQuickCreatePeriods} style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
-          <div>
-            <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>출석·퇴실 교시 자동 생성 (전문과정 추천)</span>
-            <span style={{ display: "block", marginTop: "var(--space-2)", font: "var(--type-body-sm)", color: "var(--text-muted)" }}>
+      <Card padding="none">
+        <div style={{ display: "flex" }}>
+          <button
+            type="button"
+            onClick={() => setPeriodTab(periodTab === "quick" ? null : "quick")}
+            style={{
+              flex: 1, textAlign: "left", padding: "var(--space-4) var(--space-5)",
+              background: periodTab === "quick" ? "var(--surface-card)" : "var(--surface-sunken)",
+              border: "none", borderBottom: `2px solid ${periodTab === "quick" ? "var(--green-600)" : "transparent"}`,
+              cursor: "pointer", font: "var(--type-label)",
+              color: periodTab === "quick" ? "var(--text-strong)" : "var(--text-muted)",
+            }}
+          >
+            출석·퇴실 교시 자동 생성 (전문과정 추천)
+          </button>
+          <button
+            type="button"
+            onClick={() => setPeriodTab(periodTab === "manual" ? null : "manual")}
+            style={{
+              flex: 1, textAlign: "left", padding: "var(--space-4) var(--space-5)",
+              background: periodTab === "manual" ? "var(--surface-card)" : "var(--surface-sunken)",
+              border: "none", borderLeft: "1px solid var(--border-subtle)",
+              borderBottom: `2px solid ${periodTab === "manual" ? "var(--green-600)" : "transparent"}`,
+              cursor: "pointer", font: "var(--type-label)",
+              color: periodTab === "manual" ? "var(--text-strong)" : "var(--text-muted)",
+            }}
+          >
+            교시 직접 추가 (정규 과정 · 과목별 세부 시간표용)
+          </button>
+        </div>
+
+        {periodTab === "quick" && (
+          <form onSubmit={handleQuickCreatePeriods} style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)", padding: "var(--space-5)", borderTop: "1px solid var(--border-subtle)" }}>
+            <span style={{ font: "var(--type-body-sm)", color: "var(--text-muted)" }}>
               과목별로 시간표를 세분화하지 않고, 하루 "출석" 1회 + "퇴실" 1회만 QR로 체크하면 되는 짧은
               과정(1일~1주 등)에 적합합니다. 아래에서 한 번만 만들면 과정 시작일부터 종료일까지 매일
               동일하게 적용됩니다.
             </span>
-          </div>
-          <div style={{ display: "flex", gap: "var(--space-4)", alignItems: "flex-end", flexWrap: "wrap" }}>
-            <Input
-              type="time" label="출석 시간" required
-              value={quickTimes.checkIn}
-              onChange={(e) => setQuickTimes({ ...quickTimes, checkIn: e.target.value })}
-            />
-            <Input
-              type="time" label="퇴실 시간" required
-              value={quickTimes.checkOut}
-              onChange={(e) => setQuickTimes({ ...quickTimes, checkOut: e.target.value })}
-            />
-            <Button type="submit" variant="secondary">출석·퇴실 교시 자동 생성</Button>
-          </div>
-          {quickMsg && <Alert tone={quickMsg.startsWith("오류") ? "danger" : "success"}>{quickMsg}</Alert>}
-        </form>
-      </Card>
+            <div style={{ display: "flex", gap: "var(--space-4)", alignItems: "flex-end", flexWrap: "wrap" }}>
+              <Input
+                type="time" label="출석 시간" required
+                value={quickTimes.checkIn}
+                onChange={(e) => setQuickTimes({ ...quickTimes, checkIn: e.target.value })}
+              />
+              <Input
+                type="time" label="퇴실 시간" required
+                value={quickTimes.checkOut}
+                onChange={(e) => setQuickTimes({ ...quickTimes, checkOut: e.target.value })}
+              />
+              <Button type="submit" variant="secondary">출석·퇴실 교시 자동 생성</Button>
+            </div>
+            {quickMsg && <Alert tone={quickMsg.startsWith("오류") ? "danger" : "success"}>{quickMsg}</Alert>}
+          </form>
+        )}
 
-      <Card>
-        <form onSubmit={handleAddPeriod} style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
-          <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>교시 직접 추가 (정규 과정 · 과목별 세부 시간표용)</span>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "var(--space-4)" }}>
-            <Input label="교시" required value={form.no} onChange={(e) => setForm({ ...form, no: e.target.value })} placeholder="1교시" />
-            <Input type="time" label="시작시간" required value={form.startTime} onChange={(e) => setForm({ ...form, startTime: e.target.value })} />
-            <Input type="time" label="종료시간" required value={form.endTime} onChange={(e) => setForm({ ...form, endTime: e.target.value })} />
-            <Select
-              label="구분"
-              value={form.kind}
-              onChange={(e) => setForm({ ...form, kind: e.target.value })}
-              options={[{ value: "이론", label: "이론" }, { value: "실습", label: "실습" }]}
-            />
-            <Input label="과목명" required value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} placeholder="소방학개론" />
-            <Input label="장소" required value={form.place} onChange={(e) => setForm({ ...form, place: e.target.value })} placeholder="제1강의실" />
-            <Select label="인증방식" value={form.authMethod} onChange={(e) => setForm({ ...form, authMethod: e.target.value })} options={AUTH_OPTS} />
-          </div>
-          <Button type="submit" style={{ width: 140 }}>교시 추가</Button>
-          {msg && <Alert tone={msg.startsWith("오류") ? "danger" : "success"}>{msg}</Alert>}
-        </form>
+        {periodTab === "manual" && (
+          <form onSubmit={handleAddPeriod} style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)", padding: "var(--space-5)", borderTop: "1px solid var(--border-subtle)" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "var(--space-4)" }}>
+              <Input label="교시" required value={form.no} onChange={(e) => setForm({ ...form, no: e.target.value })} placeholder="1교시" />
+              <Input type="time" label="시작시간" required value={form.startTime} onChange={(e) => setForm({ ...form, startTime: e.target.value })} />
+              <Input type="time" label="종료시간" required value={form.endTime} onChange={(e) => setForm({ ...form, endTime: e.target.value })} />
+              <Select
+                label="구분"
+                value={form.kind}
+                onChange={(e) => setForm({ ...form, kind: e.target.value })}
+                options={[{ value: "이론", label: "이론" }, { value: "실습", label: "실습" }]}
+              />
+              <Input label="과목명" required value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} placeholder="소방학개론" />
+              <Input label="장소" required value={form.place} onChange={(e) => setForm({ ...form, place: e.target.value })} placeholder="제1강의실" />
+              <Select label="인증방식" value={form.authMethod} onChange={(e) => setForm({ ...form, authMethod: e.target.value })} options={AUTH_OPTS} />
+            </div>
+            <Button type="submit" style={{ width: 140 }}>교시 추가</Button>
+            {msg && <Alert tone={msg.startsWith("오류") ? "danger" : "success"}>{msg}</Alert>}
+          </form>
+        )}
       </Card>
 
       <Card padding="none">
