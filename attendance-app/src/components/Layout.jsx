@@ -186,12 +186,12 @@ function Brand({ role }) {
       style={{
         display: "flex", flexDirection: "column", gap: 2,
         padding: "var(--space-3) var(--space-3)",
-        background: "linear-gradient(135deg, var(--amber-500), var(--amber-400))",
-        borderRadius: "var(--radius-md)", boxShadow: "var(--shadow-sm)",
+        background: "var(--green-500)", borderRadius: "var(--radius-md)",
+        border: "1px solid rgba(255,255,255,0.3)", boxShadow: "var(--shadow-sm)",
       }}
     >
-      <span style={{ fontSize: "var(--text-lg)", lineHeight: 1.2, fontWeight: 800, color: "var(--green-900)" }}>출석관리시스템</span>
-      <span style={{ fontSize: "var(--text-sm)", lineHeight: 1.2, fontWeight: 600, color: "var(--green-800)" }}>{ROLE_LABELS[role] || role}</span>
+      <span style={{ fontSize: "var(--text-lg)", lineHeight: 1.2, fontWeight: 800, color: "#fff" }}>출석관리시스템</span>
+      <span style={{ fontSize: "var(--text-sm)", lineHeight: 1.2, fontWeight: 600, color: "rgba(255,255,255,0.85)" }}>{ROLE_LABELS[role] || role}</span>
     </div>
   );
 }
