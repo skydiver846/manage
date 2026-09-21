@@ -16,7 +16,7 @@ function generateRandomPassword() {
 // 이 화면의 "계정생성(교직원)" 탭 전용 — 교육생은 별도로 "계정생성(교육생)"(엑셀 일괄 업로드)로
 // 만들기 때문에 역할 선택지에서 제외한다.
 const STAFF_ROLE_OPTS = [
-  { value: "INS", label: "담당 교관" },
+  { value: "INS", label: "교수(교관)" },
   { value: "ADM", label: "관리자" },
   { value: "APR", label: "결재권자" },
 ];
@@ -317,7 +317,7 @@ export default function AccountsPage() {
             <Input label="로그인 ID" required value={form.loginId} onChange={(e) => setForm({ ...form, loginId: e.target.value })} placeholder="사번" />
             <Input label="이름" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
             <Select label="역할" value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} options={STAFF_ROLE_OPTS} />
-            <Input label="소속기관" value={form.org} onChange={(e) => setForm({ ...form, org: e.target.value })} placeholder="예: 중부소방서" />
+            <Input label="소속기관" value={form.org} onChange={(e) => setForm({ ...form, org: e.target.value })} placeholder="예: 소방학교" />
             <Input label="연락처" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="010-0000-0000" />
             <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-1)", gridColumn: "1 / -1" }}>
               <div style={{ display: "flex", gap: "var(--space-2)", alignItems: "flex-end" }}>
