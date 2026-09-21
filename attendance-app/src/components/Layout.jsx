@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { logout } from "../lib/auth";
-import { Avatar } from "./ui";
 
 const ROLE_LABELS = {
   STU: "교육생",
@@ -26,7 +25,7 @@ const NAV = [
 
 const NARROW_BREAKPOINT = 900;
 
-export default function Layout({ user, role }) {
+export default function Layout({ role }) {
   const [isNarrow, setIsNarrow] = useState(window.innerWidth < NARROW_BREAKPOINT);
   const [navOpen, setNavOpen] = useState(false);
   const location = useLocation();
@@ -62,7 +61,7 @@ export default function Layout({ user, role }) {
         <div key={g.name} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <span
             style={{
-              font: "var(--type-caption)", fontWeight: 700, letterSpacing: "var(--tracking-wide)",
+              fontSize: "var(--text-md)", lineHeight: 1.2, fontWeight: 700, letterSpacing: "var(--tracking-wide)",
               textTransform: "uppercase", color: "var(--amber-400)",
               padding: "var(--space-1) var(--space-2) var(--space-2)",
               borderBottom: "1px solid rgba(224,166,75,0.3)", marginBottom: "var(--space-1)",
@@ -101,7 +100,7 @@ export default function Layout({ user, role }) {
         <header
           style={{
             display: "flex", alignItems: "center", gap: "var(--space-3)",
-            justifyContent: "space-between",
+            justifyContent: isNarrow ? "flex-start" : "flex-end",
             height: 64, padding: "0 var(--space-6)",
             background: "var(--surface-card)", borderBottom: "1px solid var(--border-subtle)",
             position: "sticky", top: 0, zIndex: 10,
@@ -113,12 +112,10 @@ export default function Layout({ user, role }) {
               <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>출석관리시스템</span>
             </div>
           ) : (
-            <span style={{ font: "var(--type-body-sm)", color: "var(--text-muted)" }}>전남광주통합특별시 소방학교</span>
+            <span style={{ font: "var(--type-h3)", fontWeight: 800, color: "var(--text-strong)" }}>
+              전남광주통합특별시 소방학교
+            </span>
           )}
-          <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
-            <span style={{ font: "var(--type-body-sm)", color: "var(--text-strong)" }}>{user.displayName}</span>
-            <Avatar name={user.displayName} size={32} />
-          </div>
         </header>
 
         <div style={{ padding: "var(--space-6)", flex: 1, paddingBottom: isNarrow ? 88 : "var(--space-6)" }}>
