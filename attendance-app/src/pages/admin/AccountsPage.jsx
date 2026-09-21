@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { listAllUsers, listCourses } from "../../lib/firestore";
 import { createAccount, deactivateAccount, deleteAccount, resetPassword, unlockAccount, unlockEnrollAttempt } from "../../lib/account";
-import { Card, Input, Select, Button, Alert, Pill, Checkbox, SectionTabs } from "../../components/ui";
+import { Card, Input, Select, Button, Alert, Pill, Checkbox, SectionTabs, PageHeader } from "../../components/ui";
 
 // 관리자가 "무작위 생성" 버튼을 눌렀을 때 화면에서 바로 채워줄 임시 비밀번호.
 // 실제 비밀번호 생성/저장은 서버(createAccount)에서 다시 검증하며, 이건 입력 편의용이다.
@@ -238,7 +238,7 @@ export default function AccountsPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 900 }}>
-      <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>계정 관리</h1>
+      <PageHeader title="계정 관리" />
 
       <Card padding="none">
         <SectionTabs

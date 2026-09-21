@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   getUserDoc, listPeriods, getMyRecord, createCorrection, listMyCorrections,
 } from "../../lib/firestore";
-import { Card, Input, Select, Textarea, Button, Alert, Pill } from "../../components/ui";
+import { Card, Input, Select, Textarea, Button, Alert, Pill, PageHeader, EmptyState } from "../../components/ui";
 import { STATUS_LABEL, CORRECTION_STATUS_LABEL } from "../../lib/ui";
 
 const today = new Date().toISOString().slice(0, 10);
@@ -65,11 +65,11 @@ export default function StudentCorrectionsPage({ user }) {
   }
 
   if (me === null) return <p style={{ color: "var(--text-muted)" }}>불러오는 중...</p>;
-  if (!me.courseId) return <Card>소속 과정이 없습니다.</Card>;
+  if (!me.courseId) return <Card><EmptyState compact message="소속 과정이 없습니다." /></Card>;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 760 }}>
-      <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>출결 정정 요청</h1>
+      <PageHeader title="출결 정정 요청" />
 
       <Card>
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
@@ -105,7 +105,7 @@ export default function StudentCorrectionsPage({ user }) {
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           {mine === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
-          {mine?.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>제출한 정정 요청이 없습니다.</span>}
+          {mine?.length === 0 && <EmptyState compact message="제출한 정정 요청이 없습니다." />}
           {mine?.map((c) => (
             <div key={c.id} style={{ padding: "var(--space-4) var(--space-5)", borderBottom: "1px solid var(--border-subtle)", display: "flex", flexDirection: "column", gap: 4 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "var(--space-2)" }}>

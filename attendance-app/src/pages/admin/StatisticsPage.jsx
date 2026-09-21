@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { listCourses, listReportsByCourse, computeCourseRisk, listOrgNotificationsByCourse } from "../../lib/firestore";
 import { notifyOrg } from "../../lib/notifications";
-import { Card, Select, StatCard, Pill, Button, Alert } from "../../components/ui";
+import { Card, Select, StatCard, Pill, Button, Alert, PageHeader, EmptyState } from "../../components/ui";
 
 function formatTs(ts) {
   if (!ts?.toDate) return "-";
@@ -66,10 +66,7 @@ export default function StatisticsPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 960 }}>
-      <div>
-        <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>통계</h1>
-        <span style={{ font: "var(--type-body-sm)", color: "var(--text-muted)" }}>과정·날짜별 출석률 추이와 수료 위험자 현황</span>
-      </div>
+      <PageHeader title="통계" subtitle="과정·날짜별 출석률 추이와 수료 위험자 현황" />
 
       <Card style={{ display: "flex", alignItems: "flex-end" }}>
         <Select
@@ -96,7 +93,7 @@ export default function StatisticsPage() {
             </div>
             <div style={{ padding: "var(--space-5)", display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
               {reports === null && <span style={{ color: "var(--text-muted)" }}>불러오는 중...</span>}
-              {reports?.length === 0 && <span style={{ color: "var(--text-muted)" }}>생성된 보고서가 없습니다.</span>}
+              {reports?.length === 0 && <EmptyState compact message="생성된 보고서가 없습니다." />}
               {reports?.slice().reverse().map((r) => (
                 <div key={r.id} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
                   <span style={{ width: 90, font: "var(--type-caption)", color: "var(--text-muted)", flex: "0 0 auto" }}>{r.date}</span>
@@ -123,7 +120,7 @@ export default function StatisticsPage() {
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
               {risk === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
-              {risk && atRisk.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>수료 위험자가 없습니다.</span>}
+              {risk && atRisk.length === 0 && <EmptyState compact message="수료 위험자가 없습니다." />}
               {atRisk.sort((a, b) => a.rate - b.rate).map((s) => (
                 <div key={s.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "var(--space-3) var(--space-5)", borderBottom: "1px solid var(--border-subtle)", flexWrap: "wrap", gap: "var(--space-2)" }}>
                   <div>
@@ -153,7 +150,7 @@ export default function StatisticsPage() {
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
               {orgLog === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
-              {orgLog?.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>통보 이력이 없습니다.</span>}
+              {orgLog?.length === 0 && <EmptyState compact message="통보 이력이 없습니다." />}
               {orgLog?.map((n) => (
                 <div key={n.id} style={{ padding: "var(--space-3) var(--space-5)", borderBottom: "1px solid var(--border-subtle)", display: "flex", flexDirection: "column", gap: 2 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "var(--space-2)" }}>

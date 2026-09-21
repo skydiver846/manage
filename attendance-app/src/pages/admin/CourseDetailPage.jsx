@@ -5,7 +5,7 @@ import { getCourse, listPeriods, addPeriod, listAllUsers } from "../../lib/fires
 import { deleteCourse } from "../../lib/courses";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
-import { Card, Input, Select, Button, Alert, SectionTabs } from "../../components/ui";
+import { Card, Input, Select, Button, Alert, SectionTabs, PageHeader, EmptyState } from "../../components/ui";
 
 const AUTH_OPTS = [
   { value: "qr", label: "QR 스캔" },
@@ -123,27 +123,25 @@ export default function CourseDetailPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 900 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "var(--space-3)" }}>
-        <div>
-          <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>{course.name}</h1>
-          <span style={{ font: "var(--type-body-sm)", color: "var(--text-muted)" }}>
-            {course.type} · {course.startDate}~{course.endDate}
-          </span>
-        </div>
-        <div style={{ display: "flex", gap: "var(--space-2)" }}>
-          <Link to={`/admin/courses/${courseId}/upload`}>
-            <Button variant="secondary">교육생 명단 엑셀 업로드</Button>
-          </Link>
-          <Button
-            variant="secondary"
-            disabled={deleting}
-            onClick={handleDeleteCourse}
-            style={{ color: "var(--danger-500)", borderColor: "var(--danger-500)" }}
-          >
-            {deleting ? "삭제 중..." : "과정 삭제"}
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title={course.name}
+        subtitle={`${course.type} · ${course.startDate}~${course.endDate}`}
+        actions={
+          <>
+            <Link to={`/admin/courses/${courseId}/upload`}>
+              <Button variant="secondary">교육생 명단 엑셀 업로드</Button>
+            </Link>
+            <Button
+              variant="secondary"
+              disabled={deleting}
+              onClick={handleDeleteCourse}
+              style={{ color: "var(--danger-500)", borderColor: "var(--danger-500)" }}
+            >
+              {deleting ? "삭제 중..." : "과정 삭제"}
+            </Button>
+          </>
+        }
+      />
       {deleteMsg && <Alert tone="danger">{deleteMsg}</Alert>}
 
       <Card>
@@ -223,7 +221,7 @@ export default function CourseDetailPage() {
           시간표
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          {periods.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>등록된 교시가 없습니다.</span>}
+          {periods.length === 0 && <EmptyState compact message="등록된 교시가 없습니다." description="위 탭에서 교시를 만들어보세요." />}
           {periods.map((p) => (
             <div
               key={p.id}

@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { getCourse, listAllUsers } from "../../lib/firestore";
 import { createAccount } from "../../lib/account";
 import { parseStudentExcel, downloadStudentTemplate, downloadResultsExcel } from "../../lib/excel";
-import { Card, Button, Alert, Pill } from "../../components/ui";
+import { Card, Button, Alert, Pill, PageHeader } from "../../components/ui";
 
 export default function BulkUploadPage() {
   const { courseId } = useParams();
@@ -66,8 +66,7 @@ export default function BulkUploadPage() {
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 900 }}>
       <div>
         <Link to={`/admin/courses/${courseId}`} style={{ font: "var(--type-caption)", color: "var(--text-muted)" }}>← {course?.name || "과정"}으로 돌아가기</Link>
-        <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>교육생 명단 일괄 업로드</h1>
-        <span style={{ font: "var(--type-body-sm)", color: "var(--text-muted)" }}>{course?.name}</span>
+        <PageHeader title="교육생 명단 일괄 업로드" subtitle={course?.name} />
       </div>
 
       <Card style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>

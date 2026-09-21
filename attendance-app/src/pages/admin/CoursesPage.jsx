@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { listCourses, createCourse, listAllUsers } from "../../lib/firestore";
-import { Card, Input, Select, Button, Alert } from "../../components/ui";
+import { Card, Input, Select, Button, Alert, PageHeader, EmptyState } from "../../components/ui";
 
 export default function CoursesPage() {
   const [courses, setCourses] = useState(null);
@@ -38,12 +38,7 @@ export default function CoursesPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 900 }}>
-      <div>
-        <span style={{ font: "var(--type-caption)", textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--text-muted)" }}>
-          과정 관리
-        </span>
-        <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>과정 관리</h1>
-      </div>
+      <PageHeader title="과정 관리" />
 
       <Card>
         <form onSubmit={handleCreate} style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
@@ -80,7 +75,7 @@ export default function CoursesPage() {
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           {courses === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
-          {courses?.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>등록된 과정이 없습니다.</span>}
+          {courses?.length === 0 && <EmptyState message="등록된 과정이 없습니다." description="위에서 새 과정을 등록해보세요." />}
           {courses?.map((c) => (
             <Link
               key={c.id}

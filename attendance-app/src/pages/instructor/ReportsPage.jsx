@@ -4,7 +4,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { listReportsByCourse } from "../../lib/firestore";
 import { createReport, createEnrollmentReport, deleteReport } from "../../lib/reports";
-import { Card, Select, Input, Button, Alert, Pill } from "../../components/ui";
+import { Card, Select, Input, Button, Alert, Pill, PageHeader, EmptyState } from "../../components/ui";
 import { REPORT_STATUS_LABEL, REPORT_TYPE_LABEL } from "../../lib/ui";
 
 const today = new Date().toISOString().slice(0, 10);
@@ -90,7 +90,7 @@ export default function InstructorReportsPage({ user, role }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 800 }}>
-      <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>결과보고서</h1>
+      <PageHeader title="결과보고서" />
 
       <Card style={{ display: "flex", gap: "var(--space-4)", alignItems: "flex-end", flexWrap: "wrap" }}>
         <Select label="과정" value={courseId} onChange={(e) => setCourseId(e.target.value)} style={{ width: 220 }} options={courses.map((c) => ({ value: c.id, label: c.name }))} />
@@ -113,12 +113,10 @@ export default function InstructorReportsPage({ user, role }) {
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           {!courseId && (
-            <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>
-              {courses.length === 0 ? "등록된 과정이 없습니다." : "먼저 위에서 과정을 선택해주세요."}
-            </span>
+            <EmptyState compact message={courses.length === 0 ? "등록된 과정이 없습니다." : "먼저 위에서 과정을 선택해주세요."} />
           )}
           {courseId && reports === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
-          {courseId && reports?.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>생성된 보고서가 없습니다.</span>}
+          {courseId && reports?.length === 0 && <EmptyState compact message="생성된 보고서가 없습니다." />}
           {reports?.map((r) => (
             <div
               key={r.id}

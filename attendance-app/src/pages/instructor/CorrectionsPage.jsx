@@ -3,7 +3,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { listPendingCorrectionsForCourse, getUserDoc } from "../../lib/firestore";
 import { decideCorrection } from "../../lib/corrections";
-import { Card, Select, Input, Button, Alert, Pill } from "../../components/ui";
+import { Card, Select, Input, Button, Alert, Pill, PageHeader, EmptyState } from "../../components/ui";
 import { STATUS_LABEL } from "../../lib/ui";
 
 export default function InstructorCorrectionsPage({ user, role }) {
@@ -64,7 +64,7 @@ export default function InstructorCorrectionsPage({ user, role }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 800 }}>
-      <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>정정 요청 승인/반려</h1>
+      <PageHeader title="정정 요청 승인/반려" />
 
       {courses.length > 1 && (
         <Select value={courseId} onChange={(e) => setCourseId(e.target.value)} style={{ width: 240 }} options={courses.map((c) => ({ value: c.id, label: c.name }))} />
@@ -77,12 +77,10 @@ export default function InstructorCorrectionsPage({ user, role }) {
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           {!courseId && (
-            <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>
-              {courses.length === 0 ? (role === "INS" ? "담당으로 지정된 과정이 없습니다." : "등록된 과정이 없습니다.") : "먼저 과정을 선택해주세요."}
-            </span>
+            <EmptyState compact message={courses.length === 0 ? (role === "INS" ? "담당으로 지정된 과정이 없습니다." : "등록된 과정이 없습니다.") : "먼저 과정을 선택해주세요."} />
           )}
           {courseId && items === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
-          {courseId && items?.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>대기 중인 정정 요청이 없습니다.</span>}
+          {courseId && items?.length === 0 && <EmptyState compact message="대기 중인 정정 요청이 없습니다." />}
           {items?.map((c) => (
             <div key={c.id} style={{ padding: "var(--space-4) var(--space-5)", borderBottom: "1px solid var(--border-subtle)", display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "var(--space-2)" }}>

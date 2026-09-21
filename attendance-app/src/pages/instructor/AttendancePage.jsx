@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import QRCode from "qrcode";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { listPeriods, listUsersByCourse, listRecords, confirmPeriod } from "../../lib/firestore";
 import { encodeQrPayload } from "../../lib/qr";
-import { Card, Select, Button, Alert, Pill } from "../../components/ui";
+import { Card, Select, Button, Alert, Pill, PageHeader, EmptyState } from "../../components/ui";
 import { STATUS_LABEL } from "../../lib/ui";
 
 const today = new Date().toISOString().slice(0, 10);
 
 export default function AttendancePage({ user, role }) {
+  const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [courseId, setCourseId] = useState("");
   const [periods, setPeriods] = useState([]);
@@ -112,16 +114,17 @@ export default function AttendancePage({ user, role }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 900 }}>
-      <div>
-        <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>실시간 출석현황</h1>
-        <span style={{ font: "var(--type-body-sm)", color: "var(--text-muted)" }}>{today}</span>
-      </div>
+      <PageHeader title="실시간 출석현황" subtitle={today} />
 
       {courses.length === 0 && (
         <Card>
-          <span style={{ color: "var(--text-muted)" }}>
-            {role === "INS" ? "담당으로 지정된 과정이 없습니다." : "등록된 과정이 없습니다."}
-          </span>
+          <EmptyState
+            compact
+            message={role === "INS" ? "담당으로 지정된 과정이 없습니다." : "등록된 과정이 없습니다."}
+            action={role === "ADM" && (
+              <Button size="sm" variant="secondary" onClick={() => navigate("/admin/courses")}>과정 만들러 가기</Button>
+            )}
+          />
         </Card>
       )}
 
@@ -203,7 +206,7 @@ export default function AttendancePage({ user, role }) {
             교육생 출결 ({students.length}명)
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            {students.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>등록된 교육생이 없습니다.</span>}
+            {students.length === 0 && <EmptyState compact message="등록된 교육생이 없습니다." />}
             {students.map((s) => {
               const rec = records[s.id];
               const status = rec?.status;

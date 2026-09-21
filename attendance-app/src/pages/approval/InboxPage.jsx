@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { listReportsByStatus, listReportsByStatuses } from "../../lib/firestore";
 import { decideReport } from "../../lib/reports";
-import { Card, Input, Button, Alert, Pill } from "../../components/ui";
+import { Card, Input, Button, Alert, Pill, PageHeader, EmptyState } from "../../components/ui";
 import { REPORT_STATUS_LABEL, REPORT_TYPE_LABEL } from "../../lib/ui";
 
 function formatTs(ts) {
@@ -48,7 +48,7 @@ export default function ApprovalInboxPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 800 }}>
-      <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>결재 대기함</h1>
+      <PageHeader title="결재 대기함" />
       {msg && <Alert tone={msg.startsWith("오류") ? "danger" : "success"}>{msg}</Alert>}
 
       <Card padding="none">
@@ -57,7 +57,7 @@ export default function ApprovalInboxPage() {
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           {reports === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
-          {reports?.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>결재 대기 중인 보고서가 없습니다.</span>}
+          {reports?.length === 0 && <EmptyState compact message="결재 대기 중인 보고서가 없습니다." />}
           {reports?.map((r) => (
             <div key={r.id} style={{ padding: "var(--space-4) var(--space-5)", borderBottom: "1px solid var(--border-subtle)", display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "var(--space-2)" }}>
@@ -102,7 +102,7 @@ export default function ApprovalInboxPage() {
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           {history === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
-          {history?.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>아직 결재를 완료한 보고서가 없습니다.</span>}
+          {history?.length === 0 && <EmptyState compact message="아직 결재를 완료한 보고서가 없습니다." />}
           {history?.map((r) => {
             const decidedAt = (r.approvalPath || []).find((p) => p.step === "결재")?.at;
             return (

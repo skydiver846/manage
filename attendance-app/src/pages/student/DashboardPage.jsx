@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import jsQR from "jsqr";
 import { getUserDoc, getCourse, listPeriods, getMyRecord, checkIn } from "../../lib/firestore";
 import { decodeQrPayload } from "../../lib/qr";
-import { Card, Button, Alert, Pill } from "../../components/ui";
+import { Card, Button, Alert, Pill, PageHeader, EmptyState } from "../../components/ui";
 import { STATUS_LABEL } from "../../lib/ui";
 
 const today = new Date().toISOString().slice(0, 10);
@@ -60,21 +60,14 @@ export default function DashboardPage({ user }) {
   if (!me.courseId) {
     return (
       <Card>
-        <p>아직 소속된 과정이 없습니다. 관리자에게 문의해주세요.</p>
+        <EmptyState compact message="아직 소속된 과정이 없습니다." description="관리자에게 문의해주세요." />
       </Card>
     );
   }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 760 }}>
-      <div>
-        <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>출결 대시보드</h1>
-        {course && (
-          <span style={{ font: "var(--type-body-sm)", color: "var(--text-muted)" }}>
-            {course.name} · {today}
-          </span>
-        )}
-      </div>
+      <PageHeader title="출결 대시보드" subtitle={course ? `${course.name} · ${today}` : undefined} />
       {msg && <Alert tone={msg.startsWith("오류") ? "danger" : "success"}>{msg}</Alert>}
 
       <Card padding="none">
@@ -82,7 +75,7 @@ export default function DashboardPage({ user }) {
           오늘 시간표
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          {periods.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>등록된 교시가 없습니다.</span>}
+          {periods.length === 0 && <EmptyState compact message="등록된 교시가 없습니다." />}
           {periods.map((p) => {
             const rec = records[p.id];
             const status = rec?.status;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { listAuditLogs, getUserDoc } from "../../lib/firestore";
-import { Card, Pill, Button, Select } from "../../components/ui";
+import { Card, Pill, Button, Select, PageHeader, EmptyState } from "../../components/ui";
 
 const CATEGORY_TONE = {
   "계정 변경": "info",
@@ -55,7 +55,7 @@ export default function AuditLogPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 960 }}>
-      <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>감사로그 조회</h1>
+      <PageHeader title="감사로그 조회" />
 
       {logs && (
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "var(--space-3)" }}>
@@ -108,7 +108,7 @@ export default function AuditLogPage() {
                 <tr><td colSpan={6} style={{ padding: "var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</td></tr>
               )}
               {filtered?.length === 0 && (
-                <tr><td colSpan={6} style={{ padding: "var(--space-5)", color: "var(--text-muted)" }}>기록이 없습니다.</td></tr>
+                <tr><td colSpan={6}><EmptyState compact message="기록이 없습니다." /></td></tr>
               )}
               {pageItems?.map((l, i) => (
                 <tr key={l.id} style={{ background: i % 2 ? "var(--neutral-50)" : "var(--surface-card)", borderBottom: "1px solid var(--border-subtle)" }}>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getReport, getUserDoc } from "../../lib/firestore";
 import { withdrawReport, refreshReportSummary } from "../../lib/reports";
-import { Card, Button, Pill, Alert } from "../../components/ui";
+import { Card, Button, Pill, Alert, EmptyState } from "../../components/ui";
 import { REPORT_STATUS_LABEL } from "../../lib/ui";
 
 const STEP_LABEL = { 작성: "작성", "검토·상신": "검토·상신", 결재: "결재" };
@@ -71,7 +71,7 @@ export default function ReportDetailPage({ role }) {
     reload().catch((e) => console.error(e));
   }
 
-  if (notFound) return <Card>보고서를 찾을 수 없습니다.</Card>;
+  if (notFound) return <Card><EmptyState compact message="보고서를 찾을 수 없습니다." /></Card>;
   if (!report) return <p style={{ color: "var(--text-muted)" }}>불러오는 중...</p>;
 
   const s = report.summary || {};

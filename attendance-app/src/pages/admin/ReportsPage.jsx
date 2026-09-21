@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { listReportsByStatus } from "../../lib/firestore";
 import { forwardReport } from "../../lib/reports";
-import { Card, Button, Alert, Pill } from "../../components/ui";
+import { Card, Button, Alert, Pill, PageHeader, EmptyState } from "../../components/ui";
 import { REPORT_STATUS_LABEL, REPORT_TYPE_LABEL } from "../../lib/ui";
 
 export default function AdminReportsPage() {
@@ -35,7 +35,7 @@ export default function AdminReportsPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", maxWidth: 800 }}>
-      <h1 style={{ font: "var(--type-h2)", color: "var(--text-strong)" }}>결과보고서 관리</h1>
+      <PageHeader title="결과보고서 관리" />
       {msg && <Alert tone={msg.startsWith("오류") ? "danger" : "success"}>{msg}</Alert>}
 
       <Card padding="none">
@@ -44,7 +44,7 @@ export default function AdminReportsPage() {
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           {reports === null && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>불러오는 중...</span>}
-          {reports?.length === 0 && <span style={{ padding: "var(--space-4) var(--space-5)", color: "var(--text-muted)" }}>상신 대기 중인 보고서가 없습니다.</span>}
+          {reports?.length === 0 && <EmptyState compact message="상신 대기 중인 보고서가 없습니다." />}
           {reports?.map((r) => (
             <div key={r.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "var(--space-3) var(--space-5)", borderBottom: "1px solid var(--border-subtle)", flexWrap: "wrap", gap: "var(--space-2)" }}>
               <Link to={`/reports/${r.id}`} style={{ textDecoration: "none", color: "inherit" }}>
