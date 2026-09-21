@@ -292,13 +292,38 @@ export default function AccountsPage() {
                 <Input label="소속기관" value={studentForm.org} onChange={(e) => setStudentForm({ ...studentForm, org: e.target.value })} placeholder="예: 동부소방서" />
                 <Input label="계급" value={studentForm.rank} onChange={(e) => setStudentForm({ ...studentForm, rank: e.target.value })} placeholder="예: 소방교" />
                 <Input label="연락처" value={studentForm.phone} onChange={(e) => setStudentForm({ ...studentForm, phone: e.target.value })} placeholder="010-0000-0000" />
+                <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-1)", gridColumn: "1 / -1" }}>
+                  <div style={{ display: "flex", gap: "var(--space-2)", alignItems: "flex-end" }}>
+                    <div style={{ flex: 1 }}>
+                      <Input
+                        label="초기 비밀번호 (선택, 8자 이상)"
+                        value={studentForm.password}
+                        onChange={(e) => setStudentForm({ ...studentForm, password: e.target.value })}
+                        placeholder="비워두면 자동 생성됩니다"
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      onClick={() => setStudentForm((f) => ({ ...f, password: generateRandomPassword() }))}
+                    >
+                      무작위 생성
+                    </Button>
+                  </div>
+                  <span style={{ font: "var(--type-caption)", color: "var(--text-muted)" }}>
+                    여기에 직접 입력하면 그 비밀번호로 계정이 만들어집니다. 비워두면 서버가 임시 비밀번호를 자동
+                    생성합니다(둘 다 어차피 첫날 QR 자가등록 시 비밀번호가 새로 설정됩니다).
+                  </span>
+                </div>
               </div>
               <Button type="submit" variant="secondary" loading={studentSaving} style={{ width: 140 }}>교육생 추가</Button>
               {studentMsg && <Alert tone="danger">{studentMsg}</Alert>}
               {studentCreated && (
                 <Alert tone="success">
                   생성 완료 — 로그인 ID: <strong>{studentCreated.loginId}</strong>
-                  {!studentCreated.setByAdmin && (
+                  {studentCreated.setByAdmin ? (
+                    " / 방금 입력하신 비밀번호로 바로 로그인할 수 있습니다."
+                  ) : (
                     <>
                       {" "}/ 초기 비밀번호: <strong style={{ fontFamily: "var(--font-mono)" }}>{studentCreated.tempPassword}</strong>
                       <br />
