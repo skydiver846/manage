@@ -57,10 +57,17 @@ export default function Layout({ user, role }) {
   });
 
   const navGroups = (
-    <nav style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
+    <nav style={{ display: "flex", flexDirection: "column", gap: "var(--space-5)" }}>
       {groups.map((g) => (
         <div key={g.name} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <span style={{ font: "var(--type-caption)", letterSpacing: "var(--tracking-wide)", textTransform: "uppercase", opacity: 0.45, padding: "var(--space-1) var(--space-2)" }}>
+          <span
+            style={{
+              font: "var(--type-caption)", fontWeight: 700, letterSpacing: "var(--tracking-wide)",
+              textTransform: "uppercase", color: "var(--amber-400)",
+              padding: "var(--space-1) var(--space-2) var(--space-2)",
+              borderBottom: "1px solid rgba(224,166,75,0.3)", marginBottom: "var(--space-1)",
+            }}
+          >
             {g.name}
           </span>
           {g.items.map((it) => (

@@ -4,10 +4,10 @@ export default function Card({ children, padding = "lg", style, ...rest }) {
     <div
       style={{
         background: "var(--surface-card)",
-        border: "1px solid var(--border-subtle)",
+        border: "1px solid var(--border-default)",
         borderRadius: "var(--radius-lg)",
         padding: pads[padding],
-        boxShadow: "var(--shadow-xs)",
+        boxShadow: "var(--shadow-sm)",
         ...style,
       }}
       {...rest}
