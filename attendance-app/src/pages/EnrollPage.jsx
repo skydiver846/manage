@@ -2,7 +2,7 @@ import { useState } from "react";
 import { signInWithCustomToken } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import { selfEnrollAndCheckIn } from "../lib/account";
-import { Button, Input, Alert } from "../components/ui";
+import { Button, Input, Alert, FireEmblem } from "../components/ui";
 
 // 첫날 공통 QR을 스캔해서 들어오는 화면. 로그인 상태와 무관하게 열려있어야 하므로
 // App.jsx에서 로그인 여부를 확인하기 전에 이 페이지로 분기시킨다.
@@ -135,10 +135,9 @@ function CenterCard({ children }) {
             width: 56, height: 56, borderRadius: "var(--radius-lg)",
             background: "var(--green-200)", color: "var(--green-800)",
             display: "flex", alignItems: "center", justifyContent: "center",
-            font: "var(--type-h3)", fontWeight: 800,
           }}
         >
-          FA
+          <FireEmblem size={30} />
         </div>
         <h1 style={{ font: "var(--type-h1)", color: "#fff", letterSpacing: "var(--tracking-tight)" }}>
           출석관리시스템

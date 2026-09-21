@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { logout } from "../lib/auth";
-import { Avatar } from "./ui";
+import { Avatar, FireEmblem } from "./ui";
 
 const ROLE_LABELS = {
   STU: "교육생",
@@ -102,8 +102,8 @@ export default function Layout({ user, role }) {
         >
           {isNarrow && (
             <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-              <div style={{ width: 26, height: 26, borderRadius: "var(--radius-xs)", background: "var(--green-200)", color: "var(--green-800)", display: "flex", alignItems: "center", justifyContent: "center", font: "var(--type-caption)", fontWeight: 800 }}>
-                FA
+              <div style={{ width: 26, height: 26, borderRadius: "var(--radius-xs)", background: "var(--green-200)", color: "var(--green-800)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <FireEmblem size={16} />
               </div>
               <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>출석관리시스템</span>
             </div>
@@ -175,8 +175,8 @@ export default function Layout({ user, role }) {
 function Brand({ role }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", padding: "0 var(--space-2)" }}>
-      <div style={{ width: 30, height: 30, borderRadius: "var(--radius-sm)", background: "var(--green-200)", color: "var(--green-800)", display: "flex", alignItems: "center", justifyContent: "center", font: "var(--type-caption)", fontWeight: 800 }}>
-        FA
+      <div style={{ width: 30, height: 30, borderRadius: "var(--radius-sm)", background: "var(--green-200)", color: "var(--green-800)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <FireEmblem size={18} />
       </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
         <span style={{ font: "var(--type-label)", color: "#fff" }}>출석관리시스템</span>

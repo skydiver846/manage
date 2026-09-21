@@ -2,7 +2,7 @@ import { useState } from "react";
 import { updatePassword } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import { completePasswordChange } from "../lib/account";
-import { Button, Input, Alert } from "../components/ui";
+import { Button, Input, Alert, FireEmblem } from "../components/ui";
 
 // 관리자가 임시 비밀번호로 계정을 만든 경우(mustChangePassword:true) 최초 로그인 직후
 // 반드시 거쳐야 하는 화면. App.jsx가 로그인 이후 다른 라우팅보다 먼저 이 화면으로 분기시킨다.
@@ -58,10 +58,9 @@ export default function ChangePasswordPage({ onDone }) {
             width: 56, height: 56, borderRadius: "var(--radius-lg)",
             background: "var(--green-200)", color: "var(--green-800)",
             display: "flex", alignItems: "center", justifyContent: "center",
-            font: "var(--type-h3)", fontWeight: 800,
           }}
         >
-          FA
+          <FireEmblem size={30} />
         </div>
         <h1 style={{ font: "var(--type-h1)", color: "#fff", letterSpacing: "var(--tracking-tight)" }}>
           비밀번호 변경 필요

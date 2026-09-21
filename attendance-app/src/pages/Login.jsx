@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { loginWithId } from "../lib/auth";
 import { bootstrapFirstAdmin } from "../lib/account";
-import { Button, Input, Alert, Checkbox } from "../components/ui";
+import { Button, Input, Alert, Checkbox, FireEmblem } from "../components/ui";
 
 export default function Login() {
   const [loginId, setLoginId] = useState(() => localStorage.getItem("savedLoginId") || "");
@@ -45,10 +45,9 @@ export default function Login() {
             width: 56, height: 56, borderRadius: "var(--radius-lg)",
             background: "var(--green-200)", color: "var(--green-800)",
             display: "flex", alignItems: "center", justifyContent: "center",
-            font: "var(--type-h3)", fontWeight: 800,
           }}
         >
-          FA
+          <FireEmblem size={30} />
         </div>
         <h1 style={{ font: "var(--type-h1)", color: "#fff", letterSpacing: "var(--tracking-tight)" }}>
           출석관리시스템
