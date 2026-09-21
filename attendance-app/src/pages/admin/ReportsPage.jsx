@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { listReportsByStatus } from "../../lib/firestore";
 import { forwardReport } from "../../lib/reports";
 import { Card, Button, Alert, Pill } from "../../components/ui";
-import { REPORT_STATUS_LABEL } from "../../lib/ui";
+import { REPORT_STATUS_LABEL, REPORT_TYPE_LABEL } from "../../lib/ui";
 
 export default function AdminReportsPage() {
   const [reports, setReports] = useState(null);
@@ -49,8 +49,13 @@ export default function AdminReportsPage() {
             <div key={r.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "var(--space-3) var(--space-5)", borderBottom: "1px solid var(--border-subtle)", flexWrap: "wrap", gap: "var(--space-2)" }}>
               <Link to={`/reports/${r.id}`} style={{ textDecoration: "none", color: "inherit" }}>
                 <strong style={{ font: "var(--type-body-sm)" }}>{r.courseName}</strong>
+                <span style={{ color: "var(--text-subtle)", font: "var(--type-caption)", marginLeft: "var(--space-2)" }}>
+                  [{REPORT_TYPE_LABEL[r.type] || r.type}]
+                </span>
                 <span style={{ color: "var(--text-muted)", font: "var(--type-caption)", marginLeft: "var(--space-2)" }}>
-                  {r.date} · 재적 {r.summary?.total ?? 0} · 출석률 {r.summary?.rate ?? 0}%
+                  {r.type === "enrollment"
+                    ? `${r.date} · 등록 인원 ${r.roster?.length ?? 0}명`
+                    : `${r.date} · 재적 ${r.summary?.total ?? 0} · 출석률 ${r.summary?.rate ?? 0}%`}
                 </span>
               </Link>
               <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>

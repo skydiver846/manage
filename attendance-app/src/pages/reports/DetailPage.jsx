@@ -75,9 +75,10 @@ export default function ReportDetailPage({ role }) {
   if (!report) return <p style={{ color: "var(--text-muted)" }}>불러오는 중...</p>;
 
   const s = report.summary || {};
+  const isEnrollment = report.type === "enrollment";
   const docNo = `R-${report.date}-${report.id.slice(0, 6).toUpperCase()}`;
   const canWithdraw = role === "ADM" && report.status === "reviewing";
-  const canRefresh = (role === "ADM" || role === "INS") && report.status === "submitted";
+  const canRefresh = (role === "ADM" || role === "INS") && report.status === "submitted" && !isEnrollment;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-5)", maxWidth: 760 }}>
@@ -107,7 +108,9 @@ export default function ReportDetailPage({ role }) {
           <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)", alignItems: "center", textAlign: "center", marginBottom: "var(--space-6)" }}>
             <span style={{ font: "var(--type-caption)", color: "var(--text-muted)" }}>소방학교</span>
             <h1 style={{ font: "var(--type-h1)", color: "var(--text-strong)" }}>
-              {report.type === "daily" ? "일일" : report.type === "weekly" ? "주간" : "과정종료"} 출석결과보고서
+              {isEnrollment
+                ? "입교등록 결과보고서"
+                : `${report.type === "daily" ? "일일" : report.type === "weekly" ? "주간" : "과정종료"} 출석결과보고서`}
             </h1>
             <span style={{ font: "var(--type-caption)", color: "var(--text-subtle)", fontFamily: "var(--font-mono)" }}>
               문서번호: {docNo}
@@ -130,23 +133,62 @@ export default function ReportDetailPage({ role }) {
             </tbody>
           </table>
 
-          <div style={{ font: "var(--type-label)", color: "var(--text-strong)", marginBottom: "var(--space-3)" }}>출결 집계</div>
-          <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "var(--space-6)" }}>
-            <thead>
-              <tr>
-                {["재적", "출석", "지각", "조퇴", "결석", "출석률"].map((h) => (
-                  <th key={h} style={{ border: "1px solid var(--border-default)", padding: "10px", background: "var(--surface-sunken)", font: "var(--type-label)", color: "var(--text-strong)" }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                {[s.total ?? 0, s.present ?? 0, s.late ?? 0, s.earlyLeave ?? 0, s.absent ?? 0, `${s.rate ?? 0}%`].map((v, i) => (
-                  <td key={i} style={{ border: "1px solid var(--border-default)", padding: "10px", textAlign: "center", font: "var(--type-mono)", fontWeight: 600 }}>{v}</td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
+          {isEnrollment ? (
+            <>
+              <div style={{ font: "var(--type-label)", color: "var(--text-strong)", marginBottom: "var(--space-3)" }}>
+                입교등록 명단 ({report.roster?.length ?? 0}명)
+              </div>
+              <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "var(--space-6)" }}>
+                <thead>
+                  <tr>
+                    {["순번", "시도", "소속", "계급", "성명", "입교등록시간"].map((h) => (
+                      <th key={h} style={{ border: "1px solid var(--border-default)", padding: "8px 10px", background: "var(--surface-sunken)", font: "var(--type-label)", color: "var(--text-strong)" }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {(report.roster || []).length === 0 ? (
+                    <tr>
+                      <td colSpan={6} style={{ border: "1px solid var(--border-default)", padding: "12px", textAlign: "center", color: "var(--text-muted)", font: "var(--type-body-sm)" }}>
+                        입교등록을 완료한 교육생이 없습니다.
+                      </td>
+                    </tr>
+                  ) : (
+                    (report.roster || []).map((row, i) => (
+                      <tr key={i}>
+                        <td style={{ border: "1px solid var(--border-default)", padding: "8px 10px", textAlign: "center", font: "var(--type-mono)" }}>{i + 1}</td>
+                        <td style={{ border: "1px solid var(--border-default)", padding: "8px 10px", textAlign: "center", font: "var(--type-body-sm)" }}>{row.region || "-"}</td>
+                        <td style={{ border: "1px solid var(--border-default)", padding: "8px 10px", font: "var(--type-body-sm)" }}>{row.org || "-"}</td>
+                        <td style={{ border: "1px solid var(--border-default)", padding: "8px 10px", textAlign: "center", font: "var(--type-body-sm)" }}>{row.rank || "-"}</td>
+                        <td style={{ border: "1px solid var(--border-default)", padding: "8px 10px", textAlign: "center", font: "var(--type-body-sm)", fontWeight: 600 }}>{row.name || "-"}</td>
+                        <td style={{ border: "1px solid var(--border-default)", padding: "8px 10px", textAlign: "center", font: "var(--type-mono)", fontSize: 12 }}>{formatTs(row.claimedAt)}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <>
+              <div style={{ font: "var(--type-label)", color: "var(--text-strong)", marginBottom: "var(--space-3)" }}>출결 집계</div>
+              <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "var(--space-6)" }}>
+                <thead>
+                  <tr>
+                    {["재적", "출석", "지각", "조퇴", "결석", "출석률"].map((h) => (
+                      <th key={h} style={{ border: "1px solid var(--border-default)", padding: "10px", background: "var(--surface-sunken)", font: "var(--type-label)", color: "var(--text-strong)" }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    {[s.total ?? 0, s.present ?? 0, s.late ?? 0, s.earlyLeave ?? 0, s.absent ?? 0, `${s.rate ?? 0}%`].map((v, i) => (
+                      <td key={i} style={{ border: "1px solid var(--border-default)", padding: "10px", textAlign: "center", font: "var(--type-mono)", fontWeight: 600 }}>{v}</td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </>
+          )}
 
           <div style={{ font: "var(--type-label)", color: "var(--text-strong)", marginBottom: "var(--space-3)" }}>결재</div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0, border: "1px solid var(--border-default)" }}>

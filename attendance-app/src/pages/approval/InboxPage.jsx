@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { listReportsByStatus, listReportsByStatuses } from "../../lib/firestore";
 import { decideReport } from "../../lib/reports";
 import { Card, Input, Button, Alert, Pill } from "../../components/ui";
-import { REPORT_STATUS_LABEL } from "../../lib/ui";
+import { REPORT_STATUS_LABEL, REPORT_TYPE_LABEL } from "../../lib/ui";
 
 function formatTs(ts) {
   if (!ts) return "-";
@@ -63,12 +63,21 @@ export default function ApprovalInboxPage() {
               <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "var(--space-2)" }}>
                 <Link to={`/reports/${r.id}`} style={{ textDecoration: "none", color: "inherit" }}>
                   <strong style={{ font: "var(--type-body-sm)" }}>{r.courseName} · {r.date}</strong>
+                  <span style={{ color: "var(--text-subtle)", font: "var(--type-caption)", marginLeft: "var(--space-2)" }}>
+                    [{REPORT_TYPE_LABEL[r.type] || r.type}]
+                  </span>
                 </Link>
                 <Pill tone="info">{REPORT_STATUS_LABEL[r.status] || r.status}</Pill>
               </div>
               <div style={{ font: "var(--type-body-sm)", color: "var(--text-body)" }}>
-                재적 {r.summary?.total ?? 0} · 출석 {r.summary?.present ?? 0} · 지각 {r.summary?.late ?? 0} ·
-                조퇴 {r.summary?.earlyLeave ?? 0} · 결석 {r.summary?.absent ?? 0} · 출석률 {r.summary?.rate ?? 0}%
+                {r.type === "enrollment" ? (
+                  `등록 인원 ${r.roster?.length ?? 0}명`
+                ) : (
+                  <>
+                    재적 {r.summary?.total ?? 0} · 출석 {r.summary?.present ?? 0} · 지각 {r.summary?.late ?? 0} ·
+                    조퇴 {r.summary?.earlyLeave ?? 0} · 결석 {r.summary?.absent ?? 0} · 출석률 {r.summary?.rate ?? 0}%
+                  </>
+                )}
               </div>
               <Input
                 placeholder="결재 의견(선택)"
@@ -108,7 +117,9 @@ export default function ApprovalInboxPage() {
               >
                 <span style={{ font: "var(--type-body-sm)" }}>
                   <strong>{r.courseName}</strong>
-                  <span style={{ color: "var(--text-muted)", marginLeft: "var(--space-2)" }}>{r.date} · 출석률 {r.summary?.rate ?? 0}%</span>
+                  <span style={{ color: "var(--text-muted)", marginLeft: "var(--space-2)" }}>
+                    {r.date} · {r.type === "enrollment" ? `등록 인원 ${r.roster?.length ?? 0}명` : `출석률 ${r.summary?.rate ?? 0}%`}
+                  </span>
                 </span>
                 <span style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
                   <span style={{ font: "var(--type-caption)", color: "var(--text-muted)" }}>{formatTs(decidedAt)}</span>

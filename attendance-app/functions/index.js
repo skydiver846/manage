@@ -88,7 +88,7 @@ exports.createAccount = onCall(async (request) => {
   if (!caller || caller.token.role !== "ADM") {
     throw new HttpsError("permission-denied", "관리자만 계정을 생성할 수 있습니다.");
   }
-  const { loginId, name, role, courseId, org, phone, password } = request.data || {};
+  const { loginId, name, role, courseId, org, phone, region, rank, password } = request.data || {};
   if (!loginId || !name || !VALID_ROLES.includes(role)) {
     throw new HttpsError("invalid-argument", "loginId, name, role(STU/INS/ADM/APR)은 필수입니다.");
   }
@@ -120,6 +120,7 @@ exports.createAccount = onCall(async (request) => {
 
   await admin.firestore().doc(`users/${userRecord.uid}`).set({
     loginId, name, role, courseId: courseId || null, org: org || null, phone: phone || null,
+    region: region || null, rank: rank || null,
     status: "active", mustChangePassword: !setByAdmin && !phoneLast4,
     createdAt: FieldValue.serverTimestamp(), createdBy: caller.uid,
   });
@@ -613,6 +614,50 @@ exports.createReport = onCall(async (request) => {
   return { id: reportRef.id, summary };
 });
 
+/**
+ * 첫날 QR 자가등록(selfEnrollAndCheckIn)으로 입교등록을 마친 교육생 명단을 보고서로 만든다.
+ * 일일 출결 보고서(type:"daily")와 달리 재적/출석률 집계가 아니라 "누가 언제 입교등록했는지"
+ * 명단(roster) 형태로 만들어지고, 똑같이 상신·결재 절차를 거친다.
+ */
+exports.createEnrollmentReport = onCall(async (request) => {
+  const caller = request.auth;
+  const { courseId } = request.data || {};
+  if (!courseId) throw new HttpsError("invalid-argument", "courseId는 필수입니다.");
+  await assertInstructorOrAdmin(caller, courseId);
+
+  const studentsSnap = await admin.firestore().collection("users")
+    .where("courseId", "==", courseId).where("role", "==", "STU").where("selfClaimed", "==", true).get();
+
+  const roster = studentsSnap.docs
+    .map((d) => {
+      const u = d.data();
+      return {
+        region: u.region || "", org: u.org || "", rank: u.rank || "", name: u.name || "",
+        claimedAt: u.claimedAt || null,
+      };
+    })
+    .sort((a, b) => (a.claimedAt?.toMillis?.() || 0) - (b.claimedAt?.toMillis?.() || 0));
+
+  const course = await admin.firestore().doc(`courses/${courseId}`).get();
+  const today = new Date().toISOString().slice(0, 10);
+
+  const reportRef = await admin.firestore().collection("reports").add({
+    courseId, courseName: course.data()?.name || courseId, date: today, type: "enrollment",
+    writerUid: caller.uid, status: "submitted", roster,
+    approvalPath: [
+      { step: "작성", who: caller.uid, at: Timestamp.now(), status: "완료" },
+    ],
+    createdAt: FieldValue.serverTimestamp(),
+  });
+
+  await writeAudit({
+    actorUid: caller.uid, actorRole: caller.token.role, target: `reports/${reportRef.id}`,
+    action: "입교등록 결과보고서 작성", category: "보고서",
+  });
+
+  return { id: reportRef.id, count: roster.length };
+});
+
 /** 관리자가 보고서를 결재권자에게 상신한다. */
 exports.forwardReport = onCall(async (request) => {
   const caller = request.auth;
@@ -694,6 +739,9 @@ exports.refreshReportSummary = onCall(async (request) => {
   const report = snap.data();
   if (report.status !== "submitted") {
     throw new HttpsError("failed-precondition", "상신 전(작성 완료) 상태인 보고서만 다시 집계할 수 있습니다.");
+  }
+  if (report.type === "enrollment") {
+    throw new HttpsError("failed-precondition", "입교등록 보고서는 이 기능으로 다시 집계할 수 없습니다. 삭제 후 다시 작성해주세요.");
   }
   await assertInstructorOrAdmin(caller, report.courseId);
 

@@ -21,3 +21,8 @@ export const REPORT_STATUS_LABEL = {
   approved: "승인",
   rejected: "반려",
 };
+
+export const REPORT_TYPE_LABEL = {
+  daily: "일일 출석",
+  enrollment: "입교등록",
+};

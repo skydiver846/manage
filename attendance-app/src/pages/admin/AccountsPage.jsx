@@ -28,7 +28,7 @@ export default function AccountsPage() {
   const navigate = useNavigate();
   const [users, setUsers] = useState(null);
   const [courses, setCourses] = useState([]);
-  const [form, setForm] = useState({ loginId: "", name: "", role: "STU", courseId: "", org: "", phone: "", password: "" });
+  const [form, setForm] = useState({ loginId: "", name: "", role: "STU", courseId: "", region: "", org: "", rank: "", phone: "", password: "" });
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState("");
   const [created, setCreated] = useState(null);
@@ -65,12 +65,14 @@ export default function AccountsPage() {
         name: form.name,
         role: form.role,
         courseId: form.role === "STU" ? form.courseId || null : null,
+        region: form.region || null,
         org: form.org || null,
+        rank: form.rank || null,
         phone: form.phone || null,
         password: form.password || null,
       });
       setCreated(res);
-      setForm({ loginId: "", name: "", role: "STU", courseId: "", org: "", phone: "", password: "" });
+      setForm({ loginId: "", name: "", role: "STU", courseId: "", region: "", org: "", rank: "", phone: "", password: "" });
     } catch (err) {
       setMsg("오류: " + err.message);
       setSaving(false);
@@ -243,7 +245,9 @@ export default function AccountsPage() {
                 options={[{ value: "", label: "선택 안 함" }, ...courses.map((c) => ({ value: c.id, label: c.name }))]}
               />
             )}
+            <Input label="시도" value={form.region} onChange={(e) => setForm({ ...form, region: e.target.value })} placeholder="예: 서울" />
             <Input label="소속기관" value={form.org} onChange={(e) => setForm({ ...form, org: e.target.value })} placeholder="예: 중부소방서" />
+            <Input label="계급" value={form.rank} onChange={(e) => setForm({ ...form, rank: e.target.value })} placeholder="예: 소방교" />
             <Input label="연락처" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="010-0000-0000" />
             <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-1)", gridColumn: "1 / -1" }}>
               <div style={{ display: "flex", gap: "var(--space-2)", alignItems: "flex-end" }}>

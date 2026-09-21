@@ -1,15 +1,15 @@
 import * as XLSX from "xlsx";
 
-const HEADERS = ["로그인ID", "이름", "소속기관", "연락처"];
+const HEADERS = ["로그인ID", "이름", "시도", "소속기관", "계급", "연락처"];
 const LOGIN_ID_RE = /^[A-Za-z0-9._-]{2,30}$/;
 
 /** 업로드용 빈 템플릿(.xlsx)을 다운로드한다. */
 export function downloadStudentTemplate() {
   const ws = XLSX.utils.aoa_to_sheet([
     HEADERS,
-    ["2026-0501", "홍길동", "중부소방서 예방안전과", "010-1234-5678"],
+    ["2026-0501", "홍길동", "서울", "중부소방서 예방안전과", "소방교", "010-1234-5678"],
   ]);
-  ws["!cols"] = [{ wch: 14 }, { wch: 10 }, { wch: 24 }, { wch: 16 }];
+  ws["!cols"] = [{ wch: 14 }, { wch: 10 }, { wch: 10 }, { wch: 24 }, { wch: 10 }, { wch: 16 }];
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "명단");
   XLSX.writeFile(wb, "수강생_명단_양식.xlsx");
@@ -31,7 +31,9 @@ export async function parseStudentExcel(file, existingLoginIds) {
   return rows.map((row, i) => {
     const loginId = String(row["로그인ID"] ?? "").trim();
     const name = String(row["이름"] ?? "").trim();
+    const region = String(row["시도"] ?? "").trim();
     const org = String(row["소속기관"] ?? "").trim();
+    const rank = String(row["계급"] ?? "").trim();
     const phone = String(row["연락처"] ?? "").trim();
     const errors = [];
 
@@ -44,7 +46,7 @@ export async function parseStudentExcel(file, existingLoginIds) {
 
     if (loginId) seen.add(loginId.toLowerCase());
 
-    return { row: i + 2, loginId, name, org, phone, errors, ok: errors.length === 0 };
+    return { row: i + 2, loginId, name, region, org, rank, phone, errors, ok: errors.length === 0 };
   });
 }
 

@@ -47,7 +47,7 @@ export default function BulkUploadPage() {
       try {
         const res = await createAccount({
           loginId: r.loginId, name: r.name, role: "STU", courseId,
-          org: r.org || null, phone: r.phone || null,
+          org: r.org || null, phone: r.phone || null, region: r.region || null, rank: r.rank || null,
         });
         out.push({ ...r, ok: true, tempPassword: res.tempPassword });
       } catch (err) {
@@ -99,7 +99,7 @@ export default function BulkUploadPage() {
             <table style={{ width: "100%", minWidth: 640, borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ background: "var(--surface-sunken)" }}>
-                  {["행", "로그인ID", "이름", "소속기관", "연락처", "상태"].map((h) => (
+                  {["행", "로그인ID", "이름", "시도", "소속기관", "계급", "연락처", "상태"].map((h) => (
                     <th key={h} style={{ textAlign: "left", padding: "8px 16px", font: "var(--type-caption)", color: "var(--text-muted)" }}>{h}</th>
                   ))}
                 </tr>
@@ -110,7 +110,9 @@ export default function BulkUploadPage() {
                     <td style={{ padding: "8px 16px", font: "var(--type-body-sm)" }}>{r.row}</td>
                     <td style={{ padding: "8px 16px", font: "var(--type-body-sm)" }}>{r.loginId || "-"}</td>
                     <td style={{ padding: "8px 16px", font: "var(--type-body-sm)" }}>{r.name || "-"}</td>
+                    <td style={{ padding: "8px 16px", font: "var(--type-body-sm)", color: "var(--text-muted)" }}>{r.region || "-"}</td>
                     <td style={{ padding: "8px 16px", font: "var(--type-body-sm)", color: "var(--text-muted)" }}>{r.org || "-"}</td>
+                    <td style={{ padding: "8px 16px", font: "var(--type-body-sm)", color: "var(--text-muted)" }}>{r.rank || "-"}</td>
                     <td style={{ padding: "8px 16px", font: "var(--type-body-sm)", color: "var(--text-muted)" }}>{r.phone || "-"}</td>
                     <td style={{ padding: "8px 16px" }}>
                       {r.ok ? <Pill tone="ok">정상</Pill> : <Pill tone="bad">{r.errors.join(", ")}</Pill>}

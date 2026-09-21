@@ -2,6 +2,7 @@ import { httpsCallable } from "firebase/functions";
 import { functions } from "./firebase";
 
 const createReportFn = httpsCallable(functions, "createReport");
+const createEnrollmentReportFn = httpsCallable(functions, "createEnrollmentReport");
 const forwardReportFn = httpsCallable(functions, "forwardReport");
 const decideReportFn = httpsCallable(functions, "decideReport");
 const deleteReportFn = httpsCallable(functions, "deleteReport");
@@ -11,6 +12,12 @@ const refreshReportSummaryFn = httpsCallable(functions, "refreshReportSummary");
 export async function createReport(courseId, date) {
   const res = await createReportFn({ courseId, date });
   return res.data;
+}
+
+/** 첫날 QR 자가등록을 마친 교육생 명단(순번·시도·소속·계급·성명·입교등록시간)으로 보고서를 만든다. */
+export async function createEnrollmentReport(courseId) {
+  const res = await createEnrollmentReportFn({ courseId });
+  return res.data; // { id, count }
 }
 
 export async function forwardReport(reportId) {
