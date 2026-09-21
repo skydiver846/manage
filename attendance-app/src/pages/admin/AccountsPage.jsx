@@ -35,6 +35,10 @@ export default function AccountsPage() {
   const [created, setCreated] = useState(null);
   const [busyUid, setBusyUid] = useState(null);
   const [bulkCourseId, setBulkCourseId] = useState("");
+  const [studentForm, setStudentForm] = useState({ loginId: "", name: "", courseId: "", region: "", org: "", rank: "", phone: "", password: "" });
+  const [studentSaving, setStudentSaving] = useState(false);
+  const [studentMsg, setStudentMsg] = useState("");
+  const [studentCreated, setStudentCreated] = useState(null);
   const [resetBusyUid, setResetBusyUid] = useState(null);
   const [resetMsg, setResetMsg] = useState("");
   const [resetInfo, setResetInfo] = useState(null);
@@ -78,6 +82,35 @@ export default function AccountsPage() {
       return;
     }
     setSaving(false);
+    reload().catch((e) => console.error(e));
+  }
+
+  // 엑셀 일괄 업로드에서 빠진 학생이나 뒤늦게 추가된 교육생 한두 명을 바로 등록할 때 쓴다.
+  async function handleCreateStudent(e) {
+    e.preventDefault();
+    setStudentSaving(true);
+    setStudentMsg("");
+    setStudentCreated(null);
+    try {
+      const res = await createAccount({
+        loginId: studentForm.loginId,
+        name: studentForm.name,
+        role: "STU",
+        courseId: studentForm.courseId || null,
+        region: studentForm.region || null,
+        org: studentForm.org || null,
+        rank: studentForm.rank || null,
+        phone: studentForm.phone || null,
+        password: studentForm.password || null,
+      });
+      setStudentCreated(res);
+      setStudentForm({ loginId: "", name: "", courseId: studentForm.courseId, region: "", org: "", rank: "", phone: "", password: "" });
+    } catch (err) {
+      setStudentMsg("오류: " + err.message);
+      setStudentSaving(false);
+      return;
+    }
+    setStudentSaving(false);
     reload().catch((e) => console.error(e));
   }
 
@@ -237,6 +270,43 @@ export default function AccountsPage() {
             <span style={{ display: "block", marginTop: "var(--space-2)", font: "var(--type-caption)", color: "var(--text-muted)" }}>
               교육생 계정은 과정에 소속돼야 하므로, 먼저 업로드할 과정을 선택하세요.
             </span>
+
+            <form onSubmit={handleCreateStudent} style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)", marginTop: "var(--space-6)", paddingTop: "var(--space-5)", borderTop: "1px solid var(--border-subtle)" }}>
+              <div>
+                <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>개별 교육생 추가 등록</span>
+                <span style={{ display: "block", marginTop: "var(--space-1)", font: "var(--type-caption)", color: "var(--text-muted)" }}>
+                  엑셀 명단에서 누락됐거나 뒤늦게 추가된 교육생 한두 명을 바로 등록할 때 사용하세요.
+                </span>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "var(--space-4)" }}>
+                <Input label="로그인 ID" required value={studentForm.loginId} onChange={(e) => setStudentForm({ ...studentForm, loginId: e.target.value })} placeholder="사번 또는 교육생 번호" />
+                <Input label="이름" required value={studentForm.name} onChange={(e) => setStudentForm({ ...studentForm, name: e.target.value })} />
+                <Select
+                  label="소속 과정"
+                  value={studentForm.courseId}
+                  onChange={(e) => setStudentForm({ ...studentForm, courseId: e.target.value })}
+                  options={[{ value: "", label: "선택 안 함" }, ...courses.map((c) => ({ value: c.id, label: c.name }))]}
+                />
+                <Input label="시도" value={studentForm.region} onChange={(e) => setStudentForm({ ...studentForm, region: e.target.value })} placeholder="예: 서울" />
+                <Input label="소속기관" value={studentForm.org} onChange={(e) => setStudentForm({ ...studentForm, org: e.target.value })} placeholder="예: 중부소방서" />
+                <Input label="계급" value={studentForm.rank} onChange={(e) => setStudentForm({ ...studentForm, rank: e.target.value })} placeholder="예: 소방교" />
+                <Input label="연락처" value={studentForm.phone} onChange={(e) => setStudentForm({ ...studentForm, phone: e.target.value })} placeholder="010-0000-0000" />
+              </div>
+              <Button type="submit" variant="secondary" loading={studentSaving} style={{ width: 140 }}>교육생 추가</Button>
+              {studentMsg && <Alert tone="danger">{studentMsg}</Alert>}
+              {studentCreated && (
+                <Alert tone="success">
+                  생성 완료 — 로그인 ID: <strong>{studentCreated.loginId}</strong>
+                  {!studentCreated.setByAdmin && (
+                    <>
+                      {" "}/ 초기 비밀번호: <strong style={{ fontFamily: "var(--font-mono)" }}>{studentCreated.tempPassword}</strong>
+                      <br />
+                      (첫날 QR 자가등록 시 비밀번호가 새로 설정됩니다 — 그 전까지 로그인하려면 이 비밀번호를 전달해주세요.)
+                    </>
+                  )}
+                </Alert>
+              )}
+            </form>
           </div>
         )}
 
