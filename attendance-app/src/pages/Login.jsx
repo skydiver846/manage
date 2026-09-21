@@ -40,11 +40,10 @@ export default function Login() {
       }}
     >
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-2)" }}>
-        <img src="/emblem.png" alt="소방학교" style={{ height: 68, width: "auto" }} />
+        <img src="/emblem.png?v=2" alt="소방학교" style={{ height: 68, width: "auto" }} />
         <h1 style={{ font: "var(--type-h1)", color: "#fff", letterSpacing: "var(--tracking-tight)" }}>
           출석관리시스템
         </h1>
-        <span style={{ font: "var(--type-body-sm)", color: "#9ec2b3" }}>소방학교</span>
       </div>
 
       <form

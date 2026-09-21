@@ -109,7 +109,7 @@ export default function Layout({ user, role }) {
         >
           {isNarrow && (
             <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-              <img src="/emblem.png" alt="소방학교" style={{ height: 24, width: "auto" }} />
+              <img src="/emblem.png?v=2" alt="소방학교" style={{ height: 24, width: "auto" }} />
               <span style={{ font: "var(--type-label)", color: "var(--text-strong)" }}>출석관리시스템</span>
             </div>
           )}
@@ -180,7 +180,7 @@ export default function Layout({ user, role }) {
 function Brand({ role }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", padding: "0 var(--space-2)" }}>
-      <img src="/emblem.png" alt="소방학교" style={{ height: 28, width: "auto" }} />
+      <img src="/emblem.png?v=2" alt="소방학교" style={{ height: 28, width: "auto" }} />
       <div style={{ display: "flex", flexDirection: "column" }}>
         <span style={{ font: "var(--type-label)", color: "#fff" }}>출석관리시스템</span>
         <span style={{ font: "var(--type-caption)", opacity: 0.6 }}>{ROLE_LABELS[role] || role}</span>

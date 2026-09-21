@@ -53,7 +53,7 @@ export default function ChangePasswordPage({ onDone }) {
       }}
     >
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-2)" }}>
-        <img src="/emblem.png" alt="소방학교" style={{ height: 68, width: "auto" }} />
+        <img src="/emblem.png?v=2" alt="소방학교" style={{ height: 68, width: "auto" }} />
         <h1 style={{ font: "var(--type-h1)", color: "#fff", letterSpacing: "var(--tracking-tight)" }}>
           비밀번호 변경 필요
         </h1>
