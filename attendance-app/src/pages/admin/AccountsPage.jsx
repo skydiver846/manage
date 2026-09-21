@@ -289,7 +289,7 @@ export default function AccountsPage() {
                   options={[{ value: "", label: "선택 안 함" }, ...courses.map((c) => ({ value: c.id, label: c.name }))]}
                 />
                 <Input label="시도" value={studentForm.region} onChange={(e) => setStudentForm({ ...studentForm, region: e.target.value })} placeholder="예: 서울" />
-                <Input label="소속기관" value={studentForm.org} onChange={(e) => setStudentForm({ ...studentForm, org: e.target.value })} placeholder="예: 중부소방서" />
+                <Input label="소속기관" value={studentForm.org} onChange={(e) => setStudentForm({ ...studentForm, org: e.target.value })} placeholder="예: 동부소방서" />
                 <Input label="계급" value={studentForm.rank} onChange={(e) => setStudentForm({ ...studentForm, rank: e.target.value })} placeholder="예: 소방교" />
                 <Input label="연락처" value={studentForm.phone} onChange={(e) => setStudentForm({ ...studentForm, phone: e.target.value })} placeholder="010-0000-0000" />
               </div>

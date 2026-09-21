@@ -7,7 +7,7 @@ const LOGIN_ID_RE = /^[A-Za-z0-9._-]{2,30}$/;
 export function downloadStudentTemplate() {
   const ws = XLSX.utils.aoa_to_sheet([
     HEADERS,
-    ["2026-0501", "홍길동", "서울", "중부소방서 예방안전과", "소방교", "010-1234-5678"],
+    ["2026-0501", "홍길동", "서울", "동부소방서 예방안전과", "소방교", "010-1234-5678"],
   ]);
   ws["!cols"] = [{ wch: 14 }, { wch: 10 }, { wch: 10 }, { wch: 24 }, { wch: 10 }, { wch: 16 }];
   const wb = XLSX.utils.book_new();
