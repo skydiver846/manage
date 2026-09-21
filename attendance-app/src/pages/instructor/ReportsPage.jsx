@@ -95,13 +95,15 @@ export default function InstructorReportsPage({ user, role }) {
       <Card style={{ display: "flex", gap: "var(--space-4)", alignItems: "flex-end", flexWrap: "wrap" }}>
         <Select label="과정" value={courseId} onChange={(e) => setCourseId(e.target.value)} style={{ width: 220 }} options={courses.map((c) => ({ value: c.id, label: c.name }))} />
         <Input type="date" label="대상 일자" value={date} onChange={(e) => setDate(e.target.value)} />
-        <Button disabled={saving || !courseId} loading={saving} onClick={handleCreate}>일일 결과보고서 생성</Button>
-        <Button
-          variant="secondary" disabled={savingEnrollment || !courseId} loading={savingEnrollment}
-          onClick={handleCreateEnrollment}
-        >
-          입교등록 결과보고서 생성
-        </Button>
+        <div style={{ display: "flex", gap: "var(--space-4)" }}>
+          <Button disabled={saving || !courseId} loading={saving} onClick={handleCreate}>일일 결과보고서 생성</Button>
+          <Button
+            variant="secondary" disabled={savingEnrollment || !courseId} loading={savingEnrollment}
+            onClick={handleCreateEnrollment}
+          >
+            입교등록 결과보고서 생성
+          </Button>
+        </div>
       </Card>
       {msg && <Alert tone={msg.startsWith("오류") ? "danger" : "success"}>{msg}</Alert>}
 
