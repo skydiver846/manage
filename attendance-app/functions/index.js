@@ -420,8 +420,10 @@ exports.deleteAccount = onCall(async (request) => {
 /**
  * 관리자가 과정을 영구 삭제한다 — 교시(periods), 출결 기록(attendance 이하 전체), 정정 요청,
  * 소속기관 통보 이력까지 함께 제거하고, 소속돼 있던 교육생 계정의 courseId는 비운다.
- * 이미 결과보고서가 작성된 과정은 공식 기록으로 보고 삭제를 막는다(감사 목적 보존) —
- * 그런 과정은 대신 교육생 계정 쪽 "비활성화"만 개별적으로 쓰도록 안내한다.
+ * 결과보고서(reports)는 courseName·집계값을 문서 안에 그대로 품고 있어 과정 문서와
+ * 독립적으로 존재하므로(라이브 조인 없음), 과정이 삭제돼도 이미 만들어진 보고서와 결재
+ * 이력은 그대로 남아 조회 가능하다 — 그래서 이 함수는 보고서 존재 여부로 삭제를 막지 않는다.
+ * (다만 그 보고서의 근거였던 상세 출결 원본 기록 자체는 이 삭제로 함께 사라진다.)
  */
 exports.deleteCourse = onCall(async (request) => {
   const caller = request.auth;
@@ -435,15 +437,6 @@ exports.deleteCourse = onCall(async (request) => {
   const courseSnap = await courseRef.get();
   if (!courseSnap.exists) throw new HttpsError("not-found", "과정을 찾을 수 없습니다.");
   const courseData = courseSnap.data();
-
-  const reportsSnap = await admin.firestore().collection("reports")
-    .where("courseId", "==", courseId).limit(1).get();
-  if (!reportsSnap.empty) {
-    throw new HttpsError(
-      "failed-precondition",
-      "이미 결과보고서가 작성된 과정은 삭제할 수 없습니다 (감사 기록 보존 정책)."
-    );
-  }
 
   await admin.firestore().recursiveDelete(courseRef.collection("periods"));
   await admin.firestore().recursiveDelete(admin.firestore().collection("attendance").doc(courseId));

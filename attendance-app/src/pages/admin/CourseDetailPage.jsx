@@ -94,7 +94,7 @@ export default function CourseDetailPage() {
     if (!window.confirm(
       `"${course.name}" 과정을 영구 삭제하시겠습니까?\n` +
       "교시·출결기록·정정요청 이력까지 함께 삭제되며 되돌릴 수 없습니다. " +
-      "(이미 결과보고서가 작성된 과정은 삭제할 수 없습니다)"
+      "(이미 작성된 결과보고서 자체는 별도로 보존되어 계속 조회할 수 있습니다)"
     )) return;
     setDeleting(true);
     setDeleteMsg("");
