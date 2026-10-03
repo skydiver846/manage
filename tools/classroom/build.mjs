@@ -15,8 +15,8 @@ const MODULES = [
   ["02_ChatGPT와 Claude 가입", "ChatGPT · Claude 가입", "30분"],
   ["03_프롬프트·파일·폴더 활용", "프롬프트 · 파일 · 프로젝트", "60분"],
   ["04_옵시디언 설치와 MD 파일 만들기", "옵시디언과 MD 파일", "40분"],
-  ["05_스킬 만들기", "스킬 만들기", "40분"],
-  ["06_PRD 작성하기", "PRD 작성하기", "50분"],
+  ["05_PRD 작성하기", "PRD 작성하기", "50분"],
+  ["06_스킬 만들기", "스킬 만들기", "40분"],
   ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "75분"],
   ["08_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "60분"],
   ["09_(심화) 프로토타입 배포", "GitHub · Vercel 배포", "45분"],
@@ -38,7 +38,7 @@ const FILES = {
   step3: ["steps/3-js.html", "prototype-demo/steps/3-js.html", "3-js.html", "3단계 JavaScript (움직임)"],
   final: ["prototype/index.html", "prototype-demo/index.html", "index.html", "강의평가 집계 완성본 (배포 실습용 index.html)"],
 };
-const MODULE_FILES = { 3: ["prd", "opinions"], 4: ["prd", "opinions"], 5: ["skill", "skillmd"], 6: ["template", "prd"], 7: ["prd", "opinions"], 8: ["step1", "step2", "step3", "final"], 9: ["final"] };
+const MODULE_FILES = { 3: ["prd", "opinions"], 4: ["prd", "opinions"], 5: ["template", "prd"], 6: ["skill", "skillmd"], 7: ["prd", "opinions"], 8: ["step1", "step2", "step3", "final"], 9: ["final"] };
 
 const SITES = {
   "accounts.google.com/signup": "https://accounts.google.com/signup", "google.com": "https://www.google.com/",

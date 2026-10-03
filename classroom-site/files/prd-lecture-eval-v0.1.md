@@ -74,4 +74,4 @@
 
 ## 8. 참고
 
-- 결과 프로토타입: 저장소 `prototype-demo/index.html` (모듈 6에서 고친 [[PRD_강의평가 결과보고 (v0.3 완성본)]] 기준)
+- 결과 프로토타입: 저장소 `prototype-demo/index.html` (모듈 5에서 고친 [[PRD_강의평가 결과보고 (v0.3 완성본)]] 기준)

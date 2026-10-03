@@ -47,7 +47,7 @@
 |---|---|---|---|
 | 1 | Firebase 프로젝트 만들기 | Firebase | 업무 Google 계정 (모듈 1) |
 | 2 | 공용 장부(Firestore) 만들기 | Firebase | |
-| 3 | 장부 사용 규칙 정하기 | Firebase | PRD의 "범위 밖" (모듈 6) |
+| 3 | 장부 사용 규칙 정하기 | Firebase | PRD의 "범위 밖" (모듈 5) |
 | 4 | 화면과 장부를 잇는 설정값 받기 | Firebase | |
 | 5 | PRD 고치기 → Claude로 코드 고치기 | 옵시디언, Claude | 파일 + 지시 (모듈 3) |
 | 6 | GitHub에 커밋 → 자동 배포 | GitHub, Vercel | 모듈 09 배포 |
