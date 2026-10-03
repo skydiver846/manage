@@ -87,8 +87,11 @@
 
     form { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; }
     .field { flex: 1 1 200px; display: grid; gap: 4px; min-width: 0; }
+    .field.short { flex: 0 1 110px; }
     label { font-size: 13px; font-weight: 600; }
     input {
+      width: 100%;
+      min-width: 0;
       font: inherit;
       padding: 10px 12px;
       border: 1px solid var(--line);
@@ -165,6 +168,10 @@
         <label for="name">교육생 이름</label>
         <input id="name" autocomplete="off" placeholder="예: 김소방">
       </div>
+      <div class="field short">
+        <label for="no">교육생 번호</label>
+        <input id="no" inputmode="numeric" maxlength="2" autocomplete="off" placeholder="예: 01">
+      </div>
       <button type="submit">출석 체크</button>
       <p class="error" id="error" role="alert"></p>
     </form>
@@ -181,14 +188,14 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "attendance-demo";
+    const STORAGE_KEY = "attendance-demo-v3";
     const LATE_AFTER = { h: 9, m: 0 };
 
     // 처음 열면 예시 데이터로 시작한다 (저장된 기록이 있으면 그걸 사용).
     const SAMPLE = [
-      { name: "김소방 (예시)", time: "08:41" },
-      { name: "이구조 (예시)", time: "08:55" },
-      { name: "박구급 (예시)", time: "09:07" },
+      { name: "김소방 (예시)", no: "01", time: "08:41" },
+      { name: "이구조 (예시)", no: "02", time: "08:55" },
+      { name: "박구급 (예시)", no: "03", time: "09:07" },
     ];
 
     const $ = (id) => document.getElementById(id);
@@ -224,7 +231,7 @@
       if (state.records.length === 0) {
         const li = document.createElement("li");
         li.className = "empty";
-        li.textContent = "아직 출석한 교육생이 없습니다. 위에서 이름을 입력해 첫 출석을 기록하세요.";
+        li.textContent = "아직 출석한 교육생이 없습니다. 위에서 이름과 번호를 입력해 첫 출석을 기록하세요.";
         list.append(li);
       }
       state.records.forEach((r, i) => {
@@ -235,7 +242,7 @@
           '<span class="chip ' + (late ? "late" : "ok") + '">' + (late ? "지각" : "정시") + "</span>" +
           '<button type="button" class="remove" aria-label="기록 삭제">×</button>';
         li.querySelector(".time").textContent = r.time;
-        li.querySelector(".who").textContent = r.name;
+        li.querySelector(".who").textContent = r.name + " · " + r.no;
         li.querySelector(".remove").addEventListener("click", () => {
           state.records.splice(i, 1);
           save();
@@ -257,21 +264,25 @@
     $("checkin-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const name = $("name").value.trim();
-      if (!name) {
-        $("error").textContent = "이름을 입력한 뒤 출석 체크를 누르세요.";
+      const rawNo = $("no").value.trim();
+      if (!name || !/^\d{1,2}$/.test(rawNo)) {
+        $("error").textContent = "이름과 교육생 번호(숫자 2자리)를 입력한 뒤 출석 체크를 누르세요.";
         return;
       }
-      if (state.records.some((r) => r.name === name)) {
-        $("error").textContent = name + " 교육생은 이미 출석했습니다.";
+      const no = rawNo.padStart(2, "0");
+      // 동명이인은 번호로 구분한다: 이름과 번호가 모두 같을 때만 중복으로 본다 (PRD v0.3).
+      if (state.records.some((r) => r.name === name && r.no === no)) {
+        $("error").textContent = name + "(" + no + "번) 교육생은 이미 출석했습니다.";
         return;
       }
       if (state.sample) {
         state.records = [];
         state.sample = false;
       }
-      state.records.push({ name, time: nowHHMM() });
+      state.records.push({ name, no, time: nowHHMM() });
       $("error").textContent = "";
       $("name").value = "";
+      $("no").value = "";
       save();
       render();
     });
