@@ -155,6 +155,17 @@ const firebaseConfig = {
 
 ---
 
+## 🛟 막혔을 때: 완성본으로 바꾸기
+
+Claude가 만든 코드가 동작하지 않으면 **완성본**을 씁니다: 저장소 `prototype-demo/firebase/index.html`
+
+1. 완성본의 `firebaseConfig` 부분(▼▼▼ 표시)만 내 설정값으로 바꾸기
+2. GitHub `index.html` 에 붙여넣고 커밋 → 자동 배포
+
+완성본은 3단계 규칙과 그대로 맞물리도록 만들었고, Firestore 에뮬레이터와 브라우저 두 개로 실시간 공유·중복 차단·동명이인 출석까지 시험했습니다. 실제 Firebase 프로젝트에서는 아직 시험하지 않았으니 강의 전에 한 번 확인하세요. 자세한 내용은 `prototype-demo/firebase/README.md`.
+
+> 🧑‍🏫 수업 활용: Claude 결과와 완성본을 나란히 띄워 "칸 이름이 규칙과 같은가?", "문서 ID를 어떻게 정했나?"를 비교하면 좋은 복습이 됩니다.
+
 ## 자주 막히는 곳
 
 | 상황 | 해결 |
