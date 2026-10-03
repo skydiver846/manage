@@ -11,17 +11,17 @@ const LECTURE = path.join(ROOT, "lecture");
 const OUT = path.join(ROOT, "classroom-site");
 
 const MODULES = [
-  ["01_구글 계정 3개 만들기", "구글 계정 3개 만들기", "40분"],
-  ["02_ChatGPT와 Claude 가입", "ChatGPT · Claude 가입", "30분"],
-  ["03_프롬프트·파일·폴더 활용", "프롬프트 · 파일 · 프로젝트", "60분"],
-  ["04_옵시디언 설치와 MD 파일 만들기", "옵시디언과 MD 파일", "40분"],
-  ["05_PRD 작성하기", "PRD 작성하기", "50분"],
-  ["06_스킬 만들기", "스킬 만들기", "40분"],
-  ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "75분"],
-  ["08_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "60분"],
-  ["09_(심화) 프로토타입 배포", "GitHub · Vercel 배포", "45분"],
-  ["10_(심화) Firebase로 공용 장부 연결", "Firebase 공용 장부", "50분"],
-  ["11_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code (Pro)", "55분"],
+  ["01_구글 계정 3개 만들기", "구글 계정 3개 만들기", "60분"],
+  ["02_ChatGPT와 Claude 가입", "ChatGPT · Claude 가입", "40분"],
+  ["03_프롬프트·파일·폴더 활용", "프롬프트 · 파일 · 프로젝트", "80분"],
+  ["04_옵시디언 설치와 MD 파일 만들기", "옵시디언과 MD 파일", "60분"],
+  ["05_PRD 작성하기", "PRD 작성하기", "60분"],
+  ["06_스킬 만들기", "스킬 만들기", "50분"],
+  ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "90분"],
+  ["08_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "70분"],
+  ["09_(심화) 프로토타입 배포", "GitHub · Vercel 배포", "80분"],
+  ["10_(심화) Firebase로 공용 장부 연결", "Firebase 공용 장부", "60분"],
+  ["11_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code (Pro)", "60분"],
   ["12_(심화) AI 브라우저 Aside로 웹 업무 자동화", "AI 브라우저 Aside", "30분"],
 ].map(([file, short, time], i) => ({ file, short, time, num: i + 1, page: `m${String(i + 1).padStart(2, "0")}.html` }));
 
@@ -215,12 +215,15 @@ const siteLinks = [
   ["옵시디언 내려받기", "obsidian.md", "04"], ["Gemini Notebook", "notebooklm.google.com", "07"], ["GitHub", "github.com", "09"],
   ["Vercel", "vercel.com", "09"], ["Firebase 콘솔", "console.firebase.google.com", "10"], ["Claude Code", "claude.ai/code", "11"], ["Aside", "aside.com", "12"],
 ].map(([label, host, mod]) => `<a class="tile" href="${SITES[host]}" target="_blank" rel="noopener"><b>${esc(label)}</b><span>${host}</span><small>모듈 ${mod}</small></a>`).join("");
-const modList = MODULES.map((m) => `<li><a href="${m.page}"><span class="no">${String(m.num).padStart(2, "0")}</span><span class="t">${esc(m.short)}</span><span class="time">${m.time}</span></a></li>`).join("");
+const modItems = (list) => list.map((m) => `<li><a href="${m.page}"><span class="no">${String(m.num).padStart(2, "0")}</span><span class="t">${esc(m.short)}</span><span class="time">${m.time}</span></a></li>`).join("");
 fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 입문</h1>
   <p class="lead">계정 만들기부터 프롬프트, 옵시디언, 스킬, PRD, 그리고 PRD로 만든 강의평가 집계 화면을 웹에 공개하고 AI 에이전트로 자동화하기까지 한 단계씩 따라 합니다.</p>
-  <h2>강의 순서</h2>
-  <ol class="mods">${modList}</ol>
+  <h2>1일차 · 계정부터 결과보고 자료까지</h2>
+  <ol class="mods">${modItems(MODULES.slice(0, 7))}</ol>
+  <h2>2일차 · 화면을 공개하고 자동화하기</h2>
+  <ol class="mods">${modItems(MODULES.slice(7))}</ol>
+  <p class="note">2일차 오후에는 내 업무 PRD로 결과물을 하나 만들어 발표합니다. 1일차 숙제: 모듈 05에서 시작한 내 업무 PRD 마저 쓰기.</p>
   <h2>바로가기</h2>
   <div class="tiles">${siteLinks}</div>
   <h2>자료</h2>
