@@ -16,9 +16,9 @@ const MODULES = [
   ["03_프롬프트·파일·폴더 활용", "프롬프트 · 파일 · 프로젝트", "80분"],
   ["04_옵시디언 설치와 MD 파일 만들기", "옵시디언과 MD 파일", "60분"],
   ["05_PRD 작성하기", "PRD 작성하기", "60분"],
-  ["06_스킬 만들기", "스킬 만들기", "50분"],
+  ["06_스킬 만들기", "스킬 만들기", "55분"],
   ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "90분"],
-  ["08_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "65분"],
+  ["08_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "60분"],
   ["09_(심화) 프로토타입 배포", "GitHub · Vercel 배포", "80분"],
   ["10_(심화) Firebase로 공용 장부 연결", "Firebase 공용 장부", "50분"],
   ["11_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code", "40분"],
@@ -33,12 +33,16 @@ const FILES = {
   prompts: ["files/prompts.md", "lecture/실습자료/프롬프트 모음.md", "프롬프트 모음.md", "프롬프트 모음 파일 (옵시디언 99_프롬프트 폴더 보관용)"],
   skill: ["files/prd-interview.zip", null, "prd-interview.zip", "PRD 인터뷰 스킬 (Claude에 바로 올리는 ZIP)"],
   skillmd: ["files/SKILL.md", "lecture/실습자료/스킬/prd-interview/SKILL.md", "SKILL.md", "PRD 인터뷰 스킬 원본 SKILL.md"],
+  quizreq: ["files/quiz-request-sample.md", "lecture/실습자료/문제출제_의뢰서_예시.md", "문제출제_의뢰서_예시.md", "문제출제 의뢰서 (실습용 예시)"],
+  quizsrc: ["files/quiz-source-fire-basics.md", "lecture/실습자료/교재발췌_연소와소화의기초.md", "교재발췌_연소와소화의기초.md", "교재 발췌: 연소와 소화의 기초 (실습용)"],
+  quizcard: ["files/quiz-card-form.hwpx", "lecture/실습자료/객관식_문제카드_양식(별지제4호서식).hwpx", "객관식_문제카드_양식(별지제4호서식).hwpx", "객관식 문제카드 빈 양식 (별지 제4호서식)"],
+  quizzip: ["files/quiz-generator.zip", null, "quiz-generator.zip", "문제출제 스킬 (조직 배포가 안 됐을 때 개인 등록용 ZIP)"],
   step1: ["steps/1-html.html", "prototype-demo/steps/1-html.html", "1-html.html", "1단계 HTML (뼈대)"],
   step2: ["steps/2-css.html", "prototype-demo/steps/2-css.html", "2-css.html", "2단계 CSS (옷)"],
   step3: ["steps/3-js.html", "prototype-demo/steps/3-js.html", "3-js.html", "3단계 JavaScript (움직임)"],
   final: ["prototype/index.html", "prototype-demo/index.html", "index.html", "강의평가 집계 완성본 (배포 실습용 index.html)"],
 };
-const MODULE_FILES = { 3: ["prd", "opinions"], 4: ["prd", "opinions"], 5: ["template", "prd"], 6: ["skill", "skillmd"], 7: ["prd", "opinions"], 8: ["step1", "step2", "step3", "final"], 9: ["final"] };
+const MODULE_FILES = { 3: ["prd", "opinions"], 4: ["prd", "opinions"], 5: ["template", "prd"], 6: ["skill", "skillmd", "quizreq", "quizsrc", "quizcard", "quizzip"], 7: ["prd", "opinions"], 8: ["step1", "step2", "step3", "final"], 9: ["final"] };
 
 const SITES = {
   "accounts.google.com/signup": "https://accounts.google.com/signup", "google.com": "https://www.google.com/",
@@ -91,6 +95,8 @@ function wikiTarget(raw) {
   if (mod) return [`${String(mod.num).padStart(2, "0")} ${mod.short}`, mod.page];
   if (name === "PRD_강의평가 결과보고") return ["예시 PRD 파일", "files.html#prd"];
   if (name === "강의평가_자유의견_예시") return ["자유의견 예시 파일", "files.html#opinions"];
+  if (name === "문제출제_의뢰서_예시") return ["출제 의뢰서 파일", "files.html#quizreq"];
+  if (name === "교재발췌_연소와소화의기초") return ["교재 발췌 파일", "files.html#quizsrc"];
   if (name === "PRD 템플릿") return ["PRD 템플릿 파일", "files.html#template"];
   if (name === "프롬프트 모음") return ["프롬프트 모음", "prompts.html"];
   if (name === "SKILL") return ["스킬 예시 파일", "files.html#skill"];
@@ -187,6 +193,7 @@ for (const [key, [dest, src]] of Object.entries(FILES)) {
 }
 // 스킬 ZIP: 폴더째 압축해야 Claude가 읽는다 (prd-interview/SKILL.md)
 execFileSync("zip", ["-q", "-r", path.join(OUT, FILES.skill[0]), "prd-interview"], { cwd: path.join(LECTURE, "실습자료/스킬") });
+execFileSync("zip", ["-q", "-r", path.join(OUT, FILES.quizzip[0]), "quiz-generator", "-x", "*/__pycache__/*"], { cwd: path.join(LECTURE, "실습자료/스킬") });
 
 MODULES.forEach((m, i) => {
   const md = fs.readFileSync(path.join(LECTURE, m.file + ".md"), "utf8");
