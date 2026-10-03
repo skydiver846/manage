@@ -17,11 +17,12 @@ const MODULES = [
   ["04_옵시디언 설치와 MD 파일 만들기", "옵시디언과 MD 파일", "40분"],
   ["05_스킬 만들기", "스킬 만들기", "40분"],
   ["06_PRD 작성하기", "PRD 작성하기", "50분"],
-  ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "60분"],
+  ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "75분"],
   ["08_(심화) HTML·CSS·JavaScript로 출석부 뜯어보기", "HTML · CSS · JS 뜯어보기", "60분"],
   ["09_(심화) 프로토타입 배포", "GitHub · Vercel 배포", "45분"],
   ["10_(심화) Firebase로 공용 장부 연결", "Firebase 공용 장부", "50분"],
   ["11_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code (Pro)", "55분"],
+  ["12_(심화) AI 브라우저 Aside로 웹 업무 자동화", "AI 브라우저 Aside", "30분"],
 ].map(([file, short, time], i) => ({ file, short, time, num: i + 1, page: `m${String(i + 1).padStart(2, "0")}.html` }));
 
 // 교육생이 내려받는 파일: [사이트 안 경로, 원본, 내려받을 때 이름, 설명]
@@ -43,7 +44,7 @@ const SITES = {
   "gmail.com": "https://mail.google.com/", "chatgpt.com": "https://chatgpt.com/", "claude.ai": "https://claude.ai/",
   "claude.ai/code": "https://claude.ai/code", "notebooklm.google.com": "https://notebooklm.google.com/",
   "obsidian.md": "https://obsidian.md/", "github.com": "https://github.com/", "vercel.com": "https://vercel.com/",
-  "console.firebase.google.com": "https://console.firebase.google.com/",
+  "console.firebase.google.com": "https://console.firebase.google.com/", "aside.com": "https://aside.com/",
 };
 
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -133,7 +134,7 @@ function nav(current) {
   return `<nav aria-label="목차">
     <div class="group">${link("index.html", "처음 화면")}</div>
     <div class="group"><h3>본 강의</h3>${mods(1, 7)}</div>
-    <div class="group"><h3>심화</h3>${mods(8, 11)}</div>
+    <div class="group"><h3>심화</h3>${mods(8, 12)}</div>
     <div class="group"><h3>자료</h3>${link("prompts.html", "프롬프트 모음")}${link("files.html", "실습 파일 내려받기")}</div>
   </nav>`;
 }
@@ -209,13 +210,13 @@ fs.writeFileSync(path.join(OUT, "files.html"), page("files.html", "실습 파일
 
 const siteLinks = [
   ["Google 계정 만들기", "accounts.google.com/signup", "01"], ["ChatGPT", "chatgpt.com", "02"], ["Claude", "claude.ai", "02"],
-  ["옵시디언 내려받기", "obsidian.md", "04"], ["NotebookLM", "notebooklm.google.com", "07"], ["GitHub", "github.com", "09"],
-  ["Vercel", "vercel.com", "09"], ["Firebase 콘솔", "console.firebase.google.com", "10"], ["Claude Code", "claude.ai/code", "11"],
+  ["옵시디언 내려받기", "obsidian.md", "04"], ["Gemini Notebook", "notebooklm.google.com", "07"], ["GitHub", "github.com", "09"],
+  ["Vercel", "vercel.com", "09"], ["Firebase 콘솔", "console.firebase.google.com", "10"], ["Claude Code", "claude.ai/code", "11"], ["Aside", "aside.com", "12"],
 ].map(([label, host, mod]) => `<a class="tile" href="${SITES[host]}" target="_blank" rel="noopener"><b>${esc(label)}</b><span>${host}</span><small>모듈 ${mod}</small></a>`).join("");
 const modList = MODULES.map((m) => `<li><a href="${m.page}"><span class="no">${String(m.num).padStart(2, "0")}</span><span class="t">${esc(m.short)}</span><span class="time">${m.time}</span></a></li>`).join("");
 fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 입문</h1>
-  <p class="lead">계정 만들기부터 프롬프트, 옵시디언, 스킬, PRD, 그리고 PRD로 만든 출석부를 웹에 공개하기까지 한 단계씩 따라 합니다.</p>
+  <p class="lead">계정 만들기부터 프롬프트, 옵시디언, 스킬, PRD, 그리고 PRD로 만든 출석부를 웹에 공개하고 AI 에이전트로 자동화하기까지 한 단계씩 따라 합니다.</p>
   <h2>강의 순서</h2>
   <ol class="mods">${modList}</ol>
   <h2>바로가기</h2>

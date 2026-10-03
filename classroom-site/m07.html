@@ -14,15 +14,15 @@
     <nav aria-label="목차">
     <div class="group"><a href="index.html">처음 화면</a></div>
     <div class="group"><h3>본 강의</h3><a href="m01.html">01 구글 계정 3개 만들기</a><a href="m02.html">02 ChatGPT · Claude 가입</a><a href="m03.html">03 프롬프트 · 파일 · 프로젝트</a><a href="m04.html">04 옵시디언과 MD 파일</a><a href="m05.html">05 스킬 만들기</a><a href="m06.html">06 PRD 작성하기</a><a href="m07.html" aria-current="page">07 PRD로 결과물 만들기</a></div>
-    <div class="group"><h3>심화</h3><a href="m08.html">08 HTML · CSS · JS 뜯어보기</a><a href="m09.html">09 GitHub · Vercel 배포</a><a href="m10.html">10 Firebase 공용 장부</a><a href="m11.html">11 Claude Code (Pro)</a></div>
+    <div class="group"><h3>심화</h3><a href="m08.html">08 HTML · CSS · JS 뜯어보기</a><a href="m09.html">09 GitHub · Vercel 배포</a><a href="m10.html">10 Firebase 공용 장부</a><a href="m11.html">11 Claude Code (Pro)</a><a href="m12.html">12 AI 브라우저 Aside</a></div>
     <div class="group"><h3>자료</h3><a href="prompts.html">프롬프트 모음</a><a href="files.html">실습 파일 내려받기</a></div>
   </nav>
   </aside>
   <main>
     <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>07 PRD로 결과물 만들기</span></div>
-    <article><h1>모듈 7. PRD로 결과물 만들기 (NotebookLM · 생성형 AI)</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>예시 PRD (출석부 v0.1)</span><span class="acts"><a class="btn" href="files/prd-attendance-v0.1.md" download="PRD_교육생 출석부.md">내려받기</a></span></li></ul></aside>
+    <article><h1>모듈 7. PRD로 결과물 만들기 (Gemini Notebook · 생성형 AI)</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>예시 PRD (출석부 v0.1)</span><span class="acts"><a class="btn" href="files/prd-attendance-v0.1.md" download="PRD_교육생 출석부.md">내려받기</a></span></li></ul></aside>
 <h2>한 장의 PRD, 여러 개의 결과물</h2>
-<pre><code>                        ┌─▶ NotebookLM ─▶ 요약 · 오디오 해설 · 마인드맵 · 퀴즈
+<pre><code>                        ┌─▶ Gemini Notebook ─▶ 요약 · 오디오 해설 · 슬라이드 · 인포그래픽
  📄 PRD.md (옵시디언) ──┼─▶ ChatGPT    ─▶ 보고서 · 안내문 · 발표 개요 · 이미지
                         └─▶ Claude     ─▶ 프로토타입(웹 화면) · 상세 문서
 </code></pre>
@@ -35,7 +35,7 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><strong>NotebookLM</strong></td>
+<td><strong>Gemini Notebook</strong></td>
 <td><strong>내가 넣은 자료 안에서만</strong> 답하는 AI 연구 노트</td>
 <td>자료를 이해하고 요약·학습할 때</td>
 </tr>
@@ -46,7 +46,10 @@
 </tr>
 </tbody></table></div>
 <hr>
-<h2>7-1. NotebookLM (약 25분)</h2>
+<h2>7-1. Gemini Notebook (약 40분)</h2>
+<blockquote>
+<p>💡 <strong>이름이 바뀌었습니다.</strong> 2026년 7월부터 <strong>NotebookLM</strong> 의 새 이름이 <strong>Gemini Notebook</strong> 입니다. 기능과 만들어 둔 노트북은 그대로입니다. 인터넷 검색이나 예전 자료에서는 NotebookLM이라는 이름도 계속 보입니다.</p>
+</blockquote>
 <h3>시작하기</h3>
 <ol>
 <li>&quot;업무&quot; Chrome 프로필 창에서 <a class="site" href="https://notebooklm.google.com/" target="_blank" rel="noopener"><code>notebooklm.google.com</code></a> 접속</li>
@@ -60,7 +63,7 @@
 <li>함께 참고할 자료가 있으면 추가 (PDF, 텍스트, 웹사이트 주소, YouTube 링크, Google 문서 등)</li>
 </ol>
 <blockquote>
-<p>💡 <strong>MD 파일을 바로 올릴 수 있다는 것</strong>이 옵시디언과 NotebookLM 조합의 장점입니다. 형식 변환 없이 옵시디언 노트를 그대로 넣습니다.</p>
+<p>💡 <strong>MD 파일을 바로 올릴 수 있다는 것</strong>이 옵시디언과 Gemini Notebook 조합의 장점입니다. 형식 변환 없이 옵시디언 노트를 그대로 넣습니다.</p>
 </blockquote>
 <h3>해 볼 것</h3>
 <div class="table-wrap"><table>
@@ -87,6 +90,11 @@
 <td>기능 구조를 한눈에 보는 그림</td>
 </tr>
 <tr>
+<td><strong>슬라이드 · 인포그래픽</strong></td>
+<td>스튜디오에서 생성 (아래 7-1-1)</td>
+<td>발표 자료와 한 장 요약 그림</td>
+</tr>
+<tr>
 <td><strong>보고서·학습 가이드</strong></td>
 <td>보고서 메뉴에서 형식 선택</td>
 <td>브리핑 문서, 학습 가이드, FAQ 등</td>
@@ -95,19 +103,85 @@
 <blockquote>
 <p>메뉴 이름과 위치는 업데이트로 바뀔 수 있습니다. 오디오 개요는 생성에 몇 분 걸리고, 출력 언어 설정을 한국어로 확인하세요.</p>
 </blockquote>
-<h3>실습 질문 (NotebookLM 채팅창)</h3>
+<h3>7-1-1. 슬라이드와 인포그래픽 만들기 (15분)</h3>
+<p>같은 PRD로 <strong>발표 자료(슬라이드)</strong> 와 <strong>한 장짜리 요약 그림(인포그래픽)</strong> 을 만듭니다. Gemini Notebook은 <strong>넣은 자료(소스)만</strong> 근거로 만들기 때문에, PRD에 없는 내용이 끼어들 가능성이 적습니다.</p>
+<p><strong>① 슬라이드 (Slide Deck)</strong></p>
+<ol>
+<li>오른쪽 <strong>스튜디오</strong> → <strong>슬라이드(Slide Deck)</strong> 옆의 <strong>연필(맞춤 설정)</strong> 아이콘</li>
+<li>설정 고르기</li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>고를 것</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>형식</td>
+<td><strong>발표자용 슬라이드(Presenter Slides)</strong></td>
+<td>글자가 적고 말로 설명하는 발표용. 나눠 줄 자료면 <strong>자세한 자료(Detailed Deck)</strong></td>
+</tr>
+<tr>
+<td>언어</td>
+<td><strong>한국어</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>길이</td>
+<td>짧게</td>
+<td>결재·보고용은 짧을수록 좋음</td>
+</tr>
+<tr>
+<td>프롬프트</td>
+<td>아래 지시문</td>
+<td>누구에게, 몇 장, 무엇을 강조할지</td>
+</tr>
+</tbody></table></div>
+<pre><code>교육운영 부서장님께 출석부 프로토타입 도입을 보고하는 5장짜리 발표 자료로 만들어 줘.
+1장: 지금의 문제(종이 명부), 2장: 목표, 3장: 핵심 기능, 4장: 이번에 하지 않는 것, 5장: 성공 기준과 다음 단계.
+PRD에 없는 숫자는 쓰지 마.
+</code></pre>
+<ol start="3">
+<li><strong>[생성]</strong> → 몇 분 기다리기 (오디오 개요와 함께 눌러 두면 시간을 아낄 수 있음)</li>
+<li><strong>고치기</strong>: 고치고 싶은 장을 열고 <strong>연필</strong> 아이콘 → &quot;3장 글자를 더 줄여 줘&quot;처럼 <strong>말로</strong> 고칩니다</li>
+<li><strong>내려받기</strong>: <strong>⋮</strong> → <strong>PDF</strong> 또는 <strong>PowerPoint(.pptx)</strong>. PPTX는 PowerPoint에서 글자를 직접 고칠 수 있습니다</li>
+</ol>
+<p><strong>② 인포그래픽 (Infographic)</strong></p>
+<ol>
+<li>스튜디오 → <strong>인포그래픽</strong> 옆 <strong>연필</strong> 아이콘</li>
+<li><strong>방향</strong>(가로 / 세로 / 정사각형), <strong>언어: 한국어</strong>, 프롬프트 입력</li>
+</ol>
+<pre><code>교육생이 출석하는 순서(이름·번호 입력 → 출석 체크 → 정시/지각 판정 → 명단 표시)를
+4단계 흐름 그림으로 만들어 줘. 소방 적색을 강조색으로, 글자는 크게.
+</code></pre>
+<ol start="3">
+<li><strong>[생성]</strong> → 완성되면 이미지로 저장</li>
+</ol>
+<p><strong>③ 결과 검토 (꼭 하기)</strong></p>
+<pre><code>□ PRD에 없는 숫자나 기능이 들어가지 않았나?
+□ 그림 속 한글에 오타나 깨진 글자가 없나? (그림으로 그린 글자라 틀릴 수 있음)
+□ &quot;범위 밖&quot;으로 정한 기능이 들어가 있지 않나?
+□ 개인정보(실명·연락처)가 보이지 않나?
+</code></pre>
+<blockquote>
+<p>💡 7-2의 ChatGPT &quot;발표 개요&quot;와 비교해 보세요. ChatGPT는 <strong>뼈대(장별 제목·문장)</strong> 를 주고, Gemini Notebook은 <strong>완성된 슬라이드</strong>를 줍니다. 뼈대로 생각을 정리하고, 슬라이드로 바로 보고하는 식으로 함께 쓰면 좋습니다.</p>
+<p>내려받은 PDF·PPTX·이미지는 옵시디언 <code>03_AI결과물</code> 폴더에 함께 보관합니다. 옵시디언 안에서 PDF와 이미지도 열어 볼 수 있습니다.</p>
+</blockquote>
+<h3>실습 질문 (Gemini Notebook 채팅창)</h3>
 <pre><code>이 PRD에서 &quot;범위 밖&quot;으로 정한 것과, 성공 기준을 표로 정리해 줘.
 그리고 PRD 안에서 서로 모순되거나 빠진 부분이 있으면 알려 줘.
 </code></pre>
 <p><strong>볼 것 두 가지</strong></p>
 <ol>
 <li><strong>출처 번호</strong> [1], [2] 를 눌러 PRD의 어느 문장을 근거로 했는지 확인 (ChatGPT·Claude와 가장 다른 점)</li>
-<li><strong>불일치 찾기</strong>: 모듈 6에서 4번 칸만 &quot;이름 + 번호&quot;로 고쳤다면, 5번 화면 흐름은 아직 &quot;이름 입력&quot;만 있습니다. NotebookLM이 이 불일치를 짚어 주면 옵시디언에서 5·7번 칸을 고치고 <strong>v0.3</strong> 으로 올립니다.</li>
+<li><strong>불일치 찾기</strong>: 모듈 6에서 4번 칸만 &quot;이름 + 번호&quot;로 고쳤다면, 5번 화면 흐름은 아직 &quot;이름 입력&quot;만 있습니다. Gemini Notebook이 이 불일치를 짚어 주면 옵시디언에서 5·7번 칸을 고치고 <strong>v0.3</strong> 으로 올립니다.</li>
 </ol>
-<pre><code> 옵시디언에서 PRD 수정 ─▶ NotebookLM에 다시 넣어 검토 ─▶ 불일치 발견 ─▶ 다시 수정
+<pre><code> 옵시디언에서 PRD 수정 ─▶ Gemini Notebook에 다시 넣어 검토 ─▶ 불일치 발견 ─▶ 다시 수정
 </code></pre>
 <blockquote>
-<p>⚠️ NotebookLM에 올린 파일은 <strong>복사본</strong>입니다. 옵시디언에서 PRD를 고쳐도 NotebookLM 안의 파일은 바뀌지 않으니, 다시 검토하려면 <strong>기존 소스를 지우고 새로 업로드</strong>합니다. 교육생이 가장 헷갈리는 부분입니다.</p>
+<p>⚠️ Gemini Notebook에 올린 파일은 <strong>복사본</strong>입니다. 옵시디언에서 PRD를 고쳐도 Gemini Notebook 안의 파일은 바뀌지 않으니, 다시 검토하려면 <strong>기존 소스를 지우고 새로 업로드</strong>합니다. 교육생이 가장 헷갈리는 부분입니다.</p>
 <p>AI가 불일치를 못 찾으면 &quot;4번과 5번 칸의 입력 항목이 서로 같은지 비교해 줘&quot;처럼 <strong>구체적으로</strong> 다시 묻게 하세요.</p>
 </blockquote>
 <hr>
@@ -179,7 +253,7 @@ PRD에 없는 숫자는 만들지 말고 [확인 필요]로 표시해.
  ├─ 📁 03_AI결과물
  │   ├─ 결재 보고서.md      (ChatGPT)
  │   ├─ 발표 개요.md        (ChatGPT)
- │   ├─ PRD 검토 결과.md    (NotebookLM)
+ │   ├─ PRD 검토 결과.md    (Gemini Notebook)
  │   └─ 프로토타입/index.html (Claude)
 </code></pre>
 <p><strong>순환 구조</strong>: 결과를 보고 → PRD 수정 → 다시 생성. PRD가 좋아질수록 모든 결과물이 함께 좋아집니다.</p>
@@ -192,8 +266,12 @@ PRD에 없는 숫자는 만들지 말고 [확인 필요]로 표시해.
 </tr>
 </thead>
 <tbody><tr>
-<td>NotebookLM에서 MD 파일이 안 보임</td>
+<td>Gemini Notebook에서 MD 파일이 안 보임</td>
 <td>파일 선택 창 오른쪽 아래 형식이 &quot;모든 파일&quot;인지 확인</td>
+</tr>
+<tr>
+<td>슬라이드·인포그래픽 그림 속 한글이 틀림</td>
+<td>그림으로 그린 글자라 생깁니다. 연필 아이콘으로 &quot;3장 제목 글자를 정확히 &#39;○○&#39;로&quot;처럼 고치거나, PPTX로 받아 PowerPoint에서 직접 고치기</td>
 </tr>
 <tr>
 <td>오디오 개요가 영어로 나옴</td>
@@ -210,8 +288,9 @@ PRD에 없는 숫자는 만들지 말고 [확인 필요]로 표시해.
 </tbody></table></div>
 <h2>✅ 확인 질문 (인터뷰)</h2>
 <ol>
-<li>NotebookLM에서 <strong>출처 번호가 붙은 답</strong>을 받아 보셨나요?</li>
+<li>Gemini Notebook에서 <strong>출처 번호가 붙은 답</strong>을 받아 보셨나요?</li>
 <li>오디오 개요를 들어 보셨나요? PRD를 처음 듣는 사람도 이해할 만했나요?</li>
+<li>슬라이드와 인포그래픽에서 <strong>PRD와 다른 내용이나 틀린 글자</strong>를 찾으셨나요?</li>
 <li>Claude가 만든 프로토타입에서 <strong>버튼을 눌러 동작</strong>을 확인하셨나요?</li>
 <li>결과물을 보고 <strong>PRD에서 고칠 점</strong>을 하나 찾으셨나요?</li>
 </ol>
