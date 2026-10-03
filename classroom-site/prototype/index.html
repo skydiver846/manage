@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>교육생 출석부</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+  <style>
+    /* 레이아웃: 좁은 단일 컬럼 — 상단 요약, 입력 폼, 출석 명단 순 */
+    :root {
+      --bg: #f3f4f6;
+      --surface: #ffffff;
+      --fg: #1b2230;
+      --muted: #5d6676;
+      --line: #dde1e8;
+      --accent: #c8321e;       /* 소방 적색 */
+      --ok: #1f7a4d;
+      --late: #a35f00;
+      --font-display: "Black Han Sans", "IBM Plex Sans KR", system-ui, sans-serif;
+      --font-body: "IBM Plex Sans KR", system-ui, -apple-system, "Apple SD Gothic Neo", sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #12161d; --surface: #1b212b; --fg: #e8ebf0; --muted: #9aa3b2;
+        --line: #2c3442; --accent: #ff6a52; --ok: #4cc58a; --late: #f0a840;
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #12161d; --surface: #1b212b; --fg: #e8ebf0; --muted: #9aa3b2;
+      --line: #2c3442; --accent: #ff6a52; --ok: #4cc58a; --late: #f0a840;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font: 15px/1.6 var(--font-body);
+    }
+    .wrap {
+      max-width: 560px;
+      margin: 0 auto;
+      padding-inline: 16px;
+      padding-block: 32px 48px;
+      display: grid;
+      gap: 24px;
+    }
+    header { display: grid; gap: 4px; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: .08em;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 34px;
+      line-height: 1.15;
+      text-wrap: balance;
+    }
+    header p { margin: 0; color: var(--muted); }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+    }
+    .stat { padding: 12px 14px; display: grid; gap: 2px; }
+    .stat + .stat { border-left: 1px solid var(--line); }
+    .stat span { font-size: 12px; color: var(--muted); }
+    .stat strong {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    form { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; }
+    .field { flex: 1 1 200px; display: grid; gap: 4px; min-width: 0; }
+    .field.short { flex: 0 1 110px; }
+    label { font-size: 13px; font-weight: 600; }
+    input {
+      width: 100%;
+      min-width: 0;
+      font: inherit;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--fg);
+    }
+    button {
+      font: inherit;
+      font-weight: 600;
+      padding: 10px 18px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+    }
+    button.ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      padding: 6px 12px;
+      font-size: 13px;
+    }
+    input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .error { margin: 0; color: var(--accent); font-size: 13px; min-height: 1.6em; }
+
+    .list-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .list-head h2 { margin: 0; font-size: 16px; }
+    .list-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+    li {
+      display: grid;
+      grid-template-columns: 56px 1fr auto auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 2px;
+      border-bottom: 1px solid var(--line);
+    }
+    .time { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted); }
+    .who { min-width: 0; overflow-wrap: anywhere; }
+    .chip {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid currentColor;
+    }
+    .chip.ok { color: var(--ok); }
+    .chip.late { color: var(--late); }
+    .remove {
+      background: none; border: 0; padding: 4px 6px;
+      color: var(--muted); font-size: 18px; line-height: 1;
+    }
+    .empty { color: var(--muted); padding: 16px 2px; }
+    .note { font-size: 12px; color: var(--muted); margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <span class="eyebrow">신임소방관 교육과정 · 제12기</span>
+      <h1>교육생 출석부</h1>
+      <p id="today"></p>
+    </header>
+
+    <section class="stats" aria-label="출석 요약">
+      <div class="stat"><span>출석</span><strong id="count-total">0</strong></div>
+      <div class="stat"><span>정시</span><strong id="count-ok">0</strong></div>
+      <div class="stat"><span>지각 (09:00 이후)</span><strong id="count-late">0</strong></div>
+    </section>
+
+    <form id="checkin-form" novalidate>
+      <div class="field">
+        <label for="name">교육생 이름</label>
+        <input id="name" autocomplete="off" placeholder="예: 김소방">
+      </div>
+      <div class="field short">
+        <label for="no">교육생 번호</label>
+        <input id="no" inputmode="numeric" maxlength="2" autocomplete="off" placeholder="예: 01">
+      </div>
+      <button type="submit">출석 체크</button>
+      <p class="error" id="error" role="alert"></p>
+    </form>
+
+    <section>
+      <div class="list-head">
+        <h2>오늘의 출석 명단</h2>
+        <div class="list-actions">
+          <button type="button" class="ghost" id="download">명단 내려받기</button>
+          <button type="button" class="ghost" id="reset">전체 초기화</button>
+        </div>
+      </div>
+      <ul id="list"></ul>
+    </section>
+
+    <p class="note" id="note"></p>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "attendance-demo-v3";
+    const LATE_AFTER = { h: 9, m: 0 };
+
+    // 처음 열면 예시 데이터로 시작한다 (저장된 기록이 있으면 그걸 사용).
+    const SAMPLE = [
+      { name: "김소방 (예시)", no: "01", time: "08:41" },
+      { name: "이구조 (예시)", no: "02", time: "08:55" },
+      { name: "박구급 (예시)", no: "03", time: "09:07" },
+    ];
+
+    const $ = (id) => document.getElementById(id);
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return { records: JSON.parse(raw), sample: false };
+      } catch (e) { /* 저장소를 못 쓰면 예시로 시작 */ }
+      return { records: SAMPLE.slice(), sample: true };
+    }
+
+    function save() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.records)); } catch (e) {}
+    }
+
+    function isLate(time) {
+      const [h, m] = time.split(":").map(Number);
+      return h > LATE_AFTER.h || (h === LATE_AFTER.h && m > LATE_AFTER.m);
+    }
+
+    function nowHHMM() {
+      const d = new Date();
+      return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+    }
+
+    const state = load();
+    let resetArmed = false;
+
+    function render() {
+      const list = $("list");
+      list.innerHTML = "";
+      if (state.records.length === 0) {
+        const li = document.createElement("li");
+        li.className = "empty";
+        li.textContent = "아직 출석한 교육생이 없습니다. 위에서 이름과 번호를 입력해 첫 출석을 기록하세요.";
+        list.append(li);
+      }
+      state.records.forEach((r, i) => {
+        const late = isLate(r.time);
+        const li = document.createElement("li");
+        li.innerHTML =
+          '<span class="time"></span><span class="who"></span>' +
+          '<span class="chip ' + (late ? "late" : "ok") + '">' + (late ? "지각" : "정시") + "</span>" +
+          '<button type="button" class="remove" aria-label="기록 삭제">×</button>';
+        li.querySelector(".time").textContent = r.time;
+        li.querySelector(".who").textContent = r.name + " · " + r.no;
+        li.querySelector(".remove").addEventListener("click", () => {
+          state.records.splice(i, 1);
+          save();
+          render();
+        });
+        list.append(li);
+      });
+
+      const late = state.records.filter((r) => isLate(r.time)).length;
+      $("count-total").textContent = state.records.length;
+      $("count-late").textContent = late;
+      $("count-ok").textContent = state.records.length - late;
+      $("note").textContent = state.sample
+        ? "‘(예시)’ 항목은 샘플 데이터입니다. 출석을 기록하면 이 브라우저에 저장됩니다."
+        : "기록은 이 브라우저에만 저장됩니다 (프로토타입).";
+      $("reset").textContent = resetArmed ? "한 번 더 누르면 삭제" : "전체 초기화";
+    }
+
+    $("checkin-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = $("name").value.trim();
+      const rawNo = $("no").value.trim();
+      if (!name || !/^\d{1,2}$/.test(rawNo)) {
+        $("error").textContent = "이름과 교육생 번호(숫자 2자리)를 입력한 뒤 출석 체크를 누르세요.";
+        return;
+      }
+      const no = rawNo.padStart(2, "0");
+      // 동명이인은 번호로 구분한다: 이름과 번호가 모두 같을 때만 중복으로 본다 (PRD v0.3).
+      if (state.records.some((r) => r.name === name && r.no === no)) {
+        $("error").textContent = name + "(" + no + "번) 교육생은 이미 출석했습니다.";
+        return;
+      }
+      if (state.sample) {
+        state.records = [];
+        state.sample = false;
+      }
+      state.records.push({ name, no, time: nowHHMM() });
+      $("error").textContent = "";
+      $("name").value = "";
+      $("no").value = "";
+      save();
+      render();
+    });
+
+    // 명단 내려받기 (PRD v0.5): 엑셀에서 열리는 CSV로 저장
+    function csvCell(value) {
+      let v = String(value);
+      if (/^[=+\-@]/.test(v)) v = "'" + v;            // 엑셀이 수식으로 실행하지 않게
+      return '"' + v.replace(/"/g, '""') + '"';
+    }
+
+    $("download").addEventListener("click", () => {
+      if (state.records.length === 0) {
+        $("error").textContent = "내려받을 출석 기록이 없습니다.";
+        return;
+      }
+      const rows = [["시각", "이름", "번호", "구분"]].concat(
+        state.records.map((r) => [r.time, r.name, r.no, isLate(r.time) ? "지각" : "정시"])
+      );
+      const csv = rows.map((row) => row.map(csvCell).join(",")).join("\r\n");
+      // 맨 앞의 \uFEFF(BOM) 덕분에 엑셀이 한글을 UTF-8로 읽어 깨지지 않는다
+      const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+      const d = new Date();
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      // 파일 이름은 영어로: 한글 이름은 브라우저에 따라 "download"로 바뀌는 경우가 있다
+      a.download = "attendance_" + d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0") + ".csv";
+      document.body.append(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);   // 바로 지우면 파일 이름이 사라진다
+      $("error").textContent = "";
+    });
+
+    // confirm() 대신 두 번 눌러 확인하는 방식
+    $("reset").addEventListener("click", () => {
+      if (!resetArmed) {
+        resetArmed = true;
+        render();
+        setTimeout(() => { resetArmed = false; render(); }, 3000);
+        return;
+      }
+      resetArmed = false;
+      state.records = [];
+      state.sample = false;
+      save();
+      render();
+    });
+
+    $("today").textContent = new Date().toLocaleDateString("ko-KR", {
+      year: "numeric", month: "long", day: "numeric", weekday: "long",
+    }) + " · 09:00 이후 체크는 지각 처리";
+
+    render();
+  </script>
+</body>
+</html>

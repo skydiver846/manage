@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>교육생 출석부 - 1단계 HTML</title>
+</head>
+<body>
+  <!--
+    1단계: HTML = 뼈대
+    화면에 "무엇이" 있는지만 적습니다. 모양(색, 크기)과 동작은 아직 없습니다.
+    <태그>내용</태그> 처럼 여는 태그와 닫는 태그 사이에 내용을 넣습니다.
+  -->
+
+  <h1>교육생 출석부</h1>
+  <p>신임소방관 교육과정 · 09:00 이후 체크는 지각 처리</p>
+
+  <form>
+    <label for="name">교육생 이름</label>
+    <input id="name" placeholder="예: 김소방">
+
+    <label for="no">교육생 번호</label>
+    <input id="no" placeholder="예: 01">
+
+    <button type="submit">출석 체크</button>
+  </form>
+
+  <h2>오늘의 출석 명단</h2>
+  <ul>
+    <li>08:41 김소방 · 01 (정시)</li>
+    <li>08:55 이구조 · 02 (정시)</li>
+    <li>09:07 박구급 · 03 (지각)</li>
+  </ul>
+</body>
+</html>

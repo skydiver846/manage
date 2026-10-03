@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>09 GitHub · Vercel 배포 · 생성형 AI 입문</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side">
+    <a class="brand" href="index.html"><small>소방학교 · 처음 시작하는 분들을 위한</small><strong>생성형 AI 입문</strong></a>
+    <nav aria-label="목차">
+    <div class="group"><a href="index.html">처음 화면</a></div>
+    <div class="group"><h3>본 강의</h3><a href="m01.html">01 구글 계정 3개 만들기</a><a href="m02.html">02 ChatGPT · Claude 가입</a><a href="m03.html">03 프롬프트 · 파일 · 프로젝트</a><a href="m04.html">04 옵시디언과 MD 파일</a><a href="m05.html">05 스킬 만들기</a><a href="m06.html">06 PRD 작성하기</a><a href="m07.html">07 PRD로 결과물 만들기</a></div>
+    <div class="group"><h3>심화</h3><a href="m08.html">08 HTML · CSS · JS 뜯어보기</a><a href="m09.html" aria-current="page">09 GitHub · Vercel 배포</a><a href="m10.html">10 Firebase 공용 장부</a><a href="m11.html">11 Claude Code (Pro)</a></div>
+    <div class="group"><h3>자료</h3><a href="prompts.html">프롬프트 모음</a><a href="files.html">실습 파일 내려받기</a></div>
+  </nav>
+  </aside>
+  <main>
+    <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>09 GitHub · Vercel 배포</span></div>
+    <article><h1>모듈 09 (심화 2). 프로토타입을 웹에 공개하기 (GitHub + Vercel)</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>출석부 완성본 (배포 실습용 index.html)</span><span class="acts"><a class="btn" href="prototype/index.html" download="index.html">내려받기</a> <a class="btn ghost" href="prototype/index.html" target="_blank" rel="noopener">열어 보기</a></span></li></ul></aside>
+<p>모듈 7에서 Claude로 만든 출석부 화면을 <strong>누구나 휴대폰으로 여는 웹 주소</strong>로 공개합니다. 설치 없이 <strong>웹 브라우저만으로</strong>, 비용 0원으로 진행합니다. 모든 작업은 <strong>파란 &quot;업무&quot; Chrome 프로필 창</strong>에서 합니다.</p>
+<h2>흐름과 낱말 4개</h2>
+<pre><code> index.html ──(올리기 = 커밋·푸시)──▶ GitHub 창고 ──(자동 연결)──▶ Vercel ──▶ https://내주소.vercel.app
+ (내 컴퓨터)                           (기록·보관)                  (공개)     (누구나 접속)
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>낱말</th>
+<th>한 줄 설명</th>
+<th>비유</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>저장소 (Repository)</strong></td>
+<td>프로젝트 파일과 변경 기록을 담는 곳</td>
+<td>프로젝트 상자</td>
+</tr>
+<tr>
+<td><strong>커밋 (Commit)</strong></td>
+<td>변경 내용을 <strong>메모와 함께</strong> 기록</td>
+<td>저장 + 메모</td>
+</tr>
+<tr>
+<td><strong>푸시 (Push)</strong></td>
+<td>내 컴퓨터의 기록을 GitHub로 올림</td>
+<td>택배 발송</td>
+</tr>
+<tr>
+<td><strong>배포 (Deploy)</strong></td>
+<td>웹 주소로 공개</td>
+<td>가게 오픈</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p>💡 웹 브라우저 방식에서는 GitHub 웹사이트에 파일을 올리는 순간 <strong>커밋과 푸시가 한 번에</strong> 일어납니다. 오늘은 &quot;올리기 = 커밋 + 푸시&quot;로 묶어 설명하고, Git 프로그램을 쓰면 둘이 나뉜다는 것만 한 줄로 예고합니다.</p>
+</blockquote>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>도구</th>
+<th>하는 일</th>
+<th>비유</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>GitHub</strong></td>
+<td>파일 보관 + 변경 기록. <strong>고치는 곳</strong></td>
+<td>창고 + 변경 일지</td>
+</tr>
+<tr>
+<td><strong>Vercel</strong></td>
+<td>GitHub의 파일을 웹 주소로 공개. <strong>보여 주는 곳</strong></td>
+<td>진열대</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2>0. 준비: <code>index.html</code> 파일 만들기 (5분)</h2>
+<p>웹사이트의 <strong>대문 파일</strong> 이름은 반드시 <strong><code>index.html</code></strong> 이어야 합니다.</p>
+<p><strong>방법 1: Claude에서 내려받기</strong> (다운로드 버튼이 보이면)</p>
+<ul>
+<li>프로토타입 대화 → 미리보기 창 또는 코드 블록의 <strong>다운로드</strong> → 파일 이름을 <code>index.html</code> 로 변경</li>
+</ul>
+<p><strong>방법 2: 메모장에 저장하기</strong></p>
+<ol>
+<li>Claude 답변 코드 블록 오른쪽 위 <strong>복사</strong> → <strong>메모장</strong>에 <strong>Ctrl + V</strong></li>
+<li><strong>파일 → 다른 이름으로 저장</strong><ul>
+<li>파일 이름: <code>index.html</code></li>
+<li>파일 형식: <strong>모든 파일 (*.*)</strong> ← 중요</li>
+<li>인코딩: <strong>UTF-8</strong></li>
+</ul>
+</li>
+<li>저장 위치: <code>문서 &gt; AI업무자료 &gt; 03_AI결과물</code></li>
+</ol>
+<p>✅ 저장한 파일을 <strong>더블클릭</strong>해 Chrome에서 출석부가 열리면 준비 완료</p>
+<blockquote>
+<p>⚠️ 가장 흔한 실수: 파일 형식을 &quot;텍스트 문서&quot;로 두면 <code>index.html.txt</code> 가 됩니다. 파일 탐색기 <strong>[보기] → [파일 확장명]</strong> 을 켜 두세요. 인코딩이 UTF-8이 아니면 한글이 깨집니다.</p>
+</blockquote>
+<h2>1. GitHub 계정 만들기 (10분)</h2>
+<ol>
+<li><a class="site" href="https://github.com/" target="_blank" rel="noopener"><code>github.com</code></a> → <strong>[Sign up]</strong></li>
+<li><strong>[Continue with Google]</strong> → <strong>업무 계정</strong> 선택 (버튼이 없으면 업무 Gmail로 이메일 가입 → 8자리 인증 코드)</li>
+<li><strong>Username</strong> 정하기 → 퍼즐 인증 → 설문 Skip → 요금제 <strong>Free</strong></li>
+<li>✅ 오른쪽 위 프로필 아이콘을 누르면 내 Username이 보이면 완료</li>
+</ol>
+<p>Username은 웹 주소에 그대로 들어갑니다: <code>https://github.com/hong-gildong</code></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Gmail 주소</th>
+<th>GitHub Username</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>쓸 수 있는 글자</td>
+<td>영문 소문자, 숫자, <strong>마침표(.)</strong></td>
+<td>영문, 숫자, <strong>하이픈(-)</strong></td>
+</tr>
+<tr>
+<td>예시</td>
+<td><code>hong.gildong.work</code></td>
+<td><code>hong-gildong</code></td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p>⚠️ Gmail과 규칙이 다릅니다. GitHub은 <strong>마침표 대신 하이픈</strong>을 씁니다.
+시간이 지나면 <strong>2단계 인증(2FA)</strong> 설정을 요구합니다. 인증 앱으로 설정하고 <strong>복구 코드는 반드시 따로 저장</strong>하게 하세요.</p>
+</blockquote>
+<h2>2. 저장소 만들기 (5분)</h2>
+<ol>
+<li>오른쪽 위 <strong>[+]</strong> → <strong>[New repository]</strong></li>
+<li><strong>Repository name</strong>: <code>attendance-prototype</code> (웹 주소가 되므로 영문 + 하이픈)</li>
+<li><strong>Public</strong> 선택</li>
+<li><strong>Add a README file</strong> ✅ 체크</li>
+<li><strong>[Create repository]</strong></li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Public (공개)</th>
+<th>Private (비공개)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>누가 보나</td>
+<td>누구나</td>
+<td>나와 초대한 사람</td>
+</tr>
+<tr>
+<td>오늘 실습</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>이럴 때</td>
+<td>연습, 공개해도 되는 자료</td>
+<td>업무 자료</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p>⚠️ Public 저장소에는 <strong>개인정보, 내부 문서, 비밀번호를 절대 올리지 않습니다.</strong> 모듈 2의 &quot;민감한 정보는 넣지 않는다&quot;와 같은 원칙입니다.
+README 체크를 빼먹으면 명령어가 잔뜩 적힌 화면이 나옵니다. 그 화면의 <strong>&quot;uploading an existing file&quot;</strong> 링크로 3단계를 바로 진행하면 됩니다.
+README의 확장자도 <strong><code>.md</code></strong> 입니다. 모듈 4의 Markdown이 여기서도 쓰인다고 연결해 주세요.</p>
+</blockquote>
+<h2>3. 파일 올리기 = 커밋 + 푸시 (5분)</h2>
+<ol>
+<li><strong>[Add file]</strong> → <strong>[Upload files]</strong></li>
+<li><code>index.html</code> 을 점선 상자에 끌어다 놓기 (또는 <strong>choose your files</strong>)</li>
+<li><strong>Commit changes</strong> 칸에 메시지: <code>출석부 프로토타입 첫 업로드</code></li>
+<li><strong>[Commit changes]</strong></li>
+<li>✅ 파일 목록에 <code>README.md</code>, <code>index.html</code> 두 개</li>
+<li>시계 아이콘(또는 <strong>&quot;2 Commits&quot;</strong>)을 눌러 <strong>변경 일지</strong> 확인</li>
+</ol>
+<pre><code>● 출석부 프로토타입 첫 업로드      hong-gildong   방금 전
+● Initial commit                  hong-gildong   5분 전
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>✗ 나쁜 커밋 메시지</th>
+<th>✓ 좋은 커밋 메시지</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>수정</code>, <code>ㅇㅇ</code></td>
+<td><code>지각 기준을 09:10으로 변경</code></td>
+</tr>
+<tr>
+<td><code>최종</code>, <code>최종2</code>, <code>진짜최종</code></td>
+<td><code>동명이인 대비 교육생 번호 입력칸 추가</code></td>
+</tr>
+</tbody></table></div>
+<h2>4. Vercel 계정 만들기 (3분)</h2>
+<ol>
+<li><a class="site" href="https://vercel.com/" target="_blank" rel="noopener"><code>vercel.com</code></a> → <strong>[Sign Up]</strong></li>
+<li>플랜: <strong>Hobby</strong> (개인 프로젝트, 무료)</li>
+<li>이름 입력 → <strong>[Continue with GitHub]</strong> → <strong>[Authorize Vercel]</strong></li>
+</ol>
+<pre><code> Google 계정 ──▶ GitHub 가입   (모듈 1의 열쇠로)
+ GitHub 계정 ──▶ Vercel 가입   (GitHub이 열쇠가 됨 → 처음부터 연결)
+</code></pre>
+<blockquote>
+<p>⚠️ <strong>Pro</strong>(유료)를 고르면 결제 정보 입력이 나옵니다. <strong>Hobby</strong>를 고르게 하세요. Hobby는 개인·비상업적 용도가 조건이므로, 기관의 정식 서비스로 운영할 때는 약관과 요금제를 따로 검토해야 합니다.</p>
+</blockquote>
+<h2>5. 배포하기 (5분)</h2>
+<ol>
+<li>대시보드 <strong>[Add New…]</strong> → <strong>[Project]</strong></li>
+<li><strong>Import Git Repository</strong> 목록에서 <code>attendance-prototype</code> → <strong>[Import]</strong></li>
+<li>설정은 그대로 (Framework Preset: <strong>Other</strong>) → <strong>[Deploy]</strong></li>
+<li>1분 내외로 🎉 축하 화면 → <strong>[Continue to Dashboard]</strong></li>
+</ol>
+<p><strong>목록에 저장소가 안 보이면</strong> → 목록 아래 <strong>Adjust GitHub App Permissions</strong> (또는 [Install]) → <strong>Only select repositories</strong> → <code>attendance-prototype</code> 선택 → 저장</p>
+<h3>주소가 두 개입니다: 공유할 것은 <strong>Domains</strong></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>화면 위치</th>
+<th>예시</th>
+<th>용도</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Deployment</strong></td>
+<td><code>attendance-prototype-hmmzt68iw-…vercel.app</code></td>
+<td>이번 배포 <strong>한 건</strong>만 가리킴. 보호 설정에 따라 <strong>Vercel 로그인을 요구</strong>할 수 있음</td>
+</tr>
+<tr>
+<td><strong>Domains</strong> ✅</td>
+<td><code>attendance-prototype-lyart.vercel.app</code></td>
+<td>항상 <strong>최신 배포</strong>를 보여 주는 대표 주소. 수정해도 그대로</td>
+</tr>
+</tbody></table></div>
+<h3>📱 휴대폰으로 열기: QR 만들기</h3>
+<blockquote>
+<p>데스크톱 강의에서 QR은 <strong>자료 배포용이 아니라 배포한 출석부를 교육생 휴대폰으로 확인하는 용도</strong>입니다. 링크를 PC끼리 나눌 때는 PC 메신저나 메일을 씁니다.</p>
+</blockquote>
+<p>배포된 <strong>Domains 주소</strong>를 Chrome에서 연 상태에서:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>방법</th>
+<th>하는 법</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>① 오른쪽 클릭</td>
+<td>페이지 빈 곳 오른쪽 클릭 → <strong>이 페이지의 QR 코드 생성</strong></td>
+</tr>
+<tr>
+<td>② 메뉴</td>
+<td>오른쪽 위 <strong>⋮</strong> → <strong>전송, 저장, 공유</strong> → <strong>QR 코드 만들기</strong></td>
+</tr>
+</tbody></table></div>
+<ul>
+<li>휴대폰 카메라로 찍으면 열립니다. <strong>[다운로드]</strong> 로 이미지 저장도 가능 (메뉴 이름은 Chrome 버전에 따라 다를 수 있음)</li>
+<li>교육생끼리 <strong>QR을 교환</strong>해 서로의 출석부에 출석해 보게 하면 반응이 좋습니다</li>
+</ul>
+<blockquote>
+<p>⚠️ Deployment 주소로 QR을 만들면 다른 사람 휴대폰에서 <strong>Vercel 로그인 화면</strong>이 뜰 수 있습니다. &quot;QR은 <strong>Domains</strong> 주소로&quot;를 꼭 짚어 주세요.</p>
+</blockquote>
+<h2>6. 수정 → 커밋 → 자동 재배포 (5분)</h2>
+<p><strong>고치는 곳은 GitHub입니다.</strong> Vercel에는 편집 기능이 없습니다.</p>
+<p><strong>GitHub으로 가는 지름길</strong>: Vercel 프로젝트 화면 <strong>Production Deployment</strong> 상자 오른쪽 위 버튼 중 <strong>GitHub 고양이 아이콘</strong></p>
+<pre><code>[Open in ▾]  [ GitHub 아이콘 ]  [Instant Rollback]  [Visit ▾]
+                   ▲
+</code></pre>
+<ol>
+<li>GitHub 저장소 → <strong><code>index.html</code></strong> 클릭</li>
+<li>코드 상자 오른쪽 위 회색 막대 끝의 <strong>연필(✏️ Edit this file)</strong> 클릭</li>
+</ol>
+<pre><code>┌──────────────────────────────────────────────────────────┐
+│ Code   Blame   271 lines · 9.2 KB      [Raw] [⧉] [⤓] [✏️] [⋯] │ ← 여기
+├──────────────────────────────────────────────────────────┤
+</code></pre>
+<ul>
+<li>연필이 안 보이면 옆 <strong>[⋯]</strong> → <strong>Edit file</strong>. 파일 화면에서 키보드 <strong><code>e</code></strong> 를 눌러도 됩니다</li>
+<li>연필이 눌리지 않으면 GitHub 로그인이 풀린 것</li>
+</ul>
+<ol start="3">
+<li><strong>Ctrl + F</strong> 로 <code>교육생 출석부</code> 를 찾아 <code>제13기 출석부</code> 로 변경</li>
+<li><strong>[Commit changes…]</strong> → 메시지 <code>제목을 제13기 출석부로 변경</code> → <strong>[Commit changes]</strong></li>
+<li>Vercel <strong>Deployments</strong> 메뉴에서 <strong>새 배포가 저절로</strong> 시작되는 것 확인 → <strong>Ready</strong></li>
+<li>1~2분 뒤 휴대폰에서 <strong>새로고침</strong> → 같은 주소에 바뀐 제목</li>
+</ol>
+<pre><code>● 제목을 제13기 출석부로 변경        Building… → Ready     방금 전
+● Add files via upload              Ready                  10분 전
+</code></pre>
+<blockquote>
+<p>🎯 핵심: <strong>커밋만 하면 배포는 자동입니다.</strong> Vercel 화면의 문장 <em>&quot;To update your Production Deployment, push to the main branch.&quot;</em> 가 바로 이 뜻입니다.
+고칠 때 <code>&lt;</code>, <code>&gt;</code>, <code>&quot;</code> 같은 <strong>기호는 건드리지 말고 한글 글자만</strong> 바꾸게 하세요. 화면이 깨지면 <strong>Instant Rollback</strong>으로 이전 배포로 즉시 되돌리는 시연 기회로 씁니다.</p>
+</blockquote>
+<blockquote>
+<p>⭐ <strong>Pro 트랙 (선택)</strong>: 손으로 제목을 고쳐 본 뒤, 같은 수정을 <strong>Claude Code</strong>(<a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a>)에게 말로 맡겨 봅니다. 예: &quot;index.html의 제목을 제14기 출석부로 바꿔 줘&quot;. 자세한 방법은 <a href="m11.html">11 Claude Code (Pro)</a>. 시간이 부족하면 모듈 11에서 한꺼번에 합니다.</p>
+</blockquote>
+<h2>7. 마무리: 장부는 공유되지 않는다</h2>
+<p>교육생끼리 서로의 QR로 출석한 뒤 묻습니다. &quot;짝꿍 휴대폰 명단에 내 이름이 보이나요?&quot; → <strong>안 보입니다.</strong> 기록이 각자의 브라우저에만 저장되기 때문입니다.</p>
+<pre><code> 지금:     [내 휴대폰 장부]   [짝꿍 휴대폰 장부]   ← 따로따로
+ 다음 회차: [내 휴대폰] ─┐
+            [짝꿍 휴대폰] ┼──▶ 데이터베이스 (공용 장부)  ← 모두가 같은 명단
+            [교관 PC]   ─┘
+</code></pre>
+<p>다음 회차에서 <strong>Firebase</strong>(Google 서비스, 업무 Google 계정으로 시작)를 연결해 모두가 같은 명단을 보는 출석 시스템으로 만듭니다.</p>
+<hr>
+<h2>자주 막히는 곳</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>상황</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>index.html.txt</code> 로 저장됨</td>
+<td>메모장 저장 시 파일 형식 <strong>모든 파일</strong>, 탐색기에서 확장자 표시 켜기</td>
+</tr>
+<tr>
+<td>한글이 깨짐</td>
+<td>메모장 저장 시 인코딩 <strong>UTF-8</strong></td>
+</tr>
+<tr>
+<td>GitHub Username 빨간 글씨</td>
+<td>마침표 대신 <strong>하이픈(-)</strong></td>
+</tr>
+<tr>
+<td>Vercel에서 저장소가 안 보임</td>
+<td><strong>Adjust GitHub App Permissions</strong> 로 저장소 접근 허용</td>
+</tr>
+<tr>
+<td>배포 주소가 404</td>
+<td>파일 이름이 정확히 <code>index.html</code> 인지, 저장소 맨 위에 있는지 확인</td>
+</tr>
+<tr>
+<td>다른 사람 휴대폰에서 Vercel 로그인 화면</td>
+<td><strong>Deployment</strong> 주소를 공유함 → <strong>Domains</strong> 주소로 다시 공유</td>
+</tr>
+<tr>
+<td>연필 아이콘이 없음</td>
+<td>Vercel이 아니라 <strong>GitHub</strong>에서 고칩니다</td>
+</tr>
+<tr>
+<td>수정했는데 그대로</td>
+<td>1~2분 대기 후 새로고침, Vercel <strong>Deployments</strong> 에서 Ready 확인</td>
+</tr>
+</tbody></table></div>
+<h2>✅ 확인 질문 (인터뷰)</h2>
+<ol>
+<li>저장소 파일 목록에 <code>index.html</code> 이 있고, 커밋 기록이 <strong>2개</strong> 보이나요?</li>
+<li><strong>Domains</strong> 주소를 QR로 만들어 <strong>휴대폰</strong>에서 출석 체크를 해 보셨나요?</li>
+<li>GitHub에서 제목을 고친 뒤 <strong>자동으로 바뀐 것</strong>을 확인하셨나요?</li>
+<li>짝꿍 휴대폰 명단에 내 이름이 안 보이는 이유는?</li>
+</ol>
+</article>
+    <div class="pager"><a class="prev" href="m08.html"><span>← 이전</span>08 HTML · CSS · JS 뜯어보기</a><a class="next" href="m10.html"><span>다음 →</span>10 Firebase 공용 장부</a></div>
+  </main>
+</div>
+<script src="assets/site.js"></script>
+</body>
+</html>
