@@ -134,7 +134,7 @@ function nav(current) {
   const mods = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to)
     .map((m) => link(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`)).join("");
   return `<nav aria-label="목차">
-    <div class="group">${link("index.html", "처음 화면")}</div>
+    <div class="group">${link("index.html", "처음 화면")}${link("prework.html", "사전 과제 안내")}</div>
     <div class="group"><h3>본 강의</h3>${mods(1, 7)}</div>
     <div class="group"><h3>심화</h3>${mods(8, 12)}</div>
     <div class="group"><h3>자료</h3>${link("prompts.html", "프롬프트 모음")}${link("files.html", "실습 파일 내려받기")}</div>
@@ -195,6 +195,9 @@ MODULES.forEach((m, i) => {
   fs.writeFileSync(path.join(OUT, m.page), page(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`, html, pagerFor(i)));
 });
 
+const preworkMd = fs.readFileSync(path.join(LECTURE, "사전 과제 안내.md"), "utf8");
+fs.writeFileSync(path.join(OUT, "prework.html"), page("prework.html", "사전 과제 안내", render(preworkMd)));
+
 const promptsMd = fs.readFileSync(path.join(ROOT, FILES.prompts[1]), "utf8").replace(/^←.*\n/m, "");
 fs.writeFileSync(path.join(OUT, "prompts.html"), page("prompts.html", "프롬프트 모음",
   `<p class="lead">수업에서 쓰는 프롬프트를 모았습니다. 상자 오른쪽 위 <b>[복사]</b>를 누르고 ChatGPT·Claude 입력창에 붙여넣으세요. </p><p class="lead"><a class="btn" href="${FILES.prompts[0]}" download="${FILES.prompts[2]}">프롬프트 모음 파일(.md) 내려받기</a> 옵시디언 <code>99_프롬프트</code> 폴더에 넣어 두면 수업 뒤에도 쓸 수 있습니다.</p>` + render(promptsMd)));
@@ -221,6 +224,7 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <p class="lead">계정 만들기부터 프롬프트, 옵시디언, 스킬, PRD, 그리고 PRD로 만든 강의평가 집계 화면을 웹에 공개하고 AI 에이전트로 자동화하기까지 한 단계씩 따라 합니다.</p>
   <h2>사전 과제 · 수업 전에 각자</h2>
   <ol class="mods">${modItems(MODULES.slice(0, 2))}</ol>
+  <p><a class="btn" href="prework.html">사전 과제 안내 보기</a> 첫날 전까지 해 올 것과 준비물을 한 장에 정리했습니다.</p>
   <h2>1일차 (4시간) · AI에게 일 시키기부터 PRD까지</h2>
   <ol class="mods">${modItems(MODULES.slice(2, 5))}</ol>
   <h2>2일차 (4시간) · 스킬, 결과보고 자료, 화면 뜯어보기</h2>
