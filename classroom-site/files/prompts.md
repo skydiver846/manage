@@ -160,7 +160,7 @@ PRD에 없는 숫자는 만들지 말고 [확인 필요]로 표시해.
 ## 브라우저 에이전트에게 화면 조작 맡기기 (모듈 8, Aside)
 
 ```
-https://fire-ai-classroom.vercel.app/fire-ai/prototype/index.html 을 열고
+https://www.jg-sobang.com/fire-ai/prototype/index.html 을 열고
 과목 "시연과목", 교관 "시연교관"으로 만족도 5, 3, 2 평가를 차례로 제출해 줘.
 그다음 결과표에서 "개선 필요"로 표시된 과목과 교관, 평균을 모두 알려 주고,
 결과 내려받기 버튼을 눌러 파일을 저장한 뒤 파일 이름을 알려 줘.

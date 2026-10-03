@@ -33,7 +33,7 @@
 07에서 Claude가 만든 것과 같은 **강의평가 집계 화면**(강의 사이트에 올려 둔 예시)을 Aside에게 맡깁니다.
 
 ```
-https://fire-ai-classroom.vercel.app/fire-ai/prototype/index.html 을 열고
+https://www.jg-sobang.com/fire-ai/prototype/index.html 을 열고
 과목 "시연과목", 교관 "시연교관"으로 만족도 5, 3, 2 평가를 차례로 제출해 줘.
 그다음 결과표에서 "개선 필요"로 표시된 과목과 교관, 평균을 모두 알려 주고,
 결과 내려받기 버튼을 눌러 파일을 저장한 뒤 파일 이름을 알려 줘.
