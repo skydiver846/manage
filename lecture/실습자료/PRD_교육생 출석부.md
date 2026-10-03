@@ -72,5 +72,5 @@
 
 ## 8. 참고
 
-- 결과 프로토타입: 저장소 `prototype-demo/index.html` (모듈 5에서 고친 [[PRD_교육생 출석부 (v0.3 완성본)]] 기준)
+- 결과 프로토타입: 저장소 `prototype-demo/index.html` (모듈 6에서 고친 [[PRD_교육생 출석부 (v0.3 완성본)]] 기준)
 - 정식 버전(데이터베이스 연결)은 `attendance-app` 참고
