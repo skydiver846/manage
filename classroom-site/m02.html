@@ -14,7 +14,7 @@
     <nav aria-label="목차">
     <div class="group"><a href="index.html">처음 화면</a><a href="prework.html">사전 과제 안내</a></div>
     <div class="group"><h3>본 강의</h3><a href="m01.html">01 구글 계정 3개 만들기</a><a href="m02.html" aria-current="page">02 ChatGPT · Claude 가입</a><a href="m03.html">03 프롬프트 · 파일 · 프로젝트</a><a href="m04.html">04 옵시디언과 MD 파일</a><a href="m05.html">05 PRD 작성하기</a><a href="m06.html">06 스킬 만들기</a><a href="m07.html">07 PRD로 결과물 만들기</a></div>
-    <div class="group"><h3>심화</h3><a href="m08.html">08 HTML · CSS · JS 뜯어보기</a><a href="m09.html">09 GitHub · Vercel 배포</a><a href="m10.html">10 Firebase 공용 장부</a><a href="m11.html">11 Claude Code (Pro)</a><a href="m12.html">12 AI 브라우저 Aside</a></div>
+    <div class="group"><h3>심화</h3><a href="m08.html">08 HTML · CSS · JS 뜯어보기</a><a href="m09.html">09 GitHub · Vercel 배포</a><a href="m10.html">10 Firebase 공용 장부</a><a href="m11.html">11 Claude Code</a><a href="m12.html">12 AI 브라우저 Aside</a></div>
     <div class="group"><h3>자료</h3><a href="prompts.html">프롬프트 모음</a><a href="files.html">실습 파일 내려받기</a></div>
   </nav>
   </aside>
@@ -46,9 +46,9 @@
 <td><a class="site" href="https://claude.ai/" target="_blank" rel="noopener"><code>claude.ai</code></a></td>
 </tr>
 <tr>
-<td>무료 사용</td>
-<td>가능 (사용량 제한 있음)</td>
-<td>가능 (사용량 제한 있음)</td>
+<td>이 과정에서</td>
+<td>무료 계정 (사용량 제한 있음)</td>
+<td><strong>기관 Team 계정</strong> (유료, 초대 수락)</td>
 </tr>
 <tr>
 <td>잘하는 일 (경험적)</td>
@@ -78,13 +78,18 @@
 <li><strong>오른쪽 위/왼쪽 아래 프로필</strong>: 설정 → 언어, 개인 맞춤 설정</li>
 </ul>
 <h2>2-2. Claude 가입 (약 5분)</h2>
+<p>이 과정은 기관이 준비한 <strong>Claude Team(유료)</strong> 계정을 씁니다. 따로 가입하지 않고 <strong>초대를 수락</strong>합니다.</p>
 <ol>
-<li>주소창에 <a class="site" href="https://claude.ai/" target="_blank" rel="noopener"><code>claude.ai</code></a> 입력</li>
-<li><strong>[Google로 계속하기]</strong> → &quot;업무&quot; 계정 선택</li>
-<li>이름(부르는 이름) 입력, 약관 동의</li>
-<li>화면에 따라 <strong>휴대폰 번호 인증</strong>이 나올 수 있습니다 → 문자 코드 입력</li>
+<li>담당자에게 <strong>업무 구글 계정 이메일</strong>을 알려 줍니다 (사전 과제 안내의 제출 방법대로)</li>
+<li>며칠 안에 그 메일함으로 <strong>Claude(Anthropic) 초대 메일</strong>이 옵니다 → <strong>[초대 수락]</strong> (Accept invite)</li>
+<li><strong>[Google로 계속하기]</strong> → <strong>초대받은 그 &quot;업무&quot; 계정</strong> 선택</li>
+<li>이름(부르는 이름) 입력, 약관 동의. 화면에 따라 <strong>휴대폰 번호 인증</strong>이 나올 수 있습니다</li>
 </ol>
-<p><strong>✅ 성공 확인:</strong> 인사말과 함께 가운데 입력창이 보이면 완료</p>
+<p><strong>✅ 성공 확인:</strong> 왼쪽 아래 프로필에 <strong>기관 Team 이름</strong>이 보이고, 가운데 입력창이 보이면 완료</p>
+<blockquote>
+<p>⚠️ 초대받지 않은 다른 구글 계정으로 로그인하면 <strong>무료 개인 화면</strong>이 나옵니다. 이미 개인 Claude 계정이 있던 분은 왼쪽 아래 프로필 메뉴에서 <strong>Team 쪽을 골라</strong> 주세요.
+초대 메일이 안 보이면 <strong>스팸함·프로모션함</strong>을 확인하고, 그래도 없으면 담당자에게 다시 보내 달라고 하세요.</p>
+</blockquote>
 <p><strong>화면 둘러보기</strong></p>
 <ul>
 <li><strong>입력창의 [+] 버튼</strong>: 파일·사진 첨부</li>
@@ -98,7 +103,7 @@
 너는 무엇을 잘하고, 무엇을 조심해서 써야 하는지 초등학생도 알 수 있게 5줄로 알려줘.
 </code></pre>
 <blockquote>
-<p>⭐ <strong>Pro 트랙</strong>: 기관이 Claude Pro 구독을 준비했다면, 가입 후 왼쪽 아래 프로필 → 설정에서 <strong>요금제가 Pro로 표시되는지</strong> 확인합니다. 무료와 화면은 같고, 사용량 한도와 Claude Code(모듈 11) 사용 여부가 다릅니다.</p>
+<p>💡 ChatGPT는 무료, Claude는 Team(유료)이라 두 화면의 메뉴가 조금 다를 수 있습니다. Team 계정은 사용량이 넉넉하고, 스킬(06)과 Claude Code(11)를 모두 쓸 수 있습니다.</p>
 </blockquote>
 <h2>수업에서 꼭 짚을 주의사항</h2>
 <ul>
@@ -121,6 +126,14 @@
 <tr>
 <td>Claude 휴대폰 인증 실패</td>
 <td>번호 형식 확인, 잠시 후 재시도</td>
+</tr>
+<tr>
+<td>Claude 초대 메일이 없음</td>
+<td>스팸함 확인 → 담당자에게 재초대 요청. 제출한 이메일에 오타가 없는지 확인</td>
+</tr>
+<tr>
+<td>Claude 화면에 Team 이름이 안 보임</td>
+<td>초대받지 않은 계정으로 로그인한 것. 로그아웃 후 초대받은 업무 계정으로, 또는 프로필 메뉴에서 Team 선택</td>
 </tr>
 <tr>
 <td>화면이 영어로 나옴</td>

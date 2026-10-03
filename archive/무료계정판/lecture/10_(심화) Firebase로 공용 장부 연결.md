@@ -181,7 +181,7 @@ const firebaseConfig = {
 3. **[Commit changes…]** → 메시지 `강의평가를 Firebase 공용 장부에 저장` → **[Commit changes]**
 4. Vercel **Deployments** 에서 Ready 확인 (주소는 그대로)
 
-> ⭐ **Claude Code로 (선택)**: 5~6단계를 Claude Code에 맡길 수 있습니다. 저장소를 연결하고 "PRD v0.4에 맞게 index.html을 Firestore에 저장하도록 고치고 커밋해 줘"(5단계 지시문 그대로)라고 지시하면, 복사·붙여넣기 없이 커밋까지 됩니다. 단, Firebase 설정값과 보안 규칙은 사람이 직접 확인합니다. 방법은 모듈 11 참고.
+> ⭐ **Pro 트랙 (선택)**: 5~6단계를 Claude Code에 맡길 수 있습니다. 저장소를 연결하고 "PRD v0.4에 맞게 index.html을 Firestore에 저장하도록 고치고 커밋해 줘"(5단계 지시문 그대로)라고 지시하면, 복사·붙여넣기 없이 커밋까지 됩니다. 단, Firebase 설정값과 보안 규칙은 사람이 직접 확인합니다. 방법은 모듈 11 참고.
 
 ## 7단계: 짝꿍과 같은 결과표 확인 (5분)
 

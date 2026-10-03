@@ -21,7 +21,7 @@ const MODULES = [
   ["08_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "65분"],
   ["09_(심화) 프로토타입 배포", "GitHub · Vercel 배포", "80분"],
   ["10_(심화) Firebase로 공용 장부 연결", "Firebase 공용 장부", "50분"],
-  ["11_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code (Pro)", "40분"],
+  ["11_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code", "40분"],
   ["12_(심화) AI 브라우저 Aside로 웹 업무 자동화", "AI 브라우저 Aside", "20분 · 시연"],
 ].map(([file, short, time], i) => ({ file, short, time, num: i + 1, page: `m${String(i + 1).padStart(2, "0")}.html` }));
 
@@ -237,7 +237,7 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <h2>자료</h2>
   <p><a href="prompts.html">프롬프트 모음</a> · <a href="files.html">실습 파일 내려받기</a></p>
   <h2>준비물</h2>
-  <ul><li><b>사전 과제</b>: 구글 계정(업무용 1개 이상), ChatGPT·Claude 가입 — <a href="m01.html">01</a> · <a href="m02.html">02</a></li><li>본인 명의 휴대폰 (문자 인증, 배포한 강의평가 화면 확인용)</li><li>비밀번호를 적어 둘 수첩</li><li>내 업무 중 "AI로 도움받고 싶은 일" 한 가지</li></ul>
+  <ul><li><b>사전 과제</b>: 구글 계정(업무용 1개 이상), ChatGPT 가입, 업무 이메일 제출 → Claude Team 초대 수락 — <a href="prework.html">사전 과제 안내</a></li><li>본인 명의 휴대폰 (문자 인증, 배포한 강의평가 화면 확인용)</li><li>비밀번호를 적어 둘 수첩</li><li>내 업무 중 "AI로 도움받고 싶은 일" 한 가지</li></ul>
   <p class="note">체크박스 표시는 이 PC의 브라우저에만 저장됩니다.</p>`));
 
 console.log("built", OUT, fs.readdirSync(OUT).length, "entries");

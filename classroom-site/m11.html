@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>11 Claude Code (Pro) · 생성형 AI 입문</title>
+<title>11 Claude Code · 생성형 AI 입문</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
 <link rel="stylesheet" href="assets/site.css">
 </head>
@@ -14,14 +14,14 @@
     <nav aria-label="목차">
     <div class="group"><a href="index.html">처음 화면</a><a href="prework.html">사전 과제 안내</a></div>
     <div class="group"><h3>본 강의</h3><a href="m01.html">01 구글 계정 3개 만들기</a><a href="m02.html">02 ChatGPT · Claude 가입</a><a href="m03.html">03 프롬프트 · 파일 · 프로젝트</a><a href="m04.html">04 옵시디언과 MD 파일</a><a href="m05.html">05 PRD 작성하기</a><a href="m06.html">06 스킬 만들기</a><a href="m07.html">07 PRD로 결과물 만들기</a></div>
-    <div class="group"><h3>심화</h3><a href="m08.html">08 HTML · CSS · JS 뜯어보기</a><a href="m09.html">09 GitHub · Vercel 배포</a><a href="m10.html">10 Firebase 공용 장부</a><a href="m11.html" aria-current="page">11 Claude Code (Pro)</a><a href="m12.html">12 AI 브라우저 Aside</a></div>
+    <div class="group"><h3>심화</h3><a href="m08.html">08 HTML · CSS · JS 뜯어보기</a><a href="m09.html">09 GitHub · Vercel 배포</a><a href="m10.html">10 Firebase 공용 장부</a><a href="m11.html" aria-current="page">11 Claude Code</a><a href="m12.html">12 AI 브라우저 Aside</a></div>
     <div class="group"><h3>자료</h3><a href="prompts.html">프롬프트 모음</a><a href="files.html">실습 파일 내려받기</a></div>
   </nav>
   </aside>
   <main>
-    <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>11 Claude Code (Pro)</span></div>
+    <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>11 Claude Code</span></div>
     <article><h1>모듈 11 (심화 4). Claude Code로 한 번에 만들고 배포하기</h1>
-<p>📌 <strong>Claude Pro 계정이면 직접 실습하고, 무료 계정이면 앞 화면 시연을 보며 4단계(검토)를 함께 합니다.</strong> 직접 해 보고 싶으면 수업 뒤에 이 페이지를 보며 따라 하면 됩니다.</p>
+<p>📌 <strong>이 과정의 Claude Team 계정에는 Claude Code가 포함되어 있어 모두 직접 실습합니다.</strong></p>
 <p>모듈 09에서는 파일을 <strong>손으로</strong> 올리고(커밋), 연필로 고쳤습니다. 이번에는 같은 일을 <strong>AI 에이전트(Claude Code)</strong> 에게 맡깁니다. 말로 지시하면 Claude가 저장소의 파일을 직접 읽고, 고치고, 시험하고, 커밋·푸시까지 합니다.</p>
 <p>이 모듈의 핵심은 &quot;AI가 해 준다&quot;가 아니라 <strong>&quot;AI가 한 일을 내가 검토하고 승인한다&quot;</strong> 입니다.</p>
 <pre><code> 모듈 09 (손으로):  나 ── 복사·붙여넣기 ──▶ GitHub ──▶ Vercel
@@ -32,21 +32,21 @@
 <blockquote>
 <p>💡 모듈 6에서 만든 <strong>스킬</strong>은 Claude Code에서도 같은 방식으로 씁니다. 업무 방법을 SKILL.md로 적어 두면, 사람에게 하듯 AI 에이전트에게도 매뉴얼을 건넬 수 있습니다.</p>
 </blockquote>
-<h2>무료 / Pro에 따른 진행</h2>
+<h2>이 과정의 진행 (Claude Team)</h2>
 <div class="table-wrap"><table>
 <thead>
 <tr>
-<th>교육생 계정</th>
-<th>진행 방식</th>
+<th>누가</th>
+<th>하는 일</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><strong>Pro</strong></td>
-<td><strong>교육생 실습.</strong> 각자 자기 저장소에서 1~6단계</td>
+<td><strong>교육생 모두</strong></td>
+<td>각자 자기 <code>lecture-eval</code> 저장소에서 1~6단계</td>
 </tr>
 <tr>
-<td><strong>무료</strong></td>
-<td><strong>강사 시연.</strong> 강사 Pro 계정으로 1~6단계를 화면 공유. 교육생은 4단계 <strong>검토자</strong> 역할(강사 저장소의 변경 내용 링크를 열어 함께 확인)</td>
+<td>강사</td>
+<td>앞 화면에서 한 단계 먼저 보여 주고, 4단계(검토)는 함께 읽기</td>
 </tr>
 </tbody></table></div>
 <hr>
@@ -162,7 +162,7 @@
 </thead>
 <tbody><tr>
 <td><a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a> 에 들어가지지 않음</td>
-<td>무료 계정이거나 행정망 차단. 무료면 강사 시연으로, 차단이면 전산 담당자 문의</td>
+<td>Team 화면이 맞는지 확인(왼쪽 아래 Team 이름). 맞으면 관리자 설정에서 Claude Code 허용 여부 확인. 행정망 차단이면 전산 담당자 문의</td>
 </tr>
 <tr>
 <td>저장소 목록에 <code>lecture-eval</code> 이 없음</td>
