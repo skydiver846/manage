@@ -121,6 +121,7 @@
 
     .list-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
     .list-head h2 { margin: 0; font-size: 16px; }
+    .list-actions { display: flex; gap: 6px; flex-wrap: wrap; }
     ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
     li {
       display: grid;
@@ -179,7 +180,10 @@
     <section>
       <div class="list-head">
         <h2>오늘의 출석 명단</h2>
-        <button type="button" class="ghost" id="reset">전체 초기화</button>
+        <div class="list-actions">
+          <button type="button" class="ghost" id="download">명단 내려받기</button>
+          <button type="button" class="ghost" id="reset">전체 초기화</button>
+        </div>
       </div>
       <ul id="list"></ul>
     </section>
@@ -285,6 +289,36 @@
       $("no").value = "";
       save();
       render();
+    });
+
+    // 명단 내려받기 (PRD v0.5): 엑셀에서 열리는 CSV로 저장
+    function csvCell(value) {
+      let v = String(value);
+      if (/^[=+\-@]/.test(v)) v = "'" + v;            // 엑셀이 수식으로 실행하지 않게
+      return '"' + v.replace(/"/g, '""') + '"';
+    }
+
+    $("download").addEventListener("click", () => {
+      if (state.records.length === 0) {
+        $("error").textContent = "내려받을 출석 기록이 없습니다.";
+        return;
+      }
+      const rows = [["시각", "이름", "번호", "구분"]].concat(
+        state.records.map((r) => [r.time, r.name, r.no, isLate(r.time) ? "지각" : "정시"])
+      );
+      const csv = rows.map((row) => row.map(csvCell).join(",")).join("\r\n");
+      // 맨 앞의 \uFEFF(BOM) 덕분에 엑셀이 한글을 UTF-8로 읽어 깨지지 않는다
+      const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+      const d = new Date();
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      // 파일 이름은 영어로: 한글 이름은 브라우저에 따라 "download"로 바뀌는 경우가 있다
+      a.download = "attendance_" + d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0") + ".csv";
+      document.body.append(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);   // 바로 지우면 파일 이름이 사라진다
+      $("error").textContent = "";
     });
 
     // confirm() 대신 두 번 눌러 확인하는 방식
