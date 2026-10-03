@@ -85,6 +85,7 @@
       { mod: "01", use: "Google 계정", url: "https://accounts.google.com/" },
       { mod: "02", use: "ChatGPT", url: "https://chatgpt.com/" },
       { mod: "02", use: "Claude", url: "https://claude.ai/" },
+      { mod: "06", use: "Claude 미리보기 화면", url: "https://www.claudeusercontent.com/" },
       { mod: "04", use: "옵시디언 내려받기", url: "https://obsidian.md/" },
       { mod: "06", use: "NotebookLM", url: "https://notebooklm.google.com/" },
       { mod: "08", use: "GitHub", url: "https://github.com/" },
@@ -92,6 +93,7 @@
       { mod: "09", use: "Firebase 콘솔", url: "https://console.firebase.google.com/" },
       { mod: "09", use: "Firestore 장부 서버", url: "https://firestore.googleapis.com/" },
       { mod: "09", use: "Firebase 프로그램(SDK)", url: FIREBASE + "firebase-app.js", sdk: true },
+      { mod: "10", use: "Claude Code (웹)", url: "https://claude.ai/code" },
     ];
     const LABEL = { wait: "확인 중…", open: "열림", blocked: "막힘", slow: "응답 없음" };
     const results = {};
@@ -185,6 +187,7 @@
 
       if (!down.length) line("1단계: 강의에 쓰는 사이트가 모두 열립니다.", "open");
       else line("1단계: 열리지 않는 곳 — " + down.join(", "), "blocked");
+      if (results["Claude 미리보기 화면"] && results["Claude 미리보기 화면"] !== "open") line("Claude 미리보기 화면 주소가 막혀 있으면 모듈 06에서 미리보기 창이 비어 보입니다. 코드를 메모장에 저장해 Chrome으로 여는 방법으로 진행하세요.");
       if (ai.length) line("생성형 AI 사이트(" + ai.join(", ") + ")가 막혀 있으면 모듈 02~06 진행이 어렵습니다. 전산 담당자에게 강의 시간 동안 접속 허용을 요청하세요.");
       if (fbState === "open") line("모듈 09: 수강생 실습으로 진행 (A안).", "open");
       else if (fbState === "blocked" || fb.length) line("모듈 09: 강사 시연으로 진행 (B안). 강사 노트북을 휴대폰 핫스팟에 연결해 시연하고, 수강생은 휴대폰으로 출석해 공용 장부를 확인합니다.", "blocked");
