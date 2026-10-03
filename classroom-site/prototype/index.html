@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>교육생 출석부</title>
+  <title>강의평가 결과 집계</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
   <style>
-    /* 레이아웃: 좁은 단일 컬럼 — 상단 요약, 입력 폼, 출석 명단 순 */
+    /* 레이아웃: 좁은 단일 컬럼 — 상단 요약, 입력 폼, 결과표 순 */
     :root {
       --bg: #f3f4f6;
       --surface: #ffffff;
@@ -87,9 +87,10 @@
 
     form { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; }
     .field { flex: 1 1 200px; display: grid; gap: 4px; min-width: 0; }
-    .field.short { flex: 0 1 110px; }
+    .field.short { flex: 0 1 120px; }
+    .field.mid { flex: 1 1 140px; }
     label { font-size: 13px; font-weight: 600; }
-    input {
+    input, select {
       width: 100%;
       min-width: 0;
       font: inherit;
@@ -116,23 +117,19 @@
       padding: 6px 12px;
       font-size: 13px;
     }
-    input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-    .error { margin: 0; color: var(--accent); font-size: 13px; min-height: 1.6em; }
+    input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .error { margin: 0; color: var(--accent); font-size: 13px; min-height: 1.6em; flex-basis: 100%; }
 
-    .list-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .list-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
     .list-head h2 { margin: 0; font-size: 16px; }
     .list-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-    ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-    li {
-      display: grid;
-      grid-template-columns: 56px 1fr auto auto;
-      gap: 12px;
-      align-items: center;
-      padding: 10px 2px;
-      border-bottom: 1px solid var(--line);
-    }
-    .time { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted); }
-    .who { min-width: 0; overflow-wrap: anywhere; }
+    table { width: 100%; border-collapse: collapse; border-top: 1px solid var(--line); }
+    th, td { padding: 10px 4px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+    th { font-size: 12px; font-weight: 600; color: var(--muted); }
+    th.num, td.num { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    td.who { overflow-wrap: anywhere; }
+    td.who small { display: block; color: var(--muted); font-size: 13px; }
+    td.state { text-align: right; white-space: nowrap; }
     .chip {
       font-size: 12px;
       font-weight: 600;
@@ -141,11 +138,8 @@
       border: 1px solid currentColor;
     }
     .chip.ok { color: var(--ok); }
-    .chip.late { color: var(--late); }
-    .remove {
-      background: none; border: 0; padding: 4px 6px;
-      color: var(--muted); font-size: 18px; line-height: 1;
-    }
+    .chip.bad { color: var(--accent); }
+    tr.bad td.num.avg { color: var(--accent); font-weight: 600; }
     .empty { color: var(--muted); padding: 16px 2px; }
     .note { font-size: 12px; color: var(--muted); margin: 0; }
   </style>
@@ -154,53 +148,72 @@
   <div class="wrap">
     <header>
       <span class="eyebrow">신임소방관 교육과정 · 제12기</span>
-      <h1>교육생 출석부</h1>
-      <p id="today"></p>
+      <h1>강의평가 결과 집계</h1>
+      <p>만족도 1~5점 · 평균 <strong>3.5 미만</strong>은 “개선 필요”로 표시</p>
     </header>
 
-    <section class="stats" aria-label="출석 요약">
-      <div class="stat"><span>출석</span><strong id="count-total">0</strong></div>
-      <div class="stat"><span>정시</span><strong id="count-ok">0</strong></div>
-      <div class="stat"><span>지각 (09:00 이후)</span><strong id="count-late">0</strong></div>
+    <section class="stats" aria-label="평가 요약">
+      <div class="stat"><span>응답</span><strong id="count-total">0</strong></div>
+      <div class="stat"><span>평가 과목</span><strong id="count-subject">0</strong></div>
+      <div class="stat"><span>개선 필요</span><strong id="count-bad">0</strong></div>
     </section>
 
-    <form id="checkin-form" novalidate>
+    <form id="eval-form" novalidate>
       <div class="field">
-        <label for="name">교육생 이름</label>
-        <input id="name" autocomplete="off" placeholder="예: 김소방">
+        <label for="subject">과목</label>
+        <input id="subject" list="subject-list" autocomplete="off" placeholder="예: 화재진압 전술">
+        <datalist id="subject-list"></datalist>
+      </div>
+      <div class="field mid">
+        <label for="instructor">교관</label>
+        <input id="instructor" autocomplete="off" placeholder="예: 김교관">
       </div>
       <div class="field short">
-        <label for="no">교육생 번호</label>
-        <input id="no" inputmode="numeric" maxlength="2" autocomplete="off" placeholder="예: 01">
+        <label for="score">만족도</label>
+        <select id="score">
+          <option value="">선택</option>
+          <option value="5">5 매우 만족</option>
+          <option value="4">4 만족</option>
+          <option value="3">3 보통</option>
+          <option value="2">2 불만족</option>
+          <option value="1">1 매우 불만족</option>
+        </select>
       </div>
-      <button type="submit">출석 체크</button>
+      <button type="submit">평가 제출</button>
       <p class="error" id="error" role="alert"></p>
     </form>
 
     <section>
       <div class="list-head">
-        <h2>오늘의 출석 명단</h2>
+        <h2>과목·교관별 결과</h2>
         <div class="list-actions">
-          <button type="button" class="ghost" id="download">명단 내려받기</button>
+          <button type="button" class="ghost" id="undo">마지막 응답 취소</button>
+          <button type="button" class="ghost" id="download">결과 내려받기</button>
           <button type="button" class="ghost" id="reset">전체 초기화</button>
         </div>
       </div>
-      <ul id="list"></ul>
+      <table>
+        <thead>
+          <tr><th>과목 · 교관</th><th class="num">응답</th><th class="num">평균</th><th class="num">상태</th></tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
     </section>
 
     <p class="note" id="note"></p>
   </div>
 
   <script>
-    const STORAGE_KEY = "attendance-demo-v3";
-    const LATE_AFTER = { h: 9, m: 0 };
+    const STORAGE_KEY = "lecture-eval-demo-v3";
+    const THRESHOLD = 3.5;   // 평균이 이 값보다 낮으면 개선 필요 (PRD)
 
-    // 처음 열면 예시 데이터로 시작한다 (저장된 기록이 있으면 그걸 사용).
+    // 처음 열면 예시 응답으로 시작한다 (저장된 기록이 있으면 그걸 사용).
     const SAMPLE = [
-      { name: "김소방 (예시)", no: "01", time: "08:41" },
-      { name: "이구조 (예시)", no: "02", time: "08:55" },
-      { name: "박구급 (예시)", no: "03", time: "09:07" },
-    ];
+      ["화재진압 전술 (예시)", "김교관", 5], ["화재진압 전술 (예시)", "김교관", 4], ["화재진압 전술 (예시)", "김교관", 5],
+      ["화재진압 전술 (예시)", "이교관", 3], ["화재진압 전술 (예시)", "이교관", 3], ["화재진압 전술 (예시)", "이교관", 4],
+      ["응급처치 실습 (예시)", "박교관", 4], ["응급처치 실습 (예시)", "박교관", 5],
+      ["소방 관계법규 (예시)", "최교관", 3], ["소방 관계법규 (예시)", "최교관", 2],
+    ].map(([subject, instructor, score]) => ({ subject, instructor, score }));
 
     const $ = (id) => document.getElementById(id);
 
@@ -216,82 +229,98 @@
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.records)); } catch (e) {}
     }
 
-    function isLate(time) {
-      const [h, m] = time.split(":").map(Number);
-      return h > LATE_AFTER.h || (h === LATE_AFTER.h && m > LATE_AFTER.m);
-    }
-
-    function nowHHMM() {
-      const d = new Date();
-      return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+    // 과목 + 교관이 같은 응답끼리 묶어 응답 수와 평균을 낸다 (PRD v0.3: 교관이 다르면 따로 집계).
+    function summarize(records) {
+      const groups = new Map();
+      records.forEach((r) => {
+        const key = r.subject + "\u0000" + r.instructor;
+        if (!groups.has(key)) groups.set(key, { subject: r.subject, instructor: r.instructor, count: 0, sum: 0 });
+        const g = groups.get(key);
+        g.count += 1;
+        g.sum += r.score;
+      });
+      return [...groups.values()]
+        .map((g) => ({ ...g, avg: Math.round((g.sum / g.count) * 10) / 10 }))
+        .map((g) => ({ ...g, bad: g.avg < THRESHOLD }))
+        .sort((a, b) => a.avg - b.avg || a.subject.localeCompare(b.subject, "ko"));   // 평균이 낮은 것부터
     }
 
     const state = load();
     let resetArmed = false;
 
     function render() {
-      const list = $("list");
-      list.innerHTML = "";
-      if (state.records.length === 0) {
-        const li = document.createElement("li");
-        li.className = "empty";
-        li.textContent = "아직 출석한 교육생이 없습니다. 위에서 이름과 번호를 입력해 첫 출석을 기록하세요.";
-        list.append(li);
+      const rows = $("rows");
+      rows.innerHTML = "";
+      const groups = summarize(state.records);
+      if (groups.length === 0) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = '<td class="empty" colspan="4"></td>';
+        tr.firstChild.textContent = "아직 평가가 없습니다. 위에서 과목, 교관, 만족도를 골라 첫 평가를 제출하세요.";
+        rows.append(tr);
       }
-      state.records.forEach((r, i) => {
-        const late = isLate(r.time);
-        const li = document.createElement("li");
-        li.innerHTML =
-          '<span class="time"></span><span class="who"></span>' +
-          '<span class="chip ' + (late ? "late" : "ok") + '">' + (late ? "지각" : "정시") + "</span>" +
-          '<button type="button" class="remove" aria-label="기록 삭제">×</button>';
-        li.querySelector(".time").textContent = r.time;
-        li.querySelector(".who").textContent = r.name + " · " + r.no;
-        li.querySelector(".remove").addEventListener("click", () => {
-          state.records.splice(i, 1);
-          save();
-          render();
-        });
-        list.append(li);
+      groups.forEach((g) => {
+        const tr = document.createElement("tr");
+        if (g.bad) tr.className = "bad";
+        tr.innerHTML =
+          '<td class="who"><span></span><small></small></td>' +
+          '<td class="num"></td><td class="num avg"></td>' +
+          '<td class="state"><span class="chip ' + (g.bad ? "bad" : "ok") + '">' + (g.bad ? "개선 필요" : "양호") + "</span></td>";
+        tr.querySelector(".who span").textContent = g.subject;
+        tr.querySelector(".who small").textContent = g.instructor;
+        tr.children[1].textContent = g.count;
+        tr.children[2].textContent = g.avg.toFixed(1);
+        rows.append(tr);
       });
 
-      const late = state.records.filter((r) => isLate(r.time)).length;
+      const subjects = new Set(state.records.map((r) => r.subject));
       $("count-total").textContent = state.records.length;
-      $("count-late").textContent = late;
-      $("count-ok").textContent = state.records.length - late;
+      $("count-subject").textContent = subjects.size;
+      $("count-bad").textContent = groups.filter((g) => g.bad).length;
+      $("subject-list").innerHTML = "";
+      subjects.forEach((s) => {
+        const o = document.createElement("option");
+        o.value = s;
+        $("subject-list").append(o);
+      });
       $("note").textContent = state.sample
-        ? "‘(예시)’ 항목은 샘플 데이터입니다. 출석을 기록하면 이 브라우저에 저장됩니다."
-        : "기록은 이 브라우저에만 저장됩니다 (프로토타입).";
+        ? "‘(예시)’ 과목은 샘플 데이터입니다. 평가를 제출하면 이 브라우저에 저장됩니다."
+        : "기록은 이 브라우저에만 저장됩니다 (프로토타입). 평가는 익명이며 이름을 받지 않습니다.";
       $("reset").textContent = resetArmed ? "한 번 더 누르면 삭제" : "전체 초기화";
     }
 
-    $("checkin-form").addEventListener("submit", (e) => {
+    $("eval-form").addEventListener("submit", (e) => {
       e.preventDefault();
-      const name = $("name").value.trim();
-      const rawNo = $("no").value.trim();
-      if (!name || !/^\d{1,2}$/.test(rawNo)) {
-        $("error").textContent = "이름과 교육생 번호(숫자 2자리)를 입력한 뒤 출석 체크를 누르세요.";
-        return;
-      }
-      const no = rawNo.padStart(2, "0");
-      // 동명이인은 번호로 구분한다: 이름과 번호가 모두 같을 때만 중복으로 본다 (PRD v0.3).
-      if (state.records.some((r) => r.name === name && r.no === no)) {
-        $("error").textContent = name + "(" + no + "번) 교육생은 이미 출석했습니다.";
+      const subject = $("subject").value.trim().replace(/\s+/g, " ");
+      const instructor = $("instructor").value.trim().replace(/\s+/g, " ");
+      const score = Number($("score").value);
+      if (!subject || !instructor || !Number.isInteger(score) || score < 1 || score > 5) {
+        $("error").textContent = "과목, 교관, 만족도를 모두 입력한 뒤 제출하세요.";
         return;
       }
       if (state.sample) {
         state.records = [];
         state.sample = false;
       }
-      state.records.push({ name, no, time: nowHHMM() });
+      state.records.push({ subject, instructor, score });
       $("error").textContent = "";
-      $("name").value = "";
-      $("no").value = "";
+      $("score").value = "";      // 과목·교관은 남겨 두어 같은 과목을 연달아 입력하기 쉽게
       save();
       render();
     });
 
-    // 명단 내려받기 (PRD v0.5): 엑셀에서 열리는 CSV로 저장
+    // 잘못 낸 마지막 응답 하나만 지운다
+    $("undo").addEventListener("click", () => {
+      if (state.sample || state.records.length === 0) {
+        $("error").textContent = "취소할 응답이 없습니다.";
+        return;
+      }
+      state.records.pop();
+      $("error").textContent = "";
+      save();
+      render();
+    });
+
+    // 결과 내려받기 (PRD v0.5): 엑셀에서 열리는 CSV로 저장
     function csvCell(value) {
       let v = String(value);
       if (/^[=+\-@]/.test(v)) v = "'" + v;            // 엑셀이 수식으로 실행하지 않게
@@ -299,12 +328,13 @@
     }
 
     $("download").addEventListener("click", () => {
-      if (state.records.length === 0) {
-        $("error").textContent = "내려받을 출석 기록이 없습니다.";
+      const groups = summarize(state.records);
+      if (groups.length === 0) {
+        $("error").textContent = "내려받을 평가 결과가 없습니다.";
         return;
       }
-      const rows = [["시각", "이름", "번호", "구분"]].concat(
-        state.records.map((r) => [r.time, r.name, r.no, isLate(r.time) ? "지각" : "정시"])
+      const rows = [["과목", "교관", "응답 수", "평균", "상태"]].concat(
+        groups.map((g) => [g.subject, g.instructor, g.count, g.avg.toFixed(1), g.bad ? "개선 필요" : "양호"])
       );
       const csv = rows.map((row) => row.map(csvCell).join(",")).join("\r\n");
       // 맨 앞의 \uFEFF(BOM) 덕분에 엑셀이 한글을 UTF-8로 읽어 깨지지 않는다
@@ -312,8 +342,7 @@
       const d = new Date();
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      // 파일 이름은 영어로: 한글 이름은 브라우저에 따라 "download"로 바뀌는 경우가 있다
-      a.download = "attendance_" + d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0") + ".csv";
+      a.download = "강의평가_결과_" + d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0") + ".csv";
       document.body.append(a);
       a.click();
       a.remove();
@@ -335,10 +364,6 @@
       save();
       render();
     });
-
-    $("today").textContent = new Date().toLocaleDateString("ko-KR", {
-      year: "numeric", month: "long", day: "numeric", weekday: "long",
-    }) + " · 09:00 이후 체크는 지각 처리";
 
     render();
   </script>

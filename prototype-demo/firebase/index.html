@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>교육생 출석부</title>
+  <title>강의평가 결과 집계 (공용 장부)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
   <style>
-    /* 레이아웃: 좁은 단일 컬럼 — 상단 요약, 입력 폼, 출석 명단 순 */
+    /* 레이아웃: 좁은 단일 컬럼 — 상단 요약, 입력 폼, 결과표 순 */
     :root {
       --bg: #f3f4f6;
       --surface: #ffffff;
@@ -87,9 +87,10 @@
 
     form { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; }
     .field { flex: 1 1 200px; display: grid; gap: 4px; min-width: 0; }
-    .field.short { flex: 0 1 110px; }
+    .field.short { flex: 0 1 120px; }
+    .field.mid { flex: 1 1 140px; }
     label { font-size: 13px; font-weight: 600; }
-    input {
+    input, select {
       width: 100%;
       min-width: 0;
       font: inherit;
@@ -109,8 +110,14 @@
       color: #fff;
       cursor: pointer;
     }
-    button:disabled, input:disabled { opacity: .5; cursor: not-allowed; }
-    input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    button.ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      padding: 6px 12px;
+      font-size: 13px;
+    }
+    input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     .error { margin: 0; color: var(--accent); font-size: 13px; min-height: 1.6em; flex-basis: 100%; }
 
     .list-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -125,17 +132,15 @@
     }
     .status.live { color: var(--ok); }
     .status.down { color: var(--accent); }
-    ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-    li {
-      display: grid;
-      grid-template-columns: 56px 1fr auto;
-      gap: 12px;
-      align-items: center;
-      padding: 10px 2px;
-      border-bottom: 1px solid var(--line);
-    }
-    .time { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted); }
-    .who { min-width: 0; overflow-wrap: anywhere; }
+    button:disabled, input:disabled, select:disabled { opacity: .5; cursor: not-allowed; }
+    .list-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    table { width: 100%; border-collapse: collapse; border-top: 1px solid var(--line); }
+    th, td { padding: 10px 4px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+    th { font-size: 12px; font-weight: 600; color: var(--muted); }
+    th.num, td.num { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    td.who { overflow-wrap: anywhere; }
+    td.who small { display: block; color: var(--muted); font-size: 13px; }
+    td.state { text-align: right; white-space: nowrap; }
     .chip {
       font-size: 12px;
       font-weight: 600;
@@ -144,8 +149,9 @@
       border: 1px solid currentColor;
     }
     .chip.ok { color: var(--ok); }
-    .chip.late { color: var(--late); }
-    li.empty { display: block; color: var(--muted); padding: 16px 2px; }
+    .chip.bad { color: var(--accent); }
+    tr.bad td.num.avg { color: var(--accent); font-weight: 600; }
+    .empty { color: var(--muted); padding: 16px 2px; }
     .note { font-size: 12px; color: var(--muted); margin: 0; }
   </style>
 </head>
@@ -153,45 +159,62 @@
   <div class="wrap">
     <header>
       <span class="eyebrow">신임소방관 교육과정 · 제12기</span>
-      <h1>교육생 출석부</h1>
-      <p id="today"></p>
+      <h1>강의평가 결과 집계</h1>
+      <p>만족도 1~5점 · 평균 <strong>3.5 미만</strong>은 “개선 필요”로 표시</p>
     </header>
 
-    <section class="stats" aria-label="출석 요약">
-      <div class="stat"><span>출석</span><strong id="count-total">0</strong></div>
-      <div class="stat"><span>정시</span><strong id="count-ok">0</strong></div>
-      <div class="stat"><span>지각 (09:00 이후)</span><strong id="count-late">0</strong></div>
+    <section class="stats" aria-label="평가 요약">
+      <div class="stat"><span>응답</span><strong id="count-total">0</strong></div>
+      <div class="stat"><span>평가 과목</span><strong id="count-subject">0</strong></div>
+      <div class="stat"><span>개선 필요</span><strong id="count-bad">0</strong></div>
     </section>
 
-    <form id="checkin-form" novalidate>
+    <form id="eval-form" novalidate>
       <div class="field">
-        <label for="name">교육생 이름</label>
-        <input id="name" autocomplete="off" maxlength="20" placeholder="예: 김소방">
+        <label for="subject">과목</label>
+        <input id="subject" list="subject-list" autocomplete="off" maxlength="30" placeholder="예: 화재진압 전술">
+        <datalist id="subject-list"></datalist>
+      </div>
+      <div class="field mid">
+        <label for="instructor">교관</label>
+        <input id="instructor" autocomplete="off" maxlength="20" placeholder="예: 김교관">
       </div>
       <div class="field short">
-        <label for="no">교육생 번호</label>
-        <input id="no" inputmode="numeric" maxlength="2" autocomplete="off" placeholder="예: 01">
+        <label for="score">만족도</label>
+        <select id="score">
+          <option value="">선택</option>
+          <option value="5">5 매우 만족</option>
+          <option value="4">4 만족</option>
+          <option value="3">3 보통</option>
+          <option value="2">2 불만족</option>
+          <option value="1">1 매우 불만족</option>
+        </select>
       </div>
-      <button type="submit" id="submit">출석 체크</button>
+      <button type="submit" id="submit">평가 제출</button>
       <p class="error" id="error" role="alert"></p>
     </form>
 
     <section>
       <div class="list-head">
-        <h2>오늘의 출석 명단</h2>
+        <h2>과목·교관별 결과</h2>
         <span class="status" id="status">연결 중…</span>
       </div>
-      <ul id="list"></ul>
+      <table>
+        <thead>
+          <tr><th>과목 · 교관</th><th class="num">응답</th><th class="num">평균</th><th class="num">상태</th></tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
     </section>
 
-    <p class="note" id="note">기록은 공용 장부(Firebase Firestore)에 저장되어 모든 기기에서 같은 명단이 보입니다. 잘못된 기록은 강사가 Firebase 콘솔에서 지웁니다.</p>
+    <p class="note" id="note">평가는 공용 장부(Firebase Firestore)에 익명으로 저장되어 모든 기기에서 같은 결과가 보입니다. 잘못 낸 평가는 담당자가 Firebase 콘솔에서 지웁니다.</p>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
     import {
       getFirestore, connectFirestoreEmulator,
-      collection, query, where, onSnapshot, doc, getDoc, setDoc,
+      collection, onSnapshot, addDoc,
     } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
     // ▼▼▼ 모듈 10 4단계에서 복사한 내 firebaseConfig로 이 부분만 바꾸세요 ▼▼▼
@@ -205,8 +228,8 @@
     };
     // ▲▲▲ 여기까지 ▲▲▲
 
-    const COLLECTION = "attendance";          // 3단계 보안 규칙의 컬렉션 이름과 같아야 한다
-    const LATE_AFTER = { h: 9, m: 0 };
+    const COLLECTION = "evaluations";         // 3단계 보안 규칙의 컬렉션 이름과 같아야 한다
+    const THRESHOLD = 3.5;                    // 평균이 이 값보다 낮으면 개선 필요 (PRD)
 
     // 강사 시험용: 주소 끝에 ?emulator 를 붙이면 내 컴퓨터의 Firestore 에뮬레이터에 연결한다.
     const useEmulator = new URLSearchParams(location.search).has("emulator");
@@ -220,110 +243,109 @@
       return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
     }
 
-    function nowHHMM() {
-      const d = new Date();
-      return pad2(d.getHours()) + ":" + pad2(d.getMinutes());
-    }
-
-    function isLate(time) {
-      const [h, m] = time.split(":").map(Number);
-      return h > LATE_AFTER.h || (h === LATE_AFTER.h && m > LATE_AFTER.m);
-    }
-
     function setStatus(text, kind) {
       $("status").textContent = text;
       $("status").className = "status" + (kind ? " " + kind : "");
     }
 
-    function render(records) {
-      const list = $("list");
-      list.innerHTML = "";
-      if (records.length === 0) {
-        const li = document.createElement("li");
-        li.className = "empty";
-        li.textContent = configured
-          ? "아직 출석한 교육생이 없습니다. 위에서 이름과 번호를 입력해 첫 출석을 기록하세요."
-          : "Firebase 설정값이 아직 없습니다. 코드의 firebaseConfig를 내 프로젝트 값으로 바꾸면 명단이 나타납니다.";
-        list.append(li);
-      }
-      for (const r of records) {
-        const late = isLate(r.time);
-        const li = document.createElement("li");
-        li.innerHTML =
-          '<span class="time"></span><span class="who"></span>' +
-          '<span class="chip ' + (late ? "late" : "ok") + '">' + (late ? "지각" : "정시") + "</span>";
-        li.querySelector(".time").textContent = r.time;
-        li.querySelector(".who").textContent = r.name + " · " + r.no;
-        list.append(li);
-      }
-      const late = records.filter((r) => isLate(r.time)).length;
-      $("count-total").textContent = records.length;
-      $("count-late").textContent = late;
-      $("count-ok").textContent = records.length - late;
+    // 과목 + 교관이 같은 응답끼리 묶어 응답 수와 평균을 낸다 (PRD v0.3: 교관이 다르면 따로 집계).
+    function summarize(records) {
+      const groups = new Map();
+      records.forEach((r) => {
+        const key = r.subject + "\u0000" + r.instructor;
+        if (!groups.has(key)) groups.set(key, { subject: r.subject, instructor: r.instructor, count: 0, sum: 0 });
+        const g = groups.get(key);
+        g.count += 1;
+        g.sum += r.score;
+      });
+      return [...groups.values()]
+        .map((g) => ({ ...g, avg: Math.round((g.sum / g.count) * 10) / 10 }))
+        .map((g) => ({ ...g, bad: g.avg < THRESHOLD }))
+        .sort((a, b) => a.avg - b.avg || a.subject.localeCompare(b.subject, "ko"));   // 평균이 낮은 것부터
     }
 
-    $("today").textContent = new Date().toLocaleDateString("ko-KR", {
-      year: "numeric", month: "long", day: "numeric", weekday: "long",
-    }) + " · 09:00 이후 체크는 지각 처리";
+    function render(records) {
+      const rows = $("rows");
+      rows.innerHTML = "";
+      const groups = summarize(records);
+      if (groups.length === 0) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = '<td class="empty" colspan="4"></td>';
+        tr.firstChild.textContent = configured
+          ? "아직 평가가 없습니다. 위에서 과목, 교관, 만족도를 골라 첫 평가를 제출하세요."
+          : "Firebase 설정값이 아직 없습니다. 코드의 firebaseConfig를 내 프로젝트 값으로 바꾸면 결과표가 나타납니다.";
+        rows.append(tr);
+      }
+      groups.forEach((g) => {
+        const tr = document.createElement("tr");
+        if (g.bad) tr.className = "bad";
+        tr.innerHTML =
+          '<td class="who"><span></span><small></small></td>' +
+          '<td class="num"></td><td class="num avg"></td>' +
+          '<td class="state"><span class="chip ' + (g.bad ? "bad" : "ok") + '">' + (g.bad ? "개선 필요" : "양호") + "</span></td>";
+        tr.querySelector(".who span").textContent = g.subject;
+        tr.querySelector(".who small").textContent = g.instructor;
+        tr.children[1].textContent = g.count;
+        tr.children[2].textContent = g.avg.toFixed(1);
+        rows.append(tr);
+      });
+
+      const subjects = new Set(records.map((r) => r.subject));
+      $("count-total").textContent = records.length;
+      $("count-subject").textContent = subjects.size;
+      $("count-bad").textContent = groups.filter((g) => g.bad).length;
+      $("subject-list").innerHTML = "";
+      subjects.forEach((s) => {
+        const o = document.createElement("option");
+        o.value = s;
+        $("subject-list").append(o);
+      });
+    }
 
     if (!configured) {
       // 설정값 없이 열었을 때: 화면만 보여 주고 입력은 막는다.
-      for (const el of $("checkin-form").elements) el.disabled = true;
+      for (const el of $("eval-form").elements) el.disabled = true;
       setStatus("설정 필요", "down");
       render([]);
     } else {
-      const app = initializeApp(useEmulator ? { apiKey: "demo", projectId: "demo-attendance" } : firebaseConfig);
+      const app = initializeApp(useEmulator ? { apiKey: "demo", projectId: "demo-lecture-eval" } : firebaseConfig);
       const db = getFirestore(app);
       if (useEmulator) connectFirestoreEmulator(db, "127.0.0.1", 8080);
 
-      // 오늘 날짜 기록만 실시간으로 받는다. 정렬은 화면에서 한다 (색인 불필요).
-      const today = todayStr();
+      // 모든 평가를 실시간으로 받는다. 집계와 정렬은 화면에서 한다 (색인 불필요).
       onSnapshot(
-        query(collection(db, COLLECTION), where("date", "==", today)),
+        collection(db, COLLECTION),
         (snap) => {
-          const records = snap.docs.map((d) => d.data())
-            .sort((a, b) => a.time.localeCompare(b.time) || a.no.localeCompare(b.no));
-          render(records);
+          render(snap.docs.map((d) => d.data()));
           setStatus("실시간 연결됨", "live");
         },
         (err) => {
           setStatus("연결 안 됨", "down");
           $("error").textContent = err.code === "permission-denied"
-            ? "명단을 읽을 권한이 없습니다. Firestore 규칙(3단계)을 게시했는지 확인하세요."
+            ? "결과를 읽을 권한이 없습니다. Firestore 규칙(3단계)을 게시했는지 확인하세요."
             : "공용 장부에 연결하지 못했습니다 (" + err.code + "). 설정값과 인터넷 연결을 확인하세요.";
         },
       );
 
-      $("checkin-form").addEventListener("submit", async (e) => {
+      $("eval-form").addEventListener("submit", async (e) => {
         e.preventDefault();
-        const name = $("name").value.trim();
-        const rawNo = $("no").value.trim();
-        if (!name || !/^\d{1,2}$/.test(rawNo)) {
-          $("error").textContent = "이름과 교육생 번호(숫자 2자리)를 입력한 뒤 출석 체크를 누르세요.";
+        const subject = $("subject").value.trim().replace(/\s+/g, " ");
+        const instructor = $("instructor").value.trim().replace(/\s+/g, " ");
+        const score = Number($("score").value);
+        if (!subject || !instructor || !Number.isInteger(score) || score < 1 || score > 5) {
+          $("error").textContent = "과목, 교관, 만족도를 모두 입력한 뒤 제출하세요.";
           return;
         }
-        if (name.includes("/")) {
-          $("error").textContent = "이름에는 / 기호를 쓸 수 없습니다.";
-          return;
-        }
-        const no = rawNo.padStart(2, "0");
-        const date = todayStr();
-        // 문서 ID = 날짜_번호_이름. 같은 날 같은 사람이 다시 쓰면 "고치기"가 되어 규칙이 거절한다.
-        const ref = doc(db, COLLECTION, date + "_" + no + "_" + name);
 
         $("submit").disabled = true;
         try {
-          if ((await getDoc(ref)).exists()) {
-            $("error").textContent = name + "(" + no + "번) 교육생은 이미 출석했습니다.";
-            return;
-          }
-          await setDoc(ref, { name, no, date, time: nowHHMM() });
+          // 문서 ID는 Firestore가 자동으로 만든다 (익명 평가라 사람을 구분하지 않는다).
+          await addDoc(collection(db, COLLECTION), { subject, instructor, score, date: todayStr() });
           $("error").textContent = "";
-          $("name").value = "";
-          $("no").value = "";
+          $("score").value = "";
         } catch (err) {
           $("error").textContent = err.code === "permission-denied"
-            ? "장부 규칙에 맞지 않아 저장하지 못했습니다. 이미 출석했거나, 규칙(3단계)과 코드의 칸 이름이 다릅니다."
+            ? "장부 규칙에 맞지 않아 저장하지 못했습니다. 규칙(3단계)과 코드의 칸 이름이 같은지 확인하세요."
             : "저장하지 못했습니다 (" + err.code + "). 인터넷 연결을 확인하세요.";
         } finally {
           $("submit").disabled = false;

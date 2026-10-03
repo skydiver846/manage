@@ -18,7 +18,7 @@ const MODULES = [
   ["05_스킬 만들기", "스킬 만들기", "40분"],
   ["06_PRD 작성하기", "PRD 작성하기", "50분"],
   ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "75분"],
-  ["08_(심화) HTML·CSS·JavaScript로 출석부 뜯어보기", "HTML · CSS · JS 뜯어보기", "60분"],
+  ["08_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "60분"],
   ["09_(심화) 프로토타입 배포", "GitHub · Vercel 배포", "45분"],
   ["10_(심화) Firebase로 공용 장부 연결", "Firebase 공용 장부", "50분"],
   ["11_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code (Pro)", "55분"],
@@ -27,7 +27,8 @@ const MODULES = [
 
 // 교육생이 내려받는 파일: [사이트 안 경로, 원본, 내려받을 때 이름, 설명]
 const FILES = {
-  prd: ["files/prd-attendance-v0.1.md", "lecture/실습자료/PRD_교육생 출석부.md", "PRD_교육생 출석부.md", "예시 PRD (출석부 v0.1)"],
+  prd: ["files/prd-lecture-eval-v0.1.md", "lecture/실습자료/PRD_강의평가 결과보고.md", "PRD_강의평가 결과보고.md", "예시 PRD (강의평가 결과보고 v0.1)"],
+  opinions: ["files/eval-opinions-sample.md", "lecture/실습자료/강의평가_자유의견_예시.md", "강의평가_자유의견_예시.md", "강의평가 자유의견 예시 (서술형 요약 실습용)"],
   template: ["files/prd-template.md", "lecture/실습자료/PRD 템플릿.md", "PRD 템플릿.md", "빈 PRD 양식"],
   prompts: ["files/prompts.md", "lecture/실습자료/프롬프트 모음.md", "프롬프트 모음.md", "프롬프트 모음 (옵시디언 보관용)"],
   skill: ["files/prd-interview.zip", null, "prd-interview.zip", "PRD 인터뷰 스킬 (Claude에 바로 올리는 ZIP)"],
@@ -35,9 +36,9 @@ const FILES = {
   step1: ["steps/1-html.html", "prototype-demo/steps/1-html.html", "1-html.html", "1단계 HTML (뼈대)"],
   step2: ["steps/2-css.html", "prototype-demo/steps/2-css.html", "2-css.html", "2단계 CSS (옷)"],
   step3: ["steps/3-js.html", "prototype-demo/steps/3-js.html", "3-js.html", "3단계 JavaScript (움직임)"],
-  final: ["prototype/index.html", "prototype-demo/index.html", "index.html", "출석부 완성본 (배포 실습용 index.html)"],
+  final: ["prototype/index.html", "prototype-demo/index.html", "index.html", "강의평가 집계 완성본 (배포 실습용 index.html)"],
 };
-const MODULE_FILES = { 3: ["prd"], 4: ["prd"], 5: ["skill", "skillmd"], 6: ["template", "prd"], 7: ["prd"], 8: ["step1", "step2", "step3", "final"], 9: ["final"] };
+const MODULE_FILES = { 3: ["prd", "opinions"], 4: ["prd", "opinions"], 5: ["skill", "skillmd"], 6: ["template", "prd"], 7: ["prd", "opinions"], 8: ["step1", "step2", "step3", "final"], 9: ["final"] };
 
 const SITES = {
   "accounts.google.com/signup": "https://accounts.google.com/signup", "google.com": "https://www.google.com/",
@@ -70,7 +71,7 @@ function studentMarkdown(md) {
       if (!TEACHER.test(group.join("\n"))) out.push(...group.filter((g) => !TEACHER_LINE.test(g)));
       continue;
     }
-    if (!inFence && /출석부_QR\.png|v0\.3 완성본/.test(line)) continue;   // 강사용 자료로 가는 줄
+    if (!inFence && /v0\.3 완성본/.test(line)) continue;   // 강사용 자료로 가는 줄
     if (!inFence && /^← /.test(line)) continue;   // 위쪽 이전/다음 줄은 페이지 아래 버튼과 겹친다
     out.push(line);
   }
@@ -88,7 +89,8 @@ function wikiTarget(raw) {
   const name = raw.split("/").pop();
   const mod = MODULES.find((m) => m.file === name);
   if (mod) return [`${String(mod.num).padStart(2, "0")} ${mod.short}`, mod.page];
-  if (name === "PRD_교육생 출석부") return ["예시 PRD 파일", "files.html#prd"];
+  if (name === "PRD_강의평가 결과보고") return ["예시 PRD 파일", "files.html#prd"];
+  if (name === "강의평가_자유의견_예시") return ["자유의견 예시 파일", "files.html#opinions"];
   if (name === "PRD 템플릿") return ["PRD 템플릿 파일", "files.html#template"];
   if (name === "프롬프트 모음") return ["프롬프트 모음", "prompts.html"];
   if (name === "SKILL") return ["스킬 예시 파일", "files.html#skill"];
@@ -216,7 +218,7 @@ const siteLinks = [
 const modList = MODULES.map((m) => `<li><a href="${m.page}"><span class="no">${String(m.num).padStart(2, "0")}</span><span class="t">${esc(m.short)}</span><span class="time">${m.time}</span></a></li>`).join("");
 fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 입문</h1>
-  <p class="lead">계정 만들기부터 프롬프트, 옵시디언, 스킬, PRD, 그리고 PRD로 만든 출석부를 웹에 공개하고 AI 에이전트로 자동화하기까지 한 단계씩 따라 합니다.</p>
+  <p class="lead">계정 만들기부터 프롬프트, 옵시디언, 스킬, PRD, 그리고 PRD로 만든 강의평가 집계 화면을 웹에 공개하고 AI 에이전트로 자동화하기까지 한 단계씩 따라 합니다.</p>
   <h2>강의 순서</h2>
   <ol class="mods">${modList}</ol>
   <h2>바로가기</h2>
@@ -224,7 +226,7 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <h2>자료</h2>
   <p><a href="prompts.html">프롬프트 모음</a> · <a href="files.html">실습 파일 내려받기</a></p>
   <h2>준비물</h2>
-  <ul><li>본인 명의 휴대폰 (문자 인증, 배포한 출석부 확인용)</li><li>비밀번호를 적어 둘 수첩</li><li>내 업무 중 "AI로 도움받고 싶은 일" 한 가지</li></ul>
+  <ul><li>본인 명의 휴대폰 (문자 인증, 배포한 강의평가 화면 확인용)</li><li>비밀번호를 적어 둘 수첩</li><li>내 업무 중 "AI로 도움받고 싶은 일" 한 가지</li></ul>
   <p class="note">체크박스 표시는 이 PC의 브라우저에만 저장됩니다.</p>`));
 
 console.log("built", OUT, fs.readdirSync(OUT).length, "entries");

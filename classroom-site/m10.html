@@ -24,10 +24,10 @@
 <h2>1단계: Firebase 프로젝트 만들기 (5분)</h2>
 <ol>
 <li>업무 창에서 <a class="site" href="https://console.firebase.google.com/" target="_blank" rel="noopener"><code>console.firebase.google.com</code></a> (Google 서비스라 가입 없음)</li>
-<li><strong>[프로젝트 만들기]</strong> → 이름 <code>attendance-12</code> → 약관 동의 → <strong>[계속]</strong></li>
+<li><strong>[프로젝트 만들기]</strong> → 이름 <code>lecture-eval-12</code> → 약관 동의 → <strong>[계속]</strong></li>
 <li>AI 도우미(Gemini) 질문이 나오면 원하는 대로 (사용 안 함도 가능)</li>
 <li><strong>Google 애널리틱스: 사용 안 함</strong> → <strong>[프로젝트 만들기]</strong> → 1분 대기 → <strong>[계속]</strong></li>
-<li>✅ 왼쪽 위에 <code>attendance-12</code>, 가운데에 iOS·Android·<code>&lt;/&gt;</code> 아이콘이 보이면 완료</li>
+<li>✅ 왼쪽 위에 <code>lecture-eval-12</code>, 가운데에 iOS·Android·<code>&lt;/&gt;</code> 아이콘이 보이면 완료</li>
 </ol>
 <h2>2단계: 공용 장부(Firestore) 만들기 (5분)</h2>
 <ol>
@@ -41,34 +41,40 @@
 <pre><code>rules_version = &#39;2&#39;;
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /attendance/{recordId} {
-      // 명단은 누구나 볼 수 있다
+    match /evaluations/{evalId} {
+      // 결과는 누구나 볼 수 있다 (익명 평가라 이름이 없다)
       allow read: if true;
-      // 새 출석은 정해진 칸만, 정해진 모양으로 쓸 수 있다
-      allow create: if request.resource.data.keys().hasOnly([&#39;name&#39;, &#39;no&#39;, &#39;date&#39;, &#39;time&#39;])
-        &amp;&amp; request.resource.data.keys().hasAll([&#39;name&#39;, &#39;no&#39;, &#39;date&#39;, &#39;time&#39;])
-        &amp;&amp; request.resource.data.name is string
-        &amp;&amp; request.resource.data.name.size() &gt; 0
-        &amp;&amp; request.resource.data.name.size() &lt;= 20
-        &amp;&amp; request.resource.data.no is string
-        &amp;&amp; request.resource.data.no.matches(&#39;^[0-9]{2}$&#39;);
-      // 한번 쓴 출석은 고치거나 지울 수 없다
+      // 새 평가는 정해진 칸만, 정해진 모양으로 쓸 수 있다
+      allow create: if request.resource.data.keys().hasOnly([&#39;subject&#39;, &#39;instructor&#39;, &#39;score&#39;, &#39;date&#39;])
+        &amp;&amp; request.resource.data.keys().hasAll([&#39;subject&#39;, &#39;instructor&#39;, &#39;score&#39;, &#39;date&#39;])
+        &amp;&amp; request.resource.data.subject is string
+        &amp;&amp; request.resource.data.subject.size() &gt; 0
+        &amp;&amp; request.resource.data.subject.size() &lt;= 30
+        &amp;&amp; request.resource.data.instructor is string
+        &amp;&amp; request.resource.data.instructor.size() &gt; 0
+        &amp;&amp; request.resource.data.instructor.size() &lt;= 20
+        &amp;&amp; request.resource.data.score is int
+        &amp;&amp; request.resource.data.score &gt;= 1
+        &amp;&amp; request.resource.data.score &lt;= 5
+        &amp;&amp; request.resource.data.date is string
+        &amp;&amp; request.resource.data.date.matches(&#39;^[0-9]{4}-[0-9]{2}-[0-9]{2}$&#39;);
+      // 한번 낸 평가는 고치거나 지울 수 없다 (지우기는 담당자가 콘솔에서)
       allow update, delete: if false;
     }
   }
 }
 </code></pre>
-<h2>4단계: 출석부와 장부를 잇는 설정값 받기 (5분)</h2>
+<h2>4단계: 화면과 장부를 잇는 설정값 받기 (5분)</h2>
 <ol>
 <li>왼쪽 위 <strong>프로젝트 개요</strong> → 가운데 <strong><code>&lt;/&gt;</code> (웹)</strong> 아이콘</li>
-<li>앱 닉네임 <code>출석부</code> → <strong>Firebase Hosting 체크하지 않기</strong> (배포는 Vercel이 함) → <strong>[앱 등록]</strong></li>
+<li>앱 닉네임 <code>강의평가</code> → <strong>Firebase Hosting 체크하지 않기</strong> (배포는 Vercel이 함) → <strong>[앱 등록]</strong></li>
 <li>화면에 나오는 코드 중 <strong><code>const firebaseConfig = { ... };</code></strong> 부분만 복사 → 옵시디언 <code>02_참고자료</code> 에 <code>Firebase 설정값</code> 노트로 저장</li>
 <li><strong>[콘솔로 이동]</strong></li>
 </ol>
 <pre><code class="language-js">const firebaseConfig = {
   apiKey: &quot;AIza…&quot;,
-  authDomain: &quot;attendance-12-a1b2c.firebaseapp.com&quot;,
-  projectId: &quot;attendance-12-a1b2c&quot;,
+  authDomain: &quot;lecture-eval-12-a1b2c.firebaseapp.com&quot;,
+  projectId: &quot;lecture-eval-12-a1b2c&quot;,
   …
 };
 </code></pre>
@@ -76,42 +82,42 @@ service cloud.firestore {
 <p><strong>① PRD를 먼저 고칩니다</strong> (기준 문서는 언제나 PRD). 옵시디언에서 PRD를 <strong>v0.4</strong> 로:</p>
 <ul>
 <li>6번 범위 밖에서 <strong>&quot;여러 기기 간 데이터 공유&quot;를 삭제</strong> → 이제 범위 안</li>
-<li>4번 핵심 기능에 <strong>&quot;모든 기기에서 같은 명단을 실시간으로 본다&quot;</strong> 추가</li>
-<li><strong>삭제(×)와 전체 초기화는 범위 밖으로</strong> 이동 (장부 규칙상 지울 수 없음, 관리자 기능은 다음 단계)</li>
+<li>4번 핵심 기능에 <strong>&quot;모든 기기에서 같은 결과표를 실시간으로 본다&quot;</strong> 추가</li>
+<li><strong>마지막 응답 취소와 전체 초기화는 범위 밖으로</strong> 이동 (장부 규칙상 지울 수 없음, 관리자 기능은 다음 단계)</li>
 </ul>
 <p><strong>② Claude 새 채팅</strong>에 <strong>PRD v0.4 + 현재 <code>index.html</code></strong> 두 파일을 첨부하고:</p>
-<pre><code>첨부한 index.html은 출석 기록을 브라우저(localStorage)에 저장하는 출석부야.
-첨부한 PRD v0.4에 맞게, 기록을 Firebase Firestore에 저장하도록 고쳐 줘.
+<pre><code>첨부한 index.html은 강의평가를 브라우저(localStorage)에 저장하는 집계 화면이야.
+첨부한 PRD v0.4에 맞게, 평가를 Firebase Firestore에 저장하도록 고쳐 줘.
 
 - 내 Firebase 설정값은 아래와 같아:
   (여기에 firebaseConfig 붙여넣기)
 - HTML 파일 하나로 유지하고, Firebase는 공식 CDN(gstatic.com)의 모듈 방식으로 불러와 줘
-- 컬렉션 이름은 attendance, 필드는 name, no, date(YYYY-MM-DD), time(HH:MM)만 써 줘
-- 문서 ID는 &quot;날짜_번호_이름&quot;으로 정하고, 같은 문서가 이미 있으면 &quot;이미 출석했습니다&quot;를 보여 줘
-- 오늘 날짜 기록만 실시간으로 보여 줘 (정렬은 화면에서 해 줘)
-- 삭제 버튼과 전체 초기화는 없애 줘
-- 나머지 화면 디자인과 정시/지각 판정은 그대로 둬
+- 컬렉션 이름은 evaluations, 필드는 subject, instructor, score(1~5 정수), date(YYYY-MM-DD)만 써 줘
+- 문서 ID는 Firestore가 자동으로 만들게 해 줘 (addDoc)
+- 모든 평가를 실시간으로 받아서 과목·교관별 집계는 화면에서 해 줘
+- 마지막 응답 취소, 전체 초기화, 예시 데이터는 없애 줘
+- 나머지 화면 디자인과 개선 필요 판정(평균 3.5 미만)은 그대로 둬
 </code></pre>
-<p><strong>③ 내 컴퓨터에서 먼저 확인</strong>: Claude 결과를 메모장에 <code>index.html</code>(UTF-8)로 저장 → 더블클릭 → 출석 체크 → Firebase 콘솔 <strong>Firestore → 데이터</strong> 탭에 <code>attendance</code> 아래 기록이 생기면 성공</p>
+<p><strong>③ 내 컴퓨터에서 먼저 확인</strong>: Claude 결과를 메모장에 <code>index.html</code>(UTF-8)로 저장 → 더블클릭 → 평가 제출 → Firebase 콘솔 <strong>Firestore → 데이터</strong> 탭에 <code>evaluations</code> 아래 기록이 생기면 성공</p>
 <h2>6단계: GitHub에 커밋 → 자동 배포 (5분)</h2>
 <ol>
-<li>GitHub <code>attendance-prototype</code> → <code>index.html</code> → <strong>연필(✏️)</strong></li>
+<li>GitHub <code>lecture-eval</code> → <code>index.html</code> → <strong>연필(✏️)</strong></li>
 <li>기존 내용을 <strong>Ctrl + A</strong> 로 모두 선택 → 새 코드로 <strong>붙여넣기</strong></li>
-<li><strong>[Commit changes…]</strong> → 메시지 <code>출석 기록을 Firebase 공용 장부에 저장</code> → <strong>[Commit changes]</strong></li>
+<li><strong>[Commit changes…]</strong> → 메시지 <code>강의평가를 Firebase 공용 장부에 저장</code> → <strong>[Commit changes]</strong></li>
 <li>Vercel <strong>Deployments</strong> 에서 Ready 확인 (주소는 그대로)</li>
 </ol>
 <blockquote>
 <p>⭐ <strong>Pro 트랙 (선택)</strong>: 5~6단계를 Claude Code에 맡길 수 있습니다. 저장소를 연결하고 &quot;PRD v0.4에 맞게 index.html을 Firestore에 저장하도록 고치고 커밋해 줘&quot;(5단계 지시문 그대로)라고 지시하면, 복사·붙여넣기 없이 커밋까지 됩니다. 단, Firebase 설정값과 보안 규칙은 사람이 직접 확인합니다. 방법은 모듈 11 참고.</p>
 </blockquote>
-<h2>7단계: 짝꿍과 같은 명단 확인 (5분)</h2>
+<h2>7단계: 짝꿍과 같은 결과표 확인 (5분)</h2>
 <ol>
-<li>짝꿍과 <strong>같은 출석부 주소</strong>(한 사람의 Domains 주소 QR)를 각자 휴대폰으로 열기</li>
-<li>한 사람이 출석 → <strong>다른 사람 화면에 새로고침 없이</strong> 이름이 나타나는지 확인</li>
-<li>같은 이름 + 같은 번호로 다시 출석 → &quot;이미 출석했습니다&quot;</li>
-<li>강사 PC에서 Firebase 콘솔 <strong>데이터</strong> 탭을 띄워 기록이 쌓이는 모습 보여 주기</li>
+<li>짝꿍과 <strong>같은 강의평가 주소</strong>(한 사람의 Domains 주소 QR)를 각자 휴대폰으로 열기</li>
+<li>한 사람이 평가 제출 → <strong>다른 사람 화면에 새로고침 없이</strong> 응답 수와 평균이 바뀌는지 확인</li>
+<li>같은 과목에 <strong>다른 교관</strong> 이름으로 내 보기 → 결과표에 <strong>줄이 따로</strong> 생기는지 확인</li>
+<li>강사 PC에서 Firebase 콘솔 <strong>데이터</strong> 탭을 띄워 평가가 쌓이는 모습 보여 주기 (이름 칸이 없는 것도 확인)</li>
 </ol>
-<pre><code> 지난 회차: 짝꿍 휴대폰에 내 이름 ✗
- 오늘:      짝꿍 휴대폰에 내 이름 ✓  (공용 장부)
+<pre><code> 지난 회차: 짝꿍 휴대폰 결과표에 내 평가 ✗
+ 오늘:      짝꿍 휴대폰 결과표에 내 평가 ✓  (공용 장부)
 </code></pre>
 <hr>
 <h2>자주 막히는 곳</h2>
@@ -127,32 +133,32 @@ service cloud.firestore {
 <td>누르지 않기. Spark(무료)로 충분</td>
 </tr>
 <tr>
-<td>출석 버튼을 눌러도 아무 일 없음</td>
-<td>Chrome <strong>F12 → Console</strong> 에 <code>permission-denied</code> 가 보이면 <strong>규칙과 코드의 필드 이름이 다른 것</strong>. 코드가 <code>name, no, date, time</code> 만 쓰는지 Claude에게 확인 요청</td>
+<td>제출 버튼을 눌러도 아무 일 없음</td>
+<td>Chrome <strong>F12 → Console</strong> 에 <code>permission-denied</code> 가 보이면 <strong>규칙과 코드의 칸이 다른 것</strong>. 코드가 <code>subject, instructor, score, date</code> 만 쓰는지, score를 <strong>숫자</strong>로 저장하는지 Claude에게 확인 요청</td>
 </tr>
 <tr>
 <td>&quot;The query requires an index&quot; 오류</td>
-<td>정렬을 화면에서 하도록 Claude에게 다시 요청 (또는 오류 메시지의 링크로 색인 생성)</td>
+<td>집계·정렬을 화면에서 하도록 Claude에게 다시 요청 (또는 오류 메시지의 링크로 색인 생성)</td>
 </tr>
 <tr>
 <td>위치를 잘못 골랐음</td>
 <td>바꿀 수 없음. 실습용이면 그대로 진행하거나 프로젝트를 새로 만들기</td>
 </tr>
 <tr>
-<td>30일 뒤 출석부가 멈춤</td>
+<td>30일 뒤 평가 화면이 멈춤</td>
 <td>테스트 모드로 만든 경우. 3단계 규칙으로 교체</td>
 </tr>
 <tr>
-<td>기록을 지우고 싶음</td>
-<td>화면에서는 못 지움(규칙). 강사가 Firebase 콘솔 데이터 탭에서 삭제</td>
+<td>잘못 낸 평가를 지우고 싶음</td>
+<td>화면에서는 못 지움(규칙). 담당자가 Firebase 콘솔 데이터 탭에서 삭제</td>
 </tr>
 </tbody></table></div>
 <h2>✅ 확인 질문 (인터뷰)</h2>
 <ol>
-<li>Firebase 콘솔 <strong>데이터</strong> 탭에서 <code>attendance</code> 아래 내 출석 기록이 보이나요?</li>
-<li>짝꿍이 출석했을 때 <strong>내 휴대폰 명단에</strong> 새로고침 없이 나타났나요?</li>
+<li>Firebase 콘솔 <strong>데이터</strong> 탭에서 <code>evaluations</code> 아래 내 평가가 보이나요?</li>
+<li>짝꿍이 평가를 냈을 때 <strong>내 휴대폰 결과표가</strong> 새로고침 없이 바뀌었나요?</li>
 <li>규칙의 <code>allow update, delete: if false</code> 를 <strong>PRD 말로</strong> 바꾸면?</li>
-<li>지금 출석부에서 <strong>아직 막지 못하는 것</strong>은?</li>
+<li>지금 강의평가 화면에서 <strong>아직 막지 못하는 것</strong>은?</li>
 </ol>
 </article>
     <div class="pager"><a class="prev" href="m09.html"><span>← 이전</span>09 GitHub · Vercel 배포</a><a class="next" href="m11.html"><span>다음 →</span>11 Claude Code (Pro)</a></div>
