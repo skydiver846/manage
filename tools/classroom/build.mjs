@@ -30,7 +30,7 @@ const FILES = {
   prd: ["files/prd-lecture-eval-v0.1.md", "lecture/실습자료/PRD_강의평가 결과보고.md", "PRD_강의평가 결과보고.md", "예시 PRD (강의평가 결과보고 v0.1)"],
   opinions: ["files/eval-opinions-sample.md", "lecture/실습자료/강의평가_자유의견_예시.md", "강의평가_자유의견_예시.md", "강의평가 자유의견 예시 (서술형 요약 실습용)"],
   template: ["files/prd-template.md", "lecture/실습자료/PRD 템플릿.md", "PRD 템플릿.md", "빈 PRD 양식"],
-  prompts: ["files/prompts.md", "lecture/실습자료/프롬프트 모음.md", "프롬프트 모음.md", "프롬프트 모음 (옵시디언 보관용)"],
+  prompts: ["files/prompts.md", "lecture/실습자료/프롬프트 모음.md", "프롬프트 모음.md", "프롬프트 모음 파일 (옵시디언 99_프롬프트 폴더 보관용)"],
   skill: ["files/prd-interview.zip", null, "prd-interview.zip", "PRD 인터뷰 스킬 (Claude에 바로 올리는 ZIP)"],
   skillmd: ["files/SKILL.md", "lecture/실습자료/스킬/prd-interview/SKILL.md", "SKILL.md", "PRD 인터뷰 스킬 원본 SKILL.md"],
   step1: ["steps/1-html.html", "prototype-demo/steps/1-html.html", "1-html.html", "1단계 HTML (뼈대)"],
@@ -197,7 +197,7 @@ MODULES.forEach((m, i) => {
 
 const promptsMd = fs.readFileSync(path.join(ROOT, FILES.prompts[1]), "utf8").replace(/^←.*\n/m, "");
 fs.writeFileSync(path.join(OUT, "prompts.html"), page("prompts.html", "프롬프트 모음",
-  `<p class="lead">수업에서 쓰는 프롬프트를 모았습니다. 상자 오른쪽 위 <b>[복사]</b>를 누르고 ChatGPT·Claude 입력창에 붙여넣으세요. <a href="${FILES.prompts[0]}" download="${FILES.prompts[2]}">옵시디언 보관용 파일 내려받기</a></p>` + render(promptsMd)));
+  `<p class="lead">수업에서 쓰는 프롬프트를 모았습니다. 상자 오른쪽 위 <b>[복사]</b>를 누르고 ChatGPT·Claude 입력창에 붙여넣으세요. </p><p class="lead"><a class="btn" href="${FILES.prompts[0]}" download="${FILES.prompts[2]}">프롬프트 모음 파일(.md) 내려받기</a> 옵시디언 <code>99_프롬프트</code> 폴더에 넣어 두면 수업 뒤에도 쓸 수 있습니다.</p>` + render(promptsMd)));
 
 const allFiles = Object.entries(FILES).map(([k, [href, , dl, label]]) => {
   const open = href.endsWith(".html") ? ` <a class="btn ghost" href="${href}" target="_blank" rel="noopener">열어 보기</a>` : "";
