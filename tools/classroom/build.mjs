@@ -13,16 +13,16 @@ const OUT = path.join(ROOT, "classroom-site");
 const MODULES = [
   ["01_구글 계정 3개 만들기", "구글 계정 3개 만들기", "사전 과제"],
   ["02_ChatGPT와 Claude 가입", "ChatGPT · Claude 가입", "사전 과제"],
-  ["03_프롬프트·파일·폴더 활용", "프롬프트 · 파일 · 프로젝트", "50분"],
-  ["04_옵시디언 설치와 MD 파일 만들기", "옵시디언과 MD 파일", "30분"],
-  ["05_PRD 작성하기", "PRD 작성하기", "50분"],
-  ["06_스킬 만들기", "스킬 만들기", "30분"],
-  ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "45분"],
-  ["08_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "35분"],
+  ["03_프롬프트·파일·폴더 활용", "프롬프트 · 파일 · 프로젝트", "80분"],
+  ["04_옵시디언 설치와 MD 파일 만들기", "옵시디언과 MD 파일", "60분"],
+  ["05_PRD 작성하기", "PRD 작성하기", "60분"],
+  ["06_스킬 만들기", "스킬 만들기", "50분"],
+  ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "90분"],
+  ["08_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "65분"],
   ["09_(심화) 프로토타입 배포", "GitHub · Vercel 배포", "80분"],
-  ["10_(심화) Firebase로 공용 장부 연결", "Firebase 공용 장부", "30분 · 시연"],
-  ["11_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code (Pro)", "25분 · 시연"],
-  ["12_(심화) AI 브라우저 Aside로 웹 업무 자동화", "AI 브라우저 Aside", "15분 · 시연"],
+  ["10_(심화) Firebase로 공용 장부 연결", "Firebase 공용 장부", "50분"],
+  ["11_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code (Pro)", "40분"],
+  ["12_(심화) AI 브라우저 Aside로 웹 업무 자동화", "AI 브라우저 Aside", "20분 · 시연"],
 ].map(([file, short, time], i) => ({ file, short, time, num: i + 1, page: `m${String(i + 1).padStart(2, "0")}.html` }));
 
 // 교육생이 내려받는 파일: [사이트 안 경로, 원본, 내려받을 때 이름, 설명]
@@ -219,11 +219,15 @@ const modItems = (list) => list.map((m) => `<li><a href="${m.page}"><span class=
 fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 입문</h1>
   <p class="lead">계정 만들기부터 프롬프트, 옵시디언, 스킬, PRD, 그리고 PRD로 만든 강의평가 집계 화면을 웹에 공개하고 AI 에이전트로 자동화하기까지 한 단계씩 따라 합니다.</p>
-  <h2>1일차 (4시간) · AI에게 일 시키기부터 결과보고 자료까지</h2>
-  <ol class="mods">${modItems(MODULES.slice(0, 7))}</ol>
-  <h2>2일차 (4시간) · 화면을 웹에 공개하고 자동화 맛보기</h2>
-  <ol class="mods">${modItems(MODULES.slice(7))}</ol>
-  <p class="note">01·02는 수업 전에 각자 해 오는 사전 과제입니다. 1일차 숙제: 모듈 05에서 시작한 내 업무 PRD 마저 쓰기, GitHub 가입(모듈 09의 1단계). 10~12는 앞 화면 시연으로 진행합니다.</p>
+  <h2>사전 과제 · 수업 전에 각자</h2>
+  <ol class="mods">${modItems(MODULES.slice(0, 2))}</ol>
+  <h2>1일차 (4시간) · AI에게 일 시키기부터 PRD까지</h2>
+  <ol class="mods">${modItems(MODULES.slice(2, 5))}</ol>
+  <h2>2일차 (4시간) · 스킬, 결과보고 자료, 화면 뜯어보기</h2>
+  <ol class="mods">${modItems(MODULES.slice(5, 8))}</ol>
+  <h2>3일차 (4시간) · 웹에 공개하고 자동화하기</h2>
+  <ol class="mods">${modItems(MODULES.slice(8))}</ol>
+  <p class="note">숙제: 1일차 뒤에는 모듈 05에서 시작한 내 업무 PRD 마저 쓰기, 2일차 뒤에는 GitHub 가입(모듈 09의 1단계).</p>
   <h2>바로가기</h2>
   <div class="tiles">${siteLinks}</div>
   <h2>자료</h2>
