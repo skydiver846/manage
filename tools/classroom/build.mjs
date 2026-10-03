@@ -17,12 +17,12 @@ const MODULES = [
   ["04_옵시디언 설치와 MD 파일 만들기", "옵시디언과 MD 파일", "60분"],
   ["05_PRD 작성하기", "PRD 작성하기", "60분"],
   ["06_스킬 만들기", "스킬 만들기", "55분"],
-  ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "90분"],
-  ["08_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "60분"],
-  ["09_(심화) 프로토타입 배포", "GitHub · Vercel 배포", "80분"],
-  ["10_(심화) Firebase로 공용 장부 연결", "Firebase 공용 장부", "50분"],
-  ["11_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code", "40분"],
-  ["12_(심화) AI 브라우저 Aside로 웹 업무 자동화", "AI 브라우저 Aside", "20분 · 시연"],
+  ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "85분"],
+  ["08_AI 브라우저 Aside로 코딩 없이 업무 자동화", "AI 브라우저 Aside", "25분 · 시연"],
+  ["09_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "65분"],
+  ["10_(심화) 프로토타입 배포", "GitHub · Vercel 배포", "70분"],
+  ["11_(심화) Firebase로 공용 장부 연결", "Firebase 공용 장부", "45분"],
+  ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code", "45분"],
 ].map(([file, short, time], i) => ({ file, short, time, num: i + 1, page: `m${String(i + 1).padStart(2, "0")}.html` }));
 
 // 교육생이 내려받는 파일: [사이트 안 경로, 원본, 내려받을 때 이름, 설명]
@@ -42,7 +42,7 @@ const FILES = {
   step3: ["steps/3-js.html", "prototype-demo/steps/3-js.html", "3-js.html", "3단계 JavaScript (움직임)"],
   final: ["prototype/index.html", "prototype-demo/index.html", "index.html", "강의평가 집계 완성본 (배포 실습용 index.html)"],
 };
-const MODULE_FILES = { 3: ["prd", "opinions"], 4: ["prd", "opinions"], 5: ["template", "prd"], 6: ["skill", "skillmd", "quizreq", "quizsrc", "quizcard", "quizzip"], 7: ["prd", "opinions"], 8: ["step1", "step2", "step3", "final"], 9: ["final"] };
+const MODULE_FILES = { 3: ["prd", "opinions"], 4: ["prd", "opinions"], 5: ["template", "prd"], 6: ["skill", "skillmd", "quizreq", "quizsrc", "quizcard", "quizzip"], 7: ["prd", "opinions"], 9: ["step1", "step2", "step3", "final"], 10: ["final"] };
 
 const SITES = {
   "accounts.google.com/signup": "https://accounts.google.com/signup", "google.com": "https://www.google.com/",
@@ -141,8 +141,8 @@ function nav(current) {
     .map((m) => link(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`)).join("");
   return `<nav aria-label="목차">
     <div class="group">${link("index.html", "처음 화면")}${link("prework.html", "사전 과제 안내")}</div>
-    <div class="group"><h3>본 강의</h3>${mods(1, 7)}</div>
-    <div class="group"><h3>심화</h3>${mods(8, 12)}</div>
+    <div class="group"><h3>본 강의</h3>${mods(1, 8)}</div>
+    <div class="group"><h3>심화 · 직접 만들기</h3>${mods(9, 12)}</div>
     <div class="group"><h3>자료</h3>${link("prompts.html", "프롬프트 모음")}${link("files.html", "실습 파일 내려받기")}</div>
   </nav>`;
 }
@@ -222,8 +222,8 @@ fs.writeFileSync(path.join(OUT, "files.html"), page("files.html", "실습 파일
 
 const siteLinks = [
   ["Google 계정 만들기", "accounts.google.com/signup", "01"], ["ChatGPT", "chatgpt.com", "02"], ["Claude", "claude.ai", "02"],
-  ["옵시디언 내려받기", "obsidian.md", "04"], ["Gemini Notebook", "notebooklm.google.com", "07"], ["GitHub", "github.com", "09"],
-  ["Vercel", "vercel.com", "09"], ["Firebase 콘솔", "console.firebase.google.com", "10"], ["Claude Code", "claude.ai/code", "11"], ["Aside", "aside.com", "12"],
+  ["옵시디언 내려받기", "obsidian.md", "04"], ["Gemini Notebook", "notebooklm.google.com", "07"], ["GitHub", "github.com", "10"],
+  ["Vercel", "vercel.com", "10"], ["Firebase 콘솔", "console.firebase.google.com", "11"], ["Claude Code", "claude.ai/code", "12"], ["Aside", "aside.com", "08"],
 ].map(([label, host, mod]) => `<a class="tile" href="${SITES[host]}" target="_blank" rel="noopener"><b>${esc(label)}</b><span>${host}</span><small>모듈 ${mod}</small></a>`).join("");
 const modItems = (list) => list.map((m) => `<li><a href="${m.page}"><span class="no">${String(m.num).padStart(2, "0")}</span><span class="t">${esc(m.short)}</span><span class="time">${m.time}</span></a></li>`).join("");
 fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
@@ -234,11 +234,11 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <p><a class="btn" href="prework.html">사전 과제 안내 보기</a> 첫날 전까지 해 올 것과 준비물을 한 장에 정리했습니다.</p>
   <h2>1일차 (4시간) · AI에게 일 시키기부터 PRD까지</h2>
   <ol class="mods">${modItems(MODULES.slice(2, 5))}</ol>
-  <h2>2일차 (4시간) · 스킬, 결과보고 자료, 화면 뜯어보기</h2>
-  <ol class="mods">${modItems(MODULES.slice(5, 8))}</ol>
-  <h2>3일차 (4시간) · 웹에 공개하고 자동화하기</h2>
+  <h2>2일차 (4시간) · 스킬, 결과보고 자료, 코딩 없이 자동화</h2>
+  <ol class="mods">${modItems(MODULES.slice(5, 9))}</ol>
+  <h2>3일차 (4시간) · 직접 만들어 웹에 공개하기</h2>
   <ol class="mods">${modItems(MODULES.slice(8))}</ol>
-  <p class="note">숙제: 1일차 뒤에는 모듈 05에서 시작한 내 업무 PRD 마저 쓰기, 2일차 뒤에는 GitHub 가입(모듈 09의 1단계).</p>
+  <p class="note">숙제: 1일차 뒤에는 모듈 05에서 시작한 내 업무 PRD 마저 쓰기, 2일차 뒤에는 GitHub 가입(모듈 10의 1단계). 모듈 09는 2일차(1·2단계)와 3일차(3·4단계)에 나눠 진행합니다.</p>
   <h2>바로가기</h2>
   <div class="tiles">${siteLinks}</div>
   <h2>자료</h2>

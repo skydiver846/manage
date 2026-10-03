@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>08 HTML · CSS · JS 뜯어보기 · 생성형 AI 입문</title>
+<title>08 AI 브라우저 Aside · 생성형 AI 입문</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
 <link rel="stylesheet" href="assets/site.css">
 </head>
@@ -13,310 +13,123 @@
     <a class="brand" href="index.html"><small>소방학교 · 처음 시작하는 분들을 위한</small><strong>생성형 AI 입문</strong></a>
     <nav aria-label="목차">
     <div class="group"><a href="index.html">처음 화면</a><a href="prework.html">사전 과제 안내</a></div>
-    <div class="group"><h3>본 강의</h3><a href="m01.html">01 구글 계정 3개 만들기</a><a href="m02.html">02 ChatGPT · Claude 가입</a><a href="m03.html">03 프롬프트 · 파일 · 프로젝트</a><a href="m04.html">04 옵시디언과 MD 파일</a><a href="m05.html">05 PRD 작성하기</a><a href="m06.html">06 스킬 만들기</a><a href="m07.html">07 PRD로 결과물 만들기</a></div>
-    <div class="group"><h3>심화</h3><a href="m08.html" aria-current="page">08 HTML · CSS · JS 뜯어보기</a><a href="m09.html">09 GitHub · Vercel 배포</a><a href="m10.html">10 Firebase 공용 장부</a><a href="m11.html">11 Claude Code</a><a href="m12.html">12 AI 브라우저 Aside</a></div>
+    <div class="group"><h3>본 강의</h3><a href="m01.html">01 구글 계정 3개 만들기</a><a href="m02.html">02 ChatGPT · Claude 가입</a><a href="m03.html">03 프롬프트 · 파일 · 프로젝트</a><a href="m04.html">04 옵시디언과 MD 파일</a><a href="m05.html">05 PRD 작성하기</a><a href="m06.html">06 스킬 만들기</a><a href="m07.html">07 PRD로 결과물 만들기</a><a href="m08.html" aria-current="page">08 AI 브라우저 Aside</a></div>
+    <div class="group"><h3>심화 · 직접 만들기</h3><a href="m09.html">09 HTML · CSS · JS 뜯어보기</a><a href="m10.html">10 GitHub · Vercel 배포</a><a href="m11.html">11 Firebase 공용 장부</a><a href="m12.html">12 Claude Code</a></div>
     <div class="group"><h3>자료</h3><a href="prompts.html">프롬프트 모음</a><a href="files.html">실습 파일 내려받기</a></div>
   </nav>
   </aside>
   <main>
-    <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>08 HTML · CSS · JS 뜯어보기</span></div>
-    <article><h1>모듈 08 (심화 1). HTML · CSS · JavaScript로 강의평가 화면 뜯어보기</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>1단계 HTML (뼈대)</span><span class="acts"><a class="btn" href="steps/1-html.html" download="1-html.html">내려받기</a> <a class="btn ghost" href="steps/1-html.html" target="_blank" rel="noopener">열어 보기</a></span></li><li><span>2단계 CSS (옷)</span><span class="acts"><a class="btn" href="steps/2-css.html" download="2-css.html">내려받기</a> <a class="btn ghost" href="steps/2-css.html" target="_blank" rel="noopener">열어 보기</a></span></li><li><span>3단계 JavaScript (움직임)</span><span class="acts"><a class="btn" href="steps/3-js.html" download="3-js.html">내려받기</a> <a class="btn ghost" href="steps/3-js.html" target="_blank" rel="noopener">열어 보기</a></span></li><li><span>강의평가 집계 완성본 (배포 실습용 index.html)</span><span class="acts"><a class="btn" href="prototype/index.html" download="index.html">내려받기</a> <a class="btn ghost" href="prototype/index.html" target="_blank" rel="noopener">열어 보기</a></span></li></ul></aside>
-<p>모듈 7에서 Claude가 강의평가 집계 화면을 만들어 줬습니다. 배포하기 전에, 그 화면이 <strong>어떤 재료로 어떤 순서로</strong> 만들어지는지 열어 봅니다. 코드를 외우는 시간이 아닙니다. <strong>읽고, 한 군데 바꿔 보고, 바뀐 결과를 눈으로 확인</strong>하는 시간입니다.</p>
-<h2>웹 화면을 만드는 세 가지 재료</h2>
+    <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>08 AI 브라우저 Aside</span></div>
+    <article><h1>모듈 08. AI 브라우저 Aside로 코딩 없이 업무 자동화</h1>
+<p>📌 <strong>앞 화면 시연으로 진행합니다.</strong> 직접 해 보고 싶으면 수업 뒤에 개인 PC에서 이 페이지를 보며 따라 하면 됩니다.</p>
+<p>지금까지는 AI에게 <strong>글과 파일</strong>을 건네고 결과를 받았습니다(03~07). 스킬(06)로 일하는 방법도 맡겼습니다. 그런데 행정 업무의 상당 부분은 <strong>웹사이트를 열고, 찾고, 누르고, 내려받는 일</strong>입니다. 이번 모듈에서는 <strong>코딩 없이</strong> AI가 브라우저를 직접 조작해 그 일을 대신하는 모습을 봅니다.</p>
+<h2>업무 자동화의 세 단계</h2>
 <div class="table-wrap"><table>
 <thead>
 <tr>
-<th>재료</th>
-<th>하는 일</th>
-<th>집으로 치면</th>
-<th>사람으로 치면</th>
-<th>강의평가 화면에서</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>HTML</strong></td>
-<td>화면에 <strong>무엇이</strong> 있는지</td>
-<td>골조·벽·문</td>
-<td>뼈대</td>
-<td>제목, 입력칸, 버튼, 결과표</td>
-</tr>
-<tr>
-<td><strong>CSS</strong></td>
-<td><strong>어떻게</strong> 보이는지</td>
-<td>페인트·인테리어</td>
-<td>옷</td>
-<td>배경색, 빨간 버튼, 표 구분선</td>
-</tr>
-<tr>
-<td><strong>JavaScript</strong></td>
-<td>눌렀을 때 <strong>무엇을 하는지</strong></td>
-<td>전기·수도</td>
-<td>근육</td>
-<td>평균 계산, 개선 필요 판정</td>
-</tr>
-</tbody></table></div>
-<pre><code> 1단계 HTML        2단계 + CSS        3단계 + JavaScript     4단계 완성본
- ┌──────────┐     ┌──────────┐      ┌──────────┐          ┌──────────┐
- │ 뼈대만    │ ─▶ │ 옷을 입힘 │ ─▶  │ 움직임    │   ─▶     │ 기억·편의 │
- │ 글자 나열 │     │ 색·배치   │      │ 평균 계산 │          │ 저장·취소 │
- └──────────┘     └──────────┘      └──────────┘          └──────────┘
-                                                                 │
-                                       모듈 09: 이 파일을 웹에 공개 ◀┘
-</code></pre>
-<h2>준비 (5분)</h2>
-<p><strong>실습 파일 4개</strong> (이 페이지 위의 ‘실습 파일’에서 내려받기)</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>파일</th>
 <th>단계</th>
-<th>저장소 위치</th>
+<th>무엇으로</th>
+<th>이럴 때</th>
+<th>모듈</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>1-html.html</code></td>
-<td>뼈대만</td>
-<td><code>prototype-demo/steps/1-html.html</code></td>
+<td>① 방법을 맡긴다</td>
+<td><strong>스킬</strong> (Markdown 매뉴얼)</td>
+<td>같은 양식의 글·보고서·문제를 반복해서 만들 때</td>
+<td>06</td>
 </tr>
 <tr>
-<td><code>2-css.html</code></td>
-<td>+ 옷</td>
-<td><code>prototype-demo/steps/2-css.html</code></td>
+<td>② 클릭을 맡긴다</td>
+<td><strong>AI 브라우저</strong> (Aside)</td>
+<td>이미 있는 웹사이트에서 찾기·입력·확인·내려받기를 반복할 때</td>
+<td><strong>08 (이번)</strong></td>
 </tr>
 <tr>
-<td><code>3-js.html</code></td>
-<td>+ 움직임</td>
-<td><code>prototype-demo/steps/3-js.html</code></td>
-</tr>
-<tr>
-<td><code>index.html</code></td>
-<td>완성본 (모듈 7 결과와 같은 기능)</td>
-<td><code>prototype-demo/index.html</code></td>
+<td>③ 도구를 만든다</td>
+<td><strong>코딩</strong> (HTML → 배포 → 장부 → Claude Code)</td>
+<td>맞는 도구가 <strong>없어서</strong> 직접 만들어야 할 때</td>
+<td>09 ~ 12</td>
 </tr>
 </tbody></table></div>
+<h2>Aside 한눈에 보기</h2>
 <ul>
-<li>받은 파일은 옵시디언 보관소 <code>03_AI결과물</code> 안에 <code>강의평가_단계별</code> 폴더를 만들어 넣습니다.</li>
-<li><strong>도구 두 개를 나란히</strong> 띄웁니다: 왼쪽 <strong>메모장</strong>(고치기), 오른쪽 <strong>Chrome</strong>(보기)<ul>
-<li>Chrome으로 열기: 파일 <strong>더블클릭</strong></li>
-<li>메모장으로 열기: 파일 <strong>오른쪽 클릭 → 연결 프로그램 → 메모장</strong></li>
+<li>AI 에이전트가 들어 있는 <strong>크롬 계열 브라우저</strong>입니다. Mac과 <strong>Windows</strong>(2026년 9월부터)에서 쓸 수 있습니다.</li>
+<li>내가 <strong>로그인해 둔 사이트</strong>에서 사람처럼 화면을 보고 클릭·입력합니다. 사이트마다 따로 연결 설정을 하지 않아도 됩니다.</li>
+<li><strong>루틴(Routine)</strong>: 정해 둔 일을 반복해서 하게 할 수 있습니다. &quot;매일 아침 ○○ 확인&quot; 같은 자동화에 씁니다.</li>
+<li><strong>보안 장치</strong>: 작업 기록과 기억은 내 PC에 저장하고, 내장 비밀번호 관리자는 비밀번호를 AI 모델에 보여 주지 않고 로그인합니다. 결제·게시·메시지 보내기 같은 <strong>민감한 동작은 사람의 승인</strong>을 기다립니다.</li>
+<li><strong>요금</strong>: 무료 요금제(월 500크레딧, 루틴 3개), 유료 Pro(월 20달러), Max(월 200달러)</li>
 </ul>
-</li>
-<li><strong>고치는 순서</strong>: 메모장에서 고치고 <strong>Ctrl + S</strong> → Chrome에서 <strong>F5</strong>(새로고침)</li>
+<h2>시연 (25분)</h2>
+<h3>시연 1. 화면을 대신 조작하기</h3>
+<p>07에서 Claude가 만든 것과 같은 <strong>강의평가 집계 화면</strong>(강의 사이트에 올려 둔 예시)을 Aside에게 맡깁니다.</p>
+<pre><code>https://fire-ai-classroom.vercel.app/fire-ai/prototype/index.html 을 열고
+과목 &quot;시연과목&quot;, 교관 &quot;시연교관&quot;으로 만족도 5, 3, 2 평가를 차례로 제출해 줘.
+그다음 결과표에서 &quot;개선 필요&quot;로 표시된 과목과 교관, 평균을 모두 알려 주고,
+결과 내려받기 버튼을 눌러 파일을 저장한 뒤 파일 이름을 알려 줘.
+</code></pre>
+<p>교육생이 볼 것:</p>
+<ul>
+<li>AI가 <strong>화면을 보고</strong> 입력칸을 찾아 글자를 넣고, 만족도를 고르고, 버튼을 누르는 모습</li>
+<li>중간에 <strong>허락을 묻는</strong> 단계가 나오면 무엇을 하려는지 읽고 승인하는 강사</li>
+<li>마지막 보고가 <strong>실제 화면과 같은지</strong> 확인하는 강사</li>
 </ul>
-<hr>
-<h2>1단계: HTML = 뼈대 (15분)</h2>
-<p><code>1-html.html</code> 을 Chrome으로 엽니다. 색도 배치도 없이 <strong>글자만 나열</strong>되어 있습니다. 정상입니다.</p>
-<h3>코드 읽기</h3>
-<p>메모장으로 열어 보면 <code>&lt;이름&gt;내용&lt;/이름&gt;</code> 모양이 반복됩니다. 이것을 <strong>태그</strong>라고 합니다.</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>태그</th>
-<th>뜻</th>
-<th>강의평가 화면에서</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>&lt;h1&gt;</code></td>
-<td>가장 큰 제목</td>
-<td>강의평가 결과 집계</td>
-</tr>
-<tr>
-<td><code>&lt;p&gt;</code></td>
-<td>문단</td>
-<td>과정 안내 문장</td>
-</tr>
-<tr>
-<td><code>&lt;form&gt;</code></td>
-<td>입력 묶음</td>
-<td>과목·교관·만족도·버튼을 감싼 상자</td>
-</tr>
-<tr>
-<td><code>&lt;label&gt;</code> <code>&lt;input&gt;</code></td>
-<td>이름표와 입력칸</td>
-<td>과목 [____]</td>
-</tr>
-<tr>
-<td><code>&lt;select&gt;</code> <code>&lt;option&gt;</code></td>
-<td>골라 넣는 칸과 보기</td>
-<td>만족도 [5 매우 만족 ▼]</td>
-</tr>
-<tr>
-<td><code>&lt;button&gt;</code></td>
-<td>버튼</td>
-<td>평가 제출</td>
-</tr>
-<tr>
-<td><code>&lt;table&gt;</code> <code>&lt;tr&gt;</code> <code>&lt;td&gt;</code></td>
-<td>표, 표의 한 줄, 칸 하나</td>
-<td>결과표</td>
-</tr>
-<tr>
-<td><code>&lt;!-- --&gt;</code></td>
-<td>메모(화면에 안 보임)</td>
-<td>코드 설명</td>
-</tr>
-</tbody></table></div>
+<h3>시연 2. 공개 사이트에서 찾아 정리하기</h3>
+<p>06-5에서 문제출제 스킬이 &quot;근거는 원문으로 확인&quot;을 강조했습니다. 그 확인 작업을 브라우저에 맡겨 봅니다.</p>
+<pre><code>국가법령정보센터(law.go.kr)에서 &quot;화재의 예방 및 안전관리에 관한 법률&quot;을 찾아
+현재 시행 중인 법률의 시행일을 알려 줘.
+화면에서 확인한 문장을 그대로 인용하고, 어느 화면에서 찾았는지도 알려 줘.
+</code></pre>
 <blockquote>
-<p>💡 모듈 4의 Markdown과 비교해 보세요. Markdown의 <code>#</code> 이 HTML의 <code>&lt;h1&gt;</code>, <code>| 칸 | 칸 |</code> 이 <code>&lt;tr&gt;&lt;td&gt;</code> 입니다. <strong>구조를 표시한다</strong>는 생각은 같습니다.</p>
+<p>결과를 그대로 믿지 않고 <strong>AI가 보여 준 화면과 내가 직접 연 화면을 대조</strong>합니다. &quot;원문 대조&quot;라는 습관은 스킬이든 브라우저든 같습니다.</p>
 </blockquote>
-<h3>바꿔 보기</h3>
-<ol>
-<li><code>&lt;h1&gt;강의평가 결과 집계&lt;/h1&gt;</code> 를 <code>&lt;h1&gt;제12기 강의평가 결과&lt;/h1&gt;</code> 로 → Ctrl + S → F5</li>
-<li>결과표에 한 줄 추가: <code>&lt;tr&gt;&lt;td&gt;소방 관계법규&lt;/td&gt;&lt;td&gt;최교관&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;2.5&lt;/td&gt;&lt;td&gt;개선 필요&lt;/td&gt;&lt;/tr&gt;</code></li>
-<li><strong>[평가 제출]</strong> 을 눌러 보기 → 아무 일도 안 일어나고 페이지만 새로 뜹니다</li>
-</ol>
-<h2>2단계: CSS = 옷 (15분)</h2>
-<p><code>2-css.html</code> 을 열어 1단계와 <strong>나란히</strong> 비교합니다. 같은 내용인데 업무 화면처럼 보입니다.</p>
-<h3>코드 읽기</h3>
-<p>HTML은 거의 그대로이고, 위쪽 <code>&lt;style&gt;</code> 안에 규칙이 추가됐습니다. 규칙 모양은 하나뿐입니다.</p>
-<pre><code class="language-css">대상 { 속성: 값; }
-
-button {
-  background: #c8321e;   /* 버튼 배경을 소방 적색으로 */
-  color: white;          /* 글자는 흰색 */
-}
+<h3>시연 3. 루틴으로 만들기 (반복 자동화)</h3>
+<pre><code>평가 기간(9월 28일~10월 2일) 동안 매일 오후 4시에 강의평가 화면을 열어서
+전체 응답 수와 &quot;개선 필요&quot; 과목·교관 목록을 확인하고, 결과를 세 줄로 정리해 줘.
 </code></pre>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>대상 쓰는 법</th>
-<th>뜻</th>
-<th>예</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>button</code></td>
-<td>모든 버튼</td>
-<td>평가 제출 버튼</td>
-</tr>
-<tr>
-<td><code>.bad</code></td>
-<td><code>class=&quot;bad&quot;</code> 가 붙은 것</td>
-<td>&quot;개선 필요&quot; 글자</td>
-</tr>
-<tr>
-<td><code>.num</code></td>
-<td><code>class=&quot;num&quot;</code> 이 붙은 것</td>
-<td>응답·평균 숫자 칸 (오른쪽 정렬)</td>
-</tr>
-<tr>
-<td><code>.wrap</code></td>
-<td><code>class=&quot;wrap&quot;</code> 이 붙은 것</td>
-<td>가운데 기둥</td>
-</tr>
-</tbody></table></div>
-<h3>바꿔 보기</h3>
-<ol>
-<li>버튼 색: <code>background: #c8321e;</code> → <code>background: navy;</code></li>
-<li>개선 필요 색: <code>.bad { color: #c8321e; ...}</code> 의 색을 <code>purple</code> 로</li>
-<li>기둥 너비: <code>.wrap</code> 의 <code>max-width: 520px;</code> → <code>300px</code> (좁아지는 것 확인)</li>
-</ol>
-<h3>🔍 개발자 도구로 남의 화면 들여다보기</h3>
-<p>Chrome에서 <strong>F12</strong> → 왼쪽 위 <strong>화살표 아이콘</strong> → 평가 제출 버튼 클릭 → 오른쪽 <strong>Styles</strong> 에서 <code>background</code> 값을 클릭해 바꿔 보기</p>
-<h2>3단계: JavaScript = 근육 (20분)</h2>
-<p><code>3-js.html</code> 을 엽니다. 이번엔 <strong>결과표가 비어</strong> 있습니다. 과목·교관·만족도를 넣고 <strong>[평가 제출]</strong> → 결과표에 한 줄이 생깁니다. 같은 과목·교관으로 한 번 더 내면 <strong>응답 수와 평균이 저절로</strong> 바뀝니다. 처음으로 화면이 <strong>계산을 했습니다.</strong></p>
-<h3>코드 읽기</h3>
-<p>맨 아래 <code>&lt;script&gt;</code> 안이 JavaScript입니다. 주석(<code>//</code>)을 따라 다섯 부분으로 읽습니다.</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>부분</th>
-<th>하는 일</th>
-<th>PRD와 연결</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>① 화면 요소 찾기</td>
-<td>id로 입력칸·결과표를 찾아 둠</td>
-<td></td>
-</tr>
-<tr>
-<td>② <code>answers</code></td>
-<td>제출된 응답을 모아 두는 상자</td>
-<td>&quot;평가 입력&quot;</td>
-</tr>
-<tr>
-<td>③ <code>needsImprovement()</code></td>
-<td>평균이 3.5보다 낮으면 개선 필요</td>
-<td>&quot;평균 3.5 미만이면 개선 필요&quot;</td>
-</tr>
-<tr>
-<td>④ <code>drawTable()</code></td>
-<td><strong>과목 + 교관</strong>이 같은 응답끼리 묶어 응답 수·평균 계산</td>
-<td>&quot;과목·교관별 집계&quot; (v0.3)</td>
-</tr>
-<tr>
-<td>⑤ 버튼을 누르면</td>
-<td>빈칸 검사 → 상자에 넣기 → 표 다시 그리기</td>
-<td>&quot;점수 검사&quot;, 화면 흐름</td>
-</tr>
-</tbody></table></div>
 <blockquote>
-<p>💡 ③번을 보세요. PRD에 한국어로 쓴 규칙 &quot;평균 3.5 미만이면 개선 필요&quot;가 코드에서는 <code>avg &lt; 3.5</code> 한 줄입니다. <strong>PRD를 코드로 옮기는 것</strong>, 그게 프로그래밍입니다.</p>
-<p>④번의 <code>a.subject + &quot; / &quot; + a.instructor</code> 가 모듈 5에서 고친 구멍입니다. 여기서 <code>+ &quot; / &quot; + a.instructor</code> 를 지우면 교관이 섞여 다시 &quot;평균 4.0, 양호&quot;가 됩니다. <strong>직접 지워 보고</strong> 결과표가 어떻게 바뀌는지 확인하면 PRD 한 줄의 무게가 실감 납니다.</p>
+<p>이 지시가 <strong>루틴</strong>이 되면 담당자가 매일 열어 볼 필요가 없습니다. 응답이 적은 날은 참여 독려 문자(모듈 3의 안내문)를 보낼 때를 알려 주는 셈입니다. 스킬(06)이 &quot;일하는 방법&quot;을 적어 둔 것이라면, 루틴은 <strong>&quot;언제 할지&quot;까지</strong> 정해 둔 것입니다.</p>
+<p>그런데 지금 이 화면은 <strong>각자의 브라우저에만</strong> 기록이 남습니다. 40명의 응답을 한곳에 모아야 루틴이 의미가 있습니다. 그래서 다음 모듈부터 화면을 직접 뜯어보고(09), 웹에 공개하고(10), 공용 장부를 붙입니다(11).</p>
 </blockquote>
-<h3>바꿔 보기</h3>
-<ol>
-<li>개선 필요 기준: <code>return avg &lt; 3.5;</code> → <code>3.0</code></li>
-<li>오류 문구: <code>&quot;과목, 교관, 만족도를 모두 입력하세요.&quot;</code> 를 원하는 말로</li>
-<li>평가 몇 건 제출 → <strong>F5</strong> → 결과표가 <strong>사라집니다</strong></li>
-</ol>
-<h2>AI와 함께 코드 읽기</h2>
-<p>코드가 낯설면 Claude에게 파일을 건네고 묻습니다(모듈 3의 &quot;파일 + 지시&quot;).</p>
-<pre><code>첨부한 3-js.html을 코딩을 처음 보는 사람에게 설명해 줘.
-&lt;script&gt; 부분을 한 줄씩, 비유를 들어서 설명하고
-PRD의 어느 규칙과 연결되는지도 표로 정리해 줘.
-</code></pre>
-<pre><code>첨부한 3-js.html의 결과표를 &quot;평균이 낮은 과목부터&quot; 보이게 고쳐 줘.
-바꾼 줄에는 주석으로 표시해 줘.
-</code></pre>
-<p>두 번째 결과를 완성본 <code>index.html</code> 과 비교해 보면, <strong>같은 기능도 여러 방식으로 쓸 수 있다</strong>는 것을 알게 됩니다.</p>
-<h2>다음 모듈로: 이 파일이 웹에 올라갑니다</h2>
-<p>모듈 09에서는 완성본 <code>index.html</code> 을 GitHub에 올리고 Vercel로 공개합니다.</p>
-<hr>
-<h2>자주 막히는 곳</h2>
+<h2>행정 업무에 쓸 때의 기준</h2>
 <div class="table-wrap"><table>
 <thead>
 <tr>
-<th>상황</th>
-<th>해결</th>
+<th>질문</th>
+<th>기준</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>고쳤는데 화면이 그대로</td>
-<td>메모장 <strong>Ctrl + S</strong> 를 했는지, Chrome <strong>F5</strong> 를 했는지</td>
+<td>어떤 사이트에서 써도 되나?</td>
+<td><strong>기관 규정이 허용한 곳만.</strong> 내부 업무 시스템, 개인정보가 있는 화면은 기본적으로 쓰지 않음</td>
 </tr>
 <tr>
-<td>한글이 깨짐</td>
-<td>메모장 저장 시 인코딩 <strong>UTF-8</strong></td>
+<td>어떤 일을 맡기나?</td>
+<td>공개 정보 확인, 내가 만든 도구 점검처럼 <strong>틀려도 되돌릴 수 있는 일</strong>부터</td>
 </tr>
 <tr>
-<td>메모장 저장 후 <code>.txt</code> 가 붙음</td>
-<td>파일 형식 <strong>모든 파일</strong>, 탐색기에서 확장자 표시 켜기</td>
+<td>승인은 누가?</td>
+<td>결제·게시·메시지 보내기·삭제는 <strong>반드시 사람이 승인</strong></td>
 </tr>
 <tr>
-<td>화면 일부가 통째로 사라짐</td>
-<td>닫는 태그(<code>&lt;/td&gt;</code>, <code>&lt;/tr&gt;</code>, <code>&lt;/div&gt;</code>)나 <code>}</code> 를 지운 것. 메모장 <strong>Ctrl + Z</strong> 로 되돌리기</td>
-</tr>
-<tr>
-<td>3단계에서 버튼이 동작 안 함</td>
-<td><strong>F12 → Console</strong> 의 빨간 오류 확인. 대부분 따옴표 <code>&quot;</code> 나 괄호 <code>)</code> 가 빠진 것</td>
-</tr>
-<tr>
-<td>어디를 고쳐야 할지 모름</td>
-<td>메모장 <strong>Ctrl + F</strong> 로 화면에 보이는 글자를 검색</td>
+<td>결과는 믿어도 되나?</td>
+<td>AI의 보고와 <strong>실제 화면을 대조</strong>. 숫자는 직접 확인</td>
 </tr>
 </tbody></table></div>
+<h2>숙제 (개인 PC, 선택)</h2>
+<ol>
+<li>개인 PC에 Aside 설치 (공식 사이트 <a class="site" href="https://aside.com/" target="_blank" rel="noopener"><code>aside.com</code></a>)</li>
+<li>무료 요금제로 시연 1·2를 따라 해 보기 (모듈 10에서 배포한 뒤에는 <strong>내 강의평가 주소</strong>로도)</li>
+<li>내 업무 중 <strong>&quot;매일 같은 사이트를 열어 같은 것을 확인하는 일&quot;</strong> 하나를 적어 오기. 다음 시간에 루틴으로 만들 수 있을지, 규정상 맡겨도 되는 일인지 함께 따져 봅니다</li>
+</ol>
 <h2>✅ 확인 질문 (인터뷰)</h2>
 <ol>
-<li>1단계에서 [평가 제출]을 눌러도 아무 일이 없는 이유는?</li>
-<li>버튼 색을 바꾸려면 HTML, CSS, JavaScript 중 어디를 고쳐야 할까요?</li>
-<li>PRD의 &quot;평균 3.5 미만이면 개선 필요&quot;는 3단계 코드의 어느 줄인가요?</li>
-<li>3단계에서 F5를 누르면 결과표가 사라지는 이유와, 완성본은 어떻게 해결했나요?</li>
+<li>스킬, AI 브라우저, 코딩은 각각 언제 쓰나요?</li>
+<li>Aside에게 일을 맡길 때도 <strong>사람이 꼭 하는 두 가지</strong>는?</li>
+<li>내 업무 중 브라우저 에이전트에게 맡기면 <strong>안 되는</strong> 일은 무엇일까요? 이유는?</li>
 </ol>
 </article>
-    <div class="pager"><a class="prev" href="m07.html"><span>← 이전</span>07 PRD로 결과물 만들기</a><a class="next" href="m09.html"><span>다음 →</span>09 GitHub · Vercel 배포</a></div>
+    <div class="pager"><a class="prev" href="m07.html"><span>← 이전</span>07 PRD로 결과물 만들기</a><a class="next" href="m09.html"><span>다음 →</span>09 HTML · CSS · JS 뜯어보기</a></div>
   </main>
 </div>
 <script src="assets/site.js"></script>

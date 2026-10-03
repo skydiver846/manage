@@ -4,9 +4,9 @@
 
 | 파일 | 내용 |
 |---|---|
-| `index.html` | 완성본 (PRD v0.3 + 모듈 11의 "결과 내려받기") |
-| `steps/1-html.html` ~ `3-js.html` | 모듈 08의 HTML → CSS → JavaScript 단계별 파일 |
-| `firebase/` | 모듈 10 공용 장부(Firestore) 완성본과 보안 규칙 |
+| `index.html` | 완성본 (PRD v0.3 + 모듈 12의 "결과 내려받기") |
+| `steps/1-html.html` ~ `3-js.html` | 모듈 09의 HTML → CSS → JavaScript 단계별 파일 |
+| `firebase/` | 모듈 11 공용 장부(Firestore) 완성본과 보안 규칙 |
 | `network-check.html` | 강의장 PC 접속 점검 페이지 |
 
 ## 로컬에서 실행

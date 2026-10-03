@@ -1,11 +1,11 @@
 # Firebase 연결 완성본 (강사용)
 
-모듈 10 수업 중 Claude가 만든 코드가 동작하지 않을 때 대신 쓰는 **완성본**입니다. 기능은 `prototype-demo/index.html`(PRD v0.3)과 같고, 기록만 브라우저 대신 **Firestore 공용 장부**에 저장합니다.
+모듈 11 수업 중 Claude가 만든 코드가 동작하지 않을 때 대신 쓰는 **완성본**입니다. 기능은 `prototype-demo/index.html`(PRD v0.3)과 같고, 기록만 브라우저 대신 **Firestore 공용 장부**에 저장합니다.
 
 | 파일 | 내용 |
 |---|---|
 | `index.html` | 강의평가 집계 완성본. Firebase는 공식 CDN(gstatic.com) 12.18.0 버전을 불러옴 |
-| `firestore.rules` | 모듈 10 3단계 보안 규칙과 같은 내용 |
+| `firestore.rules` | 모듈 11 3단계 보안 규칙과 같은 내용 |
 | `firebase.json` | 강사 PC에서 에뮬레이터로 시험할 때만 쓰는 설정 |
 
 ## 수업에서 쓰는 법
