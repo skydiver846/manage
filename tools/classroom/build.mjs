@@ -224,7 +224,7 @@ const siteLinks = [
   ["Google 계정 만들기", "accounts.google.com/signup", "01"], ["ChatGPT", "chatgpt.com", "02"], ["Claude", "claude.ai", "02"],
   ["옵시디언 내려받기", "obsidian.md", "04"], ["Gemini Notebook", "notebooklm.google.com", "07"], ["GitHub", "github.com", "10"],
   ["Vercel", "vercel.com", "10"], ["Firebase 콘솔", "console.firebase.google.com", "11"], ["Claude Code", "claude.ai/code", "12"], ["Aside", "aside.com", "08"],
-].map(([label, host, mod]) => `<a class="tile" href="${SITES[host]}" target="_blank" rel="noopener"><b>${esc(label)}</b><span>${host}</span><small>모듈 ${mod}</small></a>`).join("");
+].sort((a, b) => a[2].localeCompare(b[2])).map(([label, host, mod]) => `<a class="tile" href="${SITES[host]}" target="_blank" rel="noopener"><b>${esc(label)}</b><span>${host}</span><small>모듈 ${mod}</small></a>`).join("");
 const modItems = (list) => list.map((m) => `<li><a href="${m.page}"><span class="no">${String(m.num).padStart(2, "0")}</span><span class="t">${esc(m.short)}</span><span class="time">${m.time}</span></a></li>`).join("");
 fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 입문</h1>
