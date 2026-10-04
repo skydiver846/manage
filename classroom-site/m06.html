@@ -203,7 +203,7 @@ description: 사용자가 새 업무 도구를 기획하거나 &quot;PRD 써 줘
 </tbody></table></div>
 <h3>이번에 받는 스킬: <code>quiz-generator</code> (소방학교 문제출제)</h3>
 <p>교재·법령·교범을 주면 <strong>객관식 문항 → 중앙소방학교 문제카드(hwpx) → 정답지</strong>까지 만들어 주는 스킬입니다. 어느 담당과목이든 같은 6단계로 일합니다.</p>
-<pre><code>① 자료 파악 (1차 소스와 AI 요약 구분) → ② 출제 계획 (난이도·분야 배분) → ③ 문항 초안
+<pre><code>① 자료 파악 (1차 소스와 AI 요약 구분) → ② 문항 수·메타정보 확인, 출제 계획 (난이도·분야 배분) → ③ 문항 초안
 → ④ 근거 검증 (확인 안 되면 지어내지 않음) → ⑤ 문제카드·정답지 만들기 → ⑥ 최종 점검
 </code></pre>
 <p><code>prd-interview</code> 는 SKILL.md 한 장이었지만, 이 스킬은 <strong>양식 파일과 계산 스크립트까지 들어 있는 폴더</strong>입니다. 스킬이 업무 매뉴얼에서 <strong>업무 도구</strong>로 커진 모습입니다.</p>
@@ -221,7 +221,7 @@ description: 사용자가 새 업무 도구를 기획하거나 &quot;PRD 써 줘
 <pre><code>첨부한 출제 의뢰서대로 교재 발췌를 범위로 문제카드를 만들어 줘
 </code></pre>
 <ol start="4">
-<li>Claude가 <strong>과정명·과목명·출제일자·소속·성명을 먼저 물어보는지</strong> 확인합니다. 소속과 성명은 예시 값(예: <code>교육운영팀</code>, <code>홍길동</code>)으로 답합니다</li>
+<li>Claude가 <strong>문항 수와 과정명·과목명·출제일자·소속·성명을 먼저 물어보는지</strong> 확인합니다. 문항 수는 의뢰서대로 <code>5문항</code>, 소속과 성명은 예시 값(예: <code>교육운영팀</code>, <code>홍길동</code>)으로 답합니다</li>
 <li>결과로 나온 <strong>문제카드(.hwpx)</strong> 와 <strong>정답지</strong>를 내려받아 확인합니다</li>
 </ol>
 <p><strong>확인할 것</strong></p>
