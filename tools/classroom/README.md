@@ -25,7 +25,7 @@ fire-ai-classroom
  └─ network-check.html  ← 강사용 강의장 접속 점검 (목록에 링크하지 않음)
 ```
 
-- 교육생 주소: `https://www.jg-sobang.com/fire-ai/` (도메인 jg-sobang.com: 예스닉 등록, DNS는 Cloudflare에서 DNS only로 Vercel 연결. `fire-ai-classroom.vercel.app` 주소도 계속 열림)
+- 교육생 주소: `https://www.jg-sobang.com/fire-ai/` (도메인 jg-sobang.com: 예스닉 등록, DNS는 Cloudflare **Proxied(주황 구름) + SSL Full (strict)** 로 Vercel 연결. 행정망은 Vercel 직접 연결(DNS only)을 막으므로 Proxied를 유지할 것. `fire-ai-classroom.vercel.app` 주소도 계속 열림)
 - 강의장 점검: `https://www.jg-sobang.com/network-check.html`
 - 새 강의는 폴더 하나와 `index.html` 카드 하나만 추가합니다. 저장소·Vercel 프로젝트를 새로 만들지 않습니다.
 
