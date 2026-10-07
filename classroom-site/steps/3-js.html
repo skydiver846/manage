@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>구내식당 메뉴 만족도 - 3단계 JavaScript</title>
+  <title>강의평가 결과 집계 - 3단계 JavaScript</title>
 
   <!--
     3단계: JavaScript = 움직이는 근육
     HTML과 CSS는 2단계와 같습니다. 맨 아래 <script> 안에 "버튼을 누르면 무엇을 할지"를 더했습니다.
-    이제 결과표는 미리 적어 둔 글이 아니라, 만족도를 낼 때마다 새로 계산됩니다.
+    이제 결과표는 미리 적어 둔 글이 아니라, 평가를 낼 때마다 새로 계산됩니다.
   -->
   <style>
     /* 페이지 전체: 배경색, 글자 */
@@ -67,21 +67,17 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>구내식당 메뉴 만족도</h1>
-    <p class="sub">10월 2주차 (10. 12.~10. 16.) · 평균 3.5 미만은 개선 필요</p>
+    <h1>강의평가 결과 집계</h1>
+    <p class="sub">신임소방관 교육과정 · 평균 3.5 미만은 개선 필요</p>
 
     <form id="eval-form">
       <div class="field">
-        <label for="menu">메뉴</label>
-        <input id="menu" placeholder="예: 김치찌개">
+        <label for="subject">과목</label>
+        <input id="subject" placeholder="예: 화재진압 전술">
       </div>
       <div class="field">
-        <label for="meal">식사</label>
-        <select id="meal">
-          <option value="">선택</option>
-          <option value="점심">점심</option>
-          <option value="저녁">저녁</option>
-        </select>
+        <label for="instructor">교관</label>
+        <input id="instructor" placeholder="예: 김교관">
       </div>
       <div class="field">
         <label for="score">만족도</label>
@@ -98,10 +94,10 @@
       <p class="error" id="error"></p>
     </form>
 
-    <h2>메뉴·식사별 결과 (응답 <span id="count">0</span>건)</h2>
+    <h2>과목·교관별 결과 (응답 <span id="count">0</span>건)</h2>
     <table>
       <thead>
-        <tr><th>메뉴</th><th>식사</th><th class="num">응답</th><th class="num">평균</th><th class="num">상태</th></tr>
+        <tr><th>과목</th><th>교관</th><th class="num">응답</th><th class="num">평균</th><th class="num">상태</th></tr>
       </thead>
       <tbody id="rows"></tbody>
     </table>
@@ -122,12 +118,12 @@
       return avg < 3.5;
     }
 
-    // 4) 메뉴 + 식사(점심/저녁)가 같은 응답끼리 묶어서 결과표를 다시 그린다
+    // 4) 과목 + 교관이 같은 응답끼리 묶어서 결과표를 다시 그린다
     function drawTable() {
       const groups = {};
       for (const a of answers) {
-        const key = a.menu + " / " + a.meal;
-        if (!groups[key]) groups[key] = { menu: a.menu, meal: a.meal, count: 0, sum: 0 };
+        const key = a.subject + " / " + a.instructor;
+        if (!groups[key]) groups[key] = { subject: a.subject, instructor: a.instructor, count: 0, sum: 0 };
         groups[key].count += 1;
         groups[key].sum += a.score;
       }
@@ -137,7 +133,7 @@
         const g = groups[key];
         const avg = g.sum / g.count;
         const tr = document.createElement("tr");
-        const cells = [g.menu, g.meal, g.count, avg.toFixed(1),
+        const cells = [g.subject, g.instructor, g.count, avg.toFixed(1),
                        needsImprovement(avg) ? "개선 필요" : "양호"];
         cells.forEach(function (text, i) {
           const td = document.createElement("td");
@@ -155,15 +151,15 @@
     form.addEventListener("submit", function (event) {
       event.preventDefault();   // 페이지가 새로고침되지 않게 막는다
 
-      const menu = document.getElementById("menu").value.trim();
-      const meal = document.getElementById("meal").value;   // 점심 또는 저녁 (고르지 않으면 "")
+      const subject = document.getElementById("subject").value.trim();
+      const instructor = document.getElementById("instructor").value.trim();
       const score = Number(document.getElementById("score").value);
-      if (menu === "" || meal === "" || score === 0) {
-        error.textContent = "메뉴, 식사, 만족도를 모두 입력한 뒤 제출하세요.";
+      if (subject === "" || instructor === "" || score === 0) {
+        error.textContent = "과목, 교관, 만족도를 모두 입력하세요.";
         return;
       }
 
-      answers.push({ menu: menu, meal: meal, score: score });
+      answers.push({ subject: subject, instructor: instructor, score: score });
       drawTable();
       error.textContent = "";
       document.getElementById("score").value = "";   // 만족도만 비우기

@@ -20,7 +20,7 @@
   </aside>
   <main>
     <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>05 PRD 작성하기</span></div>
-    <article><h1>모듈 5. PRD 작성하기</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>빈 PRD 양식</span><span class="acts"><a class="btn" href="files/prd-template.md" download="PRD 템플릿.md">내려받기</a></span></li><li><span>예시 PRD (구내식당 메뉴 만족도 v0.1)</span><span class="acts"><a class="btn" href="files/prd-cafeteria-v0.1.md" download="PRD_구내식당 메뉴 만족도.md">내려받기</a></span></li></ul></aside>
+    <article><h1>모듈 5. PRD 작성하기</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>빈 PRD 양식</span><span class="acts"><a class="btn" href="files/prd-template.md" download="PRD 템플릿.md">내려받기</a></span></li><li><span>예시 PRD (강의평가 결과보고 v0.1)</span><span class="acts"><a class="btn" href="files/prd-lecture-eval-v0.1.md" download="PRD_강의평가 결과보고.md">내려받기</a></span></li></ul></aside>
 <h2>PRD란?</h2>
 <p><strong>PRD (Product Requirements Document, 제품 요구사항 문서)</strong>
 = &quot;<strong>무엇을, 누구를 위해, 왜, 어디까지</strong> 만들 것인가&quot;를 한 장에 정리한 기획서</p>
@@ -28,7 +28,7 @@
 <p>비유: 집을 짓기 전 <strong>설계 요청서</strong>. 목수(개발자, 또는 AI)가 이것만 보고도 무엇을 지을지 알 수 있어야 합니다.</p>
 </blockquote>
 <h3>왜 AI 시대에 PRD가 중요한가?</h3>
-<pre><code> &quot;메뉴 만족도 앱 만들어 줘&quot;     →  AI가 마음대로 상상해서 만듦  →  내 의도와 다름
+<pre><code> &quot;강의평가 앱 만들어 줘&quot;        →  AI가 마음대로 상상해서 만듦  →  내 의도와 다름
  PRD.md 를 첨부하고 &quot;만들어 줘&quot;  →  AI가 요구사항대로 만듦       →  한 번에 가까운 결과
 </code></pre>
 <p>PRD는 <strong>한 번 잘 써 두면 여러 도구에 재사용</strong>됩니다.</p>
@@ -97,15 +97,15 @@
 <h2>5-2. 예시 보기</h2>
 <p>완성된 예시: <a href="files.html#prd">예시 PRD 파일</a></p>
 <p>수업에서는 예시를 화면에 띄워 7개 항목을 짚되, <strong>6번 범위 밖</strong>과 <strong>7번 성공 기준</strong>에 시간을 씁니다. 교육생이 혼자 쓸 때 가장 많이 비워 두는 칸입니다.</p>
-<h2>5-2-1. 구멍 메우기 실습: 점심·저녁에 모두 나오는 메뉴</h2>
+<h2>5-2-1. 구멍 메우기 실습: 교관이 여러 명인 과목</h2>
 <p>모듈 3에서 AI가 찾아 준 구멍을 직접 고칩니다. 관련된 줄은 1번 배경과 4번 핵심 기능입니다.</p>
-<pre><code>- 같은 메뉴가 점심·저녁에 모두 나오는 날이 있다 (조리 시간과 담당이 다름).   ← 1번 배경
-| 필수 | 메뉴별 집계 | 메뉴별로 응답 수와 평균(소수 첫째 자리)을 표로 보여 줌 |   ← 4번 기능
+<pre><code>- 일부 과목은 교관 2~3명이 반별로 나눠 강의한다.            ← 1번 배경
+| 필수 | 과목별 집계 | 과목별로 응답 수와 평균(소수 첫째 자리)을 표로 보여 줌 |   ← 4번 기능
 </code></pre>
 <p>화이트보드에 숫자로 보여 주면 바로 이해합니다.</p>
-<pre><code>김치찌개  점심: 5, 4, 5  → 4.7
-         저녁: 3, 3, 4  → 3.3   ← 개선이 필요한 끼니
-메뉴별로만 합치면:  평균 4.0 → &quot;양호&quot;   ← 보고서에서 사라짐
+<pre><code>화재진압 전술  김교관 반: 5, 4, 5  → 4.7
+              이교관 반: 3, 3, 4  → 3.3   ← 개선이 필요한 반
+과목별로만 합치면:  평균 4.0 → &quot;양호&quot;     ← 보고서에서 사라짐
 </code></pre>
 <p>교육생에게 <strong>기획자로서</strong> 고르게 합니다 (손들기 토론).</p>
 <div class="table-wrap"><table>
@@ -118,27 +118,27 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><strong>A. 메뉴 + 식사 구분</strong></td>
-<td>평가할 때 <strong>식사(점심/저녁)</strong> 도 입력. 메뉴와 식사가 모두 같은 응답끼리 집계</td>
-<td>끼니별 차이가 보임</td>
+<td><strong>A. 과목 + 교관</strong></td>
+<td>평가할 때 <strong>교관</strong>도 입력. 과목과 교관이 모두 같은 응답끼리 집계</td>
+<td>반별 차이가 보임</td>
 <td>입력이 하나 늘어남</td>
 </tr>
 <tr>
 <td><strong>B. 경고만</strong></td>
-<td>메뉴별로 집계하되, 점심·저녁에 모두 나온 메뉴에 &quot;끼니별 차이 확인 필요&quot; 표시</td>
+<td>과목별로 집계하되, 교관이 여러 명인 과목에 &quot;반별 차이 확인 필요&quot; 표시</td>
 <td>입력 간단</td>
-<td>어느 끼니가 낮은지는 모름</td>
+<td>어느 반이 낮은지는 모름</td>
 </tr>
 <tr>
 <td><strong>C. 범위 밖으로</strong></td>
-<td>이번에는 점심·저녁 구분을 하지 않음을 6번 칸에 명시</td>
+<td>이번에는 교관 구분을 하지 않음을 6번 칸에 명시</td>
 <td>가장 빠름</td>
-<td>실제 식단 조정에선 문제</td>
+<td>실제 결과보고에선 문제</td>
 </tr>
 </tbody></table></div>
 <ul>
 <li>정답은 없습니다. <strong>어느 쪽이든 PRD에 적는 것</strong>이 핵심입니다. C도 훌륭한 답입니다. &quot;알고 있지만 안 한다&quot;와 &quot;몰라서 빠뜨림&quot;은 다릅니다.</li>
-<li>끼니마다 조리 시간과 담당이 다르다는 점을 짚으면 대부분 <strong>A</strong>를 고릅니다. 이후 실습은 A 기준으로 진행합니다.</li>
+<li>결과보고를 써 본 교육생은 대부분 <strong>A</strong>를 고릅니다. 이후 실습은 A 기준으로 진행합니다.</li>
 <li>고친 뒤 버전을 <strong>v0.1 → v0.2</strong> 로 올리게 합니다.</li>
 </ul>
 <h2>5-3. 내 PRD 쓰기 — AI와 함께 (인터뷰 방식)</h2>
@@ -163,8 +163,7 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 </ol>
 <h3>실습 주제 예시 (업무 관련으로 고르게 하기)</h3>
 <ul>
-<li>구내식당 메뉴 만족도 집계 (예시와 같은 주제)</li>
-<li>과정별 강의평가 결과 집계</li>
+<li>과정별 강의평가 결과 집계 (예시와 같은 주제)</li>
 <li>교육생 출결·외출 관리 화면</li>
 <li>교육 장비 대여·반납 대장</li>
 <li>교관 강의 시간표·강사료 정리 도구</li>

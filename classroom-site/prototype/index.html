@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>구내식당 메뉴 만족도</title>
+  <title>강의평가 결과 집계</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -147,30 +147,26 @@
 <body>
   <div class="wrap">
     <header>
-      <span class="eyebrow">구내식당 · 10월 2주차 (10. 12.~10. 16.)</span>
-      <h1>구내식당 메뉴 만족도</h1>
+      <span class="eyebrow">신임소방관 교육과정 · 제12기</span>
+      <h1>강의평가 결과 집계</h1>
       <p>만족도 1~5점 · 평균 <strong>3.5 미만</strong>은 “개선 필요”로 표시</p>
     </header>
 
     <section class="stats" aria-label="평가 요약">
       <div class="stat"><span>응답</span><strong id="count-total">0</strong></div>
-      <div class="stat"><span>평가 메뉴</span><strong id="count-menu">0</strong></div>
+      <div class="stat"><span>평가 과목</span><strong id="count-subject">0</strong></div>
       <div class="stat"><span>개선 필요</span><strong id="count-bad">0</strong></div>
     </section>
 
     <form id="eval-form" novalidate>
       <div class="field">
-        <label for="menu">메뉴</label>
-        <input id="menu" list="menu-list" autocomplete="off" placeholder="예: 김치찌개">
-        <datalist id="menu-list"></datalist>
+        <label for="subject">과목</label>
+        <input id="subject" list="subject-list" autocomplete="off" placeholder="예: 화재진압 전술">
+        <datalist id="subject-list"></datalist>
       </div>
       <div class="field mid">
-        <label for="meal">식사</label>
-        <select id="meal">
-          <option value="">선택</option>
-          <option value="점심">점심</option>
-          <option value="저녁">저녁</option>
-        </select>
+        <label for="instructor">교관</label>
+        <input id="instructor" autocomplete="off" placeholder="예: 김교관">
       </div>
       <div class="field short">
         <label for="score">만족도</label>
@@ -189,7 +185,7 @@
 
     <section>
       <div class="list-head">
-        <h2>메뉴·식사별 결과</h2>
+        <h2>과목·교관별 결과</h2>
         <div class="list-actions">
           <button type="button" class="ghost" id="undo">마지막 응답 취소</button>
           <button type="button" class="ghost" id="download">결과 내려받기</button>
@@ -198,7 +194,7 @@
       </div>
       <table>
         <thead>
-          <tr><th>메뉴 · 식사</th><th class="num">응답</th><th class="num">평균</th><th class="num">상태</th></tr>
+          <tr><th>과목 · 교관</th><th class="num">응답</th><th class="num">평균</th><th class="num">상태</th></tr>
         </thead>
         <tbody id="rows"></tbody>
       </table>
@@ -208,16 +204,16 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "cafeteria-survey-demo-v3";
+    const STORAGE_KEY = "lecture-eval-demo-v3";
     const THRESHOLD = 3.5;   // 평균이 이 값보다 낮으면 개선 필요 (PRD)
 
     // 처음 열면 예시 응답으로 시작한다 (저장된 기록이 있으면 그걸 사용).
     const SAMPLE = [
-      ["김치찌개 (예시)", "점심", 5], ["김치찌개 (예시)", "점심", 4], ["김치찌개 (예시)", "점심", 5],
-      ["김치찌개 (예시)", "저녁", 3], ["김치찌개 (예시)", "저녁", 3], ["김치찌개 (예시)", "저녁", 4],
-      ["제육볶음 (예시)", "점심", 4], ["제육볶음 (예시)", "점심", 5],
-      ["생선까스 (예시)", "저녁", 3], ["생선까스 (예시)", "저녁", 2],
-    ].map(([menu, meal, score]) => ({ menu, meal, score }));
+      ["화재진압 전술 (예시)", "김교관", 5], ["화재진압 전술 (예시)", "김교관", 4], ["화재진압 전술 (예시)", "김교관", 5],
+      ["화재진압 전술 (예시)", "이교관", 3], ["화재진압 전술 (예시)", "이교관", 3], ["화재진압 전술 (예시)", "이교관", 4],
+      ["응급처치 실습 (예시)", "박교관", 4], ["응급처치 실습 (예시)", "박교관", 5],
+      ["소방 관계법규 (예시)", "최교관", 3], ["소방 관계법규 (예시)", "최교관", 2],
+    ].map(([subject, instructor, score]) => ({ subject, instructor, score }));
 
     const $ = (id) => document.getElementById(id);
 
@@ -233,12 +229,12 @@
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.records)); } catch (e) {}
     }
 
-    // 메뉴 + 식사(점심/저녁)가 같은 응답끼리 묶어 응답 수와 평균을 낸다 (PRD v0.3: 같은 메뉴라도 점심·저녁은 따로 집계).
+    // 과목 + 교관이 같은 응답끼리 묶어 응답 수와 평균을 낸다 (PRD v0.3: 교관이 다르면 따로 집계).
     function summarize(records) {
       const groups = new Map();
       records.forEach((r) => {
-        const key = r.menu + "\u0000" + r.meal;
-        if (!groups.has(key)) groups.set(key, { menu: r.menu, meal: r.meal, count: 0, sum: 0 });
+        const key = r.subject + "\u0000" + r.instructor;
+        if (!groups.has(key)) groups.set(key, { subject: r.subject, instructor: r.instructor, count: 0, sum: 0 });
         const g = groups.get(key);
         g.count += 1;
         g.sum += r.score;
@@ -246,7 +242,7 @@
       return [...groups.values()]
         .map((g) => ({ ...g, avg: Math.round((g.sum / g.count) * 10) / 10 }))
         .map((g) => ({ ...g, bad: g.avg < THRESHOLD }))
-        .sort((a, b) => a.avg - b.avg || a.menu.localeCompare(b.menu, "ko"));   // 평균이 낮은 것부터
+        .sort((a, b) => a.avg - b.avg || a.subject.localeCompare(b.subject, "ko"));   // 평균이 낮은 것부터
     }
 
     const state = load();
@@ -259,7 +255,7 @@
       if (groups.length === 0) {
         const tr = document.createElement("tr");
         tr.innerHTML = '<td class="empty" colspan="4"></td>';
-        tr.firstChild.textContent = "아직 응답이 없습니다. 위에서 메뉴, 식사, 만족도를 골라 첫 응답을 제출하세요.";
+        tr.firstChild.textContent = "아직 평가가 없습니다. 위에서 과목, 교관, 만족도를 골라 첫 평가를 제출하세요.";
         rows.append(tr);
       }
       groups.forEach((g) => {
@@ -269,45 +265,45 @@
           '<td class="who"><span></span><small></small></td>' +
           '<td class="num"></td><td class="num avg"></td>' +
           '<td class="state"><span class="chip ' + (g.bad ? "bad" : "ok") + '">' + (g.bad ? "개선 필요" : "양호") + "</span></td>";
-        tr.querySelector(".who span").textContent = g.menu;
-        tr.querySelector(".who small").textContent = g.meal;
+        tr.querySelector(".who span").textContent = g.subject;
+        tr.querySelector(".who small").textContent = g.instructor;
         tr.children[1].textContent = g.count;
         tr.children[2].textContent = g.avg.toFixed(1);
         rows.append(tr);
       });
 
-      const menus = new Set(state.records.map((r) => r.menu));
+      const subjects = new Set(state.records.map((r) => r.subject));
       $("count-total").textContent = state.records.length;
-      $("count-menu").textContent = menus.size;
+      $("count-subject").textContent = subjects.size;
       $("count-bad").textContent = groups.filter((g) => g.bad).length;
-      $("menu-list").innerHTML = "";
-      menus.forEach((s) => {
+      $("subject-list").innerHTML = "";
+      subjects.forEach((s) => {
         const o = document.createElement("option");
         o.value = s;
-        $("menu-list").append(o);
+        $("subject-list").append(o);
       });
       $("note").textContent = state.sample
-        ? "‘(예시)’ 메뉴는 샘플 데이터입니다. 만족도를 제출하면 이 브라우저에 저장됩니다."
-        : "기록은 이 브라우저에만 저장됩니다 (프로토타입). 응답은 익명이며 이름을 받지 않습니다.";
+        ? "‘(예시)’ 과목은 샘플 데이터입니다. 평가를 제출하면 이 브라우저에 저장됩니다."
+        : "기록은 이 브라우저에만 저장됩니다 (프로토타입). 평가는 익명이며 이름을 받지 않습니다.";
       $("reset").textContent = resetArmed ? "한 번 더 누르면 삭제" : "전체 초기화";
     }
 
     $("eval-form").addEventListener("submit", (e) => {
       e.preventDefault();
-      const menu = $("menu").value.trim().replace(/\s+/g, " ");
-      const meal = $("meal").value;   // 점심 또는 저녁 (고르지 않으면 빈 값)
+      const subject = $("subject").value.trim().replace(/\s+/g, " ");
+      const instructor = $("instructor").value.trim().replace(/\s+/g, " ");
       const score = Number($("score").value);
-      if (!menu || (meal !== "점심" && meal !== "저녁") || !Number.isInteger(score) || score < 1 || score > 5) {
-        $("error").textContent = "메뉴, 식사, 만족도를 모두 입력한 뒤 제출하세요.";
+      if (!subject || !instructor || !Number.isInteger(score) || score < 1 || score > 5) {
+        $("error").textContent = "과목, 교관, 만족도를 모두 입력한 뒤 제출하세요.";
         return;
       }
       if (state.sample) {
         state.records = [];
         state.sample = false;
       }
-      state.records.push({ menu, meal, score });
+      state.records.push({ subject, instructor, score });
       $("error").textContent = "";
-      $("score").value = "";      // 메뉴·식사는 남겨 두어 같은 메뉴를 연달아 입력하기 쉽게
+      $("score").value = "";      // 과목·교관은 남겨 두어 같은 과목을 연달아 입력하기 쉽게
       save();
       render();
     });
@@ -334,11 +330,11 @@
     $("download").addEventListener("click", () => {
       const groups = summarize(state.records);
       if (groups.length === 0) {
-        $("error").textContent = "내려받을 만족도 결과가 없습니다.";
+        $("error").textContent = "내려받을 평가 결과가 없습니다.";
         return;
       }
-      const rows = [["메뉴", "식사", "응답 수", "평균", "상태"]].concat(
-        groups.map((g) => [g.menu, g.meal, g.count, g.avg.toFixed(1), g.bad ? "개선 필요" : "양호"])
+      const rows = [["과목", "교관", "응답 수", "평균", "상태"]].concat(
+        groups.map((g) => [g.subject, g.instructor, g.count, g.avg.toFixed(1), g.bad ? "개선 필요" : "양호"])
       );
       const csv = rows.map((row) => row.map(csvCell).join(",")).join("\r\n");
       // 맨 앞의 \uFEFF(BOM) 덕분에 엑셀이 한글을 UTF-8로 읽어 깨지지 않는다
@@ -346,7 +342,7 @@
       const d = new Date();
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = "메뉴만족도_결과_" + d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0") + ".csv";
+      a.download = "강의평가_결과_" + d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0") + ".csv";
       document.body.append(a);
       a.click();
       a.remove();

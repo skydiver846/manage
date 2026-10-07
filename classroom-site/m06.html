@@ -167,14 +167,14 @@ description: 사용자가 새 업무 도구를 기획하거나 &quot;PRD 써 줘
 </blockquote>
 <h2>6-4. (선택) Claude에게 스킬을 만들어 달라고 하기 (5분)</h2>
 <p>스킬도 AI와 함께 만들 수 있습니다.</p>
-<pre><code>매주 쓰는 &quot;구내식당 메뉴 만족도 결과보고서&quot;를 우리 양식으로 써 주는 스킬을 만들어 줘.
-양식: 제목 / 1. 개요(조사 기간·응답 수) / 2. 결과 요약(전체 평균) /
-      3. 개선 필요 메뉴(메뉴·식사별 평균 3.5 미만, 표) / 4. 주요 한줄의견 / 5. 다음 주 식단 조정 계획(표)
-- name은 menu-report, SKILL.md 하나로
+<pre><code>과정이 끝날 때마다 쓰는 &quot;강의평가 결과보고서&quot;를 우리 양식으로 써 주는 스킬을 만들어 줘.
+양식: 제목 / 1. 개요(과정·기간·응답률) / 2. 결과 요약(전체 평균) /
+      3. 개선 필요 과목(평균 3.5 미만, 표) / 4. 주요 의견 / 5. 조치 계획(표)
+- name은 eval-report, SKILL.md 하나로
 - description에 &quot;언제 쓰는지&quot;를 꼭 넣어 줘
 - 자료에 없는 숫자나 조치 일정은 [확인 필요]로 표시하게 해 줘
 </code></pre>
-<p>결과로 나온 SKILL.md는 옵시디언 <code>98_스킬/menu-report/</code> 에 저장합니다. 이 스킬은 모듈 7의 결재 보고서 실습과, 매주 쓰는 실제 메뉴 만족도 결과보고서에 그대로 쓸 수 있습니다.</p>
+<p>결과로 나온 SKILL.md는 옵시디언 <code>98_스킬/eval-report/</code> 에 저장합니다. 이 스킬은 모듈 7의 결재 보고서 실습과, 과정이 끝날 때마다 쓰는 실제 결과보고서에 그대로 쓸 수 있습니다.</p>
 <h2>6-5. 조직 배포: 문제출제 스킬 받아 쓰기 (15분)</h2>
 <p>지금까지는 <strong>내가 만든 스킬을 나만</strong> 썼습니다. Team 계정에서는 관리자가 스킬을 <strong>조직 전체에 배포</strong>할 수 있습니다. 부서 공식 업무 매뉴얼을 한 번 나눠 주는 것과 같습니다.</p>
 <div class="table-wrap"><table>
@@ -242,7 +242,7 @@ description: 사용자가 새 업무 도구를 기획하거나 &quot;PRD 써 줘
 <h2>다음 모듈과의 연결</h2>
 <ul>
 <li><strong>다음에 기획할 때</strong>: 모듈 5의 긴 프롬프트 대신 <code>prd-interview</code> 스킬에 한 문장으로 맡깁니다. 숙제로 남긴 내 PRD를 이어 쓸 때 써 보세요.</li>
-<li><strong>모듈 7 결과물 만들기</strong>: 6-4에서 만든 <code>menu-report</code> 스킬로 메뉴 만족도 결과보고서를 한 문장으로 만듭니다.</li>
+<li><strong>모듈 7 결과물 만들기</strong>: 6-4에서 만든 <code>eval-report</code> 스킬로 강의평가 결과보고서를 한 문장으로 만듭니다.</li>
 <li><strong>수업 뒤 내 업무</strong>: 6-5의 <code>quiz-generator</code> 는 Team 계정에서 계속 쓸 수 있습니다. 담당과목 교재로 바로 문제카드를 만들어 보세요.</li>
 <li><strong>모듈 08 AI 브라우저</strong>: 스킬이 &quot;일하는 방법&quot;을 맡기는 것이라면, AI 브라우저는 &quot;웹사이트에서 하는 클릭&quot;을 맡깁니다. 둘 다 코딩이 필요 없습니다.</li>
 <li><strong>모듈 12 Claude Code</strong>: Claude Code도 같은 방식의 스킬을 씁니다. 업무 방법을 Markdown으로 적어 두는 습관이 AI 에이전트를 다룰 때도 그대로 쓰입니다.</li>

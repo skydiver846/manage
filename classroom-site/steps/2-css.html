@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>구내식당 메뉴 만족도 - 2단계 CSS</title>
+  <title>강의평가 결과 집계 - 2단계 CSS</title>
 
   <!--
     2단계: CSS = 옷과 인테리어
@@ -67,21 +67,17 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>구내식당 메뉴 만족도</h1>
-    <p class="sub">10월 2주차 (10. 12.~10. 16.) · 평균 3.5 미만은 개선 필요</p>
+    <h1>강의평가 결과 집계</h1>
+    <p class="sub">신임소방관 교육과정 · 평균 3.5 미만은 개선 필요</p>
 
     <form>
       <div class="field">
-        <label for="menu">메뉴</label>
-        <input id="menu" placeholder="예: 김치찌개">
+        <label for="subject">과목</label>
+        <input id="subject" placeholder="예: 화재진압 전술">
       </div>
       <div class="field">
-        <label for="meal">식사</label>
-        <select id="meal">
-          <option value="">선택</option>
-          <option value="점심">점심</option>
-          <option value="저녁">저녁</option>
-        </select>
+        <label for="instructor">교관</label>
+        <input id="instructor" placeholder="예: 김교관">
       </div>
       <div class="field">
         <label for="score">만족도</label>
@@ -97,15 +93,15 @@
       <button type="submit">평가 제출</button>
     </form>
 
-    <h2>메뉴·식사별 결과</h2>
+    <h2>과목·교관별 결과</h2>
     <table>
       <thead>
-        <tr><th>메뉴</th><th>식사</th><th class="num">응답</th><th class="num">평균</th><th class="num">상태</th></tr>
+        <tr><th>과목</th><th>교관</th><th class="num">응답</th><th class="num">평균</th><th class="num">상태</th></tr>
       </thead>
       <tbody>
-        <tr><td>김치찌개</td><td>점심</td><td class="num">3</td><td class="num">4.7</td><td class="num ok">양호</td></tr>
-        <tr><td>김치찌개</td><td>저녁</td><td class="num">3</td><td class="num">3.3</td><td class="num bad">개선 필요</td></tr>
-        <tr><td>제육볶음</td><td>점심</td><td class="num">2</td><td class="num">4.5</td><td class="num ok">양호</td></tr>
+        <tr><td>화재진압 전술</td><td>김교관</td><td class="num">3</td><td class="num">4.7</td><td class="num ok">양호</td></tr>
+        <tr><td>화재진압 전술</td><td>이교관</td><td class="num">3</td><td class="num">3.3</td><td class="num bad">개선 필요</td></tr>
+        <tr><td>응급처치 실습</td><td>박교관</td><td class="num">2</td><td class="num">4.5</td><td class="num ok">양호</td></tr>
       </tbody>
     </table>
   </div>
