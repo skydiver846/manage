@@ -14,7 +14,8 @@
     <nav aria-label="목차">
     <div class="group"><a href="index.html">처음 화면</a><a href="prework.html">사전 과제 안내</a></div>
     <div class="group"><h3>본 강의</h3><a href="m01.html">01 구글 계정 3개 만들기</a><a href="m02.html">02 ChatGPT · Claude 가입</a><a href="m03.html">03 프롬프트 · 파일 · 프로젝트</a><a href="m04.html">04 옵시디언과 MD 파일</a><a href="m05.html">05 PRD 작성하기</a><a href="m06.html">06 스킬 만들기</a><a href="m07.html">07 PRD로 결과물 만들기</a><a href="m08.html">08 AI 브라우저 Aside</a></div>
-    <div class="group"><h3>심화 · 직접 만들기</h3><a href="m09.html">09 HTML · CSS · JS 뜯어보기</a><a href="m10.html" aria-current="page">10 GitHub · Vercel 배포</a><a href="m11.html">11 Firebase 공용 장부</a><a href="m12.html">12 Claude Code</a></div>
+    <div class="group"><h3>심화 · 직접 만들기</h3><a href="m09.html">09 HTML · CSS · JS 뜯어보기</a><a href="m10.html" aria-current="page">10 GitHub · Vercel 배포</a><a href="m12.html">12 Claude Code로 내 화면</a></div>
+    <div class="group"><h3>선택 자료 (수업 외)</h3><a href="m11.html">11 Firebase 공용 장부 (선택)</a></div>
     <div class="group"><h3>자료</h3><a href="prompts.html">프롬프트 모음</a><a href="files.html">실습 파일 내려받기</a></div>
   </nav>
   </aside>
@@ -298,16 +299,16 @@ README의 확장자도 <strong><code>.md</code></strong> 입니다. 모듈 4의 
 고칠 때 <code>&lt;</code>, <code>&gt;</code>, <code>&quot;</code> 같은 <strong>기호는 건드리지 말고 한글 글자만</strong> 바꾸게 하세요. 화면이 깨지면 <strong>Instant Rollback</strong>으로 이전 배포로 즉시 되돌리는 시연 기회로 씁니다.</p>
 </blockquote>
 <blockquote>
-<p>⭐ <strong>Claude Code로 한 번 더 (선택)</strong>: 손으로 제목을 고쳐 본 뒤, 같은 수정을 <strong>Claude Code</strong>(<a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a>)에게 말로 맡겨 봅니다. 예: &quot;index.html의 제목을 제13기 강의평가 결과로 바꿔 줘&quot;. 자세한 방법은 <a href="m12.html">12 Claude Code</a>. 시간이 부족하면 모듈 12에서 한꺼번에 합니다.</p>
+<p>⭐ <strong>Claude Code로 한 번 더 (선택)</strong>: 손으로 제목을 고쳐 본 뒤, 같은 수정을 <strong>Claude Code</strong>(<a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a>)에게 말로 맡겨 봅니다. 예: &quot;index.html의 제목을 제13기 강의평가 결과로 바꿔 줘&quot;. 자세한 방법은 <a href="m12.html">12 Claude Code로 내 화면</a>. 시간이 부족하면 건너뜁니다. 12에서 내 화면으로 제대로 해 봅니다.</p>
 </blockquote>
 <h2>7. 마무리: 장부는 공유되지 않는다</h2>
 <p>교육생끼리 서로의 QR로 평가를 낸 뒤 묻습니다. &quot;짝꿍 휴대폰 결과표에 내가 낸 평가가 들어 있나요?&quot; → <strong>안 들어 있습니다.</strong> 응답 수가 늘지 않습니다. 기록이 각자의 브라우저에만 저장되기 때문입니다. 40명이 내면 결과가 40군데로 흩어집니다.</p>
 <pre><code> 지금:     [내 휴대폰 장부]   [짝꿍 휴대폰 장부]   ← 따로따로
- 다음 회차: [내 휴대폰] ─┐
+ 공용 장부:  [내 휴대폰] ─┐
             [짝꿍 휴대폰] ┼──▶ 데이터베이스 (공용 장부)  ← 모두가 같은 결과표
             [담당자 PC] ─┘
 </code></pre>
-<p>다음 회차에서 <strong>Firebase</strong>(Google 서비스, 업무 Google 계정으로 시작)를 연결해 모든 응답이 한곳에 모이는 강의평가 시스템으로 만듭니다.</p>
+<p>모든 응답을 한곳에 모으려면 <strong>공용 장부(데이터베이스)</strong> 가 필요합니다. Google의 <strong>Firebase</strong> 같은 서비스가 이 역할을 합니다. 이번 과정에서는 개념만 짚고, 직접 해 보고 싶은 분은 선택 자료 <a href="m11.html">11 Firebase 공용 장부 (선택)</a> 을 참고하세요.</p>
 <hr>
 <h2>자주 막히는 곳</h2>
 <div class="table-wrap"><table>
@@ -358,7 +359,7 @@ README의 확장자도 <strong><code>.md</code></strong> 입니다. 모듈 4의 
 <li>짝꿍 휴대폰 결과표에 내가 낸 평가가 안 들어가는 이유는?</li>
 </ol>
 </article>
-    <div class="pager"><a class="prev" href="m09.html"><span>← 이전</span>09 HTML · CSS · JS 뜯어보기</a><a class="next" href="m11.html"><span>다음 →</span>11 Firebase 공용 장부</a></div>
+    <div class="pager"><a class="prev" href="m09.html"><span>← 이전</span>09 HTML · CSS · JS 뜯어보기</a><a class="next" href="m11.html"><span>다음 →</span>11 Firebase 공용 장부 (선택)</a></div>
   </main>
 </div>
 <script src="assets/site.js"></script>

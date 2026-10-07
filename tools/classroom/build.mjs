@@ -19,10 +19,10 @@ const MODULES = [
   ["06_스킬 만들기", "스킬 만들기", "55분"],
   ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "75분"],
   ["08_AI 브라우저 Aside로 코딩 없이 업무 자동화", "AI 브라우저 Aside", "45분"],
-  ["09_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "55분"],
+  ["09_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "60분"],
   ["10_(심화) 프로토타입 배포", "GitHub · Vercel 배포", "70분"],
-  ["11_(심화) Firebase로 공용 장부 연결", "Firebase 공용 장부", "45분"],
-  ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code", "45분"],
+  ["11_(심화) Firebase로 공용 장부 연결", "Firebase 공용 장부 (선택)", "수업 외"],
+  ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code로 내 화면", "60분"],
 ].map(([file, short, time], i) => ({ file, short, time, num: i + 1, page: `m${String(i + 1).padStart(2, "0")}.html` }));
 
 // 교육생이 내려받는 파일: [사이트 안 경로, 원본, 내려받을 때 이름, 설명]
@@ -143,7 +143,8 @@ function nav(current) {
   return `<nav aria-label="목차">
     <div class="group">${link("index.html", "처음 화면")}${link("prework.html", "사전 과제 안내")}</div>
     <div class="group"><h3>본 강의</h3>${mods(1, 8)}</div>
-    <div class="group"><h3>심화 · 직접 만들기</h3>${mods(9, 12)}</div>
+    <div class="group"><h3>심화 · 직접 만들기</h3>${mods(9, 10)}${mods(12, 12)}</div>
+    <div class="group"><h3>선택 자료 (수업 외)</h3>${mods(11, 11)}</div>
     <div class="group"><h3>자료</h3>${link("prompts.html", "프롬프트 모음")}${link("files.html", "실습 파일 내려받기")}</div>
   </nav>`;
 }
@@ -238,9 +239,9 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <ol class="mods">${modItems(MODULES.slice(2, 5))}</ol>
   <h2>2일차 (4시간) · 스킬, 결과보고 자료, 코딩 없이 자동화</h2>
   <ol class="mods">${modItems(MODULES.slice(5, 9))}</ol>
-  <h2>3일차 (4시간) · 직접 만들어 웹에 공개하기</h2>
-  <ol class="mods">${modItems(MODULES.slice(8))}</ol>
-  <p class="note">숙제: 1일차 뒤에는 모듈 05에서 시작한 내 업무 PRD 마저 쓰기, 2일차 뒤에는 GitHub 가입(모듈 10의 1단계). 모듈 09는 2일차(1·2단계)와 3일차(3·4단계)에 나눠 진행합니다.</p>
+  <h2>3일차 (4시간) · 직접 만들어 웹에 공개하기, 내 업무 화면 만들기</h2>
+  <ol class="mods">${modItems([MODULES[8], MODULES[9], MODULES[11]])}</ol>
+  <p class="note">숙제: 1일차 뒤에는 모듈 05에서 시작한 내 업무 PRD 마저 쓰기, 2일차 뒤에는 GitHub 가입(모듈 10의 1단계). 모듈 09는 2일차(1·2단계)와 3일차(3·4단계)에 나눠 진행합니다. 모듈 11(Firebase)은 수업에서 다루지 않는 선택 자료입니다.</p>
   <h2>바로가기</h2>
   <div class="tiles">${siteLinks}</div>
   <h2>자료</h2>

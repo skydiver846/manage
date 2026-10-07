@@ -61,8 +61,8 @@
     </section>
 
     <section aria-labelledby="s2">
-      <h2 id="s2">2단계: Firebase 공용 장부에 실제로 접속되는지</h2>
-      <p class="muted">모듈 11 4단계에서 복사한 <code>firebaseConfig</code> 를 아래에 붙여넣고 시험합니다. 장부를 <b>읽기만</b> 하고 아무것도 쓰지 않습니다.</p>
+      <h2 id="s2">2단계 (선택 자료 11용): Firebase 공용 장부에 접속되는지</h2>
+      <p class="muted">(선택 자료) 모듈 11 4단계에서 복사한 <code>firebaseConfig</code> 를 아래에 붙여넣고 시험합니다. 장부를 <b>읽기만</b> 하고 아무것도 쓰지 않습니다.</p>
       <label for="cfg" class="muted">firebaseConfig 붙여넣기</label>
       <textarea id="cfg" spellcheck="false" placeholder='const firebaseConfig = {
   apiKey: "AIza...",
@@ -92,9 +92,9 @@
       { mod: "07", use: "Gemini Notebook", url: "https://notebooklm.google.com/" },
       { mod: "10", use: "GitHub", url: "https://github.com/" },
       { mod: "10", use: "Vercel", url: "https://vercel.com/" },
-      { mod: "11", use: "Firebase 콘솔", url: "https://console.firebase.google.com/" },
-      { mod: "11", use: "Firestore 장부 서버", url: "https://firestore.googleapis.com/" },
-      { mod: "11", use: "Firebase 프로그램(SDK)", url: FIREBASE + "firebase-app.js", sdk: true },
+      { mod: "선택", use: "Firebase 콘솔", url: "https://console.firebase.google.com/" },
+      { mod: "선택", use: "Firestore 장부 서버", url: "https://firestore.googleapis.com/" },
+      { mod: "선택", use: "Firebase 프로그램(SDK)", url: FIREBASE + "firebase-app.js", sdk: true },
       { mod: "12", use: "Claude Code (웹)", url: "https://claude.ai/code", manual: true },
       { mod: "08", use: "Aside (AI 브라우저 설치·실습)", url: "https://aside.com/" },
     ];
@@ -167,7 +167,7 @@
         const db = fs.getFirestore(app);
         await withTimeout(fs.getDocsFromServer(fs.query(fs.collection(db, "evaluations"), fs.limit(1))), 20000);
         fbState = "open";
-        out.textContent = "성공: 이 PC에서 Firebase 공용 장부에 접속됩니다. 모듈 11을 교육생 실습으로 진행할 수 있습니다.";
+        out.textContent = "성공: 이 PC에서 Firebase 공용 장부에 접속됩니다. 선택 자료 11을 이 PC에서 해 볼 수 있습니다.";
         out.className = "result open";
       } catch (e) {
         if (e.code === "permission-denied") {
@@ -176,7 +176,7 @@
           out.className = "result slow";
         } else {
           fbState = "blocked";
-          out.textContent = "실패: Firebase 장부에 접속하지 못했습니다 (" + (e.code || e.message) + "). 이 강의장에서는 모듈 11을 강사 시연으로 진행하세요.";
+          out.textContent = "실패: Firebase 장부에 접속하지 못했습니다 (" + (e.code || e.message) + "). 이 PC에서는 선택 자료 11을 할 수 없습니다(수업 진행에는 영향 없음).";
           out.className = "result blocked";
         }
       } finally {
@@ -188,7 +188,7 @@
     function summarize() {
       const box = $("summary"); box.innerHTML = "";
       const line = (text, cls) => { const p = document.createElement("p"); p.textContent = text; if (cls) p.className = cls; box.append(p); };
-      const down = TARGETS.filter((t) => results[t.use] && !["open", "manual"].includes(results[t.use])).map((t) => t.use);
+      const down = TARGETS.filter((t) => t.mod !== "선택" && results[t.use] && !["open", "manual"].includes(results[t.use])).map((t) => t.use);
       const manual = TARGETS.filter((t) => results[t.use] === "manual").map((t) => t.use);
       const ai = ["ChatGPT", "Claude"].filter((n) => results[n] && !["open", "manual"].includes(results[n]));
       const fb = ["Firebase 콘솔", "Firestore 장부 서버", "Firebase 프로그램(SDK)"].filter((n) => results[n] && results[n] !== "open");
@@ -198,9 +198,9 @@
       if (manual.length) line("직접 확인: " + manual.join(", ") + " — 자동 확인이 안 되는 사이트입니다. 표의 주소를 눌러 새 탭에서 화면이 열리면 정상입니다.");
       if (results["Claude 미리보기 화면"] && !["open", "manual"].includes(results["Claude 미리보기 화면"])) line("Claude 미리보기 화면 주소가 막혀 있으면 모듈 07에서 미리보기 창이 비어 보입니다. 코드를 메모장에 저장해 Chrome으로 여는 방법으로 진행하세요.");
       if (ai.length) line("생성형 AI 사이트(" + ai.join(", ") + ")가 막혀 있으면 모듈 02~07 진행이 어렵습니다. 전산 담당자에게 강의 시간 동안 접속 허용을 요청하세요.");
-      if (fbState === "open") line("모듈 11: 교육생 실습으로 진행 (A안).", "open");
-      else if (fbState === "blocked" || fb.length) line("모듈 11: 강사 시연으로 진행 (B안). 강사 노트북을 휴대폰 핫스팟에 연결해 시연하고, 교육생은 휴대폰으로 평가를 제출해 공용 장부를 확인합니다.", "blocked");
-      else line("모듈 11: 2단계 ‘Firebase 연결 시험’까지 해야 판정할 수 있습니다.", "muted");
+      if (fbState === "open") line("선택 자료 11(Firebase): 이 PC에서 공용 장부 실습이 됩니다.", "open");
+      else if (fbState === "blocked" || fb.length) line("선택 자료 11(Firebase): 이 PC에서는 막혀 있습니다. 수업 진행에는 영향 없습니다.", "muted");
+      else line("선택 자료 11(Firebase)은 수업에서 다루지 않습니다. 필요할 때만 2단계로 시험하세요.", "muted");
     }
 
     $("again").addEventListener("click", runAll);

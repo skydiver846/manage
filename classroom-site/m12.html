@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>12 Claude Code · 생성형 AI 입문</title>
+<title>12 Claude Code로 내 화면 · 생성형 AI 입문</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
 <link rel="stylesheet" href="assets/site.css">
 </head>
@@ -14,15 +14,17 @@
     <nav aria-label="목차">
     <div class="group"><a href="index.html">처음 화면</a><a href="prework.html">사전 과제 안내</a></div>
     <div class="group"><h3>본 강의</h3><a href="m01.html">01 구글 계정 3개 만들기</a><a href="m02.html">02 ChatGPT · Claude 가입</a><a href="m03.html">03 프롬프트 · 파일 · 프로젝트</a><a href="m04.html">04 옵시디언과 MD 파일</a><a href="m05.html">05 PRD 작성하기</a><a href="m06.html">06 스킬 만들기</a><a href="m07.html">07 PRD로 결과물 만들기</a><a href="m08.html">08 AI 브라우저 Aside</a></div>
-    <div class="group"><h3>심화 · 직접 만들기</h3><a href="m09.html">09 HTML · CSS · JS 뜯어보기</a><a href="m10.html">10 GitHub · Vercel 배포</a><a href="m11.html">11 Firebase 공용 장부</a><a href="m12.html" aria-current="page">12 Claude Code</a></div>
+    <div class="group"><h3>심화 · 직접 만들기</h3><a href="m09.html">09 HTML · CSS · JS 뜯어보기</a><a href="m10.html">10 GitHub · Vercel 배포</a><a href="m12.html" aria-current="page">12 Claude Code로 내 화면</a></div>
+    <div class="group"><h3>선택 자료 (수업 외)</h3><a href="m11.html">11 Firebase 공용 장부 (선택)</a></div>
     <div class="group"><h3>자료</h3><a href="prompts.html">프롬프트 모음</a><a href="files.html">실습 파일 내려받기</a></div>
   </nav>
   </aside>
   <main>
-    <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>12 Claude Code</span></div>
-    <article><h1>모듈 12 (심화 4). Claude Code로 한 번에 만들고 배포하기</h1>
+    <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>12 Claude Code로 내 화면</span></div>
+    <article><h1>모듈 12 (심화 3). Claude Code로 내 PRD 화면 만들고 배포하기</h1>
 <p>📌 <strong>이 과정의 Claude Team 계정에는 Claude Code가 포함되어 있어 모두 직접 실습합니다.</strong></p>
-<p>모듈 10에서는 파일을 <strong>손으로</strong> 올리고(커밋), 연필로 고쳤습니다. 이번에는 같은 일을 <strong>AI 에이전트(Claude Code)</strong> 에게 맡깁니다. 말로 지시하면 Claude가 저장소의 파일을 직접 읽고, 고치고, 시험하고, 커밋·푸시까지 합니다.</p>
+<p>모듈 10에서는 강의평가 화면을 <strong>손으로</strong> 올리고(커밋) 배포했습니다. 이번에는 <strong>모듈 05에서 쓴 내 업무 PRD</strong>를 <strong>AI 에이전트(Claude Code)</strong> 에게 건네 <strong>내 화면</strong>을 만들게 합니다. 말로 지시하면 Claude가 저장소에 파일을 만들고, 시험하고, 커밋·푸시까지 합니다. 사람은 검토하고 승인한 뒤 배포합니다.</p>
+<p>과정의 마지막 장면은 <strong>각자 자기 업무 화면을 휴대폰으로 여는 것</strong>입니다.</p>
 <p>모듈 08의 AI 브라우저(Aside)가 <strong>웹사이트 화면</strong>을 조작했다면, Claude Code는 <strong>저장소의 파일과 코드</strong>를 조작합니다.</p>
 <p>이 모듈의 핵심은 &quot;AI가 해 준다&quot;가 아니라 <strong>&quot;AI가 한 일을 내가 검토하고 승인한다&quot;</strong> 입니다.</p>
 <pre><code> 모듈 10 (손으로):  나 ── 복사·붙여넣기 ──▶ GitHub ──▶ Vercel
@@ -43,7 +45,7 @@
 </thead>
 <tbody><tr>
 <td><strong>교육생 모두</strong></td>
-<td>각자 자기 <code>lecture-eval</code> 저장소에서 1~6단계</td>
+<td>각자 새 저장소 <code>my-tool</code> 에서 0~6단계</td>
 </tr>
 <tr>
 <td>강사</td>
@@ -52,32 +54,55 @@
 </tbody></table></div>
 <hr>
 <h2>0단계: 준비 (10분)</h2>
+<p><strong>① 새 저장소 만들기</strong> (모듈 10의 2단계와 같은 방법)</p>
+<ol>
+<li>GitHub 오른쪽 위 <strong>[+]</strong> → <strong>[New repository]</strong></li>
+<li><strong>Repository name</strong>: <code>my-tool</code></li>
+<li><strong>Private</strong> 선택 — 내 업무 내용이 담기므로 이번에는 <strong>비공개</strong></li>
+<li><strong>Add a README file</strong> ✅ 체크 (빈 저장소면 Claude Code가 작업을 시작하지 못합니다)</li>
+<li><strong>[Create repository]</strong></li>
+</ol>
+<p><strong>② Claude Code 연결</strong></p>
 <ol>
 <li>업무 Chrome 프로필에서 <a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a> 접속 (Claude Code <strong>웹 버전</strong>. 프로그램 설치가 필요 없어 행정망 PC에 적합)</li>
 <li><strong>GitHub 연결</strong>: 안내에 따라 Claude GitHub 앱을 설치<ul>
-<li>저장소 선택에서 <strong>Only select repositories</strong> → <code>lecture-eval</code> <strong>하나만</strong> 선택</li>
+<li>저장소 선택에서 <strong>Only select repositories</strong> → <code>my-tool</code> <strong>하나만</strong> 선택</li>
 </ul>
 </li>
-<li>작업할 저장소로 <code>lecture-eval</code> 선택</li>
+<li>작업할 저장소로 <code>my-tool</code> 선택</li>
 </ol>
-<h2>1단계: PRD에 새 기능 추가 (10분)</h2>
-<p>새 기능을 하나 정해 옵시디언 PRD에 먼저 적습니다(<strong>v0.5</strong>). 기준 문서는 언제나 PRD입니다.</p>
-<p><strong>예시 기능: 결과 내려받기</strong> (결과보고서에 붙일 표를 엑셀에서 다시 정리하지 않기)</p>
-<ul>
-<li>4번 핵심 기능에 추가: &quot;있으면 좋음 | 결과 내려받기 | [결과 내려받기] 버튼을 누르면 과목·교관별 결과표를 엑셀에서 열 수 있는 CSV 파일로 저장&quot;</li>
-<li>6번 범위 밖에서 &quot;엑셀 내보내기&quot; 삭제 (이제 범위 안)</li>
-<li>7번 성공 기준에 추가: &quot;- [ ] 내려받은 파일을 엑셀로 열면 과목·교관·응답 수·평균·상태 칸이 보이고, 순서가 화면 결과표와 같다&quot;</li>
-</ul>
+<h2>1단계: 내 PRD 다듬기 (5분)</h2>
+<p>옵시디언 <code>01_기획(PRD)</code> 의 <strong>내 PRD</strong>를 열어 세 가지만 확인합니다.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>확인</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>4번 핵심 기능</strong>이 3~5개인가?</td>
+<td>한 시간 안에 만들 수 있는 크기. 많으면 &quot;있으면 좋음&quot;은 다음으로</td>
+</tr>
+<tr>
+<td><strong>6번 범위 밖</strong>에 &quot;로그인, 여러 사람 공유(데이터베이스)&quot; 가 있나?</td>
+<td>기록은 <strong>이 브라우저에만</strong> 저장하는 화면으로 만든다 (10에서 확인한 한계 그대로)</td>
+</tr>
+<tr>
+<td>실제 이름·연락처·내부 자료가 들어 있지 않나?</td>
+<td>저장소와 AI에게 건네는 내용이므로 예시로 바꾼다</td>
+</tr>
+</tbody></table></div>
 <h2>2단계: Claude Code에 지시하기 (5분)</h2>
-<pre><code>이 저장소의 index.html은 과정별 강의평가 결과 집계 화면이야.
-아래 PRD v0.5의 &quot;결과 내려받기&quot; 기능을 추가해 줘.
+<pre><code>이 저장소에 아래 PRD의 업무 화면을 만들어 줘.
 
-(여기에 PRD v0.5의 4번·7번 칸 붙여넣기)
+(여기에 내 PRD 전체를 붙여넣기)
 
-- index.html 파일 하나만 고치고, 나머지 기능과 디자인은 그대로 둬
-- 한글이 엑셀에서 깨지지 않게 해 줘
-- 고친 뒤 브라우저에서 동작을 시험해 보고 결과를 알려 줘
-- 커밋 메시지는 한국어로 &quot;결과 내려받기 기능 추가&quot;
+- index.html 파일 하나로 만들고, 외부 서버나 데이터베이스 없이 기록은 이 브라우저(localStorage)에만 저장해 줘
+- 휴대폰 화면(폭 약 400px)에서 가로 스크롤 없이 보이게 해 줘
+- 실제 개인정보 대신 예시 데이터로 처음 화면을 보여 줘
+- 다 만든 뒤 PRD 7번 성공 기준대로 시험해 보고, 기준마다 통과 여부를 표로 알려 줘
+- 커밋 메시지는 한국어로 &quot;내 PRD 화면 v0.1&quot;
 </code></pre>
 <h2>3단계: Claude가 일하는 모습 지켜보기 (10분)</h2>
 <p>화면에 Claude가 하는 일이 차례로 나타납니다.</p>
@@ -89,16 +114,12 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>파일 읽기</td>
-<td>지금 코드가 어떻게 되어 있는지 파악</td>
-</tr>
-<tr>
-<td>파일 고치기 (초록·빨강 줄)</td>
-<td>추가한 줄(초록)과 지운 줄(빨강)</td>
+<td>파일 만들기 (초록 줄)</td>
+<td>새로 쓴 코드</td>
 </tr>
 <tr>
 <td>시험 실행</td>
-<td>고친 기능이 동작하는지 확인</td>
+<td>만든 화면이 PRD 성공 기준대로 동작하는지 확인</td>
 </tr>
 <tr>
 <td>커밋·푸시</td>
@@ -106,27 +127,36 @@
 </tr>
 </tbody></table></div>
 <ul>
-<li>중간에 <strong>허락을 묻는 화면</strong>이 나오면 무엇을 하려는지 읽고 승인합니다. 모르는 내용이면 승인하지 말고 강사에게 묻습니다.</li>
+<li>중간에 <strong>허락을 묻는 화면</strong>이 나오면 무엇을 하려는지 읽고 승인합니다. 모르는 내용이면 승인하지 말고 손을 들어 주세요.</li>
 <li>Claude Code는 보통 <code>main</code>(운영)이 아니라 <strong>별도 작업 줄기(브랜치)</strong> 에 올립니다. 원본을 바로 건드리지 않는 안전장치입니다.</li>
 </ul>
-<h2>4단계: AI가 한 일 검토하기 (10분) ⭐</h2>
-<p>GitHub 저장소에서 확인합니다.</p>
+<h2>4단계: AI가 한 일 검토하기 (5분) ⭐</h2>
 <ol>
-<li>저장소 화면 위쪽 <strong>브랜치 선택</strong>(main 이라고 적힌 버튼) → Claude가 만든 브랜치 선택</li>
-<li><strong>커밋 기록(시계 아이콘)</strong> → Claude의 커밋 클릭</li>
-<li><strong>초록 줄(추가)</strong> 과 <strong>빨강 줄(삭제)</strong> 을 읽으며 확인:<ul>
-<li>PRD에 적은 기능만 바뀌었나?</li>
-<li>교관별 집계·개선 필요 판정 같은 <strong>원래 기능을 지우지 않았나?</strong></li>
-<li>모르는 외부 주소나 이상한 코드가 들어가지 않았나?</li>
+<li>Claude가 보여 준 <strong>성공 기준 표</strong>를 내 PRD 7번과 대조: 통과 못 한 항목이 있으면 &quot;○번 기준이 안 맞아, 고쳐 줘&quot;로 이어서 지시</li>
+<li>GitHub 저장소 → 위쪽 <strong>브랜치 선택</strong>(main 이라고 적힌 버튼) → Claude가 만든 브랜치 → <strong>커밋 기록(시계 아이콘)</strong> → Claude의 커밋</li>
+<li>확인할 것:<ul>
+<li>PRD에 적은 기능이 들어 있나? 범위 밖으로 정한 것을 멋대로 넣지 않았나?</li>
+<li>내 실제 정보나 모르는 외부 주소가 들어가지 않았나?</li>
 </ul>
 </li>
 </ol>
-<h2>5단계: 미리보기 배포로 확인 (5분)</h2>
-<p>Vercel은 브랜치마다 <strong>미리보기(Preview) 주소</strong>를 따로 만들어 줍니다.</p>
+<h2>5단계: 합치고 배포하기 (10분)</h2>
 <ol>
-<li>Vercel 프로젝트 → <strong>Deployments</strong> → Claude 브랜치의 배포 → <strong>Visit</strong></li>
-<li>미리보기 주소에서 평가 몇 건 제출 → [결과 내려받기] → 엑셀로 열어 PRD 성공 기준 확인</li>
-<li>운영 주소(Domains)는 <strong>아직 그대로</strong>인지 확인</li>
+<li>GitHub에서 <strong>Compare &amp; pull request</strong> (또는 Claude Code 화면의 PR 만들기) → 변경 내용 확인 → <strong>Merge pull request</strong> → <strong>Confirm merge</strong></li>
+<li>Vercel 대시보드 <strong>[Add New…] → [Project]</strong> → <code>my-tool</code> → <strong>[Import]</strong> → <strong>[Deploy]</strong> (모듈 10의 5단계와 같음)<ul>
+<li>목록에 <code>my-tool</code> 이 안 보이면 <strong>Adjust GitHub App Permissions</strong> 에서 <code>my-tool</code> 접근을 추가</li>
+</ul>
+</li>
+<li><strong>Domains</strong> 주소를 QR로 만들어 <strong>내 휴대폰</strong>으로 열기 (모듈 10의 QR 방법)</li>
+</ol>
+<pre><code> 내 PRD ──▶ Claude Code ──▶ 브랜치 ──(검토)──▶ 합치기(Merge) ──▶ main ──▶ Vercel ──▶ 📱 내 화면
+</code></pre>
+<h2>6단계: 한 번 더 고치기 — 미리보기로 확인 (선택, 10분)</h2>
+<p>이제 저장소가 Vercel에 연결되어 있으니, 고칠 때마다 <strong>미리보기(Preview) 주소</strong>가 따로 생깁니다.</p>
+<ol>
+<li>Claude Code에 수정 하나를 지시: 예) &quot;제목 아래에 사용 방법을 한 줄로 넣어 줘&quot;, &quot;버튼 색을 소방 적색으로&quot;</li>
+<li>Vercel <strong>Deployments</strong> → Claude 브랜치의 배포 → <strong>Visit</strong> 으로 미리보기 확인</li>
+<li>운영 주소(Domains)는 <strong>아직 그대로</strong>인지 확인 → 괜찮으면 합치기 → 운영 주소에 반영</li>
 </ol>
 <div class="table-wrap"><table>
 <thead>
@@ -141,17 +171,9 @@
 </tr>
 <tr>
 <td>운영 (Production, Domains)</td>
-<td><code>main</code> 의 결과. 교육생이 실제로 평가에 쓰는 주소</td>
+<td><code>main</code> 의 결과. 실제로 쓰는 주소</td>
 </tr>
 </tbody></table></div>
-<h2>6단계: 합치기 → 운영 반영 (5분)</h2>
-<ol>
-<li>GitHub에서 <strong>Compare &amp; pull request</strong> (또는 Claude Code 화면의 PR 만들기)</li>
-<li>변경 내용을 마지막으로 확인 → <strong>Merge pull request</strong> → <strong>Confirm merge</strong></li>
-<li>Vercel이 <code>main</code> 을 다시 배포 → 운영 주소에서 새 기능 확인</li>
-</ol>
-<pre><code> Claude 브랜치 ──(미리보기에서 확인)──▶ 합치기(Merge) ──▶ main ──▶ 운영 주소에 반영
-</code></pre>
 <hr>
 <h2>자주 막히는 곳</h2>
 <div class="table-wrap"><table>
@@ -166,20 +188,24 @@
 <td>Team 화면이 맞는지 확인(왼쪽 아래 Team 이름). 맞으면 관리자 설정에서 Claude Code 허용 여부 확인. 행정망 차단이면 전산 담당자 문의</td>
 </tr>
 <tr>
-<td>저장소 목록에 <code>lecture-eval</code> 이 없음</td>
+<td>저장소 목록에 <code>my-tool</code> 이 없음</td>
 <td>GitHub 앱 설정에서 해당 저장소 접근 허용 추가</td>
 </tr>
 <tr>
-<td>Claude가 여러 파일을 고침</td>
-<td>지시문에 &quot;index.html 하나만&quot; 조건이 있는지 확인. 원치 않으면 합치지 않고 지시를 다시</td>
+<td>Claude가 시작하지 못하고 저장소가 비었다고 함</td>
+<td>저장소를 만들 때 <strong>Add a README file</strong> 을 체크하지 않은 것. GitHub에서 README를 하나 만들고 다시</td>
+</tr>
+<tr>
+<td>Claude가 여러 파일을 만듦</td>
+<td>지시문에 &quot;index.html 하나로&quot; 조건이 있는지 확인. 원치 않으면 합치지 않고 지시를 다시</td>
+</tr>
+<tr>
+<td>화면이 PRD와 다름</td>
+<td>PRD 7번 성공 기준을 구체적으로 고친 뒤 &quot;이 기준대로 다시 맞춰 줘&quot;</td>
 </tr>
 <tr>
 <td>미리보기 주소가 안 보임</td>
 <td>Vercel <strong>Deployments</strong> 에서 Claude 브랜치 배포가 Ready 인지 확인</td>
-</tr>
-<tr>
-<td>내려받은 CSV가 엑셀에서 깨짐</td>
-<td>&quot;엑셀에서 한글이 깨지지 않게&quot; 조건을 넣어 다시 요청</td>
 </tr>
 <tr>
 <td>잘못 합쳤음</td>
@@ -188,13 +214,13 @@
 </tbody></table></div>
 <h2>✅ 확인 질문 (인터뷰)</h2>
 <ol>
-<li>GitHub 앱에 <strong>저장소 하나만</strong> 허용한 이유는?</li>
-<li>Claude의 커밋에서 <strong>초록 줄과 빨강 줄</strong>은 각각 무엇인가요?</li>
+<li>GitHub 앱에 <strong>저장소 하나만</strong> 허용하고 저장소를 <strong>비공개</strong>로 만든 이유는?</li>
+<li>AI에게 화면을 맡길 때 <strong>PRD</strong>가 하는 역할은?</li>
 <li>미리보기 주소와 운영 주소의 차이는?</li>
 <li>AI에게 맡긴 뒤에도 <strong>사람이 꼭 하는 두 가지</strong>는?</li>
 </ol>
 </article>
-    <div class="pager"><a class="prev" href="m11.html"><span>← 이전</span>11 Firebase 공용 장부</a><a class="next" href="prompts.html"><span>다음 →</span>프롬프트 모음</a></div>
+    <div class="pager"><a class="prev" href="m11.html"><span>← 이전</span>11 Firebase 공용 장부 (선택)</a><a class="next" href="prompts.html"><span>다음 →</span>프롬프트 모음</a></div>
   </main>
 </div>
 <script src="assets/site.js"></script>

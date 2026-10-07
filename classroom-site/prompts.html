@@ -14,7 +14,8 @@
     <nav aria-label="목차">
     <div class="group"><a href="index.html">처음 화면</a><a href="prework.html">사전 과제 안내</a></div>
     <div class="group"><h3>본 강의</h3><a href="m01.html">01 구글 계정 3개 만들기</a><a href="m02.html">02 ChatGPT · Claude 가입</a><a href="m03.html">03 프롬프트 · 파일 · 프로젝트</a><a href="m04.html">04 옵시디언과 MD 파일</a><a href="m05.html">05 PRD 작성하기</a><a href="m06.html">06 스킬 만들기</a><a href="m07.html">07 PRD로 결과물 만들기</a><a href="m08.html">08 AI 브라우저 Aside</a></div>
-    <div class="group"><h3>심화 · 직접 만들기</h3><a href="m09.html">09 HTML · CSS · JS 뜯어보기</a><a href="m10.html">10 GitHub · Vercel 배포</a><a href="m11.html">11 Firebase 공용 장부</a><a href="m12.html">12 Claude Code</a></div>
+    <div class="group"><h3>심화 · 직접 만들기</h3><a href="m09.html">09 HTML · CSS · JS 뜯어보기</a><a href="m10.html">10 GitHub · Vercel 배포</a><a href="m12.html">12 Claude Code로 내 화면</a></div>
+    <div class="group"><h3>선택 자료 (수업 외)</h3><a href="m11.html">11 Firebase 공용 장부 (선택)</a></div>
     <div class="group"><h3>자료</h3><a href="prompts.html" aria-current="page">프롬프트 모음</a><a href="files.html">실습 파일 내려받기</a></div>
   </nav>
   </aside>
@@ -158,7 +159,7 @@ PRD의 어느 규칙과 연결되는지도 표로 정리해 줘.
 <pre><code>첨부한 3-js.html의 결과표를 &quot;평균이 낮은 과목부터&quot; 보이게 고쳐 줘.
 바꾼 줄에는 주석으로 표시해 줘.
 </code></pre>
-<h2>Firebase 공용 장부로 바꾸기 (모듈 11)</h2>
+<h2>Firebase 공용 장부로 바꾸기 (선택 자료 11, 수업 외)</h2>
 <pre><code>첨부한 index.html은 강의평가를 브라우저(localStorage)에 저장하는 집계 화면이야.
 첨부한 PRD v0.4에 맞게, 평가를 Firebase Firestore에 저장하도록 고쳐 줘.
 
@@ -171,7 +172,18 @@ PRD의 어느 규칙과 연결되는지도 표로 정리해 줘.
 - 마지막 응답 취소, 전체 초기화, 예시 데이터는 없애 줘
 - 나머지 화면 디자인과 개선 필요 판정(평균 3.5 미만)은 그대로 둬
 </code></pre>
-<h2>Claude Code에 기능 추가 맡기기 (모듈 12)</h2>
+<h2>Claude Code로 내 PRD 화면 만들기 (모듈 12)</h2>
+<pre><code>이 저장소에 아래 PRD의 업무 화면을 만들어 줘.
+
+(여기에 내 PRD 전체를 붙여넣기)
+
+- index.html 파일 하나로 만들고, 외부 서버나 데이터베이스 없이 기록은 이 브라우저(localStorage)에만 저장해 줘
+- 휴대폰 화면(폭 약 400px)에서 가로 스크롤 없이 보이게 해 줘
+- 실제 개인정보 대신 예시 데이터로 처음 화면을 보여 줘
+- 다 만든 뒤 PRD 7번 성공 기준대로 시험해 보고, 기준마다 통과 여부를 표로 알려 줘
+- 커밋 메시지는 한국어로 &quot;내 PRD 화면 v0.1&quot;
+</code></pre>
+<h2>(더 해 보기) 강의평가 화면에 기능 추가 맡기기</h2>
 <pre><code>이 저장소의 index.html은 과정별 강의평가 결과 집계 화면이야.
 아래 PRD v0.5의 &quot;결과 내려받기&quot; 기능을 추가해 줘.
 
