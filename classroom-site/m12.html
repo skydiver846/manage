@@ -94,8 +94,37 @@
 </tr>
 </tbody></table></div>
 <h2>1단계-B: 공공데이터 파일 준비 (B를 고른 경우, 5분)</h2>
+<p>아래 세 파일 중 하나를 고릅니다. 처음이면 <strong>기본</strong>을 권합니다.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>파일 (공공데이터포털에서 이 이름으로 검색)</th>
+<th>크기</th>
+<th>만들어 볼 화면</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>기본</strong></td>
+<td>소방청_화재인명피해 지역별 성별 현황</td>
+<td>작은 표</td>
+<td>시도별 사상자 막대그래프, 전국 평균보다 많은 지역 강조</td>
+</tr>
+<tr>
+<td>대안</td>
+<td>소방청_가스누출(폭발) 화재 발생 현황</td>
+<td>약 300줄</td>
+<td>연도·장소별 건수, 많은 장소 순위</td>
+</tr>
+<tr>
+<td>도전</td>
+<td>소방청_연간화재통계</td>
+<td>약 3만 7천 줄 (화재 1건 = 1줄)</td>
+<td>시도·장소·발화요인별 집계, 많은 순 강조. 파일이 커서 시간이 더 걸림</td>
+</tr>
+</tbody></table></div>
 <ol>
-<li><code>data.go.kr</code> (공공데이터포털)에서 안내받은 파일 이름으로 검색 → <strong>파일데이터</strong> → <strong>[다운로드]</strong> (로그인 없이 받을 수 있음)</li>
+<li><code>data.go.kr</code> (공공데이터포털)에서 위 파일 이름으로 검색 → <strong>파일데이터</strong> → <strong>[다운로드]</strong> (로그인 없이 받을 수 있음)</li>
 <li>받은 파일 이름을 <code>data.csv</code> 로 바꾸기 (한글·띄어쓰기가 든 파일 이름은 웹 주소에서 말썽이 날 수 있음)</li>
 <li>GitHub <code>my-tool</code> 저장소 → <strong>[Add file] → [Upload files]</strong> → <code>data.csv</code> 끌어다 놓기 → <strong>[Commit changes]</strong></li>
 </ol>
