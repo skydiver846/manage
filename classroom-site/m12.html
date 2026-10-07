@@ -45,7 +45,7 @@
 </thead>
 <tbody><tr>
 <td><strong>교육생 모두</strong></td>
-<td>각자 새 저장소 <code>my-tool</code> 에서 0~6단계</td>
+<td>각자 새 저장소 <code>my-tool</code> 에서 0~6단계. 화면 주제는 <strong>A. 내 PRD</strong> 또는 <strong>B. 공공데이터</strong> 중 하나</td>
 </tr>
 <tr>
 <td>강사</td>
@@ -93,7 +93,17 @@
 <td>저장소와 AI에게 건네는 내용이므로 예시로 바꾼다</td>
 </tr>
 </tbody></table></div>
+<h2>1단계-B: 공공데이터 파일 준비 (B를 고른 경우, 5분)</h2>
+<ol>
+<li><code>data.go.kr</code> (공공데이터포털)에서 안내받은 파일 이름으로 검색 → <strong>파일데이터</strong> → <strong>[다운로드]</strong> (로그인 없이 받을 수 있음)</li>
+<li>받은 파일 이름을 <code>data.csv</code> 로 바꾸기 (한글·띄어쓰기가 든 파일 이름은 웹 주소에서 말썽이 날 수 있음)</li>
+<li>GitHub <code>my-tool</code> 저장소 → <strong>[Add file] → [Upload files]</strong> → <code>data.csv</code> 끌어다 놓기 → <strong>[Commit changes]</strong></li>
+</ol>
+<blockquote>
+<p>공공데이터는 <strong>누구나 쓸 수 있게 공개된 자료</strong>라 비공개 저장소에 올려도, 배포해서 보여 줘도 됩니다. 다만 화면에 <strong>출처(공공데이터포털, 제공기관, 기준일)</strong> 를 꼭 적습니다.</p>
+</blockquote>
 <h2>2단계: Claude Code에 지시하기 (5분)</h2>
+<p><strong>A. 내 PRD 화면</strong></p>
 <pre><code>이 저장소에 아래 PRD의 업무 화면을 만들어 줘.
 
 (여기에 내 PRD 전체를 붙여넣기)
@@ -103,6 +113,18 @@
 - 실제 개인정보 대신 예시 데이터로 처음 화면을 보여 줘
 - 다 만든 뒤 PRD 7번 성공 기준대로 시험해 보고, 기준마다 통과 여부를 표로 알려 줘
 - 커밋 메시지는 한국어로 &quot;내 PRD 화면 v0.1&quot;
+</code></pre>
+<p><strong>B. 공공데이터 화면</strong></p>
+<pre><code>이 저장소의 data.csv는 공공데이터포털에서 받은 &quot;[파일 이름]&quot; 자료야.
+이 데이터로 한눈에 보는 현황 화면을 index.html 파일 하나로 만들어 줘.
+
+- 먼저 CSV의 칸 이름과 줄 수를 확인해 알려 주고, 어울리는 표·그래프 3가지를 제안한 뒤 첫 번째로 만들어 줘
+- CSV가 EUC-KR(CP949)일 수 있으니 한글이 깨지지 않게 읽어 줘
+- 외부 서버나 외부 프로그램(라이브러리) 없이 같은 저장소의 data.csv를 읽고, 그래프도 직접 그려 줘
+- 휴대폰 화면(폭 약 400px)에서 가로 스크롤 없이 보이게 해 줘
+- 화면 아래에 출처(공공데이터포털, 제공기관, 기준일)를 적어 줘
+- 다 만든 뒤 화면의 숫자 3개를 CSV 원본과 대조해 맞는지 표로 알려 줘
+- 커밋 메시지는 한국어로 &quot;공공데이터 화면 v0.1&quot;
 </code></pre>
 <h2>3단계: Claude가 일하는 모습 지켜보기 (10분)</h2>
 <p>화면에 Claude가 하는 일이 차례로 나타납니다.</p>
@@ -132,7 +154,7 @@
 </ul>
 <h2>4단계: AI가 한 일 검토하기 (5분) ⭐</h2>
 <ol>
-<li>Claude가 보여 준 <strong>성공 기준 표</strong>를 내 PRD 7번과 대조: 통과 못 한 항목이 있으면 &quot;○번 기준이 안 맞아, 고쳐 줘&quot;로 이어서 지시</li>
+<li>Claude가 보여 준 표를 확인합니다. <strong>A</strong>는 성공 기준 표를 내 PRD 7번과 대조, <strong>B</strong>는 숫자 대조 표를 보고 하나는 직접 CSV(엑셀)를 열어 맞는지 확인. 안 맞으면 &quot;○○가 안 맞아, 고쳐 줘&quot;로 이어서 지시</li>
 <li>GitHub 저장소 → 위쪽 <strong>브랜치 선택</strong>(main 이라고 적힌 버튼) → Claude가 만든 브랜치 → <strong>커밋 기록(시계 아이콘)</strong> → Claude의 커밋</li>
 <li>확인할 것:<ul>
 <li>PRD에 적은 기능이 들어 있나? 범위 밖으로 정한 것을 멋대로 넣지 않았나?</li>
@@ -202,6 +224,14 @@
 <tr>
 <td>화면이 PRD와 다름</td>
 <td>PRD 7번 성공 기준을 구체적으로 고친 뒤 &quot;이 기준대로 다시 맞춰 줘&quot;</td>
+</tr>
+<tr>
+<td>(B) 한글이 깨져 보임</td>
+<td>&quot;data.csv가 EUC-KR이야. 한글이 깨지지 않게 다시 읽어 줘&quot;</td>
+</tr>
+<tr>
+<td>(B) 배포한 화면에 데이터가 안 나옴</td>
+<td><code>data.csv</code> 가 저장소 맨 위(index.html과 같은 곳)에 있는지, 파일 이름 대소문자가 같은지 확인</td>
 </tr>
 <tr>
 <td>미리보기 주소가 안 보임</td>
