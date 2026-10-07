@@ -19,7 +19,7 @@ const MODULES = [
   ["06_스킬 만들기", "스킬 만들기", "55분"],
   ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "75분"],
   ["08_AI 브라우저 Aside로 코딩 없이 업무 자동화", "AI 브라우저 Aside", "45분"],
-  ["09_(심화) HTML·CSS·JavaScript로 메뉴 만족도 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "55분"],
+  ["09_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "55분"],
   ["10_(심화) 프로토타입 배포", "GitHub · Vercel 배포", "70분"],
   ["11_(심화) Firebase로 공용 장부 연결", "Firebase 공용 장부", "45분"],
   ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code", "45분"],
@@ -27,8 +27,8 @@ const MODULES = [
 
 // 교육생이 내려받는 파일: [사이트 안 경로, 원본, 내려받을 때 이름, 설명]
 const FILES = {
-  prd: ["files/prd-cafeteria-v0.1.md", "lecture/실습자료/PRD_구내식당 메뉴 만족도.md", "PRD_구내식당 메뉴 만족도.md", "예시 PRD (구내식당 메뉴 만족도 v0.1)"],
-  opinions: ["files/cafeteria-opinions-sample.md", "lecture/실습자료/구내식당_한줄의견_예시.md", "구내식당_한줄의견_예시.md", "구내식당 한줄의견 예시 (서술형 요약 실습용)"],
+  prd: ["files/prd-lecture-eval-v0.1.md", "lecture/실습자료/PRD_강의평가 결과보고.md", "PRD_강의평가 결과보고.md", "예시 PRD (강의평가 결과보고 v0.1)"],
+  opinions: ["files/eval-opinions-sample.md", "lecture/실습자료/강의평가_자유의견_예시.md", "강의평가_자유의견_예시.md", "강의평가 자유의견 예시 (서술형 요약 실습용)"],
   template: ["files/prd-template.md", "lecture/실습자료/PRD 템플릿.md", "PRD 템플릿.md", "빈 PRD 양식"],
   prompts: ["files/prompts.md", "lecture/실습자료/프롬프트 모음.md", "프롬프트 모음.md", "프롬프트 모음 파일 (옵시디언 99_프롬프트 폴더 보관용)"],
   skill: ["files/prd-interview.zip", null, "prd-interview.zip", "PRD 인터뷰 스킬 (Claude에 바로 올리는 ZIP)"],
@@ -40,7 +40,7 @@ const FILES = {
   step1: ["steps/1-html.html", "prototype-demo/steps/1-html.html", "1-html.html", "1단계 HTML (뼈대)"],
   step2: ["steps/2-css.html", "prototype-demo/steps/2-css.html", "2-css.html", "2단계 CSS (옷)"],
   step3: ["steps/3-js.html", "prototype-demo/steps/3-js.html", "3-js.html", "3단계 JavaScript (움직임)"],
-  final: ["prototype/index.html", "prototype-demo/index.html", "index.html", "메뉴 만족도 집계 완성본 (배포 실습용 index.html)"],
+  final: ["prototype/index.html", "prototype-demo/index.html", "index.html", "강의평가 집계 완성본 (배포 실습용 index.html)"],
 };
 const MODULE_FILES = { 3: ["prd", "opinions"], 4: ["prd", "opinions"], 5: ["template", "prd"], 6: ["skill", "skillmd", "quizreq", "quizsrc", "quizcard", "quizzip"], 7: ["prd", "opinions"], 9: ["step1", "step2", "step3", "final"], 10: ["final"] };
 
@@ -93,8 +93,8 @@ function wikiTarget(raw) {
   const name = raw.split("/").pop();
   const mod = MODULES.find((m) => m.file === name);
   if (mod) return [`${String(mod.num).padStart(2, "0")} ${mod.short}`, mod.page];
-  if (name === "PRD_구내식당 메뉴 만족도") return ["예시 PRD 파일", "files.html#prd"];
-  if (name === "구내식당_한줄의견_예시") return ["한줄의견 예시 파일", "files.html#opinions"];
+  if (name === "PRD_강의평가 결과보고") return ["예시 PRD 파일", "files.html#prd"];
+  if (name === "강의평가_자유의견_예시") return ["자유의견 예시 파일", "files.html#opinions"];
   if (name === "문제출제_의뢰서_예시") return ["출제 의뢰서 파일", "files.html#quizreq"];
   if (name === "교재발췌_연소와소화의기초") return ["교재 발췌 파일", "files.html#quizsrc"];
   if (name === "PRD 템플릿") return ["PRD 템플릿 파일", "files.html#template"];
@@ -228,7 +228,7 @@ const siteLinks = [
 const modItems = (list) => list.map((m) => `<li><a href="${m.page}"><span class="no">${String(m.num).padStart(2, "0")}</span><span class="t">${esc(m.short)}</span><span class="time">${m.time}</span></a></li>`).join("");
 fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 입문</h1>
-  <p class="lead">계정 만들기부터 프롬프트, 옵시디언, 스킬, PRD, 그리고 PRD로 만든 메뉴 만족도 집계 화면을 웹에 공개하고 AI 에이전트로 자동화하기까지 한 단계씩 따라 합니다.</p>
+  <p class="lead">계정 만들기부터 프롬프트, 옵시디언, 스킬, PRD, 그리고 PRD로 만든 강의평가 집계 화면을 웹에 공개하고 AI 에이전트로 자동화하기까지 한 단계씩 따라 합니다.</p>
   <h2>사전 과제 · 수업 전에 각자</h2>
   <ol class="mods">${modItems(MODULES.slice(0, 2))}</ol>
   <p><a class="btn" href="prework.html">사전 과제 안내 보기</a> 첫날 전까지 해 올 것과 준비물을 한 장에 정리했습니다.</p>
@@ -244,7 +244,7 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <h2>자료</h2>
   <p><a href="prompts.html">프롬프트 모음</a> · <a href="files.html">실습 파일 내려받기</a></p>
   <h2>준비물</h2>
-  <ul><li><b>사전 과제</b>: 구글 계정(업무용 1개 이상), ChatGPT 가입, 업무 이메일 제출 → Claude Team 초대 수락 — <a href="prework.html">사전 과제 안내</a></li><li>본인 명의 휴대폰 (문자 인증, 배포한 메뉴 만족도 화면 확인용)</li><li>비밀번호를 적어 둘 수첩</li><li>내 업무 중 "AI로 도움받고 싶은 일" 한 가지</li></ul>
+  <ul><li><b>사전 과제</b>: 구글 계정(업무용 1개 이상), ChatGPT 가입, 업무 이메일 제출 → Claude Team 초대 수락 — <a href="prework.html">사전 과제 안내</a></li><li>본인 명의 휴대폰 (문자 인증, 배포한 강의평가 화면 확인용)</li><li>비밀번호를 적어 둘 수첩</li><li>내 업무 중 "AI로 도움받고 싶은 일" 한 가지</li></ul>
   <p class="note">체크박스 표시는 이 PC의 브라우저에만 저장됩니다.</p>`));
 
 console.log("built", OUT, fs.readdirSync(OUT).length, "entries");
