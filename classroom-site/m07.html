@@ -20,7 +20,7 @@
   </aside>
   <main>
     <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>07 PRD로 결과물 만들기</span></div>
-    <article><h1>모듈 7. PRD로 결과물 만들기 (Gemini Notebook · 생성형 AI)</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>예시 PRD (강의평가 결과보고 v0.1)</span><span class="acts"><a class="btn" href="files/prd-lecture-eval-v0.1.md" download="PRD_강의평가 결과보고.md">내려받기</a></span></li><li><span>강의평가 자유의견 예시 (서술형 요약 실습용)</span><span class="acts"><a class="btn" href="files/eval-opinions-sample.md" download="강의평가_자유의견_예시.md">내려받기</a></span></li></ul></aside>
+    <article><h1>모듈 7. PRD로 결과물 만들기 (Gemini Notebook · 생성형 AI)</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>예시 PRD (구내식당 메뉴 만족도 v0.1)</span><span class="acts"><a class="btn" href="files/prd-cafeteria-v0.1.md" download="PRD_구내식당 메뉴 만족도.md">내려받기</a></span></li><li><span>구내식당 한줄의견 예시 (서술형 요약 실습용)</span><span class="acts"><a class="btn" href="files/cafeteria-opinions-sample.md" download="구내식당_한줄의견_예시.md">내려받기</a></span></li></ul></aside>
 <h2>한 장의 PRD, 여러 개의 결과물</h2>
 <pre><code>                        ┌─▶ Gemini Notebook ─▶ 요약 · 오디오 해설 · 슬라이드 · 인포그래픽
  📄 PRD.md (옵시디언) ──┼─▶ ChatGPT    ─▶ 보고서 · 안내문 · 발표 개요 · 이미지
@@ -60,7 +60,7 @@
 <ol>
 <li><strong>소스 추가</strong> 창에서 <strong>파일 업로드</strong> 선택</li>
 <li>옵시디언 보관소 <code>문서 &gt; AI업무자료 &gt; 01_기획(PRD)</code> 의 <strong>PRD .md 파일</strong> 선택</li>
-<li><code>02_참고자료</code> 의 <strong><code>강의평가_자유의견_예시.md</code></strong> 도 함께 추가 (없으면 <a href="files.html#opinions">자유의견 예시 파일</a> 를 받아서)</li>
+<li><code>02_참고자료</code> 의 <strong><code>구내식당_한줄의견_예시.md</code></strong> 도 함께 추가 (없으면 <a href="files.html#opinions">한줄의견 예시 파일</a> 를 받아서)</li>
 <li>그 밖에 함께 참고할 자료가 있으면 추가 (PDF, 텍스트, 웹사이트 주소, YouTube 링크, Google 문서 등)</li>
 </ol>
 <blockquote>
@@ -105,7 +105,7 @@
 <p>메뉴 이름과 위치는 업데이트로 바뀔 수 있습니다. 오디오 개요는 생성에 몇 분 걸리고, 출력 언어 설정을 한국어로 확인하세요.</p>
 </blockquote>
 <h3>7-1-1. 슬라이드와 인포그래픽 만들기 (15분)</h3>
-<p>같은 자료(PRD + 자유의견)로 <strong>결과보고 발표 자료(슬라이드)</strong> 와 <strong>한 장짜리 요약 그림(인포그래픽)</strong> 을 만듭니다. Gemini Notebook은 <strong>넣은 자료(소스)만</strong> 근거로 만들기 때문에, PRD에 없는 내용이 끼어들 가능성이 적습니다.</p>
+<p>같은 자료(PRD + 한줄의견)로 <strong>결과보고 발표 자료(슬라이드)</strong> 와 <strong>한 장짜리 요약 그림(인포그래픽)</strong> 을 만듭니다. Gemini Notebook은 <strong>넣은 자료(소스)만</strong> 근거로 만들기 때문에, PRD에 없는 내용이 끼어들 가능성이 적습니다.</p>
 <p><strong>① 슬라이드 (Slide Deck)</strong></p>
 <ol>
 <li>오른쪽 <strong>스튜디오</strong> → <strong>슬라이드(Slide Deck)</strong> 옆의 <strong>연필(맞춤 설정)</strong> 아이콘</li>
@@ -140,9 +140,9 @@
 <td>누구에게, 몇 장, 무엇을 강조할지</td>
 </tr>
 </tbody></table></div>
-<pre><code>교육운영과장님께 &quot;제12기 강의평가 결과와 집계 도구 도입&quot;을 보고하는 5장짜리 발표 자료로 만들어 줘.
-1장: 지금의 문제(네이버 폼 결과를 엑셀로 다시 집계, 반나절), 2장: 자유의견에서 나온 주요 개선 요구,
-3장: 집계 도구의 핵심 기능, 4장: 이번에 하지 않는 것, 5장: 성공 기준과 다음 단계.
+<pre><code>총무과장님께 &quot;10월 2주차 구내식당 만족도 결과와 집계 화면 도입&quot;을 보고하는 5장짜리 발표 자료로 만들어 줘.
+1장: 지금의 문제(매주 네이버 폼 결과를 엑셀로 내려받아 메뉴·식사별로 다시 집계, 매주 두세 시간),
+2장: 한줄의견에서 나온 주요 요구, 3장: 집계 화면의 핵심 기능, 4장: 이번에 하지 않는 것, 5장: 성공 기준과 다음 단계.
 소스에 없는 숫자는 쓰지 마.
 </code></pre>
 <ol start="3">
@@ -155,9 +155,9 @@
 <li>스튜디오 → <strong>인포그래픽</strong> 옆 <strong>연필</strong> 아이콘</li>
 <li><strong>방향</strong>(가로 / 세로 / 정사각형), <strong>언어: 한국어</strong>, 프롬프트 입력</li>
 </ol>
-<pre><code>강의평가 결과보고가 만들어지는 순서(휴대폰으로 평가 입력 → 과목·교관별 자동 집계
+<pre><code>메뉴 만족도 결과보고가 만들어지는 순서(휴대폰으로 만족도 입력 → 메뉴·식사별 자동 집계
 → 평균 3.5 미만 &quot;개선 필요&quot; 표시 → 결과보고서 작성)를 4단계 흐름 그림으로 만들어 줘.
-자유의견에서 가장 많이 나온 개선 요구 3개를 아래에 함께 넣어 줘.
+한줄의견에서 가장 많이 나온 &quot;바라는 점&quot; 3개를 아래에 함께 넣어 줘.
 소방 적색을 강조색으로, 글자는 크게.
 </code></pre>
 <ol start="3">
@@ -180,7 +180,7 @@
 <p><strong>볼 것 두 가지</strong></p>
 <ol>
 <li><strong>출처 번호</strong> [1], [2] 를 눌러 PRD의 어느 문장을 근거로 했는지 확인 (ChatGPT·Claude와 가장 다른 점)</li>
-<li><strong>불일치 찾기</strong>: 모듈 5에서 4번 칸만 &quot;과목 + 교관&quot;으로 고쳤다면, 5번 화면 흐름은 아직 &quot;과목 [____] 만족도 [▼]&quot;만 있고 교관 입력칸이 없습니다. Gemini Notebook이 이 불일치를 짚어 주면 옵시디언에서 5·7번 칸을 고치고 <strong>v0.3</strong> 으로 올립니다.</li>
+<li><strong>불일치 찾기</strong>: 모듈 5에서 4번 칸만 &quot;메뉴 + 식사(점심/저녁)&quot;로 고쳤다면, 5번 화면 흐름은 아직 &quot;메뉴 [____] 만족도 [▼]&quot;만 있고 식사 입력칸이 없습니다. Gemini Notebook이 이 불일치를 짚어 주면 옵시디언에서 5·7번 칸을 고치고 <strong>v0.3</strong> 으로 올립니다.</li>
 </ol>
 <pre><code> 옵시디언에서 PRD 수정 ─▶ Gemini Notebook에 다시 넣어 검토 ─▶ 불일치 발견 ─▶ 다시 수정
 </code></pre>
@@ -191,13 +191,13 @@
 <hr>
 <h2>7-2. ChatGPT로 만들기 (약 10분)</h2>
 <p>PRD.md 를 첨부(또는 모듈 3의 프로젝트에 추가)한 뒤:</p>
-<p><strong>① 결재용 보고서: 집계 도구 도입</strong></p>
+<p><strong>① 결재용 보고서: 메뉴 만족도 집계 화면 도입</strong></p>
 <pre><code>첨부한 PRD를 바탕으로 상급자 결재용 1페이지 보고서를 써 줘.
 형식: 제목 / 추진 배경 / 주요 내용 / 기대 효과 / 향후 일정(표).
 PRD에 없는 숫자는 만들지 말고 [확인 필요]로 표시해.
 </code></pre>
 <blockquote>
-<p>💡 모듈 6-4에서 <code>eval-report</code> 스킬을 만들었다면 자유의견 파일을 첨부하고 &quot;제12기 강의평가 결과보고서 써 줘&quot; 한 문장으로 <strong>결과보고서 자체</strong>도 만들어 보세요. 점수 숫자는 아직 없으니 [확인 필요]로 나오는 것이 정상입니다. 숫자는 7-3의 화면이 채워 줍니다.</p>
+<p>💡 모듈 6-4에서 <code>menu-report</code> 스킬을 만들었다면 한줄의견 파일을 첨부하고 &quot;10월 2주차 메뉴 만족도 결과보고서 써 줘&quot; 한 문장으로 <strong>결과보고서 자체</strong>도 만들어 보세요. 점수 숫자는 아직 없으니 [확인 필요]로 나오는 것이 정상입니다. 숫자는 7-3의 화면이 채워 줍니다.</p>
 </blockquote>
 <p><strong>② 발표 개요 (시간이 남으면)</strong></p>
 <pre><code>이 PRD로 10분 발표를 하려고 해. 슬라이드 7장 구성으로
@@ -233,13 +233,13 @@ PRD에 없는 숫자는 만들지 말고 [확인 필요]로 표시해.
 </tr>
 </thead>
 <tbody><tr>
-<td>과목·교관·만족도로 평가가 기록된다</td>
-<td><code>화재진압 전술</code>, <code>김교관</code>, <code>5</code> → 평가 제출</td>
+<td>메뉴·식사·만족도로 응답이 기록된다</td>
+<td><code>된장찌개</code>, <code>점심</code>, <code>5</code> → 제출</td>
 <td>☐</td>
 </tr>
 <tr>
 <td>평균 3.5 미만은 &quot;개선 필요&quot;로 표시된다</td>
-<td><code>화재진압 전술</code>, <code>이교관</code>, <code>3</code> 을 두 번 제출</td>
+<td><code>된장찌개</code>, <code>저녁</code>, <code>3</code> 을 두 번 제출</td>
 <td>☐</td>
 </tr>
 <tr>
@@ -248,16 +248,16 @@ PRD에 없는 숫자는 만들지 말고 [확인 필요]로 표시해.
 <td>☐</td>
 </tr>
 <tr>
-<td><strong>같은 과목이라도 교관이 다르면 따로 집계된다</strong></td>
-<td>결과표에 김교관·이교관이 <strong>두 줄</strong>로 나오는지</td>
+<td><strong>같은 메뉴라도 점심·저녁이 다르면 따로 집계된다</strong></td>
+<td>결과표에 된장찌개 점심·저녁이 <strong>두 줄</strong>로 나오는지</td>
 <td>☐</td>
 </tr>
 </tbody></table></div>
 <hr>
 <h2>7-4. 결과물 정리 — 다시 옵시디언으로</h2>
 <pre><code>📁 AI업무자료
- ├─ 📁 01_기획(PRD)      ← PRD_강의평가 결과보고.md (원본)
- ├─ 📁 02_참고자료       ← 강의평가_자유의견_예시.md
+ ├─ 📁 01_기획(PRD)      ← PRD_구내식당 메뉴 만족도.md (원본)
+ ├─ 📁 02_참고자료       ← 구내식당_한줄의견_예시.md
  ├─ 📁 03_AI결과물
  │   ├─ 결재 보고서.md      (ChatGPT)
  │   ├─ 발표 개요.md        (ChatGPT)

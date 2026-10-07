@@ -43,7 +43,7 @@
 </thead>
 <tbody><tr>
 <td><strong>교육생 모두</strong></td>
-<td>각자 자기 <code>lecture-eval</code> 저장소에서 1~6단계</td>
+<td>각자 자기 <code>menu-survey</code> 저장소에서 1~6단계</td>
 </tr>
 <tr>
 <td>강사</td>
@@ -55,21 +55,21 @@
 <ol>
 <li>업무 Chrome 프로필에서 <a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a> 접속 (Claude Code <strong>웹 버전</strong>. 프로그램 설치가 필요 없어 행정망 PC에 적합)</li>
 <li><strong>GitHub 연결</strong>: 안내에 따라 Claude GitHub 앱을 설치<ul>
-<li>저장소 선택에서 <strong>Only select repositories</strong> → <code>lecture-eval</code> <strong>하나만</strong> 선택</li>
+<li>저장소 선택에서 <strong>Only select repositories</strong> → <code>menu-survey</code> <strong>하나만</strong> 선택</li>
 </ul>
 </li>
-<li>작업할 저장소로 <code>lecture-eval</code> 선택</li>
+<li>작업할 저장소로 <code>menu-survey</code> 선택</li>
 </ol>
 <h2>1단계: PRD에 새 기능 추가 (10분)</h2>
 <p>새 기능을 하나 정해 옵시디언 PRD에 먼저 적습니다(<strong>v0.5</strong>). 기준 문서는 언제나 PRD입니다.</p>
 <p><strong>예시 기능: 결과 내려받기</strong> (결과보고서에 붙일 표를 엑셀에서 다시 정리하지 않기)</p>
 <ul>
-<li>4번 핵심 기능에 추가: &quot;있으면 좋음 | 결과 내려받기 | [결과 내려받기] 버튼을 누르면 과목·교관별 결과표를 엑셀에서 열 수 있는 CSV 파일로 저장&quot;</li>
+<li>4번 핵심 기능에 추가: &quot;있으면 좋음 | 결과 내려받기 | [결과 내려받기] 버튼을 누르면 메뉴·식사별 결과표를 엑셀에서 열 수 있는 CSV 파일로 저장&quot;</li>
 <li>6번 범위 밖에서 &quot;엑셀 내보내기&quot; 삭제 (이제 범위 안)</li>
-<li>7번 성공 기준에 추가: &quot;- [ ] 내려받은 파일을 엑셀로 열면 과목·교관·응답 수·평균·상태 칸이 보이고, 순서가 화면 결과표와 같다&quot;</li>
+<li>7번 성공 기준에 추가: &quot;- [ ] 내려받은 파일을 엑셀로 열면 메뉴·식사·응답 수·평균·상태 칸이 보이고, 순서가 화면 결과표와 같다&quot;</li>
 </ul>
 <h2>2단계: Claude Code에 지시하기 (5분)</h2>
-<pre><code>이 저장소의 index.html은 과정별 강의평가 결과 집계 화면이야.
+<pre><code>이 저장소의 index.html은 구내식당 메뉴 만족도 집계 화면이야.
 아래 PRD v0.5의 &quot;결과 내려받기&quot; 기능을 추가해 줘.
 
 (여기에 PRD v0.5의 4번·7번 칸 붙여넣기)
@@ -116,7 +116,7 @@
 <li><strong>커밋 기록(시계 아이콘)</strong> → Claude의 커밋 클릭</li>
 <li><strong>초록 줄(추가)</strong> 과 <strong>빨강 줄(삭제)</strong> 을 읽으며 확인:<ul>
 <li>PRD에 적은 기능만 바뀌었나?</li>
-<li>교관별 집계·개선 필요 판정 같은 <strong>원래 기능을 지우지 않았나?</strong></li>
+<li>메뉴·식사별 집계·개선 필요 판정 같은 <strong>원래 기능을 지우지 않았나?</strong></li>
 <li>모르는 외부 주소나 이상한 코드가 들어가지 않았나?</li>
 </ul>
 </li>
@@ -125,7 +125,7 @@
 <p>Vercel은 브랜치마다 <strong>미리보기(Preview) 주소</strong>를 따로 만들어 줍니다.</p>
 <ol>
 <li>Vercel 프로젝트 → <strong>Deployments</strong> → Claude 브랜치의 배포 → <strong>Visit</strong></li>
-<li>미리보기 주소에서 평가 몇 건 제출 → [결과 내려받기] → 엑셀로 열어 PRD 성공 기준 확인</li>
+<li>미리보기 주소에서 만족도 몇 건 제출 → [결과 내려받기] → 엑셀로 열어 PRD 성공 기준 확인</li>
 <li>운영 주소(Domains)는 <strong>아직 그대로</strong>인지 확인</li>
 </ol>
 <div class="table-wrap"><table>
@@ -141,7 +141,7 @@
 </tr>
 <tr>
 <td>운영 (Production, Domains)</td>
-<td><code>main</code> 의 결과. 교육생이 실제로 평가에 쓰는 주소</td>
+<td><code>main</code> 의 결과. 이용자가 실제로 만족도를 내는 주소</td>
 </tr>
 </tbody></table></div>
 <h2>6단계: 합치기 → 운영 반영 (5분)</h2>
@@ -152,6 +152,9 @@
 </ol>
 <pre><code> Claude 브랜치 ──(미리보기에서 확인)──▶ 합치기(Merge) ──▶ main ──▶ 운영 주소에 반영
 </code></pre>
+<blockquote>
+<p>💡 같은 방법을 <strong>강의평가 결과 집계</strong>(과목·교관별)에도 그대로 쓸 수 있습니다. 메뉴를 과목으로, 점심·저녁을 교관으로 바꾸면 PRD → 화면 → 장부 → 배포 흐름이 똑같습니다.</p>
+</blockquote>
 <hr>
 <h2>자주 막히는 곳</h2>
 <div class="table-wrap"><table>
@@ -166,7 +169,7 @@
 <td>Team 화면이 맞는지 확인(왼쪽 아래 Team 이름). 맞으면 관리자 설정에서 Claude Code 허용 여부 확인. 행정망 차단이면 전산 담당자 문의</td>
 </tr>
 <tr>
-<td>저장소 목록에 <code>lecture-eval</code> 이 없음</td>
+<td>저장소 목록에 <code>menu-survey</code> 이 없음</td>
 <td>GitHub 앱 설정에서 해당 저장소 접근 허용 추가</td>
 </tr>
 <tr>

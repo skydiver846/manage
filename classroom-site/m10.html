@@ -20,8 +20,8 @@
   </aside>
   <main>
     <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>10 GitHub · Vercel 배포</span></div>
-    <article><h1>모듈 10 (심화 2). 프로토타입을 웹에 공개하기 (GitHub + Vercel)</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>강의평가 집계 완성본 (배포 실습용 index.html)</span><span class="acts"><a class="btn" href="prototype/index.html" download="index.html">내려받기</a> <a class="btn ghost" href="prototype/index.html" target="_blank" rel="noopener">열어 보기</a></span></li></ul></aside>
-<p>모듈 7에서 Claude로 만든 강의평가 집계 화면을 <strong>누구나 휴대폰으로 여는 웹 주소</strong>로 공개합니다. 설치 없이 <strong>웹 브라우저만으로</strong>, 비용 0원으로 진행합니다. 모든 작업은 <strong>파란 &quot;업무&quot; Chrome 프로필 창</strong>에서 합니다.</p>
+    <article><h1>모듈 10 (심화 2). 프로토타입을 웹에 공개하기 (GitHub + Vercel)</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>메뉴 만족도 집계 완성본 (배포 실습용 index.html)</span><span class="acts"><a class="btn" href="prototype/index.html" download="index.html">내려받기</a> <a class="btn ghost" href="prototype/index.html" target="_blank" rel="noopener">열어 보기</a></span></li></ul></aside>
+<p>모듈 7에서 Claude로 만든 메뉴 만족도 화면을 <strong>누구나 휴대폰으로 여는 웹 주소</strong>로 공개합니다. 설치 없이 <strong>웹 브라우저만으로</strong>, 비용 0원으로 진행합니다. 모든 작업은 <strong>파란 &quot;업무&quot; Chrome 프로필 창</strong>에서 합니다.</p>
 <h2>흐름과 낱말 4개</h2>
 <pre><code> index.html ──(올리기 = 커밋·푸시)──▶ GitHub 창고 ──(자동 연결)──▶ Vercel ──▶ https://내주소.vercel.app
  (내 컴퓨터)                           (기록·보관)                  (공개)     (누구나 접속)
@@ -95,7 +95,7 @@
 </li>
 <li>저장 위치: <code>문서 &gt; AI업무자료 &gt; 03_AI결과물</code></li>
 </ol>
-<p>✅ 저장한 파일을 <strong>더블클릭</strong>해 Chrome에서 강의평가 화면이 열리면 준비 완료</p>
+<p>✅ 저장한 파일을 <strong>더블클릭</strong>해 Chrome에서 메뉴 만족도 화면이 열리면 준비 완료</p>
 <blockquote>
 <p>⚠️ 가장 흔한 실수: 파일 형식을 &quot;텍스트 문서&quot;로 두면 <code>index.html.txt</code> 가 됩니다. 파일 탐색기 <strong>[보기] → [파일 확장명]</strong> 을 켜 두세요. 인코딩이 UTF-8이 아니면 한글이 깨집니다.</p>
 </blockquote>
@@ -136,7 +136,7 @@
 <h2>2. 저장소 만들기 (5분)</h2>
 <ol>
 <li>오른쪽 위 <strong>[+]</strong> → <strong>[New repository]</strong></li>
-<li><strong>Repository name</strong>: <code>lecture-eval</code> (웹 주소가 되므로 영문 + 하이픈)</li>
+<li><strong>Repository name</strong>: <code>menu-survey</code> (웹 주소가 되므로 영문 + 하이픈)</li>
 <li><strong>Public</strong> 선택</li>
 <li><strong>Add a README file</strong> ✅ 체크</li>
 <li><strong>[Create repository]</strong></li>
@@ -174,12 +174,12 @@ README의 확장자도 <strong><code>.md</code></strong> 입니다. 모듈 4의 
 <ol>
 <li><strong>[Add file]</strong> → <strong>[Upload files]</strong></li>
 <li><code>index.html</code> 을 점선 상자에 끌어다 놓기 (또는 <strong>choose your files</strong>)</li>
-<li><strong>Commit changes</strong> 칸에 메시지: <code>강의평가 집계 프로토타입 첫 업로드</code></li>
+<li><strong>Commit changes</strong> 칸에 메시지: <code>메뉴 만족도 프로토타입 첫 업로드</code></li>
 <li><strong>[Commit changes]</strong></li>
 <li>✅ 파일 목록에 <code>README.md</code>, <code>index.html</code> 두 개</li>
 <li>시계 아이콘(또는 <strong>&quot;2 Commits&quot;</strong>)을 눌러 <strong>변경 일지</strong> 확인</li>
 </ol>
-<pre><code>● 강의평가 집계 프로토타입 첫 업로드  hong-gildong   방금 전
+<pre><code>● 메뉴 만족도 프로토타입 첫 업로드  hong-gildong   방금 전
 ● Initial commit                  hong-gildong   5분 전
 </code></pre>
 <div class="table-wrap"><table>
@@ -195,7 +195,7 @@ README의 확장자도 <strong><code>.md</code></strong> 입니다. 모듈 4의 
 </tr>
 <tr>
 <td><code>최종</code>, <code>최종2</code>, <code>진짜최종</code></td>
-<td><code>교관별 집계를 위해 교관 입력칸 추가</code></td>
+<td><code>점심·저녁 따로 집계하려고 식사 입력칸 추가</code></td>
 </tr>
 </tbody></table></div>
 <h2>4. Vercel 계정 만들기 (3분)</h2>
@@ -213,11 +213,11 @@ README의 확장자도 <strong><code>.md</code></strong> 입니다. 모듈 4의 
 <h2>5. 배포하기 (5분)</h2>
 <ol>
 <li>대시보드 <strong>[Add New…]</strong> → <strong>[Project]</strong></li>
-<li><strong>Import Git Repository</strong> 목록에서 <code>lecture-eval</code> → <strong>[Import]</strong></li>
+<li><strong>Import Git Repository</strong> 목록에서 <code>menu-survey</code> → <strong>[Import]</strong></li>
 <li>설정은 그대로 (Framework Preset: <strong>Other</strong>) → <strong>[Deploy]</strong></li>
 <li>1분 내외로 🎉 축하 화면 → <strong>[Continue to Dashboard]</strong></li>
 </ol>
-<p><strong>목록에 저장소가 안 보이면</strong> → 목록 아래 <strong>Adjust GitHub App Permissions</strong> (또는 [Install]) → <strong>Only select repositories</strong> → <code>lecture-eval</code> 선택 → 저장</p>
+<p><strong>목록에 저장소가 안 보이면</strong> → 목록 아래 <strong>Adjust GitHub App Permissions</strong> (또는 [Install]) → <strong>Only select repositories</strong> → <code>menu-survey</code> 선택 → 저장</p>
 <h3>주소가 두 개입니다: 공유할 것은 <strong>Domains</strong></h3>
 <div class="table-wrap"><table>
 <thead>
@@ -229,18 +229,18 @@ README의 확장자도 <strong><code>.md</code></strong> 입니다. 모듈 4의 
 </thead>
 <tbody><tr>
 <td><strong>Deployment</strong></td>
-<td><code>lecture-eval-hmmzt68iw-…vercel.app</code></td>
+<td><code>menu-survey-hmmzt68iw-…vercel.app</code></td>
 <td>이번 배포 <strong>한 건</strong>만 가리킴. 보호 설정에 따라 <strong>Vercel 로그인을 요구</strong>할 수 있음</td>
 </tr>
 <tr>
 <td><strong>Domains</strong> ✅</td>
-<td><code>lecture-eval-lyart.vercel.app</code></td>
+<td><code>menu-survey-lyart.vercel.app</code></td>
 <td>항상 <strong>최신 배포</strong>를 보여 주는 대표 주소. 수정해도 그대로</td>
 </tr>
 </tbody></table></div>
 <h3>📱 휴대폰으로 열기: QR 만들기</h3>
 <blockquote>
-<p>데스크톱 강의에서 QR은 <strong>자료 배포용이 아니라 배포한 강의평가 화면을 교육생 휴대폰으로 열어 평가해 보는 용도</strong>입니다. 링크를 PC끼리 나눌 때는 PC 메신저나 메일을 씁니다.</p>
+<p>데스크톱 강의에서 QR은 <strong>자료 배포용이 아니라 배포한 메뉴 만족도 화면을 교육생 휴대폰으로 열어 응답해 보는 용도</strong>입니다. 링크를 PC끼리 나눌 때는 PC 메신저나 메일을 씁니다.</p>
 </blockquote>
 <p>배포된 <strong>Domains 주소</strong>를 Chrome에서 연 상태에서:</p>
 <div class="table-wrap"><table>
@@ -261,7 +261,7 @@ README의 확장자도 <strong><code>.md</code></strong> 입니다. 모듈 4의 
 </tbody></table></div>
 <ul>
 <li>휴대폰 카메라로 찍으면 열립니다. <strong>[다운로드]</strong> 로 이미지 저장도 가능 (메뉴 이름은 Chrome 버전에 따라 다를 수 있음)</li>
-<li>교육생끼리 <strong>QR을 교환</strong>해 서로의 화면에 평가를 내 보게 하면 반응이 좋습니다</li>
+<li>교육생끼리 <strong>QR을 교환</strong>해 서로의 화면에 만족도를 내 보게 하면 (교육생이 이용자 역할) 반응이 좋습니다</li>
 </ul>
 <blockquote>
 <p>⚠️ Deployment 주소로 QR을 만들면 다른 사람 휴대폰에서 <strong>Vercel 로그인 화면</strong>이 뜰 수 있습니다. &quot;QR은 <strong>Domains</strong> 주소로&quot;를 꼭 짚어 주세요.</p>
@@ -285,12 +285,12 @@ README의 확장자도 <strong><code>.md</code></strong> 입니다. 모듈 4의 
 <li>연필이 눌리지 않으면 GitHub 로그인이 풀린 것</li>
 </ul>
 <ol start="3">
-<li><strong>Ctrl + F</strong> 로 <code>강의평가 결과 집계</code> 를 찾아 <code>제12기 강의평가 결과</code> 로 변경 (두 군데: 브라우저 탭 제목 <code>&lt;title&gt;</code> 과 화면 제목 <code>&lt;h1&gt;</code>. 한 군데만 바꿔도 됩니다)</li>
-<li><strong>[Commit changes…]</strong> → 메시지 <code>제목을 제12기 강의평가 결과로 변경</code> → <strong>[Commit changes]</strong></li>
+<li><strong>Ctrl + F</strong> 로 <code>구내식당 메뉴 만족도</code> 를 찾아 <code>10월 2주차 메뉴 만족도</code> 로 변경 (두 군데: 브라우저 탭 제목 <code>&lt;title&gt;</code> 과 화면 제목 <code>&lt;h1&gt;</code>. 한 군데만 바꿔도 됩니다)</li>
+<li><strong>[Commit changes…]</strong> → 메시지 <code>제목을 10월 2주차 메뉴 만족도로 변경</code> → <strong>[Commit changes]</strong></li>
 <li>Vercel <strong>Deployments</strong> 메뉴에서 <strong>새 배포가 저절로</strong> 시작되는 것 확인 → <strong>Ready</strong></li>
 <li>1~2분 뒤 휴대폰에서 <strong>새로고침</strong> → 같은 주소에 바뀐 제목</li>
 </ol>
-<pre><code>● 제목을 제12기 강의평가 결과로 변경  Building… → Ready     방금 전
+<pre><code>● 제목을 10월 2주차 메뉴 만족도로 변경  Building… → Ready     방금 전
 ● Add files via upload              Ready                  10분 전
 </code></pre>
 <blockquote>
@@ -298,16 +298,16 @@ README의 확장자도 <strong><code>.md</code></strong> 입니다. 모듈 4의 
 고칠 때 <code>&lt;</code>, <code>&gt;</code>, <code>&quot;</code> 같은 <strong>기호는 건드리지 말고 한글 글자만</strong> 바꾸게 하세요. 화면이 깨지면 <strong>Instant Rollback</strong>으로 이전 배포로 즉시 되돌리는 시연 기회로 씁니다.</p>
 </blockquote>
 <blockquote>
-<p>⭐ <strong>Claude Code로 한 번 더 (선택)</strong>: 손으로 제목을 고쳐 본 뒤, 같은 수정을 <strong>Claude Code</strong>(<a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a>)에게 말로 맡겨 봅니다. 예: &quot;index.html의 제목을 제13기 강의평가 결과로 바꿔 줘&quot;. 자세한 방법은 <a href="m12.html">12 Claude Code</a>. 시간이 부족하면 모듈 12에서 한꺼번에 합니다.</p>
+<p>⭐ <strong>Claude Code로 한 번 더 (선택)</strong>: 손으로 제목을 고쳐 본 뒤, 같은 수정을 <strong>Claude Code</strong>(<a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a>)에게 말로 맡겨 봅니다. 예: &quot;index.html의 제목을 10월 3주차 메뉴 만족도로 바꿔 줘&quot;. 자세한 방법은 <a href="m12.html">12 Claude Code</a>. 시간이 부족하면 모듈 12에서 한꺼번에 합니다.</p>
 </blockquote>
 <h2>7. 마무리: 장부는 공유되지 않는다</h2>
-<p>교육생끼리 서로의 QR로 평가를 낸 뒤 묻습니다. &quot;짝꿍 휴대폰 결과표에 내가 낸 평가가 들어 있나요?&quot; → <strong>안 들어 있습니다.</strong> 응답 수가 늘지 않습니다. 기록이 각자의 브라우저에만 저장되기 때문입니다. 40명이 내면 결과가 40군데로 흩어집니다.</p>
+<p>교육생끼리 서로의 QR로 만족도를 낸 뒤 묻습니다. &quot;짝꿍 휴대폰 결과표에 내가 낸 응답이 들어 있나요?&quot; → <strong>안 들어 있습니다.</strong> 응답 수가 늘지 않습니다. 기록이 각자의 브라우저에만 저장되기 때문입니다. 구내식당 이용자 150명이 내면 결과가 150군데로 흩어집니다.</p>
 <pre><code> 지금:     [내 휴대폰 장부]   [짝꿍 휴대폰 장부]   ← 따로따로
  다음 회차: [내 휴대폰] ─┐
             [짝꿍 휴대폰] ┼──▶ 데이터베이스 (공용 장부)  ← 모두가 같은 결과표
             [담당자 PC] ─┘
 </code></pre>
-<p>다음 회차에서 <strong>Firebase</strong>(Google 서비스, 업무 Google 계정으로 시작)를 연결해 모든 응답이 한곳에 모이는 강의평가 시스템으로 만듭니다.</p>
+<p>다음 회차에서 <strong>Firebase</strong>(Google 서비스, 업무 Google 계정으로 시작)를 연결해 모든 응답이 한곳에 모이는 메뉴 만족도 시스템으로 만듭니다.</p>
 <hr>
 <h2>자주 막히는 곳</h2>
 <div class="table-wrap"><table>
@@ -353,9 +353,9 @@ README의 확장자도 <strong><code>.md</code></strong> 입니다. 모듈 4의 
 <h2>✅ 확인 질문 (인터뷰)</h2>
 <ol>
 <li>저장소 파일 목록에 <code>index.html</code> 이 있고, 커밋 기록이 <strong>2개</strong> 보이나요?</li>
-<li><strong>Domains</strong> 주소를 QR로 만들어 <strong>휴대폰</strong>에서 평가를 제출해 보셨나요?</li>
+<li><strong>Domains</strong> 주소를 QR로 만들어 <strong>휴대폰</strong>에서 만족도를 제출해 보셨나요?</li>
 <li>GitHub에서 제목을 고친 뒤 <strong>자동으로 바뀐 것</strong>을 확인하셨나요?</li>
-<li>짝꿍 휴대폰 결과표에 내가 낸 평가가 안 들어가는 이유는?</li>
+<li>짝꿍 휴대폰 결과표에 내가 낸 응답이 안 들어가는 이유는?</li>
 </ol>
 </article>
     <div class="pager"><a class="prev" href="m09.html"><span>← 이전</span>09 HTML · CSS · JS 뜯어보기</a><a class="next" href="m11.html"><span>다음 →</span>11 Firebase 공용 장부</a></div>

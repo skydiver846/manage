@@ -65,8 +65,8 @@
       <label for="cfg" class="muted">firebaseConfig 붙여넣기</label>
       <textarea id="cfg" spellcheck="false" placeholder='const firebaseConfig = {
   apiKey: "AIza...",
-  authDomain: "lecture-eval-12-xxxx.firebaseapp.com",
-  projectId: "lecture-eval-12-xxxx",
+  authDomain: "menu-survey-xxxx.firebaseapp.com",
+  projectId: "menu-survey-xxxx",
   ...
 };'></textarea>
       <button type="button" id="fbtest">Firebase 연결 시험</button>
@@ -160,7 +160,7 @@
         const fs = await withTimeout(import(FIREBASE + "firebase-firestore.js"), 10000);
         const app = getApps().find((a) => a.name === "check") || initializeApp(cfg, "check");
         const db = fs.getFirestore(app);
-        await withTimeout(fs.getDocsFromServer(fs.query(fs.collection(db, "evaluations"), fs.limit(1))), 20000);
+        await withTimeout(fs.getDocsFromServer(fs.query(fs.collection(db, "ratings"), fs.limit(1))), 20000);
         fbState = "open";
         out.textContent = "성공: 이 PC에서 Firebase 공용 장부에 접속됩니다. 모듈 11을 교육생 실습으로 진행할 수 있습니다.";
         out.className = "result open";
@@ -192,7 +192,7 @@
       if (results["Claude 미리보기 화면"] && results["Claude 미리보기 화면"] !== "open") line("Claude 미리보기 화면 주소가 막혀 있으면 모듈 07에서 미리보기 창이 비어 보입니다. 코드를 메모장에 저장해 Chrome으로 여는 방법으로 진행하세요.");
       if (ai.length) line("생성형 AI 사이트(" + ai.join(", ") + ")가 막혀 있으면 모듈 02~07 진행이 어렵습니다. 전산 담당자에게 강의 시간 동안 접속 허용을 요청하세요.");
       if (fbState === "open") line("모듈 11: 교육생 실습으로 진행 (A안).", "open");
-      else if (fbState === "blocked" || fb.length) line("모듈 11: 강사 시연으로 진행 (B안). 강사 노트북을 휴대폰 핫스팟에 연결해 시연하고, 교육생은 휴대폰으로 평가를 제출해 공용 장부를 확인합니다.", "blocked");
+      else if (fbState === "blocked" || fb.length) line("모듈 11: 강사 시연으로 진행 (B안). 강사 노트북을 휴대폰 핫스팟에 연결해 시연하고, 교육생은 휴대폰으로 만족도를 제출해 공용 장부를 확인합니다.", "blocked");
       else line("모듈 11: 2단계 ‘Firebase 연결 시험’까지 해야 판정할 수 있습니다.", "muted");
     }
 

@@ -1,24 +1,23 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /evaluations/{evalId} {
-      // 결과는 누구나 볼 수 있다 (익명 평가라 이름이 없다)
+    match /ratings/{ratingId} {
+      // 결과는 누구나 볼 수 있다 (익명 응답이라 이름이 없다)
       allow read: if true;
-      // 새 평가는 정해진 칸만, 정해진 모양으로 쓸 수 있다
-      allow create: if request.resource.data.keys().hasOnly(['subject', 'instructor', 'score', 'date'])
-        && request.resource.data.keys().hasAll(['subject', 'instructor', 'score', 'date'])
-        && request.resource.data.subject is string
-        && request.resource.data.subject.size() > 0
-        && request.resource.data.subject.size() <= 30
-        && request.resource.data.instructor is string
-        && request.resource.data.instructor.size() > 0
-        && request.resource.data.instructor.size() <= 20
+      // 새 응답은 정해진 칸만, 정해진 모양으로 쓸 수 있다
+      allow create: if request.resource.data.keys().hasOnly(['menu', 'meal', 'score', 'date'])
+        && request.resource.data.keys().hasAll(['menu', 'meal', 'score', 'date'])
+        && request.resource.data.menu is string
+        && request.resource.data.menu.size() > 0
+        && request.resource.data.menu.size() <= 30
+        && request.resource.data.meal is string
+        && (request.resource.data.meal == '점심' || request.resource.data.meal == '저녁')
         && request.resource.data.score is int
         && request.resource.data.score >= 1
         && request.resource.data.score <= 5
         && request.resource.data.date is string
         && request.resource.data.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$');
-      // 한번 낸 평가는 고치거나 지울 수 없다 (지우기는 담당자가 콘솔에서)
+      // 한번 낸 응답은 고치거나 지울 수 없다 (지우기는 급식 담당자가 콘솔에서)
       allow update, delete: if false;
     }
   }
