@@ -26,16 +26,17 @@ const MODULES = [
 ].map(([file, short, time], i) => ({ file, short, time, num: i + 1, page: `m${String(i + 1).padStart(2, "0")}.html` }));
 
 // 교육생이 내려받는 파일: [사이트 안 경로, 원본, 내려받을 때 이름, 설명]
+// 사이트 안 경로도 한글 이름으로 둔다. 행정망 보안 프로그램 등이 download 속성을 무시해도 주소의 파일 이름으로 저장되기 때문
 const FILES = {
-  prd: ["files/prd-lecture-eval-v0.1.md", "lecture/실습자료/PRD_강의평가 결과보고.md", "PRD_강의평가 결과보고.md", "예시 PRD (강의평가 결과보고 v0.1)"],
-  opinions: ["files/eval-opinions-sample.md", "lecture/실습자료/강의평가_자유의견_예시.md", "강의평가_자유의견_예시.md", "강의평가 자유의견 예시 (서술형 요약 실습용)"],
-  template: ["files/prd-template.md", "lecture/실습자료/PRD 템플릿.md", "PRD 템플릿.md", "빈 PRD 양식"],
-  prompts: ["files/prompts.md", "lecture/실습자료/프롬프트 모음.md", "프롬프트 모음.md", "프롬프트 모음 파일 (옵시디언 99_프롬프트 폴더 보관용)"],
+  prd: ["files/PRD_강의평가 결과보고.md", "lecture/실습자료/PRD_강의평가 결과보고.md", "PRD_강의평가 결과보고.md", "예시 PRD (강의평가 결과보고 v0.1)"],
+  opinions: ["files/강의평가_자유의견_예시.md", "lecture/실습자료/강의평가_자유의견_예시.md", "강의평가_자유의견_예시.md", "강의평가 자유의견 예시 (서술형 요약 실습용)"],
+  template: ["files/PRD 템플릿.md", "lecture/실습자료/PRD 템플릿.md", "PRD 템플릿.md", "빈 PRD 양식"],
+  prompts: ["files/프롬프트 모음.md", "lecture/실습자료/프롬프트 모음.md", "프롬프트 모음.md", "프롬프트 모음 파일 (옵시디언 99_프롬프트 폴더 보관용)"],
   skill: ["files/prd-interview.zip", null, "prd-interview.zip", "PRD 인터뷰 스킬 (Claude에 바로 올리는 ZIP)"],
   skillmd: ["files/SKILL.md", "lecture/실습자료/스킬/prd-interview/SKILL.md", "SKILL.md", "PRD 인터뷰 스킬 원본 SKILL.md"],
-  quizreq: ["files/quiz-request-sample.md", "lecture/실습자료/문제출제_의뢰서_예시.md", "문제출제_의뢰서_예시.md", "문제출제 의뢰서 (실습용 예시)"],
-  quizsrc: ["files/quiz-source-fire-basics.md", "lecture/실습자료/교재발췌_연소와소화의기초.md", "교재발췌_연소와소화의기초.md", "교재 발췌: 연소와 소화의 기초 (실습용)"],
-  quizcard: ["files/quiz-card-form.hwpx", "lecture/실습자료/객관식_문제카드_양식(별지제4호서식).hwpx", "객관식_문제카드_양식(별지제4호서식).hwpx", "객관식 문제카드 빈 양식 (별지 제4호서식)"],
+  quizreq: ["files/문제출제_의뢰서_예시.md", "lecture/실습자료/문제출제_의뢰서_예시.md", "문제출제_의뢰서_예시.md", "문제출제 의뢰서 (실습용 예시)"],
+  quizsrc: ["files/교재발췌_연소와소화의기초.md", "lecture/실습자료/교재발췌_연소와소화의기초.md", "교재발췌_연소와소화의기초.md", "교재 발췌: 연소와 소화의 기초 (실습용)"],
+  quizcard: ["files/객관식_문제카드_양식(별지제4호서식).hwpx", "lecture/실습자료/객관식_문제카드_양식(별지제4호서식).hwpx", "객관식_문제카드_양식(별지제4호서식).hwpx", "객관식 문제카드 빈 양식 (별지 제4호서식)"],
   quizzip: ["files/quiz-generator.zip", null, "quiz-generator.zip", "문제출제 스킬 (조직 배포가 안 됐을 때 개인 등록용 ZIP)"],
   step1: ["steps/1-html.html", "prototype-demo/steps/1-html.html", "1-html.html", "1단계 HTML (뼈대)"],
   step2: ["steps/2-css.html", "prototype-demo/steps/2-css.html", "2-css.html", "2단계 CSS (옷)"],
@@ -127,7 +128,7 @@ function enhance(html) {
 
 function fileBox(keys) {
   const items = keys.map((k) => {
-    const [href, , dl, label] = FILES[k];
+    const [dest, , dl, label] = FILES[k]; const href = encodeURI(dest);
     const open = href.endsWith(".html") ? ` <a class="btn ghost" href="${href}" target="_blank" rel="noopener">열어 보기</a>` : "";
     return `<li><span>${esc(label)}</span><span class="acts"><a class="btn" href="${href}" download="${esc(dl)}">내려받기</a>${open}</span></li>`;
   });
@@ -207,9 +208,10 @@ fs.writeFileSync(path.join(OUT, "prework.html"), page("prework.html", "사전 �
 
 const promptsMd = fs.readFileSync(path.join(ROOT, FILES.prompts[1]), "utf8").replace(/^←.*\n/m, "");
 fs.writeFileSync(path.join(OUT, "prompts.html"), page("prompts.html", "프롬프트 모음",
-  `<p class="lead">수업에서 쓰는 프롬프트를 모았습니다. 상자 오른쪽 위 <b>[복사]</b>를 누르고 ChatGPT·Claude 입력창에 붙여넣으세요. </p><p class="lead"><a class="btn" href="${FILES.prompts[0]}" download="${FILES.prompts[2]}">프롬프트 모음 파일(.md) 내려받기</a> 옵시디언 <code>99_프롬프트</code> 폴더에 넣어 두면 수업 뒤에도 쓸 수 있습니다.</p>` + render(promptsMd)));
+  `<p class="lead">수업에서 쓰는 프롬프트를 모았습니다. 상자 오른쪽 위 <b>[복사]</b>를 누르고 ChatGPT·Claude 입력창에 붙여넣으세요. </p><p class="lead"><a class="btn" href="${encodeURI(FILES.prompts[0])}" download="${FILES.prompts[2]}">프롬프트 모음 파일(.md) 내려받기</a> 옵시디언 <code>99_프롬프트</code> 폴더에 넣어 두면 수업 뒤에도 쓸 수 있습니다.</p>` + render(promptsMd)));
 
-const allFiles = Object.entries(FILES).map(([k, [href, , dl, label]]) => {
+const allFiles = Object.entries(FILES).map(([k, [dest, , dl, label]]) => {
+  const href = encodeURI(dest);
   const open = href.endsWith(".html") ? ` <a class="btn ghost" href="${href}" target="_blank" rel="noopener">열어 보기</a>` : "";
   const used = Object.entries(MODULE_FILES).filter(([, ks]) => ks.includes(k)).map(([n]) => `모듈 ${String(n).padStart(2, "0")}`).join(", ");
   return `<tr id="${k === "skillmd" ? "skill" : k}"><td>${esc(label)}</td><td>${used}</td><td class="acts"><a class="btn" href="${href}" download="${esc(dl)}">내려받기</a>${open}</td></tr>`;
