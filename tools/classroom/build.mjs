@@ -235,13 +235,13 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <h2>사전 과제 · 수업 전에 각자</h2>
   <ol class="mods">${modItems(MODULES.slice(0, 2))}</ol>
   <p><a class="btn" href="prework.html">사전 과제 안내 보기</a> 첫날 전까지 해 올 것과 준비물을 한 장에 정리했습니다.</p>
-  <h2>1일차 (4시간) · AI에게 일 시키기부터 PRD까지</h2>
+  <h2>1회차 (4시간) · AI에게 일 시키기부터 PRD까지</h2>
   <ol class="mods">${modItems(MODULES.slice(2, 5))}</ol>
-  <h2>2일차 (4시간) · 스킬, 결과보고 자료, 코딩 없이 자동화</h2>
+  <h2>2회차 (4시간) · 스킬, 결과보고 자료, 코딩 없이 자동화</h2>
   <ol class="mods">${modItems(MODULES.slice(5, 9))}</ol>
-  <h2>3일차 (4시간) · 직접 만들어 웹에 공개하기, 내 업무 화면 만들기</h2>
+  <h2>3회차 (4시간) · 직접 만들어 웹에 공개하기, 내 업무 화면 만들기</h2>
   <ol class="mods">${modItems([MODULES[8], MODULES[9], MODULES[11]])}</ol>
-  <p class="note">숙제: 1일차 뒤에는 모듈 05에서 시작한 내 업무 PRD 마저 쓰기, 2일차 뒤에는 GitHub 가입(모듈 10의 1단계). 모듈 09는 2일차(1·2단계)와 3일차(3·4단계)에 나눠 진행합니다. 모듈 11(Firebase)은 수업에서 다루지 않는 선택 자료입니다.</p>
+  <p class="note">숙제: 1회차 뒤에는 모듈 05에서 시작한 내 업무 PRD 마저 쓰기, 2회차 뒤에는 GitHub 가입(모듈 10의 1단계). 모듈 09는 2회차(1·2단계)와 3회차(3·4단계)에 나눠 진행합니다. 모듈 11(Firebase)은 수업에서 다루지 않는 선택 자료입니다.</p>
   <h2>바로가기</h2>
   <div class="tiles">${siteLinks}</div>
   <h2>자료</h2>
