@@ -31,7 +31,8 @@
     th { color: var(--muted); font-weight: 600; font-size: 13px; }
     td.addr { font-family: var(--mono); font-size: 13px; overflow-wrap: anywhere; }
     .pill { display: inline-block; font-size: 12px; font-weight: 700; padding: 1px 9px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
-    .wait { color: var(--muted); } .open { color: var(--ok); } .blocked { color: var(--bad); } .slow { color: var(--warn); }
+    .wait { color: var(--muted); } .open { color: var(--ok); } .blocked { color: var(--bad); } .slow { color: var(--warn); } .manual { color: var(--warn); }
+    td.addr a { color: inherit; }
     button { font: inherit; font-weight: 600; padding: 9px 16px; border-radius: 8px; border: 0; background: var(--accent); color: #fff; cursor: pointer; justify-self: start; }
     button:disabled { opacity: .5; cursor: not-allowed; }
     textarea { width: 100%; min-height: 150px; font: 13px/1.5 var(--mono); padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); }
@@ -84,8 +85,8 @@
     const TARGETS = [
       { mod: "01", use: "Google 계정", url: "https://accounts.google.com/" },
       { mod: "02", use: "ChatGPT", url: "https://chatgpt.com/" },
-      { mod: "02", use: "Claude", url: "https://claude.ai/" },
-      { mod: "07", use: "Claude 미리보기 화면", url: "https://www.claudeusercontent.com/" },
+      { mod: "02", use: "Claude", url: "https://claude.ai/", manual: true },
+      { mod: "07", use: "Claude 미리보기 화면", url: "https://www.claudeusercontent.com/", manual: true },
       { mod: "06", use: "국가법령정보센터 (문제출제 스킬 근거 검증)", url: "https://www.law.go.kr/" },
       { mod: "04", use: "옵시디언 내려받기", url: "https://obsidian.md/" },
       { mod: "07", use: "Gemini Notebook", url: "https://notebooklm.google.com/" },
@@ -94,10 +95,11 @@
       { mod: "11", use: "Firebase 콘솔", url: "https://console.firebase.google.com/" },
       { mod: "11", use: "Firestore 장부 서버", url: "https://firestore.googleapis.com/" },
       { mod: "11", use: "Firebase 프로그램(SDK)", url: FIREBASE + "firebase-app.js", sdk: true },
-      { mod: "12", use: "Claude Code (웹)", url: "https://claude.ai/code" },
+      { mod: "12", use: "Claude Code (웹)", url: "https://claude.ai/code", manual: true },
       { mod: "08", use: "Aside (AI 브라우저 설치·실습)", url: "https://aside.com/" },
     ];
-    const LABEL = { wait: "확인 중…", open: "열림", blocked: "막힘", slow: "응답 없음" };
+    // manual: 사이트 보안 설정(CORP) 때문에 다른 페이지에서 자동 확인이 안 되는 곳. 주소를 눌러 직접 열어 본다.
+    const LABEL = { wait: "확인 중…", open: "열림", blocked: "막힘", slow: "응답 없음", manual: "직접 확인" };
     const results = {};
     const $ = (id) => document.getElementById(id);
 
@@ -106,6 +108,7 @@
     }
 
     async function probe(t) {
+      if (t.manual) return "manual";
       try {
         if (t.sdk) await withTimeout(import(t.url), 10000);   // 실제 프로그램 파일을 불러와 본다
         else await withTimeout(fetch(t.url, { mode: "no-cors", cache: "no-store" }), 8000);
@@ -127,7 +130,9 @@
       const cells = TARGETS.map((t) => {
         const tr = document.createElement("tr");
         for (const v of [t.mod, t.use]) { const td = document.createElement("td"); td.textContent = v; tr.append(td); }
-        const a = document.createElement("td"); a.className = "addr"; a.textContent = t.url.replace("https://", ""); tr.append(a);
+        const a = document.createElement("td"); a.className = "addr";
+        const link = document.createElement("a"); link.href = t.url; link.target = "_blank"; link.rel = "noopener"; link.textContent = t.url.replace("https://", "");
+        a.append(link); tr.append(a);
         const r = document.createElement("td"); r.append(pill("wait")); tr.append(r);
         body.append(tr);
         return r;
@@ -183,13 +188,15 @@
     function summarize() {
       const box = $("summary"); box.innerHTML = "";
       const line = (text, cls) => { const p = document.createElement("p"); p.textContent = text; if (cls) p.className = cls; box.append(p); };
-      const down = TARGETS.filter((t) => results[t.use] && results[t.use] !== "open").map((t) => t.use);
-      const ai = ["ChatGPT", "Claude"].filter((n) => results[n] && results[n] !== "open");
+      const down = TARGETS.filter((t) => results[t.use] && !["open", "manual"].includes(results[t.use])).map((t) => t.use);
+      const manual = TARGETS.filter((t) => results[t.use] === "manual").map((t) => t.use);
+      const ai = ["ChatGPT", "Claude"].filter((n) => results[n] && !["open", "manual"].includes(results[n]));
       const fb = ["Firebase 콘솔", "Firestore 장부 서버", "Firebase 프로그램(SDK)"].filter((n) => results[n] && results[n] !== "open");
 
-      if (!down.length) line("1단계: 강의에 쓰는 사이트가 모두 열립니다.", "open");
+      if (!down.length) line("1단계: 자동 확인한 사이트가 모두 열립니다.", "open");
       else line("1단계: 열리지 않는 곳 — " + down.join(", "), "blocked");
-      if (results["Claude 미리보기 화면"] && results["Claude 미리보기 화면"] !== "open") line("Claude 미리보기 화면 주소가 막혀 있으면 모듈 07에서 미리보기 창이 비어 보입니다. 코드를 메모장에 저장해 Chrome으로 여는 방법으로 진행하세요.");
+      if (manual.length) line("직접 확인: " + manual.join(", ") + " — 자동 확인이 안 되는 사이트입니다. 표의 주소를 눌러 새 탭에서 화면이 열리면 정상입니다.");
+      if (results["Claude 미리보기 화면"] && !["open", "manual"].includes(results["Claude 미리보기 화면"])) line("Claude 미리보기 화면 주소가 막혀 있으면 모듈 07에서 미리보기 창이 비어 보입니다. 코드를 메모장에 저장해 Chrome으로 여는 방법으로 진행하세요.");
       if (ai.length) line("생성형 AI 사이트(" + ai.join(", ") + ")가 막혀 있으면 모듈 02~07 진행이 어렵습니다. 전산 담당자에게 강의 시간 동안 접속 허용을 요청하세요.");
       if (fbState === "open") line("모듈 11: 교육생 실습으로 진행 (A안).", "open");
       else if (fbState === "blocked" || fb.length) line("모듈 11: 강사 시연으로 진행 (B안). 강사 노트북을 휴대폰 핫스팟에 연결해 시연하고, 교육생은 휴대폰으로 평가를 제출해 공용 장부를 확인합니다.", "blocked");
