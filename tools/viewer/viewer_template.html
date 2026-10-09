@@ -1,0 +1,310 @@
+<title>생성형 AI 입문 강의자료</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=Nanum+Gothic+Coding&display=swap">
+<style>
+  /* 레이아웃: 왼쪽 고정 목차 + 오른쪽 읽기 칼럼(약 70자 폭). 휴대폰에서는 목차가 위에서 펼쳐지는 서랍 */
+  :root {
+    --bg: #f4f5f7;
+    --paper: #ffffff;
+    --ink: #1b2230;
+    --muted: #5b6474;
+    --line: #dde1e8;
+    --accent: #c8321e;          /* 소방 적색 */
+    --accent-soft: #fbe9e6;
+    --note: #eef3fb;            /* 강사 노트 바탕 */
+    --note-line: #2f5ea8;
+    --code: #f0f2f5;
+    --font-display: "Black Han Sans", "IBM Plex Sans KR", system-ui, sans-serif;
+    --font-body: "IBM Plex Sans KR", system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+    --font-code: "Nanum Gothic Coding", "D2Coding", ui-monospace, monospace;  /* 한글도 고정폭이라 상자 그림이 맞음 */
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #11151b; --paper: #181d25; --ink: #e6e9ee; --muted: #9aa3b2; --line: #2a313d;
+      --accent: #ff6a52; --accent-soft: #3a2220; --note: #18233a; --note-line: #7aa2e8; --code: #202632;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #11151b; --paper: #181d25; --ink: #e6e9ee; --muted: #9aa3b2; --line: #2a313d;
+    --accent: #ff6a52; --accent-soft: #3a2220; --note: #18233a; --note-line: #7aa2e8; --code: #202632;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.75 var(--font-body); }
+
+  .app { display: grid; grid-template-columns: 280px minmax(0, 1fr); min-height: 100%; }
+
+  /* ── 목차 ── */
+  .side {
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    background: var(--paper); border-right: 1px solid var(--line);
+    padding-block: 20px 32px; padding-inline: 16px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .brand { display: grid; gap: 2px; }
+  .brand small { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; color: var(--accent); }
+  .brand strong { font-family: var(--font-display); font-weight: 400; font-size: 22px; line-height: 1.2; }
+  .tools { display: grid; gap: 8px; }
+  .tools input[type="search"] {
+    width: 100%; font: inherit; font-size: 14px; padding: 7px 10px;
+    border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink);
+  }
+  .toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); cursor: pointer; }
+  nav { display: grid; gap: 12px; }
+  .group h3 {
+    margin: 0 0 4px; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: var(--muted);
+  }
+  .group a {
+    display: block; padding: 5px 8px; border-radius: 6px; color: var(--ink);
+    text-decoration: none; font-size: 14px; line-height: 1.45;
+  }
+  .group a:hover { background: var(--bg); }
+  .group a[aria-current="page"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .group a .hit { font-size: 11px; color: var(--accent); margin-left: 4px; }
+  .empty-search { font-size: 13px; color: var(--muted); }
+
+  /* ── 본문 ── */
+  main { min-width: 0; padding-block: 28px 64px; padding-inline: 32px; }
+  .topbar { display: none; }
+  .crumb { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  article { max-width: 760px; }
+  article h1 { font-family: var(--font-display); font-weight: 400; font-size: 32px; line-height: 1.25; margin: 0 0 18px; text-wrap: balance; }
+  article h2 { font-size: 22px; line-height: 1.35; margin: 40px 0 12px; padding-top: 16px; border-top: 1px solid var(--line); text-wrap: balance; }
+  article h3 { font-size: 17px; margin: 28px 0 8px; }
+  article p, article li { max-width: 68ch; }
+  article a { color: var(--accent); }
+  article hr { border: 0; border-top: 1px dashed var(--line); margin: 32px 0; }
+  article code { font-family: var(--font-mono); font-size: .9em; background: var(--code); padding: 1px 5px; border-radius: 4px; }
+  article pre {
+    position: relative; background: var(--code); border: 1px solid var(--line); border-radius: 8px;
+    padding: 14px 16px; overflow-x: auto; font: 14px/1.6 var(--font-code);
+  }
+  article pre code { background: none; padding: 0; white-space: pre; font: inherit; }
+  .copy {
+    position: absolute; top: 8px; right: 8px; font: 600 12px var(--font-body);
+    padding: 3px 10px; border-radius: 5px; border: 1px solid var(--line);
+    background: var(--paper); color: var(--muted); cursor: pointer;
+  }
+  .copy:hover { color: var(--accent); border-color: var(--accent); }
+  .table-wrap { overflow-x: auto; margin: 14px 0; }
+  table { border-collapse: collapse; font-size: 14px; min-width: 100%; }
+  th, td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--bg); font-weight: 700; }
+  td { font-variant-numeric: tabular-nums; }
+  blockquote { margin: 16px 0; padding: 10px 16px; border-left: 4px solid var(--line); background: var(--paper); color: var(--ink); }
+  blockquote p { margin: 6px 0; }
+  blockquote.teacher { border-left-color: var(--note-line); background: var(--note); }
+  body.hide-teacher blockquote.teacher { display: none; }
+  li input[type="checkbox"] { width: 16px; height: 16px; margin-right: 6px; vertical-align: -2px; accent-color: var(--accent); }
+  article img { max-width: 220px; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+
+  .pager { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); max-width: 760px; }
+  .pager a { flex: 1 1 220px; display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); text-decoration: none; background: var(--paper); }
+  .pager a span { font-size: 12px; color: var(--muted); }
+  .pager a.next { text-align: right; }
+  .pager a:hover { border-color: var(--accent); }
+
+  /* 실습 파일 */
+  .filehead { display: grid; gap: 6px; margin-bottom: 14px; }
+  .path { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+  .tabs { display: flex; gap: 6px; margin: 10px 0; }
+  .tabs button {
+    font: 600 13px var(--font-body); padding: 6px 14px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--paper); color: var(--muted);
+  }
+  .tabs button[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .phone { width: 100%; max-width: 400px; height: 680px; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: #fff; }
+  .phone iframe { width: 100%; height: 100%; border: 0; }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  @media (max-width: 860px) {
+    .app { grid-template-columns: minmax(0, 1fr); }
+    .side { position: fixed; inset: 0 auto 0 0; width: min(300px, 86vw); z-index: 10; transform: translateX(-102%); transition: transform .2s; box-shadow: 0 0 0 100vmax transparent; }
+    .side.open { transform: none; box-shadow: 0 0 0 100vmax rgba(0,0,0,.35); }
+    main { padding-inline: 16px; padding-block: 0 48px; }
+    .topbar {
+      display: flex; align-items: center; gap: 10px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+      background: var(--bg); padding-block: 10px; margin-bottom: 8px; border-bottom: 1px solid var(--line);
+    }
+    .topbar button { font: 600 14px var(--font-body); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); }
+    .topbar span { font-size: 14px; font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    article h1 { font-size: 26px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .side { transition: none; } }
+</style>
+
+<div class="app">
+  <aside class="side" id="side">
+    <div class="brand">
+      <small>소방학교 · 처음 시작하는 분들을 위한</small>
+      <strong>생성형 AI 입문 강의자료</strong>
+    </div>
+    <div class="tools">
+      <input type="search" id="q" placeholder="전체 자료에서 찾기 (예: 동명이인)" aria-label="강의자료 검색">
+      <label class="toggle"><input type="checkbox" id="teacher" checked> 강사 노트 보기</label>
+    </div>
+    <nav id="nav" aria-label="강의자료 목차"></nav>
+  </aside>
+
+  <main>
+    <div class="topbar"><button type="button" id="menu">☰ 목차</button><span id="topTitle"></span></div>
+    <div class="crumb" id="crumb"></div>
+    <article id="doc"></article>
+    <div class="pager" id="pager"></div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script>
+  const DATA = /*__DATA__*/null;
+  const docs = DATA.docs;
+  const byTitle = {};
+  docs.forEach((d) => { byTitle[d.title] = d; });
+  const $ = (id) => document.getElementById(id);
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+  };
+
+  // [[위키 링크]]를 페이지 안 링크로 바꾼다. 코드 블록과 `인라인 코드` 안은 그대로 둔다.
+  function wikify(md) {
+    const conv = (text) => text.replace(/\[\[([^\]]+)\]\]/g, (m, raw) => {
+      const name = raw.split("/").pop();
+      const d = byTitle[name];
+      return d ? "[" + d.short + "](#" + d.id + ")" : "‘" + name + "’";
+    });
+    return md.split(/(```[\s\S]*?```)/g).map((part, i) =>
+      i % 2 ? part : part.split(/(`[^`\n]*`)/g).map((p, j) => (j % 2 ? p : conv(p))).join("")
+    ).join("");
+  }
+
+  function addCopy(pre) {
+    const btn = document.createElement("button");
+    btn.type = "button"; btn.className = "copy"; btn.textContent = "복사";
+    btn.addEventListener("click", () => {
+      const text = pre.querySelector("code") ? pre.querySelector("code").innerText : pre.innerText;
+      navigator.clipboard.writeText(text).then(
+        () => { btn.textContent = "복사됨"; setTimeout(() => (btn.textContent = "복사"), 1500); },
+        () => { const r = document.createRange(); r.selectNodeContents(pre); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = "Ctrl+C"; }
+      );
+    });
+    pre.append(btn);
+  }
+
+  function enhance(root, doc) {
+    root.querySelectorAll("table").forEach((t) => { const w = document.createElement("div"); w.className = "table-wrap"; t.replaceWith(w); w.append(t); });
+    root.querySelectorAll("pre").forEach(addCopy);
+    root.querySelectorAll("blockquote").forEach((b) => { if (/🧑‍🏫|강사/.test(b.textContent)) b.classList.add("teacher"); });
+    root.querySelectorAll('li input[type="checkbox"]').forEach((c, i) => {
+      const key = "lv-check-" + doc.id + "-" + i;
+      c.disabled = false;
+      c.checked = store.get(key) === "1";
+      c.addEventListener("change", () => store.set(key, c.checked ? "1" : "0"));
+    });
+    root.querySelectorAll('a[href^="http"]').forEach((a) => { a.target = "_blank"; a.rel = "noopener"; });
+  }
+
+  function renderHtmlFile(doc, el) {
+    el.innerHTML = "";
+    const head = document.createElement("div"); head.className = "filehead";
+    const h1 = document.createElement("h1"); h1.textContent = doc.short;
+    const path = document.createElement("div"); path.className = "path"; path.textContent = doc.path;
+    const note = document.createElement("p"); note.textContent = doc.note; note.style.margin = "0";
+    head.append(h1, path, note); el.append(head);
+
+    const pre = document.createElement("pre"); const code = document.createElement("code");
+    code.textContent = doc.body; pre.append(code); addCopy(pre);
+
+    if (!doc.preview) { el.append(pre); return; }
+    const tabs = document.createElement("div"); tabs.className = "tabs"; tabs.setAttribute("role", "tablist");
+    const bPrev = document.createElement("button"); bPrev.type = "button"; bPrev.textContent = "화면 미리보기";
+    const bCode = document.createElement("button"); bCode.type = "button"; bCode.textContent = "코드 보기";
+    tabs.append(bPrev, bCode);
+    const phone = document.createElement("div"); phone.className = "phone";
+    const frame = document.createElement("iframe");
+    frame.title = doc.short + " 미리보기";
+    frame.setAttribute("sandbox", "allow-scripts allow-forms");
+    frame.srcdoc = doc.body;
+    phone.append(frame);
+    const show = (preview) => {
+      phone.hidden = !preview; pre.hidden = preview;
+      bPrev.setAttribute("aria-selected", String(preview)); bCode.setAttribute("aria-selected", String(!preview));
+    };
+    bPrev.addEventListener("click", () => show(true));
+    bCode.addEventListener("click", () => show(false));
+    el.append(tabs, phone, pre);
+    show(true);
+  }
+
+  function buildNav(filter) {
+    const nav = $("nav"); nav.innerHTML = "";
+    const q = (filter || "").trim();
+    const groups = [];
+    docs.forEach((d) => {
+      let hits = 0;
+      if (q) { hits = d.body.split(q).length - 1 + (d.short.includes(q) ? 1 : 0); if (!hits) return; }
+      let g = groups.find((x) => x.name === d.group);
+      if (!g) { g = { name: d.group, items: [] }; groups.push(g); }
+      g.items.push({ d, hits });
+    });
+    if (!groups.length) { const p = document.createElement("p"); p.className = "empty-search"; p.textContent = "‘" + q + "’ 이(가) 들어간 자료가 없습니다."; nav.append(p); return; }
+    groups.forEach((g) => {
+      const box = document.createElement("div"); box.className = "group";
+      const h = document.createElement("h3"); h.textContent = g.name; box.append(h);
+      g.items.forEach(({ d, hits }) => {
+        const a = document.createElement("a"); a.href = "#" + d.id; a.textContent = d.short; a.dataset.id = d.id;
+        if (q) { const s = document.createElement("span"); s.className = "hit"; s.textContent = hits + "곳"; a.append(s); }
+        box.append(a);
+      });
+      nav.append(box);
+    });
+    markCurrent();
+  }
+
+  function markCurrent() {
+    const id = current().id;
+    $("nav").querySelectorAll("a").forEach((a) => (a.dataset.id === id ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current")));
+  }
+
+  function current() {
+    const id = location.hash.slice(1);
+    return docs.find((d) => d.id === id) || docs.find((d) => d.id === store.get("lv-last")) || docs[0];
+  }
+
+  function show() {
+    const doc = current();
+    store.set("lv-last", doc.id);
+    const el = $("doc");
+    $("crumb").textContent = doc.group + " · " + (doc.kind === "md" ? doc.title + ".md" : doc.title);
+    $("topTitle").textContent = doc.short;
+    if (doc.kind === "md") {
+      el.innerHTML = marked.parse(wikify(doc.body), { gfm: true });
+      enhance(el, doc);
+    } else {
+      renderHtmlFile(doc, el);
+    }
+    const i = docs.indexOf(doc);
+    const pager = $("pager"); pager.innerHTML = "";
+    const link = (d, cls, label) => { const a = document.createElement("a"); a.href = "#" + d.id; a.className = cls; const s = document.createElement("span"); s.textContent = label; a.append(s, document.createTextNode(d.short)); return a; };
+    if (i > 0) pager.append(link(docs[i - 1], "prev", "← 이전"));
+    if (i < docs.length - 1) pager.append(link(docs[i + 1], "next", "다음 →"));
+    markCurrent();
+    $("side").classList.remove("open");
+    window.scrollTo(0, 0);
+  }
+
+  $("teacher").checked = store.get("lv-teacher") !== "0";
+  document.body.classList.toggle("hide-teacher", !$("teacher").checked);
+  $("teacher").addEventListener("change", (e) => { document.body.classList.toggle("hide-teacher", !e.target.checked); store.set("lv-teacher", e.target.checked ? "1" : "0"); });
+  $("q").addEventListener("input", (e) => buildNav(e.target.value));
+  $("menu").addEventListener("click", () => $("side").classList.toggle("open"));
+  document.addEventListener("click", (e) => { if ($("side").classList.contains("open") && !e.target.closest("#side, #menu")) $("side").classList.remove("open"); });
+  window.addEventListener("hashchange", show);
+
+  buildNav("");
+  show();
+</script>

@@ -1,0 +1,316 @@
+<title>12교시 리허설 기록</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  /* 레이아웃: 위에 요약 띠, 아래로 일차별 교시 카드가 한 줄씩. 강사 노트북 옆 화면에 띄워 두고 쓰는 기록장 */
+  :root {
+    --bg: #eef1f4;
+    --paper: #ffffff;
+    --ink: #17202b;
+    --muted: #5d6877;
+    --line: #d5dbe3;
+    --accent: #c4361f;      /* 소방 적색 */
+    --accent-soft: #fbe8e4;
+    --ok: #1d7a4c;
+    --ok-soft: #e2f3ea;
+    --warn: #a35b00;
+    --warn-soft: #fbefdc;
+    --font-display: "Do Hyeon", "IBM Plex Sans KR", "Malgun Gothic", sans-serif;
+    --font-body: "IBM Plex Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12171d; --paper: #1a2129; --ink: #e5e9ee; --muted: #9aa5b3; --line: #2c3540;
+      --accent: #ff7b62; --accent-soft: #3a221d; --ok: #5fcf95; --ok-soft: #173225; --warn: #f0b252; --warn-soft: #3a2b14;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12171d; --paper: #1a2129; --ink: #e5e9ee; --muted: #9aa5b3; --line: #2c3540;
+    --accent: #ff7b62; --accent-soft: #3a221d; --ok: #5fcf95; --ok-soft: #173225; --warn: #f0b252; --warn-soft: #3a2b14;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--ink); font: 15px/1.6 var(--font-body); }
+  .wrap { max-width: 980px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 48px; display: grid; gap: 18px; }
+  header { display: grid; gap: 4px; }
+  header small { color: var(--accent); font-weight: 700; font-size: 12px; letter-spacing: .08em; }
+  h1 { margin: 0; font: 400 30px/1.2 var(--font-display); text-wrap: balance; }
+  header p { margin: 0; color: var(--muted); max-width: 66ch; }
+  .store { font-size: 13px; color: var(--muted); }
+  .store b { color: var(--ink); }
+
+  .summary { display: flex; flex-wrap: wrap; gap: 10px; align-items: stretch; }
+  .stat { flex: 1 1 150px; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; display: grid; gap: 2px; }
+  .stat span { font-size: 12px; color: var(--muted); }
+  .stat strong { font: 600 22px/1.2 var(--font-mono); font-variant-numeric: tabular-nums; }
+  .stat strong.over { color: var(--accent); }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+  h2 { margin: 6px 0 0; font: 400 22px/1.3 var(--font-display); display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+  h2 span { font: 500 13px var(--font-body); color: var(--muted); }
+  .group { display: grid; gap: 10px; }
+
+  .row { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 10px; border-left: 4px solid var(--line); }
+  .row[data-result="ok"] { border-left-color: var(--ok); }
+  .row[data-result="stuck"] { border-left-color: var(--accent); }
+  .row[data-result="diff"] { border-left-color: var(--warn); }
+  .row.running { box-shadow: 0 0 0 2px var(--accent-soft); }
+  .top { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: baseline; justify-content: space-between; }
+  .name { display: grid; gap: 0; min-width: 0; }
+  .name b { font-size: 16px; }
+  .name small { color: var(--muted); font-size: 13px; }
+  .times { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .times label { font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+  input[type="time"], input[type="number"] { font: 500 14px var(--font-mono); padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+  input[type="number"] { width: 64px; }
+  .mins { font: 600 14px var(--font-mono); font-variant-numeric: tabular-nums; min-width: 9ch; text-align: right; }
+  .mins.over { color: var(--accent); }
+  .mins.under { color: var(--ok); }
+  .live { font: 600 13px var(--font-mono); color: var(--accent); }
+
+  button { font: 600 13px var(--font-body); padding: 5px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; }
+  button:hover { border-color: var(--accent); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip[aria-pressed="true"][data-v="ok"] { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+  .chip[aria-pressed="true"][data-v="stuck"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .chip[aria-pressed="true"][data-v="diff"] { background: var(--warn-soft); border-color: var(--warn); color: var(--warn); }
+  .notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; }
+  .notes label { display: grid; gap: 3px; font-size: 12px; color: var(--muted); min-width: 0; }
+  textarea { font: 14px/1.5 var(--font-body); padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); min-height: 52px; resize: vertical; width: 100%; }
+  .saved { font-size: 12px; color: var(--muted); min-height: 1em; }
+  .checks { gap: 6px; }
+  .check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; cursor: pointer; }
+  .check input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--ok); flex: none; }
+  .check.done span { color: var(--muted); text-decoration: line-through; }
+  .copybox { width: 100%; min-height: 140px; font: 13px/1.5 var(--font-mono); }
+  .hint { font-size: 13px; color: var(--muted); margin: 0; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <small>생성형 AI 업무 활용 입문 · 1기 리허설</small>
+    <h1>12교시 리허설 기록</h1>
+    <p>교시를 시작할 때 <b>시작</b>, 끝날 때 <b>끝</b>을 누르고 결과와 막힌 곳을 적어 두세요. 계획은 1교시 50분 기준입니다. 리허설 시간 × 1.3~1.5배를 실제 교육생 시간으로 봅니다.</p>
+    <div class="store" id="store">저장소를 연결하는 중…</div>
+  </header>
+
+  <section class="summary" aria-label="요약">
+    <div class="stat"><span>기록한 교시</span><strong id="sDone">0 / 12</strong></div>
+    <div class="stat"><span>계획 합계</span><strong id="sPlan">0분</strong></div>
+    <div class="stat"><span>실제 합계 (기록한 교시)</span><strong id="sReal">0분</strong></div>
+    <div class="stat"><span>막힘 · 메뉴 다름</span><strong id="sStuck">0 · 0</strong></div>
+  </section>
+
+  <section class="group" aria-label="수업 전 점검">
+    <h2>수업 전 점검 <span>하루마다 30분 전. 리허설 때 한 번 끝까지 확인해 둡니다</span></h2>
+    <div class="row checks" id="checks"></div>
+  </section>
+
+  <div id="groups"></div>
+
+  <section class="group" aria-label="요약 복사">
+    <h2>Claude에게 보낼 요약 <span>필요할 때만. 이 페이지 기록은 Claude도 직접 읽을 수 있습니다</span></h2>
+    <textarea id="copyText" class="copybox" readonly></textarea>
+    <div class="actions"><button type="button" id="copyBtn" class="primary">요약 복사</button><span class="saved" id="copyMsg"></span></div>
+  </section>
+</div>
+
+<script>
+const PLAN = [
+  { round: "사전 과제", sub: "수업 전, 리허설용 새 크롬 프로필에서", items: [
+    { id: "pre", label: "사전 과제", title: "01 업무 계정 · 02 ChatGPT·Claude 가입 · GitHub 가입", mods: "01 · 02 · 10의 1단계", plan: 35 } ] },
+  { round: "1일차", sub: "1~6교시 · AI에게 일 시키기 → 내 자료 → PRD → 스킬 → 보고 자료", items: [
+    { id: "p01", label: "1교시", title: "생성형 AI 첫 경험과 프롬프트", mods: "00 · 3-0 몸풀기 HTML · 3-1", plan: 50 },
+    { id: "p02", label: "2교시", title: "파일 건네기와 프로젝트", mods: "3-2 · 3-3", plan: 50 },
+    { id: "p03", label: "3교시", title: "옵시디언과 MD 파일", mods: "04 (설치 포함)", plan: 50 },
+    { id: "p04", label: "4교시", title: "업무 기획서(PRD) 작성", mods: "05", plan: 50 },
+    { id: "p05", label: "5교시", title: "스킬로 업무 방법 맡기기", mods: "06", plan: 50 },
+    { id: "p06", label: "6교시", title: "PRD로 보고 자료 만들기", mods: "07", plan: 50 } ] },
+  { round: "2일차", sub: "7~12교시 · 코딩 없이 자동화 → 화면 구조 → 웹 공개 → 내 업무 화면 → 공유", items: [
+    { id: "p07", label: "7교시", title: "코딩 없이 업무 자동화", mods: "08 Aside (설치 포함)", plan: 50 },
+    { id: "p08", label: "8교시", title: "웹 화면의 구조", mods: "09", plan: 50 },
+    { id: "p09", label: "9교시", title: "내 화면을 웹에 공개", mods: "10", plan: 50 },
+    { id: "p10", label: "10~11교시", title: "AI 에이전트로 내 업무 화면 만들기", mods: "12 (A 내 PRD / B 공공데이터)", plan: 100 },
+    { id: "p12", label: "12교시", title: "결과 공유와 업무 적용 계획", mods: "공유 · 과정 평가", plan: 50 } ] },
+];
+const ALL = PLAN.flatMap((g) => g.items);
+const CHECKS = [
+  ["proj", "프로젝터 입력을 노트북(HDMI)으로 전환하고, 강의장 PC 화면이 나가지 않는지 확인"],
+  ["cable", "노트북 연결 단자(HDMI · USB-C 젠더)와 전원"],
+  ["net", "노트북 인터넷 (기관 와이파이, 예비로 휴대폰 핫스팟)"],
+  ["team", "노트북 Claude가 Team 화면인지(왼쪽 아래 Team 이름), 크롬 확대 125~150%"],
+  ["pages", "강의장 PC에 강사용 열람 페이지와 이 기록 페이지 열기"],
+  ["netcheck", "교육생 PC 한 대에서 접속 점검 페이지 확인 (Claude 3개는 주소를 눌러 직접 확인)"],
+  ["html", "(1일차) 교육생 PC 한 대로 HTML 파일 내려받기 → 바탕화면 더블클릭 실행 확인"],
+  ["install", "그날 설치가 있으면(1일차 3교시 옵시디언, 2일차 7교시 Aside) 교육생 PC 한 대로 설치 확인"],
+  ["logout", "수업 후 강의장 PC에서 개인 Claude 로그아웃, 크롬 프로필 정리"],
+];
+const RESULTS = [["ok", "됨"], ["stuck", "막힘"], ["diff", "메뉴 이름 다름"]];
+const LS = "rehearsal-log-v1";
+const state = {};        // id -> record
+let db = null;           // db 네임스페이스 (없으면 이 브라우저에만 저장)
+const $ = (id) => document.getElementById(id);
+
+function toMin(t) { if (!t) return null; const [h, m] = t.split(":").map(Number); return h * 60 + m; }
+function minutesOf(r) {
+  if (!r) return null;
+  if (Number.isFinite(r.minutes) && r.minutes > 0) return r.minutes;
+  const s = toMin(r.start), e = toMin(r.end);
+  if (s == null || e == null) return null;
+  return e >= s ? e - s : e + 1440 - s;
+}
+function nowHM() { const d = new Date(); return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); }
+
+function loadLocal() { try { return JSON.parse(localStorage.getItem(LS) || "{}"); } catch (e) { return {}; } }
+function saveLocal() { try { localStorage.setItem(LS, JSON.stringify(state)); } catch (e) {} }
+
+const pending = {};
+function persist(id) {
+  const r = state[id]; r.updatedAt = new Date().toISOString();
+  saveLocal();
+  clearTimeout(pending[id]);
+  pending[id] = setTimeout(async () => {
+    const msg = document.querySelector(`[data-saved="${id}"]`);
+    if (!db) { if (msg) msg.textContent = "이 브라우저에 저장됨"; return; }
+    try { await db.doc("rehearsal/" + id).set(r); if (msg) msg.textContent = "저장됨 " + nowHM(); }
+    catch (e) { if (msg) msg.textContent = "저장 실패: 잠시 뒤 다시 입력해 주세요 (" + (e && e.code || "오류") + ")"; }
+  }, 600);
+}
+
+function rowHTML(it) {
+  return `<article class="row" id="row-${it.id}">
+    <div class="top">
+      <div class="name"><b>${it.label} · ${it.title}</b><small>모듈 ${it.mods} · 계획 ${it.plan}분</small></div>
+      <div class="times">
+        <label>시작 <input type="time" id="start-${it.id}"></label>
+        <button type="button" data-act="start" data-id="${it.id}">시작</button>
+        <label>끝 <input type="time" id="end-${it.id}"></label>
+        <button type="button" data-act="end" data-id="${it.id}">끝</button>
+        <label>직접(분) <input type="number" min="0" max="300" id="min-${it.id}" placeholder="-"></label>
+        <span class="mins" id="mins-${it.id}">-</span>
+      </div>
+    </div>
+    <div class="chips" role="group" aria-label="${it.label} 결과">
+      ${RESULTS.map(([v, t]) => `<button type="button" class="chip" data-act="result" data-id="${it.id}" data-v="${v}" aria-pressed="false">${t}</button>`).join("")}
+      <span class="live" id="live-${it.id}"></span>
+    </div>
+    <div class="notes">
+      <label for="issue-${it.id}">막힌 곳과 이유<textarea id="issue-${it.id}" placeholder="예: 옵시디언 설치 때 관리자 권한 창이 뜸"></textarea></label>
+      <label for="text-${it.id}">교재에서 헷갈린 문장<textarea id="text-${it.id}" placeholder="예: 4-2의 '보관소' 설명이 부족"></textarea></label>
+    </div>
+    <div class="saved" data-saved="${it.id}"></div>
+  </article>`;
+}
+
+function build() {
+  $("checks").innerHTML = CHECKS.map(([k, t]) => `<label class="check" id="chk-${k}"><input type="checkbox" id="cb-${k}" data-k="${k}"><span>${t}</span></label>`).join("") + `<div class="saved" data-saved="checks"></div>`;
+  $("checks").addEventListener("change", (e) => {
+    const k = e.target.dataset.k; if (!k) return;
+    const c = state.checks || (state.checks = { items: {} }); c.items = c.items || {};
+    c.items[k] = e.target.checked; persist("checks"); paint();
+  });
+  $("groups").innerHTML = PLAN.map((g) => `<section class="group"><h2>${g.round} <span>${g.sub}</span></h2>${g.items.map(rowHTML).join("")}</section>`).join("");
+  for (const it of ALL) {
+    const id = it.id;
+    $("start-" + id).addEventListener("change", (e) => { rec(id).start = e.target.value; persist(id); paint(); });
+    $("end-" + id).addEventListener("change", (e) => { rec(id).end = e.target.value; persist(id); paint(); });
+    $("min-" + id).addEventListener("change", (e) => { const v = parseInt(e.target.value, 10); rec(id).minutes = Number.isFinite(v) ? v : null; persist(id); paint(); });
+    $("issue-" + id).addEventListener("input", (e) => { rec(id).issue = e.target.value; persist(id); paintSummary(); });
+    $("text-" + id).addEventListener("input", (e) => { rec(id).text = e.target.value; persist(id); paintSummary(); });
+  }
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-act]"); if (!b) return;
+    const id = b.dataset.id, r = rec(id);
+    if (b.dataset.act === "start") { r.start = nowHM(); r.end = ""; r.minutes = null; }
+    if (b.dataset.act === "end") { if (!r.start) r.start = nowHM(); r.end = nowHM(); }
+    if (b.dataset.act === "result") r.result = r.result === b.dataset.v ? "" : b.dataset.v;
+    persist(id); paint();
+  });
+}
+function rec(id) { return state[id] || (state[id] = { start: "", end: "", minutes: null, result: "", issue: "", text: "" }); }
+
+function setVal(el, v) { if (document.activeElement !== el && el.value !== (v ?? "")) el.value = v ?? ""; }
+function paint() {
+  for (const it of ALL) {
+    const id = it.id, r = state[id] || {};
+    setVal($("start-" + id), r.start); setVal($("end-" + id), r.end);
+    setVal($("min-" + id), Number.isFinite(r.minutes) && r.minutes > 0 ? String(r.minutes) : "");
+    setVal($("issue-" + id), r.issue); setVal($("text-" + id), r.text);
+    const m = minutesOf(r), el = $("mins-" + id);
+    if (m == null) { el.textContent = "-"; el.className = "mins"; }
+    else { const d = m - it.plan; el.textContent = m + "분 (" + (d > 0 ? "+" : "") + d + ")"; el.className = "mins " + (d > 0 ? "over" : "under"); }
+    const row = $("row-" + id);
+    row.dataset.result = r.result || "";
+    row.classList.toggle("running", !!(r.start && !r.end && !(r.minutes > 0)));
+    row.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.v === r.result)));
+  }
+  const items = (state.checks && state.checks.items) || {};
+  for (const [k] of CHECKS) { const on = !!items[k]; $("cb-" + k).checked = on; $("chk-" + k).classList.toggle("done", on); }
+  tick(); paintSummary();
+}
+function tick() {
+  const now = toMin(nowHM());
+  for (const it of ALL) {
+    const r = state[it.id] || {}, el = $("live-" + it.id);
+    if (r.start && !r.end && !(r.minutes > 0)) { let e = now - toMin(r.start); if (e < 0) e += 1440; el.textContent = "진행 중 " + e + "분 / 계획 " + it.plan + "분"; }
+    else el.textContent = "";
+  }
+}
+function paintSummary() {
+  const lessons = ALL.filter((it) => it.id !== "pre");
+  let done = 0, plan = 0, real = 0, stuck = 0, diff = 0; const lines = [];
+  for (const it of ALL) {
+    const r = state[it.id] || {}, m = minutesOf(r);
+    if (it.id !== "pre") plan += it.plan;
+    if (m != null) { if (it.id !== "pre") done += it.plan / 50; real += m; }
+    if (r.result === "stuck") stuck++; if (r.result === "diff") diff++;
+    if (m != null || r.result || r.issue || r.text) {
+      const res = RESULTS.find(([v]) => v === r.result);
+      lines.push(`[${it.label}] ${r.start || "?"}~${r.end || "?"} (${m == null ? "?" : m + "분"}, 계획 ${it.plan}분) / ${res ? res[1] : "-"} / ${r.issue || "-"} / ${r.text || "-"}`);
+    }
+  }
+  $("sDone").textContent = done + " / " + lessons.reduce((a, it) => a + it.plan / 50, 0);
+  $("sPlan").textContent = plan + "분";
+  const recordedPlan = ALL.filter((it) => minutesOf(state[it.id]) != null).reduce((a, it) => a + it.plan, 0);
+  $("sReal").textContent = real + "분";
+  $("sReal").className = real > recordedPlan && recordedPlan > 0 ? "over" : "";
+  $("sStuck").textContent = stuck + " · " + diff;
+  const items = (state.checks && state.checks.items) || {};
+  const notDone = CHECKS.filter(([k]) => !items[k]).map(([, t]) => "- " + t);
+  const checkLine = "수업 전 점검: " + (CHECKS.length - notDone.length) + "/" + CHECKS.length + (notDone.length ? " (남은 것)\n" + notDone.join("\n") : " 완료");
+  $("copyText").value = (lines.length ? "리허설 기록\n" + lines.join("\n") : "교시 기록 없음") + "\n\n" + checkLine;
+}
+
+$("copyBtn").addEventListener("click", async () => {
+  const t = $("copyText");
+  try { await navigator.clipboard.writeText(t.value); $("copyMsg").textContent = "복사했습니다. 대화창에 붙여넣으세요."; }
+  catch (e) { t.focus(); t.select(); $("copyMsg").textContent = "Ctrl+C로 복사하세요 (선택해 두었습니다)."; }
+});
+
+Object.assign(state, loadLocal());
+build(); paint();
+setInterval(tick, 20000);
+
+(async () => {
+  const ns = window.claude ? await window.claude.use("db") : null;
+  if (!ns) { $("store").innerHTML = "기록은 <b>이 브라우저에만</b> 저장됩니다. Claude에게 알릴 때는 아래 요약을 복사해 보내 주세요."; return; }
+  db = ns;
+  $("store").innerHTML = "기록은 <b>자동 저장</b>되고 Claude도 읽을 수 있습니다. 다른 기기에서 열어도 같은 기록이 보입니다.";
+  db.collection("rehearsal").onSnapshot((snap) => {
+    let fromStore = 0;
+    for (const d of snap.docs) {
+      const local = state[d.id], remote = d.data();
+      if (!local || !local.updatedAt || (remote.updatedAt || "") >= local.updatedAt) { state[d.id] = remote; fromStore++; }
+    }
+    // 저장소에 아직 없는 이 브라우저 기록은 한 번 올려 둔다
+    if (!snap.metadata || !snap.metadata.fromCache) {
+      for (const id of Object.keys(state)) if (!snap.docs.some((d) => d.id === id) && (id === "checks" || ALL.some((it) => it.id === id))) persist(id);
+    }
+    saveLocal(); paint();
+  }, (e) => { $("store").textContent = "저장소 연결이 끊겼습니다. 입력은 이 브라우저에 남고, 새로고침하면 다시 연결합니다."; });
+})();
+</script>
