@@ -141,7 +141,7 @@ function nav(current) {
   const mods = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to)
     .map((m) => link(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`)).join("");
   return `<nav aria-label="목차">
-    <div class="group">${link("index.html", "처음 화면")}${link("prework.html", "사전 과제 안내")}</div>
+    <div class="group">${link("index.html", "처음 화면")}${link("prework.html", "사전 과제 안내")}${link("homework.html", "회차별 과제")}</div>
     <div class="group"><h3>본 강의</h3>${mods(1, 8)}</div>
     <div class="group"><h3>심화 · 직접 만들기</h3>${mods(9, 10)}${mods(12, 12)}</div>
     <div class="group"><h3>선택 자료 (수업 외)</h3>${mods(11, 11)}</div>
@@ -206,6 +206,8 @@ MODULES.forEach((m, i) => {
 
 const preworkMd = fs.readFileSync(path.join(LECTURE, "사전 과제 안내.md"), "utf8");
 fs.writeFileSync(path.join(OUT, "prework.html"), page("prework.html", "사전 과제 안내", render(preworkMd)));
+const homeworkMd = fs.readFileSync(path.join(LECTURE, "회차별 과제.md"), "utf8");
+fs.writeFileSync(path.join(OUT, "homework.html"), page("homework.html", "회차별 과제", render(homeworkMd)));
 
 const promptsMd = fs.readFileSync(path.join(ROOT, FILES.prompts[1]), "utf8").replace(/^←.*\n/m, "");
 fs.writeFileSync(path.join(OUT, "prompts.html"), page("prompts.html", "프롬프트 모음",
@@ -241,7 +243,7 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <ol class="mods">${modItems(MODULES.slice(5, 9))}</ol>
   <h2>3회차 (4시간) · 직접 만들어 웹에 공개하기, 내 업무 화면 만들기</h2>
   <ol class="mods">${modItems([MODULES[8], MODULES[9], MODULES[11]])}</ol>
-  <p class="note">숙제: 1회차 뒤에는 모듈 05에서 시작한 내 업무 PRD 마저 쓰기, 2회차 뒤에는 GitHub 가입(모듈 10의 1단계). 모듈 09는 2회차(1·2단계)와 3회차(3·4단계)에 나눠 진행합니다. 모듈 11(Firebase)은 수업에서 다루지 않는 선택 자료입니다.</p>
+  <p class="note">4주 동안 주 1회 진행합니다. 회차 사이 일주일은 배운 것을 업무에 써 보는 시간입니다: <a href="homework.html">회차별 과제</a>. 모듈 09는 2회차(1·2단계)와 3회차(3·4단계)에 나눠 진행합니다. 모듈 11(Firebase)은 수업에서 다루지 않는 선택 자료입니다.</p>
   <h2>바로가기</h2>
   <div class="tiles">${siteLinks}</div>
   <h2>자료</h2>
