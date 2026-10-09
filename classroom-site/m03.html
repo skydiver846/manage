@@ -21,7 +21,7 @@
   </aside>
   <main>
     <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>03 프롬프트 · 파일 · 프로젝트</span></div>
-    <article><h1>모듈 3. 프롬프트 · 파일 건네기 · 폴더(프로젝트) 활용</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>예시 PRD (강의평가 결과보고 v0.1)</span><span class="acts"><a class="btn" href="files/PRD_%EA%B0%95%EC%9D%98%ED%8F%89%EA%B0%80%20%EA%B2%B0%EA%B3%BC%EB%B3%B4%EA%B3%A0.md" download="PRD_강의평가 결과보고.md">내려받기</a></span></li><li><span>강의평가 자유의견 예시 (서술형 요약 실습용)</span><span class="acts"><a class="btn" href="files/%EA%B0%95%EC%9D%98%ED%8F%89%EA%B0%80_%EC%9E%90%EC%9C%A0%EC%9D%98%EA%B2%AC_%EC%98%88%EC%8B%9C.md" download="강의평가_자유의견_예시.md">내려받기</a></span></li></ul></aside>
+    <article><h1>모듈 3. 프롬프트 · 파일 건네기 · 폴더(프로젝트) 활용</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>지뢰찾기 화면 그림 (몸풀기 화면 캡처용)</span><span class="acts"><a class="btn" href="files/%EC%A7%80%EB%A2%B0%EC%B0%BE%EA%B8%B0_%ED%99%94%EB%A9%B4.png" download="지뢰찾기_화면.png">내려받기</a> <a class="btn ghost" href="files/%EC%A7%80%EB%A2%B0%EC%B0%BE%EA%B8%B0_%ED%99%94%EB%A9%B4.png" target="_blank" rel="noopener">열어 보기</a></span></li><li><span>예시 PRD (강의평가 결과보고 v0.1)</span><span class="acts"><a class="btn" href="files/PRD_%EA%B0%95%EC%9D%98%ED%8F%89%EA%B0%80%20%EA%B2%B0%EA%B3%BC%EB%B3%B4%EA%B3%A0.md" download="PRD_강의평가 결과보고.md">내려받기</a></span></li><li><span>강의평가 자유의견 예시 (서술형 요약 실습용)</span><span class="acts"><a class="btn" href="files/%EA%B0%95%EC%9D%98%ED%8F%89%EA%B0%80_%EC%9E%90%EC%9C%A0%EC%9D%98%EA%B2%AC_%EC%98%88%EC%8B%9C.md" download="강의평가_자유의견_예시.md">내려받기</a></span></li></ul></aside>
 <p>이 모듈의 핵심 한 줄:</p>
 <blockquote>
 <p><strong>AI의 답은 내가 건네는 것(질문 + 자료 + 맥락)만큼 좋아진다.</strong></p>
@@ -51,22 +51,71 @@
 </tr>
 </tbody></table></div>
 <hr>
-<h2>3-0. 오프닝: 나만의 이모티콘 만들기 (10분)</h2>
-<p>본격적으로 시작하기 전에 AI와 가볍게 놀아 봅니다. <strong>ChatGPT</strong> 새 채팅에 입력하세요.</p>
+<h2>3-0. 몸풀기: 말로 만드는 프로그램, HTML 한 장 (15분)</h2>
+<p>본격적으로 시작하기 전에 AI에게 <strong>프로그램</strong>을 하나 시켜 봅니다. 코딩은 몰라도 됩니다.</p>
+<blockquote>
+<p><strong>알아 둘 것: AI가 만든 HTML 파일 하나 = 설치 없이 바로 쓰는 프로그램</strong></p>
+<ul>
+<li>내려받은 <code>.html</code> 파일을 <strong>더블클릭</strong>하면 인터넷 창(크롬·엣지)에서 바로 열립니다.</li>
+<li>설치도, 관리자 권한도, 인터넷 연결도 필요 없습니다. 파일 하나라 동료에게 그대로 건넬 수 있습니다.</li>
+<li>2일차에는 이 파일을 <strong>웹 주소</strong>로 공개하고(09), 내 업무 화면을 같은 방법으로 만듭니다(12).</li>
+</ul>
+</blockquote>
+<h3>① 함께: 공학용 계산기 (Claude, 5분)</h3>
+<p><strong>Claude</strong> 새 채팅에 입력하세요.</p>
+<pre><code>공학용 계산기를 HTML 파일 하나로 만들어 줘.
+- 사칙연산, 괄호, 제곱, 제곱근, sin·cos·tan(도 단위), log, π
+- 버튼은 크게, 키보드로 숫자 입력도 되게
+- 계산 기록을 아래에 5줄까지 보여 줘
+- 외부 라이브러리 없이 파일 하나로
+</code></pre>
+<ol>
+<li>오른쪽 <strong>미리보기</strong>에서 바로 눌러 봅니다. <code>sin 30</code> = 0.5, <code>√2</code> ≈ 1.414 가 나오면 성공.</li>
+<li>미리보기 오른쪽 위 <strong>다운로드</strong>(또는 복사 → 메모장 → <code>계산기.html</code>로 저장)로 <strong>바탕화면</strong>에 저장합니다.</li>
+<li>바탕화면의 <code>계산기.html</code>을 <strong>더블클릭</strong> → 인터넷 창에서 열리면 내 PC의 프로그램이 된 것입니다.</li>
+<li>고치고 싶으면 말로: &quot;버튼 색을 빨간색 계열로&quot;, &quot;단위 변환(℃↔℉) 버튼 추가&quot;</li>
+</ol>
+<h3>② 골라서 하나: 게임 만들기 (8분)</h3>
+<p><strong>A. 폭탄 뽑기 (ChatGPT)</strong>: 회식·워크숍 복불복용</p>
+<pre><code>회식·워크숍에서 쓸 &#39;폭탄 뽑기&#39; 게임을 HTML 파일 하나로 만들어 줘.
+- 참가자 이름을 쉼표로 입력하면 차례가 순서대로 돌아가
+- 카드 12장 중 1장에 폭탄이 숨어 있어. 차례인 사람이 카드를 누르면 뒤집혀
+- 폭탄이 나오면 화면이 흔들리고 &quot;펑! ○○○ 당첨&quot;을 크게 보여 줘
+- 다시 하기 버튼, 카드 수 조절(6~30장)
+- 외부 라이브러리 없이 파일 하나로
+캔버스에서 바로 실행해 볼 수 있게 해 줘.
+</code></pre>
+<ul>
+<li>답이 코드로만 나오면 오른쪽 위 <strong>미리보기(실행)</strong> 를 누르거나 &quot;캔버스로 열어 줘&quot;라고 이어서 입력합니다.</li>
+</ul>
+<p><strong>B. 지뢰찾기 (Claude, 화면 캡처로 시키기)</strong>: 그림 한 장으로 설명하기</p>
+<ol>
+<li>이 모듈 실습 파일의 <strong>지뢰찾기 화면 그림</strong>을 <strong>열어 보기</strong> 합니다.</li>
+<li><code>Windows 키 + Shift + S</code> → 그림 부분을 마우스로 끌어 <strong>화면 캡처</strong>합니다.</li>
+<li>Claude 새 채팅 입력창에 <code>Ctrl + V</code> 로 붙여 넣고 아래를 함께 보냅니다.</li>
+</ol>
+<pre><code>붙여 넣은 화면처럼 동작하는 지뢰찾기 게임을 HTML 파일 하나로 만들어 줘.
+- 9×9 칸, 지뢰 10개, 첫 클릭은 절대 지뢰가 아니게
+- 왼쪽 클릭은 열기, 오른쪽 클릭은 깃발, 빈칸을 열면 주변도 자동으로 열기
+- 위쪽에 남은 지뢰 수, 걸린 시간, 다시 하기 버튼(웃는 얼굴)
+- 색과 칸 테두리는 그림과 비슷하게
+</code></pre>
+<ul>
+<li>긴 설명 대신 <strong>그림 한 장</strong>을 건넸습니다. 업무에서도 똑같습니다. 기존 양식, 엑셀 표, 오류 창을 캡처해 붙여 넣으면 AI가 훨씬 정확히 알아듣습니다(3-2에서 이어집니다).</li>
+</ul>
+<h3>③ 정리 (2분)</h3>
+<ul>
+<li>옆 사람과 비교해 보세요. <strong>같은 AI인데 지시가 다르면 결과가 다릅니다.</strong> 그 차이를 만드는 방법이 바로 다음 3-1입니다.</li>
+<li>오늘 만든 것은 놀이였지만, 2일차에는 같은 방법으로 <strong>강의평가 결과 화면</strong>을 만듭니다.</li>
+<li><strong>조심할 것:</strong> 출처를 모르는 <code>.html</code> 첨부파일은 열지 않습니다(피싱에 자주 쓰입니다). 내가 만들었거나 믿을 수 있는 사람이 준 파일만 엽니다.</li>
+</ul>
+<p><strong>쉬는 시간에 해 볼 거리 (선택): 나만의 이모티콘 (ChatGPT)</strong></p>
 <pre><code>나는 소방학교 교육운영 담당자야. 안경을 쓰고 웃는 얼굴의 귀여운 캐릭터로
 &quot;확인했습니다&quot;, &quot;수고하셨습니다&quot;, &quot;잠시만요&quot; 이모티콘 3개를 만들어 줘.
 흰 배경, 글자는 한글로 크게.
 </code></pre>
 <ul>
-<li>마음에 안 들면 이어서 고칩니다: &quot;머리를 짧게&quot;, &quot;소방 헬멧을 씌워 줘&quot;, &quot;글자를 더 크게&quot;</li>
-<li>옆 사람과 결과를 비교해 보세요. <strong>같은 AI인데 지시가 다르면 결과가 다릅니다.</strong> 그 차이를 만드는 방법이 바로 다음 3-1입니다.</li>
-</ul>
-<p><strong>내 셀카로 만들고 싶다면 (선택)</strong></p>
-<ul>
-<li><strong>휴대폰의 ChatGPT 앱</strong>에서 합니다. 강의장 PC로 사진을 옮기지 않습니다.</li>
-<li>먼저 설정 → <strong>데이터 제어 → &quot;모델 개선&quot;</strong> 을 꺼 두세요. 올린 사진이 학습에 쓰이지 않게 합니다.</li>
-<li><strong>내 사진만</strong> 씁니다. 동료·가족 등 다른 사람의 사진은 그 사람의 동의 없이 올리지 않습니다.</li>
-<li>만든 이모티콘을 판매하거나 공식 홍보물에 쓰려면 서비스 약관을 따로 확인합니다.</li>
+<li>내 셀카로 만들고 싶다면 <strong>휴대폰의 ChatGPT 앱</strong>에서, 먼저 설정 → <strong>데이터 제어 → &quot;모델 개선&quot;</strong> 을 끄고, <strong>내 사진만</strong> 씁니다. 다른 사람의 사진은 그 사람의 동의 없이 올리지 않습니다.</li>
 </ul>
 <h2>3-1. 프롬프트: 좋은 지시의 5요소 (30분)</h2>
 <h3>공식: <strong>역할 · 목표 · 맥락 · 형식 · 조건</strong></h3>

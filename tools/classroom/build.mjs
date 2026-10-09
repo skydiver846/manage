@@ -28,6 +28,7 @@ const MODULES = [
 // 교육생이 내려받는 파일: [사이트 안 경로, 원본, 내려받을 때 이름, 설명]
 // 사이트 안 경로도 한글 이름으로 둔다. 행정망 보안 프로그램 등이 download 속성을 무시해도 주소의 파일 이름으로 저장되기 때문
 const FILES = {
+  mine: ["files/지뢰찾기_화면.png", "lecture/실습자료/지뢰찾기_화면.png", "지뢰찾기_화면.png", "지뢰찾기 화면 그림 (몸풀기 화면 캡처용)"],
   prd: ["files/PRD_강의평가 결과보고.md", "lecture/실습자료/PRD_강의평가 결과보고.md", "PRD_강의평가 결과보고.md", "예시 PRD (강의평가 결과보고 v0.1)"],
   opinions: ["files/강의평가_자유의견_예시.md", "lecture/실습자료/강의평가_자유의견_예시.md", "강의평가_자유의견_예시.md", "강의평가 자유의견 예시 (서술형 요약 실습용)"],
   template: ["files/PRD 템플릿.md", "lecture/실습자료/PRD 템플릿.md", "PRD 템플릿.md", "빈 PRD 양식"],
@@ -43,7 +44,7 @@ const FILES = {
   step3: ["steps/3-js.html", "prototype-demo/steps/3-js.html", "3-js.html", "3단계 JavaScript (움직임)"],
   final: ["prototype/index.html", "prototype-demo/index.html", "index.html", "강의평가 집계 완성본 (배포 실습용 index.html)"],
 };
-const MODULE_FILES = { 3: ["prd", "opinions"], 4: ["prd", "opinions"], 5: ["template", "prd"], 6: ["skill", "skillmd", "quizreq", "quizsrc", "quizcard", "quizzip"], 7: ["prd", "opinions"], 9: ["step1", "step2", "step3", "final"], 10: ["final"] };
+const MODULE_FILES = { 3: ["mine", "prd", "opinions"], 4: ["prd", "opinions"], 5: ["template", "prd"], 6: ["skill", "skillmd", "quizreq", "quizsrc", "quizcard", "quizzip"], 7: ["prd", "opinions"], 9: ["step1", "step2", "step3", "final"], 10: ["final"] };
 
 const SITES = {
   "accounts.google.com/signup": "https://accounts.google.com/signup", "google.com": "https://www.google.com/",
@@ -129,7 +130,7 @@ function enhance(html) {
 function fileBox(keys) {
   const items = keys.map((k) => {
     const [dest, , dl, label] = FILES[k]; const href = encodeURI(dest);
-    const open = href.endsWith(".html") ? ` <a class="btn ghost" href="${href}" target="_blank" rel="noopener">열어 보기</a>` : "";
+    const open = /\.(html|png)$/.test(href) ? ` <a class="btn ghost" href="${href}" target="_blank" rel="noopener">열어 보기</a>` : "";
     return `<li><span>${esc(label)}</span><span class="acts"><a class="btn" href="${href}" download="${esc(dl)}">내려받기</a>${open}</span></li>`;
   });
   return `<aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul>${items.join("")}</ul></aside>`;
@@ -215,7 +216,7 @@ fs.writeFileSync(path.join(OUT, "prompts.html"), page("prompts.html", "프롬프
 
 const allFiles = Object.entries(FILES).map(([k, [dest, , dl, label]]) => {
   const href = encodeURI(dest);
-  const open = href.endsWith(".html") ? ` <a class="btn ghost" href="${href}" target="_blank" rel="noopener">열어 보기</a>` : "";
+  const open = /\.(html|png)$/.test(href) ? ` <a class="btn ghost" href="${href}" target="_blank" rel="noopener">열어 보기</a>` : "";
   const used = Object.entries(MODULE_FILES).filter(([, ks]) => ks.includes(k)).map(([n]) => `모듈 ${String(n).padStart(2, "0")}`).join(", ");
   return `<tr id="${k === "skillmd" ? "skill" : k}"><td>${esc(label)}</td><td>${used}</td><td class="acts"><a class="btn" href="${href}" download="${esc(dl)}">내려받기</a>${open}</td></tr>`;
 }).join("");
