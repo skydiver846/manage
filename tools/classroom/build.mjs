@@ -243,7 +243,7 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <ol class="mods">${modItems(MODULES.slice(5, 9))}</ol>
   <h2>3회차 (9~12교시) · 웹에 공개하기, 내 업무 화면 만들기, 결과 공유</h2>
   <ol class="mods">${modItems([MODULES[9], MODULES[11]])}</ol>
-  <p class="note">4주 동안 주 1회 진행합니다. 회차 사이 일주일은 배운 것을 업무에 써 보는 시간입니다: <a href="homework.html">회차별 과제</a>. 1회차 1~4교시, 2회차 5~8교시, 3회차 9~12교시 (1교시 = 50분 수업 + 10분 휴식). 모듈 11(Firebase)은 수업에서 다루지 않는 선택 자료입니다.</p>
+  <p class="note">12시간을 4시간씩 3회로 나눠 진행합니다. 회차 사이에는 배운 것을 업무에 써 보는 과제를 합니다: <a href="homework.html">회차별 과제</a>. 1회차 1~4교시, 2회차 5~8교시, 3회차 9~12교시 (1교시 = 50분 수업 + 10분 휴식). 모듈 11(Firebase)은 수업에서 다루지 않는 선택 자료입니다.</p>
   <h2>바로가기</h2>
   <div class="tiles">${siteLinks}</div>
   <h2>자료</h2>
