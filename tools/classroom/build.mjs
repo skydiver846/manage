@@ -102,6 +102,9 @@ function wikiTarget(raw) {
   if (name === "PRD 템플릿") return ["PRD 템플릿 파일", "files.html#template"];
   if (name === "프롬프트 모음") return ["프롬프트 모음", "prompts.html"];
   if (name === "SKILL") return ["스킬 예시 파일", "files.html#skill"];
+  if (name === "지뢰찾기_화면.png") return ["지뢰찾기 화면 그림", "files.html#mine"];
+  if (name === "사전 과제 안내") return ["사전 과제 안내", "prework.html"];
+  if (name === "과제 안내") return ["과제 안내", "homework.html"];
   if (name === "00_강의 개요") return ["강의 개요", "index.html"];
   return [null, null];   // 강사용 자료(정답, QR 등)는 링크하지 않는다
 }
