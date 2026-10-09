@@ -141,7 +141,7 @@ function nav(current) {
   const mods = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to)
     .map((m) => link(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`)).join("");
   return `<nav aria-label="목차">
-    <div class="group">${link("index.html", "처음 화면")}${link("prework.html", "사전 과제 안내")}${link("homework.html", "회차별 과제")}</div>
+    <div class="group">${link("index.html", "처음 화면")}${link("prework.html", "사전 과제 안내")}${link("homework.html", "과제 안내")}</div>
     <div class="group"><h3>본 강의</h3>${mods(1, 8)}</div>
     <div class="group"><h3>심화 · 직접 만들기</h3>${mods(9, 10)}${mods(12, 12)}</div>
     <div class="group"><h3>선택 자료 (수업 외)</h3>${mods(11, 11)}</div>
@@ -206,8 +206,8 @@ MODULES.forEach((m, i) => {
 
 const preworkMd = fs.readFileSync(path.join(LECTURE, "사전 과제 안내.md"), "utf8");
 fs.writeFileSync(path.join(OUT, "prework.html"), page("prework.html", "사전 과제 안내", render(preworkMd)));
-const homeworkMd = fs.readFileSync(path.join(LECTURE, "회차별 과제.md"), "utf8");
-fs.writeFileSync(path.join(OUT, "homework.html"), page("homework.html", "회차별 과제", render(homeworkMd)));
+const homeworkMd = fs.readFileSync(path.join(LECTURE, "과제 안내.md"), "utf8");
+fs.writeFileSync(path.join(OUT, "homework.html"), page("homework.html", "과제 안내", render(homeworkMd)));
 
 const promptsMd = fs.readFileSync(path.join(ROOT, FILES.prompts[1]), "utf8").replace(/^←.*\n/m, "");
 fs.writeFileSync(path.join(OUT, "prompts.html"), page("prompts.html", "프롬프트 모음",
@@ -237,19 +237,17 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <h2>사전 과제 · 수업 전에 각자</h2>
   <ol class="mods">${modItems(MODULES.slice(0, 2))}</ol>
   <p><a class="btn" href="prework.html">사전 과제 안내 보기</a> 첫날 전까지 해 올 것과 준비물을 한 장에 정리했습니다.</p>
-  <h2>1회차 (1~4교시) · AI에게 일 시키기부터 PRD까지</h2>
-  <ol class="mods">${modItems(MODULES.slice(2, 5))}</ol>
-  <h2>2회차 (5~8교시) · 스킬, 결과보고 자료, 코딩 없이 자동화</h2>
-  <ol class="mods">${modItems(MODULES.slice(5, 9))}</ol>
-  <h2>3회차 (9~12교시) · 웹에 공개하기, 내 업무 화면 만들기, 결과 공유</h2>
-  <ol class="mods">${modItems([MODULES[9], MODULES[11]])}</ol>
-  <p class="note">12시간을 4시간씩 3회로 나눠 진행합니다. 회차 사이에는 배운 것을 업무에 써 보는 과제를 합니다: <a href="homework.html">회차별 과제</a>. 1회차 1~4교시, 2회차 5~8교시, 3회차 9~12교시 (1교시 = 50분 수업 + 10분 휴식). 모듈 11(Firebase)은 수업에서 다루지 않는 선택 자료입니다.</p>
+  <h2>1일차 (1~6교시) · AI에게 일 시키기, PRD, 스킬, 보고 자료</h2>
+  <ol class="mods">${modItems(MODULES.slice(2, 7))}</ol>
+  <h2>2일차 (7~12교시) · 코딩 없이 자동화, 웹에 공개하기, 내 업무 화면 만들기</h2>
+  <ol class="mods">${modItems([MODULES[7], MODULES[8], MODULES[9], MODULES[11]])}</ol>
+  <p class="note">2일 연속, 총 12시간(하루 6교시, 1교시 = 50분 수업 + 10분 휴식)입니다. 1일차 저녁 과제와 과정 뒤 과제는 <a href="homework.html">과제 안내</a>에 있습니다. 모듈 11(Firebase)은 수업에서 다루지 않는 선택 자료입니다.</p>
   <h2>바로가기</h2>
   <div class="tiles">${siteLinks}</div>
   <h2>자료</h2>
   <p><a href="prompts.html">프롬프트 모음</a> · <a href="files.html">실습 파일 내려받기</a></p>
   <h2>준비물</h2>
-  <ul><li><b>사전 과제</b>: 구글 계정(업무용 1개 이상), ChatGPT 가입, 업무 이메일 제출 → Claude Team 초대 수락 — <a href="prework.html">사전 과제 안내</a></li><li>본인 명의 휴대폰 (문자 인증, 배포한 강의평가 화면 확인용)</li><li>비밀번호를 적어 둘 수첩</li><li>내 업무 중 "AI로 도움받고 싶은 일" 한 가지</li></ul>
+  <ul><li><b>사전 과제</b>: 업무용 구글 계정, ChatGPT 가입, 업무 이메일 제출 → Claude Team 초대 수락, GitHub 가입 — <a href="prework.html">사전 과제 안내</a></li><li>본인 명의 휴대폰 (문자 인증, 배포한 강의평가 화면 확인용)</li><li>비밀번호를 적어 둘 수첩</li><li>내 업무 중 "AI로 도움받고 싶은 일" 한 가지</li></ul>
   <p class="note">체크박스 표시는 이 PC의 브라우저에만 저장됩니다.</p>`));
 
 console.log("built", OUT, fs.readdirSync(OUT).length, "entries");
