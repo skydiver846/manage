@@ -155,7 +155,7 @@
 - 다 만든 뒤 화면의 숫자 3개를 CSV 원본과 대조해 맞는지 표로 알려 줘
 - 커밋 메시지는 한국어로 &quot;공공데이터 화면 v0.1&quot;
 </code></pre>
-<h2>3단계: Claude가 일하는 모습 지켜보기 (10분)</h2>
+<h2>3단계: Claude가 일하는 모습 지켜보기 (15분)</h2>
 <p>화면에 Claude가 하는 일이 차례로 나타납니다.</p>
 <div class="table-wrap"><table>
 <thead>
@@ -181,7 +181,7 @@
 <li>중간에 <strong>허락을 묻는 화면</strong>이 나오면 무엇을 하려는지 읽고 승인합니다. 모르는 내용이면 승인하지 말고 손을 들어 주세요.</li>
 <li>Claude Code는 보통 <code>main</code>(운영)이 아니라 <strong>별도 작업 줄기(브랜치)</strong> 에 올립니다. 원본을 바로 건드리지 않는 안전장치입니다.</li>
 </ul>
-<h2>4단계: AI가 한 일 검토하기 (5분) ⭐</h2>
+<h2>4단계: AI가 한 일 검토하기 (10분) ⭐</h2>
 <ol>
 <li>Claude가 보여 준 표를 확인합니다. <strong>A</strong>는 성공 기준 표를 내 PRD 7번과 대조, <strong>B</strong>는 숫자 대조 표를 보고 하나는 직접 CSV(엑셀)를 열어 맞는지 확인. 안 맞으면 &quot;○○가 안 맞아, 고쳐 줘&quot;로 이어서 지시</li>
 <li>GitHub 저장소 → 위쪽 <strong>브랜치 선택</strong>(main 이라고 적힌 버튼) → Claude가 만든 브랜치 → <strong>커밋 기록(시계 아이콘)</strong> → Claude의 커밋</li>
@@ -191,7 +191,7 @@
 </ul>
 </li>
 </ol>
-<h2>5단계: 합치고 배포하기 (10분)</h2>
+<h2>5단계: 합치고 배포하기 (15분)</h2>
 <ol>
 <li>GitHub에서 <strong>Compare &amp; pull request</strong> (또는 Claude Code 화면의 PR 만들기) → 변경 내용 확인 → <strong>Merge pull request</strong> → <strong>Confirm merge</strong></li>
 <li>Vercel 대시보드 <strong>[Add New…] → [Project]</strong> → <code>my-tool</code> → <strong>[Import]</strong> → <strong>[Deploy]</strong> (모듈 10의 5단계와 같음)<ul>
@@ -202,7 +202,7 @@
 </ol>
 <pre><code> 내 PRD ──▶ Claude Code ──▶ 브랜치 ──(검토)──▶ 합치기(Merge) ──▶ main ──▶ Vercel ──▶ 📱 내 화면
 </code></pre>
-<h2>6단계: 한 번 더 고치기 — 미리보기로 확인 (선택, 10분)</h2>
+<h2>6단계: 한 번 더 고치기 — 미리보기로 확인 (시간이 남으면, 20분)</h2>
 <p>이제 저장소가 Vercel에 연결되어 있으니, 고칠 때마다 <strong>미리보기(Preview) 주소</strong>가 따로 생깁니다.</p>
 <ol>
 <li>Claude Code에 수정 하나를 지시: 예) &quot;제목 아래에 사용 방법을 한 줄로 넣어 줘&quot;, &quot;버튼 색을 소방 적색으로&quot;</li>

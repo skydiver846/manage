@@ -67,7 +67,7 @@
 <h2>이 과정의 진행 (Claude Team)</h2>
 <p>Team 계정이라 <strong>모두 스킬을 Claude에 등록</strong>해서 씁니다(6-3). 무료 계정에서 쓰는 대체 방법도 6-3 끝에 참고로 남겨 두었습니다. 회사 밖에서 무료 계정으로 쓸 때 기억해 두세요.</p>
 <hr>
-<h2>6-1. 스킬은 어떻게 생겼나 (10분)</h2>
+<h2>6-1. 스킬은 어떻게 생겼나 (5분)</h2>
 <p>스킬은 <strong>폴더 하나</strong>입니다. 그 안에 <code>SKILL.md</code> 라는 Markdown 파일이 꼭 있어야 합니다.</p>
 <pre><code>📁 prd-interview          ← 스킬 폴더 (이름 = 스킬 이름)
  └─ 📄 SKILL.md           ← 필수. 이름, 언제 쓰는지, 일하는 순서
@@ -107,7 +107,7 @@ description: 사용자가 새 업무 도구를 기획하거나 &quot;PRD 써 줘
 <td>모듈 4의 Markdown 그대로. 모듈 3의 프롬프트 공식(역할·목표·맥락·형식·조건)을 문서로 적은 것</td>
 </tr>
 </tbody></table></div>
-<h2>6-2. 옵시디언에서 SKILL.md 쓰기 (15분)</h2>
+<h2>6-2. 옵시디언에서 SKILL.md 쓰기 (10분)</h2>
 <ol>
 <li>옵시디언 보관소에 <strong><code>98_스킬</code></strong> 폴더를 만들고, 그 안에 <strong><code>prd-interview</code></strong> 폴더를 만듭니다</li>
 <li><code>prd-interview</code> 폴더에서 <strong>[새 노트]</strong> → 제목을 정확히 <strong><code>SKILL</code></strong> (대문자)로</li>
@@ -176,7 +176,7 @@ description: 사용자가 새 업무 도구를 기획하거나 &quot;PRD 써 줘
 - 자료에 없는 숫자나 조치 일정은 [확인 필요]로 표시하게 해 줘
 </code></pre>
 <p>결과로 나온 SKILL.md는 옵시디언 <code>98_스킬/eval-report/</code> 에 저장합니다. 이 스킬은 모듈 7의 결재 보고서 실습과, 과정이 끝날 때마다 쓰는 실제 결과보고서에 그대로 쓸 수 있습니다.</p>
-<h2>6-5. 조직 배포: 문제출제 스킬 한 번 써 보기 (5분)</h2>
+<h2>6-5. 조직 배포: 문제출제 스킬 맛보기 (화면으로 함께 보기, 3분)</h2>
 <p>지금까지는 <strong>내가 만든 스킬을 나만</strong> 썼습니다. Team 계정에서는 관리자가 스킬을 <strong>조직 전체에 배포</strong>할 수 있습니다. 부서 공식 업무 매뉴얼을 한 번 나눠 주는 것과 같습니다.</p>
 <div class="table-wrap"><table>
 <thead>
@@ -204,13 +204,13 @@ description: 사용자가 새 업무 도구를 기획하거나 &quot;PRD 써 줘
 </tbody></table></div>
 <p>배포해 둔 스킬은 <code>quiz-generator</code> 입니다. 교재·법령을 주면 <strong>객관식 문항 → 중앙소방학교 문제카드(hwpx) → 정답지</strong>까지 만들어 줍니다. SKILL.md 한 장이 아니라 <strong>양식 파일과 스크립트까지 든 폴더</strong>라서, 스킬이 매뉴얼을 넘어 <strong>업무 도구</strong>까지 담을 수 있다는 것을 보여 줍니다.</p>
 <ol>
-<li>설정 → 스킬 목록에 <strong>quiz-generator</strong> 가 보이는지 확인</li>
+<li>각자 설정 → 스킬 목록에 <strong>quiz-generator</strong> 가 보이는지만 확인</li>
 <li>실습 파일 <strong>출제 의뢰서</strong>와 <strong>교재 발췌</strong>를 내려받아 Claude 새 대화에 첨부하고 한 문장만 입력</li>
 </ol>
 <pre><code>첨부한 출제 의뢰서대로 교재 발췌를 범위로 문제카드를 만들어 줘
 </code></pre>
 <ol start="3">
-<li>Claude가 <strong>문항 수와 과정명·과목명·출제일자·소속·성명을 먼저 묻는 것</strong>까지 확인합니다. 예시 값(5문항, <code>교육운영팀</code>, <code>홍길동</code>)으로 답하고, 만들어지는 동안 6-6으로 넘어갑니다. 결과(문제카드·정답지)는 6-6을 마친 뒤 열어 봅니다.</li>
+<li>Claude가 <strong>문항 수와 과정명·과목명·출제일자·소속·성명을 먼저 묻는 것</strong>까지 봅니다. 수업에서는 앞 화면으로 함께 보고, 각자 직접 해 보는 것은 과제 ② 기간에 합니다(예시 값: 5문항, <code>교육운영팀</code>, <code>홍길동</code>).</li>
 </ol>
 <p><strong>더 해 보기 (수업 뒤): 문제카드 확인 기준</strong></p>
 <pre><code>□ 의뢰서대로 5문항, 난이도 상 1 · 중 3 · 하 1 인가?

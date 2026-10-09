@@ -13,16 +13,16 @@ const OUT = path.join(ROOT, "classroom-site");
 const MODULES = [
   ["01_구글 업무 계정 만들기", "구글 업무 계정 만들기", "사전 과제"],
   ["02_ChatGPT와 Claude 가입", "ChatGPT · Claude 가입", "사전 과제"],
-  ["03_프롬프트·파일·폴더 활용", "프롬프트 · 파일 · 프로젝트", "80분"],
-  ["04_옵시디언 설치와 MD 파일 만들기", "옵시디언과 MD 파일", "60분"],
-  ["05_PRD 작성하기", "PRD 작성하기", "60분"],
-  ["06_스킬 만들기", "스킬 만들기", "55분"],
-  ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "75분"],
-  ["08_AI 브라우저 Aside로 코딩 없이 업무 자동화", "AI 브라우저 Aside", "45분"],
-  ["09_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "60분"],
-  ["10_(심화) 프로토타입 배포", "GitHub · Vercel 배포", "70분"],
+  ["03_프롬프트·파일·폴더 활용", "프롬프트 · 파일 · 프로젝트", "2교시"],
+  ["04_옵시디언 설치와 MD 파일 만들기", "옵시디언과 MD 파일", "1교시"],
+  ["05_PRD 작성하기", "PRD 작성하기", "1교시"],
+  ["06_스킬 만들기", "스킬 만들기", "1교시"],
+  ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "1교시"],
+  ["08_AI 브라우저 Aside로 코딩 없이 업무 자동화", "AI 브라우저 Aside", "1교시"],
+  ["09_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "1교시"],
+  ["10_(심화) 프로토타입 배포", "GitHub · Vercel 배포", "1교시"],
   ["11_(심화) Firebase로 공용 장부 연결", "Firebase 공용 장부 (선택)", "수업 외"],
-  ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code로 내 화면", "60분"],
+  ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code로 내 화면", "2교시"],
 ].map(([file, short, time], i) => ({ file, short, time, num: i + 1, page: `m${String(i + 1).padStart(2, "0")}.html` }));
 
 // 교육생이 내려받는 파일: [사이트 안 경로, 원본, 내려받을 때 이름, 설명]
@@ -237,13 +237,13 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <h2>사전 과제 · 수업 전에 각자</h2>
   <ol class="mods">${modItems(MODULES.slice(0, 2))}</ol>
   <p><a class="btn" href="prework.html">사전 과제 안내 보기</a> 첫날 전까지 해 올 것과 준비물을 한 장에 정리했습니다.</p>
-  <h2>1회차 (4시간) · AI에게 일 시키기부터 PRD까지</h2>
+  <h2>1회차 (1~4교시) · AI에게 일 시키기부터 PRD까지</h2>
   <ol class="mods">${modItems(MODULES.slice(2, 5))}</ol>
-  <h2>2회차 (4시간) · 스킬, 결과보고 자료, 코딩 없이 자동화</h2>
+  <h2>2회차 (5~8교시) · 스킬, 결과보고 자료, 코딩 없이 자동화</h2>
   <ol class="mods">${modItems(MODULES.slice(5, 9))}</ol>
-  <h2>3회차 (4시간) · 직접 만들어 웹에 공개하기, 내 업무 화면 만들기</h2>
-  <ol class="mods">${modItems([MODULES[8], MODULES[9], MODULES[11]])}</ol>
-  <p class="note">4주 동안 주 1회 진행합니다. 회차 사이 일주일은 배운 것을 업무에 써 보는 시간입니다: <a href="homework.html">회차별 과제</a>. 모듈 09는 2회차(1·2단계)와 3회차(3·4단계)에 나눠 진행합니다. 모듈 11(Firebase)은 수업에서 다루지 않는 선택 자료입니다.</p>
+  <h2>3회차 (9~12교시) · 웹에 공개하기, 내 업무 화면 만들기, 결과 공유</h2>
+  <ol class="mods">${modItems([MODULES[9], MODULES[11]])}</ol>
+  <p class="note">4주 동안 주 1회 진행합니다. 회차 사이 일주일은 배운 것을 업무에 써 보는 시간입니다: <a href="homework.html">회차별 과제</a>. 1회차 1~4교시, 2회차 5~8교시, 3회차 9~12교시 (1교시 = 50분 수업 + 10분 휴식). 모듈 11(Firebase)은 수업에서 다루지 않는 선택 자료입니다.</p>
   <h2>바로가기</h2>
   <div class="tiles">${siteLinks}</div>
   <h2>자료</h2>
