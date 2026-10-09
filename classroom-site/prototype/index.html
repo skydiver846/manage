@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>강의평가 결과 집계</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+  <style>
+    /* 레이아웃: 좁은 단일 컬럼 — 상단 요약, 입력 폼, 결과표 순 */
+    :root {
+      --bg: #f3f4f6;
+      --surface: #ffffff;
+      --fg: #1b2230;
+      --muted: #5d6676;
+      --line: #dde1e8;
+      --accent: #c8321e;       /* 소방 적색 */
+      --ok: #1f7a4d;
+      --late: #a35f00;
+      --font-display: "Black Han Sans", "IBM Plex Sans KR", system-ui, sans-serif;
+      --font-body: "IBM Plex Sans KR", system-ui, -apple-system, "Apple SD Gothic Neo", sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #12161d; --surface: #1b212b; --fg: #e8ebf0; --muted: #9aa3b2;
+        --line: #2c3442; --accent: #ff6a52; --ok: #4cc58a; --late: #f0a840;
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #12161d; --surface: #1b212b; --fg: #e8ebf0; --muted: #9aa3b2;
+      --line: #2c3442; --accent: #ff6a52; --ok: #4cc58a; --late: #f0a840;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font: 15px/1.6 var(--font-body);
+    }
+    .wrap {
+      max-width: 560px;
+      margin: 0 auto;
+      padding-inline: 16px;
+      padding-block: 32px 48px;
+      display: grid;
+      gap: 24px;
+    }
+    header { display: grid; gap: 4px; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: .08em;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 34px;
+      line-height: 1.15;
+      text-wrap: balance;
+    }
+    header p { margin: 0; color: var(--muted); }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+    }
+    .stat { padding: 12px 14px; display: grid; gap: 2px; }
+    .stat + .stat { border-left: 1px solid var(--line); }
+    .stat span { font-size: 12px; color: var(--muted); }
+    .stat strong {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    form { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; }
+    .field { flex: 1 1 200px; display: grid; gap: 4px; min-width: 0; }
+    .field.short { flex: 0 1 120px; }
+    .field.mid { flex: 1 1 140px; }
+    label { font-size: 13px; font-weight: 600; }
+    input, select {
+      width: 100%;
+      min-width: 0;
+      font: inherit;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--fg);
+    }
+    button {
+      font: inherit;
+      font-weight: 600;
+      padding: 10px 18px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+    }
+    button.ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      padding: 6px 12px;
+      font-size: 13px;
+    }
+    input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .error { margin: 0; color: var(--accent); font-size: 13px; min-height: 1.6em; flex-basis: 100%; }
+
+    .list-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .list-head h2 { margin: 0; font-size: 16px; }
+    .list-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    table { width: 100%; border-collapse: collapse; border-top: 1px solid var(--line); }
+    th, td { padding: 10px 4px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+    th { font-size: 12px; font-weight: 600; color: var(--muted); }
+    th.num, td.num { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    td.who { overflow-wrap: anywhere; }
+    td.who small { display: block; color: var(--muted); font-size: 13px; }
+    td.state { text-align: right; white-space: nowrap; }
+    .chip {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid currentColor;
+    }
+    .chip.ok { color: var(--ok); }
+    .chip.bad { color: var(--accent); }
+    tr.bad td.num.avg { color: var(--accent); font-weight: 600; }
+    .empty { color: var(--muted); padding: 16px 2px; }
+    .note { font-size: 12px; color: var(--muted); margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <span class="eyebrow">신임소방관 교육과정 · 제12기</span>
+      <h1>강의평가 결과 집계</h1>
+      <p>만족도 1~5점 · 평균 <strong>3.5 미만</strong>은 “개선 필요”로 표시</p>
+    </header>
+
+    <section class="stats" aria-label="평가 요약">
+      <div class="stat"><span>응답</span><strong id="count-total">0</strong></div>
+      <div class="stat"><span>평가 과목</span><strong id="count-subject">0</strong></div>
+      <div class="stat"><span>개선 필요</span><strong id="count-bad">0</strong></div>
+    </section>
+
+    <form id="eval-form" novalidate>
+      <div class="field">
+        <label for="subject">과목</label>
+        <input id="subject" list="subject-list" autocomplete="off" placeholder="예: 화재진압 전술">
+        <datalist id="subject-list"></datalist>
+      </div>
+      <div class="field mid">
+        <label for="instructor">교관</label>
+        <input id="instructor" autocomplete="off" placeholder="예: 김교관">
+      </div>
+      <div class="field short">
+        <label for="score">만족도</label>
+        <select id="score">
+          <option value="">선택</option>
+          <option value="5">5 매우 만족</option>
+          <option value="4">4 만족</option>
+          <option value="3">3 보통</option>
+          <option value="2">2 불만족</option>
+          <option value="1">1 매우 불만족</option>
+        </select>
+      </div>
+      <button type="submit">평가 제출</button>
+      <p class="error" id="error" role="alert"></p>
+    </form>
+
+    <section>
+      <div class="list-head">
+        <h2>과목·교관별 결과</h2>
+        <div class="list-actions">
+          <button type="button" class="ghost" id="undo">마지막 응답 취소</button>
+          <button type="button" class="ghost" id="download">결과 내려받기</button>
+          <button type="button" class="ghost" id="reset">전체 초기화</button>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr><th>과목 · 교관</th><th class="num">응답</th><th class="num">평균</th><th class="num">상태</th></tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </section>
+
+    <p class="note" id="note"></p>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "lecture-eval-demo-v3";
+    const THRESHOLD = 3.5;   // 평균이 이 값보다 낮으면 개선 필요 (PRD)
+
+    // 처음 열면 예시 응답으로 시작한다 (저장된 기록이 있으면 그걸 사용).
+    const SAMPLE = [
+      ["화재진압 전술 (예시)", "김교관", 5], ["화재진압 전술 (예시)", "김교관", 4], ["화재진압 전술 (예시)", "김교관", 5],
+      ["화재진압 전술 (예시)", "이교관", 3], ["화재진압 전술 (예시)", "이교관", 3], ["화재진압 전술 (예시)", "이교관", 4],
+      ["응급처치 실습 (예시)", "박교관", 4], ["응급처치 실습 (예시)", "박교관", 5],
+      ["소방 관계법규 (예시)", "최교관", 3], ["소방 관계법규 (예시)", "최교관", 2],
+    ].map(([subject, instructor, score]) => ({ subject, instructor, score }));
+
+    const $ = (id) => document.getElementById(id);
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return { records: JSON.parse(raw), sample: false };
+      } catch (e) { /* 저장소를 못 쓰면 예시로 시작 */ }
+      return { records: SAMPLE.slice(), sample: true };
+    }
+
+    function save() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.records)); } catch (e) {}
+    }
+
+    // 과목 + 교관이 같은 응답끼리 묶어 응답 수와 평균을 낸다 (PRD v0.3: 교관이 다르면 따로 집계).
+    function summarize(records) {
+      const groups = new Map();
+      records.forEach((r) => {
+        const key = r.subject + "\u0000" + r.instructor;
+        if (!groups.has(key)) groups.set(key, { subject: r.subject, instructor: r.instructor, count: 0, sum: 0 });
+        const g = groups.get(key);
+        g.count += 1;
+        g.sum += r.score;
+      });
+      return [...groups.values()]
+        .map((g) => ({ ...g, avg: Math.round((g.sum / g.count) * 10) / 10 }))
+        .map((g) => ({ ...g, bad: g.avg < THRESHOLD }))
+        .sort((a, b) => a.avg - b.avg || a.subject.localeCompare(b.subject, "ko"));   // 평균이 낮은 것부터
+    }
+
+    const state = load();
+    let resetArmed = false;
+
+    function render() {
+      const rows = $("rows");
+      rows.innerHTML = "";
+      const groups = summarize(state.records);
+      if (groups.length === 0) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = '<td class="empty" colspan="4"></td>';
+        tr.firstChild.textContent = "아직 평가가 없습니다. 위에서 과목, 교관, 만족도를 골라 첫 평가를 제출하세요.";
+        rows.append(tr);
+      }
+      groups.forEach((g) => {
+        const tr = document.createElement("tr");
+        if (g.bad) tr.className = "bad";
+        tr.innerHTML =
+          '<td class="who"><span></span><small></small></td>' +
+          '<td class="num"></td><td class="num avg"></td>' +
+          '<td class="state"><span class="chip ' + (g.bad ? "bad" : "ok") + '">' + (g.bad ? "개선 필요" : "양호") + "</span></td>";
+        tr.querySelector(".who span").textContent = g.subject;
+        tr.querySelector(".who small").textContent = g.instructor;
+        tr.children[1].textContent = g.count;
+        tr.children[2].textContent = g.avg.toFixed(1);
+        rows.append(tr);
+      });
+
+      const subjects = new Set(state.records.map((r) => r.subject));
+      $("count-total").textContent = state.records.length;
+      $("count-subject").textContent = subjects.size;
+      $("count-bad").textContent = groups.filter((g) => g.bad).length;
+      $("subject-list").innerHTML = "";
+      subjects.forEach((s) => {
+        const o = document.createElement("option");
+        o.value = s;
+        $("subject-list").append(o);
+      });
+      $("note").textContent = state.sample
+        ? "‘(예시)’ 과목은 샘플 데이터입니다. 평가를 제출하면 이 브라우저에 저장됩니다."
+        : "기록은 이 브라우저에만 저장됩니다 (프로토타입). 평가는 익명이며 이름을 받지 않습니다.";
+      $("reset").textContent = resetArmed ? "한 번 더 누르면 삭제" : "전체 초기화";
+    }
+
+    $("eval-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const subject = $("subject").value.trim().replace(/\s+/g, " ");
+      const instructor = $("instructor").value.trim().replace(/\s+/g, " ");
+      const score = Number($("score").value);
+      if (!subject || !instructor || !Number.isInteger(score) || score < 1 || score > 5) {
+        $("error").textContent = "과목, 교관, 만족도를 모두 입력한 뒤 제출하세요.";
+        return;
+      }
+      if (state.sample) {
+        state.records = [];
+        state.sample = false;
+      }
+      state.records.push({ subject, instructor, score });
+      $("error").textContent = "";
+      $("score").value = "";      // 과목·교관은 남겨 두어 같은 과목을 연달아 입력하기 쉽게
+      save();
+      render();
+    });
+
+    // 잘못 낸 마지막 응답 하나만 지운다
+    $("undo").addEventListener("click", () => {
+      if (state.sample || state.records.length === 0) {
+        $("error").textContent = "취소할 응답이 없습니다.";
+        return;
+      }
+      state.records.pop();
+      $("error").textContent = "";
+      save();
+      render();
+    });
+
+    // 결과 내려받기 (PRD v0.5): 엑셀에서 열리는 CSV로 저장
+    function csvCell(value) {
+      let v = String(value);
+      if (/^[=+\-@]/.test(v)) v = "'" + v;            // 엑셀이 수식으로 실행하지 않게
+      return '"' + v.replace(/"/g, '""') + '"';
+    }
+
+    $("download").addEventListener("click", () => {
+      const groups = summarize(state.records);
+      if (groups.length === 0) {
+        $("error").textContent = "내려받을 평가 결과가 없습니다.";
+        return;
+      }
+      const rows = [["과목", "교관", "응답 수", "평균", "상태"]].concat(
+        groups.map((g) => [g.subject, g.instructor, g.count, g.avg.toFixed(1), g.bad ? "개선 필요" : "양호"])
+      );
+      const csv = rows.map((row) => row.map(csvCell).join(",")).join("\r\n");
+      // 맨 앞의 \uFEFF(BOM) 덕분에 엑셀이 한글을 UTF-8로 읽어 깨지지 않는다
+      const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+      const d = new Date();
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "강의평가_결과_" + d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0") + ".csv";
+      document.body.append(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);   // 바로 지우면 파일 이름이 사라진다
+      $("error").textContent = "";
+    });
+
+    // confirm() 대신 두 번 눌러 확인하는 방식
+    $("reset").addEventListener("click", () => {
+      if (!resetArmed) {
+        resetArmed = true;
+        render();
+        setTimeout(() => { resetArmed = false; render(); }, 3000);
+        return;
+      }
+      resetArmed = false;
+      state.records = [];
+      state.sample = false;
+      save();
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

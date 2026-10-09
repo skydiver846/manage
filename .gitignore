@@ -20,3 +20,7 @@ npm-debug.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# 강사용 열람 페이지 빌드 결과, 보고서 양식·결과물 (기관 문서는 저장소에 올리지 않음)
+tools/viewer/out/
+tools/report/*.hwpx

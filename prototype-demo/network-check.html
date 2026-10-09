@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>강의장 접속 점검</title>
+  <style>
+    /* 레이아웃: 한 칼럼 점검표 — 위에서부터 자동 점검, Firebase 실제 연결 시험, 판정 요약 */
+    :root {
+      --bg: #f3f4f6; --surface: #ffffff; --fg: #1b2230; --muted: #5d6676; --line: #dde1e8;
+      --accent: #c8321e; --ok: #1f7a4d; --bad: #b42318; --warn: #a35f00;
+      --font: system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      --mono: ui-monospace, Consolas, "D2Coding", monospace;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) { --bg: #12161d; --surface: #1b212b; --fg: #e8ebf0; --muted: #9aa3b2; --line: #2c3442; --accent: #ff6a52; --ok: #4cc58a; --bad: #ff7a6b; --warn: #f0a840; color-scheme: dark; }
+    }
+    :root[data-theme="dark"] { --bg: #12161d; --surface: #1b212b; --fg: #e8ebf0; --muted: #9aa3b2; --line: #2c3442; --accent: #ff6a52; --ok: #4cc58a; --bad: #ff7a6b; --warn: #f0a840; color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.6 var(--font); }
+    .wrap { max-width: 760px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 48px; display: grid; gap: 22px; }
+    h1 { margin: 0; font-size: 26px; }
+    h2 { margin: 0 0 8px; font-size: 18px; }
+    p { margin: 0; }
+    .muted { color: var(--muted); font-size: 14px; }
+    section { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 12px; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; font-size: 13px; }
+    td.addr { font-family: var(--mono); font-size: 13px; overflow-wrap: anywhere; }
+    .pill { display: inline-block; font-size: 12px; font-weight: 700; padding: 1px 9px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+    .wait { color: var(--muted); } .open { color: var(--ok); } .blocked { color: var(--bad); } .slow { color: var(--warn); } .manual { color: var(--warn); }
+    td.addr a { color: inherit; }
+    button { font: inherit; font-weight: 600; padding: 9px 16px; border-radius: 8px; border: 0; background: var(--accent); color: #fff; cursor: pointer; justify-self: start; }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+    textarea { width: 100%; min-height: 150px; font: 13px/1.5 var(--mono); padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); }
+    .result { font-weight: 600; }
+    .summary { border-left: 4px solid var(--line); padding-left: 12px; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>강의장 접속 점검</h1>
+      <p class="muted">강의장 PC의 Chrome에서 이 페이지를 열면, 강의에 쓰는 사이트가 열리는지 자동으로 확인합니다. 결과는 이 PC에서만 보입니다.</p>
+    </header>
+
+    <section aria-labelledby="s1">
+      <h2 id="s1">1단계: 사이트 주소가 열리는지</h2>
+      <p class="muted">“열림”은 주소에 닿았다는 뜻입니다. 기관 보안 장비가 차단 안내 화면을 대신 보여 주는 경우에도 “열림”으로 보일 수 있어, Firebase는 2단계로 꼭 확인하세요.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>모듈</th><th>용도</th><th>주소</th><th>결과</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <button type="button" id="again">다시 점검</button>
+    </section>
+
+    <section aria-labelledby="s2">
+      <h2 id="s2">2단계 (선택 자료 11용): Firebase 공용 장부에 접속되는지</h2>
+      <p class="muted">(선택 자료) 모듈 11 4단계에서 복사한 <code>firebaseConfig</code> 를 아래에 붙여넣고 시험합니다. 장부를 <b>읽기만</b> 하고 아무것도 쓰지 않습니다.</p>
+      <label for="cfg" class="muted">firebaseConfig 붙여넣기</label>
+      <textarea id="cfg" spellcheck="false" placeholder='const firebaseConfig = {
+  apiKey: "AIza...",
+  authDomain: "lecture-eval-12-xxxx.firebaseapp.com",
+  projectId: "lecture-eval-12-xxxx",
+  ...
+};'></textarea>
+      <button type="button" id="fbtest">Firebase 연결 시험</button>
+      <p class="result" id="fbresult" role="status"></p>
+    </section>
+
+    <section aria-labelledby="s3">
+      <h2 id="s3">판정</h2>
+      <div class="summary" id="summary"><p class="muted">점검이 끝나면 여기에 진행 방법을 안내합니다.</p></div>
+    </section>
+  </div>
+
+  <script type="module">
+    const FIREBASE = "https://www.gstatic.com/firebasejs/12.18.0/";
+    const TARGETS = [
+      { mod: "01", use: "Google 계정", url: "https://accounts.google.com/" },
+      { mod: "02", use: "ChatGPT", url: "https://chatgpt.com/" },
+      { mod: "02", use: "Claude", url: "https://claude.ai/", manual: true },
+      { mod: "07", use: "Claude 미리보기 화면", url: "https://www.claudeusercontent.com/", manual: true },
+      { mod: "06", use: "국가법령정보센터 (문제출제 스킬 근거 검증)", url: "https://www.law.go.kr/" },
+      { mod: "04", use: "옵시디언 내려받기", url: "https://obsidian.md/" },
+      { mod: "07", use: "Gemini Notebook", url: "https://notebooklm.google.com/" },
+      { mod: "10", use: "GitHub", url: "https://github.com/" },
+      { mod: "10", use: "Vercel", url: "https://vercel.com/" },
+      { mod: "선택", use: "Firebase 콘솔", url: "https://console.firebase.google.com/" },
+      { mod: "선택", use: "Firestore 장부 서버", url: "https://firestore.googleapis.com/" },
+      { mod: "선택", use: "Firebase 프로그램(SDK)", url: FIREBASE + "firebase-app.js", sdk: true },
+      { mod: "12", use: "Claude Code (웹)", url: "https://claude.ai/code", manual: true },
+      { mod: "12", use: "공공데이터포털 (B 실습 파일)", url: "https://www.data.go.kr/" },
+      { mod: "08", use: "Aside (AI 브라우저 설치·실습)", url: "https://aside.com/" },
+    ];
+    // manual: 사이트 보안 설정(CORP) 때문에 다른 페이지에서 자동 확인이 안 되는 곳. 주소를 눌러 직접 열어 본다.
+    const LABEL = { wait: "확인 중…", open: "열림", blocked: "막힘", slow: "응답 없음", manual: "직접 확인" };
+    const results = {};
+    const $ = (id) => document.getElementById(id);
+
+    function withTimeout(promise, ms) {
+      return Promise.race([promise, new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms))]);
+    }
+
+    async function probe(t) {
+      if (t.manual) return "manual";
+      try {
+        if (t.sdk) await withTimeout(import(t.url), 10000);   // 실제 프로그램 파일을 불러와 본다
+        else await withTimeout(fetch(t.url, { mode: "no-cors", cache: "no-store" }), 8000);
+        return "open";
+      } catch (e) {
+        return e.message === "timeout" ? "slow" : "blocked";
+      }
+    }
+
+    function pill(state) {
+      const s = document.createElement("span");
+      s.className = "pill " + state; s.textContent = LABEL[state];
+      return s;
+    }
+
+    async function runAll() {
+      $("again").disabled = true;
+      const body = $("rows"); body.innerHTML = "";
+      const cells = TARGETS.map((t) => {
+        const tr = document.createElement("tr");
+        for (const v of [t.mod, t.use]) { const td = document.createElement("td"); td.textContent = v; tr.append(td); }
+        const a = document.createElement("td"); a.className = "addr";
+        const link = document.createElement("a"); link.href = t.url; link.target = "_blank"; link.rel = "noopener"; link.textContent = t.url.replace("https://", "");
+        a.append(link); tr.append(a);
+        const r = document.createElement("td"); r.append(pill("wait")); tr.append(r);
+        body.append(tr);
+        return r;
+      });
+      await Promise.all(TARGETS.map(async (t, i) => {
+        const state = await probe(t);
+        results[t.use] = state;
+        cells[i].replaceChildren(pill(state));
+      }));
+      $("again").disabled = false;
+      summarize();
+    }
+
+    // 붙여넣은 firebaseConfig에서 키: "값" 쌍만 뽑는다 (따옴표 없는 키도 허용)
+    function parseConfig(text) {
+      const cfg = {};
+      for (const m of text.matchAll(/([A-Za-z]+)\s*:\s*["']([^"']+)["']/g)) cfg[m[1]] = m[2];
+      return cfg;
+    }
+
+    let fbState = null;
+    $("fbtest").addEventListener("click", async () => {
+      const cfg = parseConfig($("cfg").value);
+      const out = $("fbresult");
+      if (!cfg.apiKey || !cfg.projectId) { out.textContent = "apiKey와 projectId가 들어간 firebaseConfig 전체를 붙여넣어 주세요."; out.className = "result blocked"; return; }
+      $("fbtest").disabled = true;
+      out.textContent = "접속하는 중… (최대 20초)"; out.className = "result wait";
+      try {
+        const { initializeApp, getApps } = await withTimeout(import(FIREBASE + "firebase-app.js"), 10000);
+        const fs = await withTimeout(import(FIREBASE + "firebase-firestore.js"), 10000);
+        const app = getApps().find((a) => a.name === "check") || initializeApp(cfg, "check");
+        const db = fs.getFirestore(app);
+        await withTimeout(fs.getDocsFromServer(fs.query(fs.collection(db, "evaluations"), fs.limit(1))), 20000);
+        fbState = "open";
+        out.textContent = "성공: 이 PC에서 Firebase 공용 장부에 접속됩니다. 선택 자료 11을 이 PC에서 해 볼 수 있습니다.";
+        out.className = "result open";
+      } catch (e) {
+        if (e.code === "permission-denied") {
+          fbState = "open";
+          out.textContent = "접속은 됩니다. 다만 장부 규칙이 읽기를 막고 있습니다. 모듈 11 3단계 규칙을 게시했는지 확인하세요.";
+          out.className = "result slow";
+        } else {
+          fbState = "blocked";
+          out.textContent = "실패: Firebase 장부에 접속하지 못했습니다 (" + (e.code || e.message) + "). 이 PC에서는 선택 자료 11을 할 수 없습니다(수업 진행에는 영향 없음).";
+          out.className = "result blocked";
+        }
+      } finally {
+        $("fbtest").disabled = false;
+        summarize();
+      }
+    });
+
+    function summarize() {
+      const box = $("summary"); box.innerHTML = "";
+      const line = (text, cls) => { const p = document.createElement("p"); p.textContent = text; if (cls) p.className = cls; box.append(p); };
+      const down = TARGETS.filter((t) => t.mod !== "선택" && results[t.use] && !["open", "manual"].includes(results[t.use])).map((t) => t.use);
+      const manual = TARGETS.filter((t) => results[t.use] === "manual").map((t) => t.use);
+      const ai = ["ChatGPT", "Claude"].filter((n) => results[n] && !["open", "manual"].includes(results[n]));
+      const fb = ["Firebase 콘솔", "Firestore 장부 서버", "Firebase 프로그램(SDK)"].filter((n) => results[n] && results[n] !== "open");
+
+      if (!down.length) line("1단계: 자동 확인한 사이트가 모두 열립니다.", "open");
+      else line("1단계: 열리지 않는 곳 — " + down.join(", "), "blocked");
+      if (manual.length) line("직접 확인: " + manual.join(", ") + " — 자동 확인이 안 되는 사이트입니다. 표의 주소를 눌러 새 탭에서 화면이 열리면 정상입니다.");
+      if (results["Claude 미리보기 화면"] && !["open", "manual"].includes(results["Claude 미리보기 화면"])) line("Claude 미리보기 화면 주소가 막혀 있으면 모듈 07에서 미리보기 창이 비어 보입니다. 코드를 메모장에 저장해 Chrome으로 여는 방법으로 진행하세요.");
+      if (ai.length) line("생성형 AI 사이트(" + ai.join(", ") + ")가 막혀 있으면 모듈 02~07 진행이 어렵습니다. 전산 담당자에게 강의 시간 동안 접속 허용을 요청하세요.");
+      if (fbState === "open") line("선택 자료 11(Firebase): 이 PC에서 공용 장부 실습이 됩니다.", "open");
+      else if (fbState === "blocked" || fb.length) line("선택 자료 11(Firebase): 이 PC에서는 막혀 있습니다. 수업 진행에는 영향 없습니다.", "muted");
+      else line("선택 자료 11(Firebase)은 수업에서 다루지 않습니다. 필요할 때만 2단계로 시험하세요.", "muted");
+    }
+
+    $("again").addEventListener("click", runAll);
+    runAll();
+  </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>강의평가 결과 집계 - 1단계 HTML</title>
+</head>
+<body>
+  <!--
+    1단계: HTML = 뼈대
+    화면에 "무엇이" 있는지만 적습니다. 모양(색, 크기)과 동작은 아직 없습니다.
+    <태그>내용</태그> 처럼 여는 태그와 닫는 태그 사이에 내용을 넣습니다.
+  -->
+
+  <h1>강의평가 결과 집계</h1>
+  <p>신임소방관 교육과정 · 평균 3.5 미만은 개선 필요</p>
+
+  <form>
+    <label for="subject">과목</label>
+    <input id="subject" placeholder="예: 화재진압 전술">
+
+    <label for="instructor">교관</label>
+    <input id="instructor" placeholder="예: 김교관">
+
+    <label for="score">만족도</label>
+    <select id="score">
+      <option value="">선택</option>
+      <option value="5">5 매우 만족</option>
+      <option value="4">4 만족</option>
+      <option value="3">3 보통</option>
+      <option value="2">2 불만족</option>
+      <option value="1">1 매우 불만족</option>
+    </select>
+
+    <button type="submit">평가 제출</button>
+  </form>
+
+  <h2>과목·교관별 결과</h2>
+  <table>
+    <tr><th>과목</th><th>교관</th><th>응답</th><th>평균</th><th>상태</th></tr>
+    <tr><td>화재진압 전술</td><td>김교관</td><td>3</td><td>4.7</td><td>양호</td></tr>
+    <tr><td>화재진압 전술</td><td>이교관</td><td>3</td><td>3.3</td><td>개선 필요</td></tr>
+    <tr><td>응급처치 실습</td><td>박교관</td><td>2</td><td>4.5</td><td>양호</td></tr>
+  </table>
+</body>
+</html>

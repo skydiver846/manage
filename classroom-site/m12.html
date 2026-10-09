@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>12 Claude Code로 내 화면 · 생성형 AI 입문</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side">
+    <a class="brand" href="index.html"><small>소방학교 · 처음 시작하는 분들을 위한</small><strong>생성형 AI 입문</strong></a>
+    <nav aria-label="목차">
+    <div class="group"><a href="index.html">처음 화면</a><a href="prework.html">사전 과제 안내</a><a href="homework.html">과제 안내</a></div>
+    <div class="group"><h3>본 강의</h3><a href="m01.html">01 구글 업무 계정 만들기</a><a href="m02.html">02 ChatGPT · Claude 가입</a><a href="m03.html">03 프롬프트 · 파일 · 프로젝트</a><a href="m04.html">04 옵시디언과 MD 파일</a><a href="m05.html">05 PRD 작성하기</a><a href="m06.html">06 스킬 만들기</a><a href="m07.html">07 PRD로 결과물 만들기</a><a href="m08.html">08 AI 브라우저 Aside</a></div>
+    <div class="group"><h3>심화 · 직접 만들기</h3><a href="m09.html">09 HTML · CSS · JS 뜯어보기</a><a href="m10.html">10 GitHub · Vercel 배포</a><a href="m12.html" aria-current="page">12 Claude Code로 내 화면</a></div>
+    <div class="group"><h3>선택 자료 (수업 외)</h3><a href="m11.html">11 Firebase 공용 장부 (선택)</a></div>
+    <div class="group"><h3>자료</h3><a href="prompts.html">프롬프트 모음</a><a href="files.html">실습 파일 내려받기</a></div>
+  </nav>
+  </aside>
+  <main>
+    <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>12 Claude Code로 내 화면</span></div>
+    <article><h1>모듈 12 (심화 3). Claude Code로 내 PRD 화면 만들고 배포하기</h1>
+<p>📌 <strong>이 과정의 Claude Team 계정에는 Claude Code가 포함되어 있어 모두 직접 실습합니다.</strong></p>
+<p>모듈 10에서는 강의평가 화면을 <strong>손으로</strong> 올리고(커밋) 배포했습니다. 이번에는 <strong>모듈 05에서 쓴 내 업무 PRD</strong>를 <strong>AI 에이전트(Claude Code)</strong> 에게 건네 <strong>내 화면</strong>을 만들게 합니다. 말로 지시하면 Claude가 저장소에 파일을 만들고, 시험하고, 커밋·푸시까지 합니다. 사람은 검토하고 승인한 뒤 배포합니다.</p>
+<p>과정의 마지막 장면은 <strong>각자 자기 업무 화면을 휴대폰으로 여는 것</strong>입니다.</p>
+<p>모듈 08의 AI 브라우저(Aside)가 <strong>웹사이트 화면</strong>을 조작했다면, Claude Code는 <strong>저장소의 파일과 코드</strong>를 조작합니다.</p>
+<p>이 모듈의 핵심은 &quot;AI가 해 준다&quot;가 아니라 <strong>&quot;AI가 한 일을 내가 검토하고 승인한다&quot;</strong> 입니다.</p>
+<pre><code> 모듈 10 (손으로):  나 ── 복사·붙여넣기 ──▶ GitHub ──▶ Vercel
+ 모듈 12 (AI와):    나 ── 지시 ──▶ Claude Code ── 커밋·푸시 ──▶ GitHub ──▶ Vercel
+                     ▲                                          │
+                     └──────────── 변경 내용 검토·승인 ◀──────────┘
+</code></pre>
+<blockquote>
+<p>💡 모듈 6에서 만든 <strong>스킬</strong>은 Claude Code에서도 같은 방식으로 씁니다. 업무 방법을 SKILL.md로 적어 두면, 사람에게 하듯 AI 에이전트에게도 매뉴얼을 건넬 수 있습니다.</p>
+</blockquote>
+<h2>이 과정의 진행 (Claude Team)</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>누가</th>
+<th>하는 일</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>교육생 모두</strong></td>
+<td>각자 새 저장소 <code>my-tool</code> 에서 0~6단계. 화면 주제는 <strong>A. 내 PRD</strong> 또는 <strong>B. 공공데이터</strong> 중 하나</td>
+</tr>
+<tr>
+<td>강사</td>
+<td>앞 화면에서 한 단계 먼저 보여 주고, 4단계(검토)는 함께 읽기</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2>0단계: 준비 (10분)</h2>
+<p><strong>① 새 저장소 만들기</strong> (모듈 10의 2단계와 같은 방법)</p>
+<ol>
+<li>GitHub 오른쪽 위 <strong>[+]</strong> → <strong>[New repository]</strong></li>
+<li><strong>Repository name</strong>: <code>my-tool</code></li>
+<li><strong>Private</strong> 선택 — 내 업무 내용이 담기므로 이번에는 <strong>비공개</strong></li>
+<li><strong>Add a README file</strong> ✅ 체크 (빈 저장소면 Claude Code가 작업을 시작하지 못합니다)</li>
+<li><strong>[Create repository]</strong></li>
+</ol>
+<p><strong>② Claude Code 연결</strong></p>
+<ol>
+<li>업무 Chrome 프로필에서 <a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a> 접속 (Claude Code <strong>웹 버전</strong>. 프로그램 설치가 필요 없어 행정망 PC에 적합)</li>
+<li><strong>GitHub 연결</strong>: 안내에 따라 Claude GitHub 앱을 설치<ul>
+<li>저장소 선택에서 <strong>Only select repositories</strong> → <code>my-tool</code> <strong>하나만</strong> 선택</li>
+</ul>
+</li>
+<li>작업할 저장소로 <code>my-tool</code> 선택</li>
+</ol>
+<h2>1단계: 내 PRD 다듬기 (5분)</h2>
+<p>옵시디언 <code>01_기획(PRD)</code> 의 <strong>내 PRD</strong>를 열어 세 가지만 확인합니다.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>확인</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>4번 핵심 기능</strong>이 3~5개인가?</td>
+<td>한 시간 안에 만들 수 있는 크기. 많으면 &quot;있으면 좋음&quot;은 다음으로</td>
+</tr>
+<tr>
+<td><strong>6번 범위 밖</strong>에 &quot;로그인, 여러 사람 공유(데이터베이스)&quot; 가 있나?</td>
+<td>기록은 <strong>이 브라우저에만</strong> 저장하는 화면으로 만든다 (10에서 확인한 한계 그대로)</td>
+</tr>
+<tr>
+<td>실제 이름·연락처·내부 자료가 들어 있지 않나?</td>
+<td>저장소와 AI에게 건네는 내용이므로 예시로 바꾼다</td>
+</tr>
+</tbody></table></div>
+<h2>1단계-B: 공공데이터 파일 준비 (B를 고른 경우, 5분)</h2>
+<p>아래 세 파일 중 하나를 고릅니다. 처음이면 <strong>기본</strong>을 권합니다.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>파일 (공공데이터포털에서 이 이름으로 검색)</th>
+<th>크기</th>
+<th>만들어 볼 화면</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>기본</strong></td>
+<td>소방청_화재인명피해 지역별 성별 현황</td>
+<td>작은 표</td>
+<td>시도별 사상자 막대그래프, 전국 평균보다 많은 지역 강조</td>
+</tr>
+<tr>
+<td>대안</td>
+<td>소방청_가스누출(폭발) 화재 발생 현황</td>
+<td>약 300줄</td>
+<td>연도·장소별 건수, 많은 장소 순위</td>
+</tr>
+<tr>
+<td>도전</td>
+<td>소방청_연간화재통계</td>
+<td>약 3만 7천 줄 (화재 1건 = 1줄)</td>
+<td>시도·장소·발화요인별 집계, 많은 순 강조. 파일이 커서 시간이 더 걸림</td>
+</tr>
+</tbody></table></div>
+<ol>
+<li><code>data.go.kr</code> (공공데이터포털)에서 위 파일 이름으로 검색 → <strong>파일데이터</strong> → <strong>[다운로드]</strong> (로그인 없이 받을 수 있음)</li>
+<li>받은 파일 이름을 <code>data.csv</code> 로 바꾸기 (한글·띄어쓰기가 든 파일 이름은 웹 주소에서 말썽이 날 수 있음)</li>
+<li>GitHub <code>my-tool</code> 저장소 → <strong>[Add file] → [Upload files]</strong> → <code>data.csv</code> 끌어다 놓기 → <strong>[Commit changes]</strong></li>
+</ol>
+<blockquote>
+<p>공공데이터는 <strong>누구나 쓸 수 있게 공개된 자료</strong>라 비공개 저장소에 올려도, 배포해서 보여 줘도 됩니다. 다만 화면에 <strong>출처(공공데이터포털, 제공기관, 기준일)</strong> 를 꼭 적습니다.</p>
+</blockquote>
+<h2>2단계: Claude Code에 지시하기 (5분)</h2>
+<p><strong>A. 내 PRD 화면</strong></p>
+<pre><code>이 저장소에 아래 PRD의 업무 화면을 만들어 줘.
+
+(여기에 내 PRD 전체를 붙여넣기)
+
+- index.html 파일 하나로 만들고, 외부 서버나 데이터베이스 없이 기록은 이 브라우저(localStorage)에만 저장해 줘
+- 휴대폰 화면(폭 약 400px)에서 가로 스크롤 없이 보이게 해 줘
+- 실제 개인정보 대신 예시 데이터로 처음 화면을 보여 줘
+- 다 만든 뒤 PRD 7번 성공 기준대로 시험해 보고, 기준마다 통과 여부를 표로 알려 줘
+- 커밋 메시지는 한국어로 &quot;내 PRD 화면 v0.1&quot;
+</code></pre>
+<p><strong>B. 공공데이터 화면</strong></p>
+<pre><code>이 저장소의 data.csv는 공공데이터포털에서 받은 &quot;[파일 이름]&quot; 자료야.
+이 데이터로 한눈에 보는 현황 화면을 index.html 파일 하나로 만들어 줘.
+
+- 먼저 CSV의 칸 이름과 줄 수를 확인해 알려 주고, 어울리는 표·그래프 3가지를 제안한 뒤 첫 번째로 만들어 줘
+- CSV가 EUC-KR(CP949)일 수 있으니 한글이 깨지지 않게 읽어 줘
+- 외부 서버나 외부 프로그램(라이브러리) 없이 같은 저장소의 data.csv를 읽고, 그래프도 직접 그려 줘
+- 휴대폰 화면(폭 약 400px)에서 가로 스크롤 없이 보이게 해 줘
+- 화면 아래에 출처(공공데이터포털, 제공기관, 기준일)를 적어 줘
+- 다 만든 뒤 화면의 숫자 3개를 CSV 원본과 대조해 맞는지 표로 알려 줘
+- 커밋 메시지는 한국어로 &quot;공공데이터 화면 v0.1&quot;
+</code></pre>
+<h2>3단계: Claude가 일하는 모습 지켜보기 (15분)</h2>
+<p>화면에 Claude가 하는 일이 차례로 나타납니다.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>보이는 것</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>파일 만들기 (초록 줄)</td>
+<td>새로 쓴 코드</td>
+</tr>
+<tr>
+<td>시험 실행</td>
+<td>만든 화면이 PRD 성공 기준대로 동작하는지 확인</td>
+</tr>
+<tr>
+<td>커밋·푸시</td>
+<td>변경 내용을 기록해 GitHub로 올림</td>
+</tr>
+</tbody></table></div>
+<ul>
+<li>중간에 <strong>허락을 묻는 화면</strong>이 나오면 무엇을 하려는지 읽고 승인합니다. 모르는 내용이면 승인하지 말고 손을 들어 주세요.</li>
+<li>Claude Code는 보통 <code>main</code>(운영)이 아니라 <strong>별도 작업 줄기(브랜치)</strong> 에 올립니다. 원본을 바로 건드리지 않는 안전장치입니다.</li>
+</ul>
+<h2>4단계: AI가 한 일 검토하기 (10분) ⭐</h2>
+<ol>
+<li>Claude가 보여 준 표를 확인합니다. <strong>A</strong>는 성공 기준 표를 내 PRD 7번과 대조, <strong>B</strong>는 숫자 대조 표를 보고 하나는 직접 CSV(엑셀)를 열어 맞는지 확인. 안 맞으면 &quot;○○가 안 맞아, 고쳐 줘&quot;로 이어서 지시</li>
+<li>GitHub 저장소 → 위쪽 <strong>브랜치 선택</strong>(main 이라고 적힌 버튼) → Claude가 만든 브랜치 → <strong>커밋 기록(시계 아이콘)</strong> → Claude의 커밋</li>
+<li>확인할 것:<ul>
+<li>PRD에 적은 기능이 들어 있나? 범위 밖으로 정한 것을 멋대로 넣지 않았나?</li>
+<li>내 실제 정보나 모르는 외부 주소가 들어가지 않았나?</li>
+</ul>
+</li>
+</ol>
+<h2>5단계: 합치고 배포하기 (15분)</h2>
+<ol>
+<li>GitHub에서 <strong>Compare &amp; pull request</strong> (또는 Claude Code 화면의 PR 만들기) → 변경 내용 확인 → <strong>Merge pull request</strong> → <strong>Confirm merge</strong></li>
+<li>Vercel 대시보드 <strong>[Add New…] → [Project]</strong> → <code>my-tool</code> → <strong>[Import]</strong> → <strong>[Deploy]</strong> (모듈 10의 5단계와 같음)<ul>
+<li>목록에 <code>my-tool</code> 이 안 보이면 <strong>Adjust GitHub App Permissions</strong> 에서 <code>my-tool</code> 접근을 추가</li>
+</ul>
+</li>
+<li><strong>Domains</strong> 주소를 QR로 만들어 <strong>내 휴대폰</strong>으로 열기 (모듈 10의 QR 방법)</li>
+</ol>
+<pre><code> 내 PRD ──▶ Claude Code ──▶ 브랜치 ──(검토)──▶ 합치기(Merge) ──▶ main ──▶ Vercel ──▶ 📱 내 화면
+</code></pre>
+<h2>6단계: 한 번 더 고치기 — 미리보기로 확인 (시간이 남으면, 20분)</h2>
+<p>이제 저장소가 Vercel에 연결되어 있으니, 고칠 때마다 <strong>미리보기(Preview) 주소</strong>가 따로 생깁니다.</p>
+<ol>
+<li>Claude Code에 수정 하나를 지시: 예) &quot;제목 아래에 사용 방법을 한 줄로 넣어 줘&quot;, &quot;버튼 색을 소방 적색으로&quot;</li>
+<li>Vercel <strong>Deployments</strong> → Claude 브랜치의 배포 → <strong>Visit</strong> 으로 미리보기 확인</li>
+<li>운영 주소(Domains)는 <strong>아직 그대로</strong>인지 확인 → 괜찮으면 합치기 → 운영 주소에 반영</li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>주소</th>
+<th>무엇을 보여 주나</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>미리보기 (Preview)</td>
+<td>아직 합치기 전, Claude 브랜치의 결과</td>
+</tr>
+<tr>
+<td>운영 (Production, Domains)</td>
+<td><code>main</code> 의 결과. 실제로 쓰는 주소</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2>자주 막히는 곳</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>상황</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a> 에 들어가지지 않음</td>
+<td>Team 화면이 맞는지 확인(왼쪽 아래 Team 이름). 맞으면 관리자 설정에서 Claude Code 허용 여부 확인. 행정망 차단이면 전산 담당자 문의</td>
+</tr>
+<tr>
+<td>저장소 목록에 <code>my-tool</code> 이 없음</td>
+<td>GitHub 앱 설정에서 해당 저장소 접근 허용 추가</td>
+</tr>
+<tr>
+<td>Claude가 시작하지 못하고 저장소가 비었다고 함</td>
+<td>저장소를 만들 때 <strong>Add a README file</strong> 을 체크하지 않은 것. GitHub에서 README를 하나 만들고 다시</td>
+</tr>
+<tr>
+<td>Claude가 여러 파일을 만듦</td>
+<td>지시문에 &quot;index.html 하나로&quot; 조건이 있는지 확인. 원치 않으면 합치지 않고 지시를 다시</td>
+</tr>
+<tr>
+<td>화면이 PRD와 다름</td>
+<td>PRD 7번 성공 기준을 구체적으로 고친 뒤 &quot;이 기준대로 다시 맞춰 줘&quot;</td>
+</tr>
+<tr>
+<td>(B) 한글이 깨져 보임</td>
+<td>&quot;data.csv가 EUC-KR이야. 한글이 깨지지 않게 다시 읽어 줘&quot;</td>
+</tr>
+<tr>
+<td>(B) 배포한 화면에 데이터가 안 나옴</td>
+<td><code>data.csv</code> 가 저장소 맨 위(index.html과 같은 곳)에 있는지, 파일 이름 대소문자가 같은지 확인</td>
+</tr>
+<tr>
+<td>미리보기 주소가 안 보임</td>
+<td>Vercel <strong>Deployments</strong> 에서 Claude 브랜치 배포가 Ready 인지 확인</td>
+</tr>
+<tr>
+<td>잘못 합쳤음</td>
+<td>Vercel <strong>Instant Rollback</strong> 으로 이전 배포로 즉시 되돌리고, GitHub에서 되돌리기(Revert)</td>
+</tr>
+</tbody></table></div>
+<h2>✅ 확인 질문 (인터뷰)</h2>
+<ol>
+<li>GitHub 앱에 <strong>저장소 하나만</strong> 허용하고 저장소를 <strong>비공개</strong>로 만든 이유는?</li>
+<li>AI에게 화면을 맡길 때 <strong>PRD</strong>가 하는 역할은?</li>
+<li>미리보기 주소와 운영 주소의 차이는?</li>
+<li>AI에게 맡긴 뒤에도 <strong>사람이 꼭 하는 두 가지</strong>는?</li>
+</ol>
+</article>
+    <div class="pager"><a class="prev" href="m11.html"><span>← 이전</span>11 Firebase 공용 장부 (선택)</a><a class="next" href="prompts.html"><span>다음 →</span>프롬프트 모음</a></div>
+  </main>
+</div>
+<script src="assets/site.js"></script>
+</body>
+</html>
