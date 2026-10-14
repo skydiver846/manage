@@ -263,6 +263,112 @@ button {
 <li>오류 문구: <code>&quot;과목, 교관, 만족도를 모두 입력하세요.&quot;</code> 를 원하는 말로</li>
 <li>평가 몇 건 제출 → <strong>F5</strong> → 결과표가 <strong>사라집니다</strong></li>
 </ol>
+<h2>더 알아보기: JavaScript가 할 수 있는 일 10가지 (쉬는 시간·집에서)</h2>
+<p>세 재료 중 화면을 <strong>살아 움직이게</strong> 하는 것은 JavaScript입니다. 공통점은 <strong>새로고침 없이 그 자리에서 바로 바뀐다</strong>는 것입니다.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>번호</th>
+<th>예시</th>
+<th>JavaScript가 하는 일</th>
+<th>업무에서 쓰면</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>계산하기</td>
+<td>입력값을 읽어 계산하고 결과를 표시</td>
+<td>강의평가 평균 계산</td>
+</tr>
+<tr>
+<td>2</td>
+<td>입력값 검사</td>
+<td>입력 형식이 맞는지 실시간으로 판단</td>
+<td>전화번호·날짜 형식 확인</td>
+</tr>
+<tr>
+<td>3</td>
+<td>실시간 시계</td>
+<td>1초마다 화면을 다시 그림</td>
+<td>시험 남은 시간 표시</td>
+</tr>
+<tr>
+<td>4</td>
+<td>다크 모드</td>
+<td>버튼 하나로 모양을 통째로 바꿈</td>
+<td>야간 상황실 화면</td>
+</tr>
+<tr>
+<td>5</td>
+<td>할 일 목록</td>
+<td>화면 요소를 새로 만들고 지움</td>
+<td>점검 체크리스트</td>
+</tr>
+<tr>
+<td>6</td>
+<td>글자 수 세기</td>
+<td>입력 길이를 세고 기준을 넘으면 경고</td>
+<td>공문 제목 글자 수</td>
+</tr>
+<tr>
+<td>7</td>
+<td>무작위 색</td>
+<td>난수를 만들어 화면에 적용</td>
+<td>발표 순서 뽑기</td>
+</tr>
+<tr>
+<td>8</td>
+<td>접고 펴는 안내문</td>
+<td>누르면 내용을 보이거나 숨김</td>
+<td>자주 묻는 질문</td>
+</tr>
+<tr>
+<td>9</td>
+<td>목록 검색</td>
+<td>많은 자료에서 조건에 맞는 것만 거름</td>
+<td>교육생 명단 찾기</td>
+</tr>
+<tr>
+<td>10</td>
+<td>퀴즈 채점</td>
+<td>답을 판단하고 점수를 쌓음</td>
+<td>복습 문제</td>
+</tr>
+</tbody></table></div>
+<p>직접 눌러 보고 싶으면 Claude에게 이렇게 시킵니다.</p>
+<pre><code>HTML, CSS, JavaScript 중 JavaScript가 할 수 있는 일을 10가지 예시로 보여 줘.
+계산하기, 입력값 검사, 실시간 시계, 다크 모드, 할 일 목록, 글자 수 세기,
+무작위 색, 접고 펴는 안내문, 목록 검색, 퀴즈 채점을
+한 화면에서 직접 눌러 볼 수 있게 HTML 파일 하나로 만들어 줘.
+예시마다 &quot;JavaScript가 한 일&quot;을 한 줄로 적고, 외부 라이브러리 없이.
+</code></pre>
+<h3>파일 하나로 끝나는 것과 인터넷이 필요한 것</h3>
+<p>AI에게 &quot;3D로 방 꾸미기를 만들어 줘&quot;처럼 어려운 화면을 시키면, 남이 만든 <strong>외부 라이브러리</strong>(예: 3D용 three.js)를 인터넷에서 불러오는 코드를 쓰기도 합니다.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>파일 하나로 끝나는 화면</th>
+<th>외부 라이브러리를 쓰는 화면</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>인터넷</td>
+<td>없어도 열림</td>
+<td>있어야 열림 (라이브러리를 받아 옴)</td>
+</tr>
+<tr>
+<td>행정망</td>
+<td>대부분 그대로 열림</td>
+<td>라이브러리 주소가 막히면 <strong>빈 화면</strong></td>
+</tr>
+<tr>
+<td>이 과정의 프롬프트</td>
+<td>&quot;외부 라이브러리 없이&quot;를 넣음</td>
+<td>필요할 때만, 열리는지 확인하고 씀</td>
+</tr>
+</tbody></table></div>
+<p>그래서 이 과정의 프롬프트에는 <strong>&quot;외부 라이브러리 없이, 파일 하나로&quot;</strong> 를 넣습니다. 화면이 하얗게 나오면 F12 → Console에 빨간 오류가 있는지 보고, 외부 주소를 불러오지 못한 것이면 &quot;외부 라이브러리 없이 다시 만들어 줘&quot;라고 시킵니다.</p>
 <h2>AI와 함께 코드 읽기</h2>
 <p>코드가 낯설면 Claude에게 파일을 건네고 묻습니다(모듈 3의 &quot;파일 + 지시&quot;).</p>
 <pre><code>첨부한 3-js.html을 코딩을 처음 보는 사람에게 설명해 줘.
@@ -307,6 +413,14 @@ PRD의 어느 규칙과 연결되는지도 표로 정리해 줘.
 <tr>
 <td>어디를 고쳐야 할지 모름</td>
 <td>메모장 <strong>Ctrl + F</strong> 로 화면에 보이는 글자를 검색</td>
+</tr>
+<tr>
+<td>AI가 만든 화면이 하얗게만 나옴</td>
+<td>외부 라이브러리를 인터넷에서 못 불러온 것. &quot;외부 라이브러리 없이 파일 하나로 다시 만들어 줘&quot;</td>
+</tr>
+<tr>
+<td>AI의 답이 코드 중간에 끊김</td>
+<td>긴 파일은 답 한 번에 다 못 쓸 수 있음. &quot;이어서 계속 써 줘&quot; 또는 [계속]. 무료 계정은 사용 한도가 차면 멈춤</td>
 </tr>
 </tbody></table></div>
 <h2>✅ 확인 질문 (인터뷰)</h2>
