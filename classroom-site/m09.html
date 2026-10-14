@@ -21,7 +21,7 @@
   </aside>
   <main>
     <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>09 HTML · CSS · JS 뜯어보기</span></div>
-    <article><h1>모듈 09 (심화 1). HTML · CSS · JavaScript로 강의평가 화면 뜯어보기</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>1단계 HTML (뼈대)</span><span class="acts"><a class="btn" href="steps/1-html.html" download="1-html.html">내려받기</a> <a class="btn ghost" href="steps/1-html.html" target="_blank" rel="noopener">열어 보기</a></span></li><li><span>2단계 CSS (옷)</span><span class="acts"><a class="btn" href="steps/2-css.html" download="2-css.html">내려받기</a> <a class="btn ghost" href="steps/2-css.html" target="_blank" rel="noopener">열어 보기</a></span></li><li><span>3단계 JavaScript (움직임)</span><span class="acts"><a class="btn" href="steps/3-js.html" download="3-js.html">내려받기</a> <a class="btn ghost" href="steps/3-js.html" target="_blank" rel="noopener">열어 보기</a></span></li><li><span>강의평가 집계 완성본 (배포 실습용 index.html)</span><span class="acts"><a class="btn" href="prototype/index.html" download="index.html">내려받기</a> <a class="btn ghost" href="prototype/index.html" target="_blank" rel="noopener">열어 보기</a></span></li></ul></aside>
+    <article><h1>모듈 09 (심화 1). HTML · CSS · JavaScript로 강의평가 화면 뜯어보기</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>1단계 HTML (뼈대)</span><span class="acts"><a class="btn" href="steps/1-html.html" download="1-html.html">내려받기</a> <a class="btn ghost" href="steps/1-html.html" target="_blank" rel="noopener">열어 보기</a></span></li><li><span>2단계 CSS (옷)</span><span class="acts"><a class="btn" href="steps/2-css.html" download="2-css.html">내려받기</a> <a class="btn ghost" href="steps/2-css.html" target="_blank" rel="noopener">열어 보기</a></span></li><li><span>3단계 JavaScript (움직임)</span><span class="acts"><a class="btn" href="steps/3-js.html" download="3-js.html">내려받기</a> <a class="btn ghost" href="steps/3-js.html" target="_blank" rel="noopener">열어 보기</a></span></li><li><span>강의평가 집계 완성본 (배포 실습용 index.html)</span><span class="acts"><a class="btn" href="prototype/index.html" download="index.html">내려받기</a> <a class="btn ghost" href="prototype/index.html" target="_blank" rel="noopener">열어 보기</a></span></li><li><span>일정 플래너 완성 예시 (캘린더 + 간트차트)</span><span class="acts"><a class="btn" href="files/%EC%9D%BC%EC%A0%95%20%ED%94%8C%EB%9E%98%EB%84%88%20(%EC%98%88%EC%8B%9C).html" download="일정 플래너 (예시).html">내려받기</a> <a class="btn ghost" href="files/%EC%9D%BC%EC%A0%95%20%ED%94%8C%EB%9E%98%EB%84%88%20(%EC%98%88%EC%8B%9C).html" target="_blank" rel="noopener">열어 보기</a></span></li><li><span>3D 방 꾸미기 완성 예시 (라이브러리를 파일 안에 넣어 인터넷 없이 열림)</span><span class="acts"><a class="btn" href="files/3D%20%EB%B0%A9%20%EA%BE%B8%EB%AF%B8%EA%B8%B0%20(%EC%98%88%EC%8B%9C).html" download="3D 방 꾸미기 (예시).html">내려받기</a> <a class="btn ghost" href="files/3D%20%EB%B0%A9%20%EA%BE%B8%EB%AF%B8%EA%B8%B0%20(%EC%98%88%EC%8B%9C).html" target="_blank" rel="noopener">열어 보기</a></span></li></ul></aside>
 <p>모듈 7에서 Claude가 강의평가 집계 화면을 만들어 줬고, 모듈 8에서는 AI 브라우저가 그 화면을 대신 조작했습니다. 하지만 맞는 도구가 없으면 직접 만들어야 합니다. 배포하기 전에, 그 화면이 <strong>어떤 재료로 어떤 순서로</strong> 만들어지는지 열어 봅니다. 코드를 외우는 시간이 아닙니다. <strong>읽고, 한 군데 바꿔 보고, 바뀐 결과를 눈으로 확인</strong>하는 시간입니다.</p>
 <h2>웹 화면을 만드는 세 가지 재료</h2>
 <div class="table-wrap"><table>
@@ -368,7 +368,60 @@ button {
 <td>필요할 때만, 열리는지 확인하고 씀</td>
 </tr>
 </tbody></table></div>
+<p>라이브러리를 <strong>파일 안에 통째로 넣는</strong> 방법도 있습니다. 아래 3D 방 꾸미기 완성 예시가 그렇게 만들어져 있어서, 파일은 커지지만(약 600KB) 인터넷 없이 더블클릭만으로 열립니다.</p>
 <p>그래서 이 과정의 프롬프트에는 <strong>&quot;외부 라이브러리 없이, 파일 하나로&quot;</strong> 를 넣습니다. 화면이 하얗게 나오면 F12 → Console에 빨간 오류가 있는지 보고, 외부 주소를 불러오지 못한 것이면 &quot;외부 라이브러리 없이 다시 만들어 줘&quot;라고 시킵니다.</p>
+<h2>응용 실습: AI에게 큰 화면 맡기기 (시간이 남으면 · 과정 뒤, 20분)</h2>
+<p>강의평가 화면은 작은 화면입니다. 같은 세 재료로 <strong>얼마나 큰 화면까지</strong> 되는지 직접 시켜 봅니다. 둘 중 하나를 고르세요. 이 모듈 실습 파일에 두 화면의 <strong>완성 예시</strong>가 있으니, 먼저 열어 보고 시작해도 됩니다.</p>
+<h3>A. 일정 플래너: 캘린더 + 간트차트 (Claude)</h3>
+<pre><code>일정을 등록하면 월간 캘린더에, 프로젝트를 등록하면 간트차트에 보여 주는
+일정 관리 화면을 HTML 파일 하나로 만들어 줘.
+- 등록 창에서 &quot;일정&quot; / &quot;프로젝트&quot;를 고른다
+- 일정: 제목, 날짜, 시작·종료 시간, 색, 메모 → 캘린더에 표시, 날짜를 누르면 그날 일정 목록
+- 프로젝트: 제목, 시작일, 종료일, 진행률, 색 → 간트차트 막대, 끌어서 기간 이동·조절, 오늘 표시선
+- 브라우저에 자동 저장, 삭제 후 되돌리기
+- 부드러운 애니메이션, 깔끔한 디자인
+- HTML·CSS·JavaScript만, 외부 라이브러리 없이
+</code></pre>
+<p><strong>만든 뒤 찾아볼 것</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>화면에서</th>
+<th>어느 재료가 한 일</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>캘린더 칸, 등록 창, 입력칸</td>
+<td>HTML (무엇이 있나)</td>
+</tr>
+<tr>
+<td>둥근 카드, 막대가 자라나는 움직임, 창이 커지며 열리는 효과</td>
+<td>CSS (어떻게 보이나)</td>
+</tr>
+<tr>
+<td>날짜 계산, 막대 끌기, 자동 저장, 삭제 되돌리기, 숫자 올라가는 효과</td>
+<td>JavaScript (어떻게 움직이나)</td>
+</tr>
+</tbody></table></div>
+<ul>
+<li><code>F12</code> → <strong>Application → Local Storage</strong> 를 열면 저장된 일정이 글자로 보입니다. 완성본(4단계)과 같은 <strong>&quot;이 브라우저에만&quot;</strong> 저장입니다.</li>
+<li>업무에 쓰면: 교육 일정, 과정 운영 일정, 시설 점검 일정. 실제 개인정보·내부 일정은 넣지 않습니다.</li>
+</ul>
+<h3>B. 3D 방 꾸미기 (Claude)</h3>
+<pre><code>3D로 방을 꾸미는 화면을 HTML 파일 하나로 만들어 줘.
+- three.js 사용
+- 바닥과 벽 두 면. 빈 곳을 끌면 방이 돌아가고, 휠로 확대·축소
+- 가구 버튼(침대, 소파, 책상, 의자, 책장, 탁자, 화분, 스탠드, 러그)을 누르면 방에 놓이고, 끌어서 옮김 (벽 밖으로는 못 나감)
+- 선택한 가구: 색 바꾸기, R 키로 돌리기, Delete 키로 지우기
+- 벽 색, 바닥(마루·타일·단색), 낮·밤 바꾸기
+- 브라우저에 저장, 사진(PNG)으로 저장
+</code></pre>
+<p><strong>만든 뒤 확인할 것</strong></p>
+<ul>
+<li>Claude 미리보기나 내려받은 파일이 <strong>하얀 화면</strong>이면 <code>F12</code> → <strong>Console</strong> 을 봅니다. three.js를 인터넷(<code>cdn.jsdelivr.net</code>, <code>cdnjs</code>, <code>unpkg</code> 등)에서 못 불러온 것이면 그 주소가 막힌 것입니다.</li>
+<li>코드에서 <code>three</code> 가 들어간 <code>&lt;script src=&quot;https://...&quot;&gt;</code> 또는 <code>import</code> 줄을 찾아보세요. 이 한 줄이 <strong>남이 만든 3D 도구를 빌려 오는 줄</strong>입니다. 직접 쓰면 수만 줄인 3D 계산을 한 줄로 빌려 씁니다.</li>
+<li>완성 예시 파일은 같은 도구를 파일 안에 넣어 두어 인터넷 없이 열립니다. <strong>같은 기능, 다른 선택</strong>입니다.</li>
+</ul>
 <h2>AI와 함께 코드 읽기</h2>
 <p>코드가 낯설면 Claude에게 파일을 건네고 묻습니다(모듈 3의 &quot;파일 + 지시&quot;).</p>
 <pre><code>첨부한 3-js.html을 코딩을 처음 보는 사람에게 설명해 줘.
@@ -416,7 +469,7 @@ PRD의 어느 규칙과 연결되는지도 표로 정리해 줘.
 </tr>
 <tr>
 <td>AI가 만든 화면이 하얗게만 나옴</td>
-<td>외부 라이브러리를 인터넷에서 못 불러온 것. &quot;외부 라이브러리 없이 파일 하나로 다시 만들어 줘&quot;</td>
+<td>외부 라이브러리를 인터넷에서 못 불러온 것. &quot;외부 라이브러리 없이 파일 하나로 다시 만들어 줘&quot; (3D처럼 꼭 필요하면 완성 예시 파일로 봄)</td>
 </tr>
 <tr>
 <td>AI의 답이 코드 중간에 끊김</td>

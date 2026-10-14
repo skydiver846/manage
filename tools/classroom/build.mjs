@@ -42,9 +42,11 @@ const FILES = {
   step1: ["steps/1-html.html", "prototype-demo/steps/1-html.html", "1-html.html", "1단계 HTML (뼈대)"],
   step2: ["steps/2-css.html", "prototype-demo/steps/2-css.html", "2-css.html", "2단계 CSS (옷)"],
   step3: ["steps/3-js.html", "prototype-demo/steps/3-js.html", "3-js.html", "3단계 JavaScript (움직임)"],
+  planner: ["files/일정 플래너 (예시).html", "prototype-demo/examples/planner.html", "일정 플래너 (예시).html", "일정 플래너 완성 예시 (캘린더 + 간트차트)"],
+  room3d: ["files/3D 방 꾸미기 (예시).html", "prototype-demo/examples/room3d.html", "3D 방 꾸미기 (예시).html", "3D 방 꾸미기 완성 예시 (라이브러리를 파일 안에 넣어 인터넷 없이 열림)"],
   final: ["prototype/index.html", "prototype-demo/index.html", "index.html", "강의평가 집계 완성본 (배포 실습용 index.html)"],
 };
-const MODULE_FILES = { 3: ["mine", "prd", "opinions"], 4: ["prd", "opinions"], 5: ["template", "prd"], 6: ["skill", "skillmd", "quizreq", "quizsrc", "quizcard", "quizzip"], 7: ["prd", "opinions"], 9: ["step1", "step2", "step3", "final"], 10: ["final"] };
+const MODULE_FILES = { 3: ["mine", "prd", "opinions"], 4: ["prd", "opinions"], 5: ["template", "prd"], 6: ["skill", "skillmd", "quizreq", "quizsrc", "quizcard", "quizzip"], 7: ["prd", "opinions"], 9: ["step1", "step2", "step3", "final", "planner", "room3d"], 10: ["final"] };
 
 const SITES = {
   "accounts.google.com/signup": "https://accounts.google.com/signup", "google.com": "https://www.google.com/",
