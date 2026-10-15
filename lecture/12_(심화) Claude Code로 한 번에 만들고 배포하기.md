@@ -36,22 +36,16 @@
 
 ---
 
-## 0단계: 준비 (10분)
+## 0단계: 준비 확인 (2분)
 
-**① 새 저장소 만들기** (모듈 10의 2단계와 같은 방법)
-1. GitHub 오른쪽 위 **[+]** → **[New repository]**
-2. **Repository name**: `my-tool`
-3. **Private** 선택 — 내 업무 내용이 담기므로 이번에는 **비공개**
-4. **Add a README file** ✅ 체크 (빈 저장소면 Claude Code가 작업을 시작하지 못합니다)
-5. **[Create repository]**
+모듈 10의 **8번**에서 `my-tool` 저장소를 만들고 Claude Code에 연결해 두었습니다.
 
-**② Claude Code 연결**
-1. 업무 Chrome 프로필에서 `claude.ai/code` 접속 (Claude Code **웹 버전**. 프로그램 설치가 필요 없어 행정망 PC에 적합)
-2. **GitHub 연결**: 안내에 따라 Claude GitHub 앱을 설치
-   - 저장소 선택에서 **Only select repositories** → `my-tool` **하나만** 선택
-3. 작업할 저장소로 `my-tool` 선택
+1. 업무 Chrome 프로필에서 `claude.ai/code` 접속
+2. 작업할 저장소로 `my-tool` 선택
 
-> 🧑‍🏫 2번에서 "모든 저장소(All repositories)"를 고르지 않게 합니다. **AI에게는 필요한 저장소만 열어 준다**, 이것이 오늘의 첫 번째 보안 습관입니다.
+**아직 안 했다면** 모듈 10의 8번(①저장소 만들기, ②Claude Code 연결)을 지금 합니다(약 10분). 저장소는 **Private**, README 체크, GitHub 앱은 **Only select repositories → `my-tool` 하나만**입니다.
+
+> 🧑‍🏫 0단계에서 막힌 사람이 많으면 옆 사람과 짝을 지어 먼저 된 사람이 도와주게 합니다. **AI에게는 필요한 저장소만 열어 준다**는 보안 습관을 한 번 더 짚습니다.
 
 ## 1단계: 내 PRD 다듬기 (5분)
 
