@@ -6,7 +6,7 @@
 
 > ⚠️ **리허설 전 모듈입니다.** Claude Code 화면과 메뉴 이름은 자주 바뀝니다. 강의 전에 Team 계정(교육생과 같은 좌석)으로 처음부터 끝까지 한 번 해 보고 문구를 맞춰 주세요.
 
-모듈 10에서는 강의평가 화면을 **손으로** 올리고(커밋) 배포했습니다. 이번에는 **모듈 05에서 쓴 내 업무 PRD**를 **AI 에이전트(Claude Code)** 에게 건네 **내 화면**을 만들게 합니다. 말로 지시하면 Claude가 저장소에 파일을 만들고, 시험하고, 커밋·푸시까지 합니다. 사람은 검토하고 승인한 뒤 배포합니다.
+모듈 10에서는 강의평가 화면을 **손으로** 끌어다 놓아 배포했습니다. 이번에는 **모듈 05에서 쓴 내 업무 PRD**를 **AI 에이전트(Claude Code)** 에게 건네 **내 화면**을 만들게 합니다. 말로 지시하면 Claude가 저장소에 파일을 만들고, 시험하고, 커밋·푸시까지 합니다. 사람은 검토하고 승인한 뒤 배포합니다.
 
 과정의 마지막 장면은 **각자 자기 업무 화면을 휴대폰으로 여는 것**입니다.
 
@@ -15,8 +15,8 @@
 이 모듈의 핵심은 "AI가 해 준다"가 아니라 **"AI가 한 일을 내가 검토하고 승인한다"** 입니다.
 
 ```
- 모듈 10 (손으로):  나 ── 복사·붙여넣기 ──▶ GitHub ──▶ Vercel
- 모듈 12 (AI와):    나 ── 지시 ──▶ Claude Code ── 커밋·푸시 ──▶ GitHub ──▶ Vercel
+ 모듈 10 (손으로):  나 ── 폴더 끌어다 놓기 ─────────────────────────▶ Netlify
+ 모듈 12 (AI와):    나 ── 지시 ──▶ Claude Code ── 커밋·푸시 ──▶ GitHub ──▶ Netlify (저절로)
                      ▲                                          │
                      └──────────── 변경 내용 검토·승인 ◀──────────┘
 ```
@@ -38,12 +38,12 @@
 
 ## 0단계: 준비 확인 (2분)
 
-모듈 10의 **8번**에서 `my-tool` 저장소를 만들고 Claude Code에 연결해 두었습니다.
+모듈 10의 **7번**에서 `my-tool` 저장소를 만들고 Claude Code에 연결해 두었습니다.
 
 1. 업무 Chrome 프로필에서 `claude.ai/code` 접속
 2. 작업할 저장소로 `my-tool` 선택
 
-**아직 안 했다면** 모듈 10의 8번(①저장소 만들기, ②Claude Code 연결)을 지금 합니다(약 10분). 저장소는 **Private**, README 체크, GitHub 앱은 **Only select repositories → `my-tool` 하나만**입니다.
+**아직 안 했다면** 모듈 10의 7번(①저장소 만들기, ②Claude Code 연결)을 지금 합니다(약 10분). 저장소는 **Private**, README 체크, GitHub 앱은 **Only select repositories → `my-tool` 하나만**입니다.
 
 > 🧑‍🏫 0단계에서 막힌 사람이 많으면 옆 사람과 짝을 지어 먼저 된 사람이 도와주게 합니다. **AI에게는 필요한 저장소만 열어 준다**는 보안 습관을 한 번 더 짚습니다.
 
@@ -131,26 +131,30 @@
 ## 5단계: 합치고 배포하기 (15분)
 
 1. GitHub에서 **Compare & pull request** (또는 Claude Code 화면의 PR 만들기) → 변경 내용 확인 → **Merge pull request** → **Confirm merge**
-2. Vercel 대시보드 **[Add New…] → [Project]** → `my-tool` → **[Import]** → **[Deploy]** (모듈 10의 5단계와 같음)
-   - 목록에 `my-tool` 이 안 보이면 **Adjust GitHub App Permissions** 에서 `my-tool` 접근을 추가
-3. **Domains** 주소를 QR로 만들어 **내 휴대폰**으로 열기 (모듈 10의 QR 방법)
+2. Netlify에서 **[Add new site] → [Import an existing project]** → **GitHub** 선택
+   - 처음이면 Netlify GitHub 앱 설치 화면이 나옵니다 → **Only select repositories** → `my-tool` **하나만** 선택
+3. 목록에서 `my-tool` → 설정은 **비워 둔 채로** (Build command 비움, Publish directory 비움) → **[Deploy]**
+4. 주소 이름 바꾸기 (모듈 10의 3번): 예) `my-tool-hong` → `https://my-tool-hong.netlify.app`
+5. 그 주소를 QR로 만들어 **내 휴대폰**으로 열기 (모듈 10의 4번)
 
 ```
- 내 PRD ──▶ Claude Code ──▶ 브랜치 ──(검토)──▶ 합치기(Merge) ──▶ main ──▶ Vercel ──▶ 📱 내 화면
+ 내 PRD ──▶ Claude Code ──▶ 브랜치 ──(검토)──▶ 합치기(Merge) ──▶ main ──▶ Netlify ──▶ 📱 내 화면
 ```
+
+> 💡 모듈 10에서는 폴더를 손으로 끌어다 놓았습니다. 이제는 Netlify가 GitHub 창고를 지켜보다가 `main` 이 바뀌면 **저절로 다시 배포**합니다.
 
 ## 6단계: 한 번 더 고치기 — 미리보기로 확인 (시간이 남으면, 20분)
 
-이제 저장소가 Vercel에 연결되어 있으니, 고칠 때마다 **미리보기(Preview) 주소**가 따로 생깁니다.
+이제 저장소가 Netlify에 연결되어 있으니, 합치기 전에 **미리보기(Deploy Preview) 주소**로 먼저 확인할 수 있습니다.
 
 1. Claude Code에 수정 하나를 지시: 예) "제목 아래에 사용 방법을 한 줄로 넣어 줘", "버튼 색을 소방 적색으로"
-2. Vercel **Deployments** → Claude 브랜치의 배포 → **Visit** 으로 미리보기 확인
-3. 운영 주소(Domains)는 **아직 그대로**인지 확인 → 괜찮으면 합치기 → 운영 주소에 반영
+2. Claude Code 화면에서 **PR 만들기** → GitHub의 그 PR 화면에 Netlify가 남긴 **Deploy Preview** 링크(댓글 또는 아래쪽 확인 목록)를 눌러 미리보기 확인
+3. 운영 주소(netlify.app)는 **아직 그대로**인지 확인 → 괜찮으면 합치기 → 1~2분 뒤 운영 주소에 반영
 
 | 주소 | 무엇을 보여 주나 |
 |---|---|
-| 미리보기 (Preview) | 아직 합치기 전, Claude 브랜치의 결과 |
-| 운영 (Production, Domains) | `main` 의 결과. 실제로 쓰는 주소 |
+| 미리보기 (Deploy Preview) | 아직 합치기 전, Claude가 고친 결과 |
+| 운영 (`○○.netlify.app`) | `main` 의 결과. 실제로 쓰는 주소 |
 
 > 🧑‍🏫 마무리 멘트: "기획(PRD)은 사람이, 만드는 일은 AI가, **검토와 확인은 다시 사람이** 합니다. 이 순서를 지키면 AI를 믿고 쓸 수 있습니다." 같은 방법으로 강의평가 화면에 "결과 내려받기" 같은 기능을 더하는 것도 됩니다.
 
@@ -167,8 +171,9 @@
 | 화면이 PRD와 다름 | PRD 7번 성공 기준을 구체적으로 고친 뒤 "이 기준대로 다시 맞춰 줘" |
 | (B) 한글이 깨져 보임 | "data.csv가 EUC-KR이야. 한글이 깨지지 않게 다시 읽어 줘" |
 | (B) 배포한 화면에 데이터가 안 나옴 | `data.csv` 가 저장소 맨 위(index.html과 같은 곳)에 있는지, 파일 이름 대소문자가 같은지 확인 |
-| 미리보기 주소가 안 보임 | Vercel **Deployments** 에서 Claude 브랜치 배포가 Ready 인지 확인 |
-| 잘못 합쳤음 | Vercel **Instant Rollback** 으로 이전 배포로 즉시 되돌리고, GitHub에서 되돌리기(Revert) |
+| Netlify 목록에 `my-tool` 이 없음 | Netlify GitHub 앱 설정(**Configure the Netlify app on GitHub**)에서 `my-tool` 접근 추가 |
+| 미리보기 주소가 안 보임 | PR 화면 아래 확인 목록이 끝날 때까지 1~2분 기다리기. Netlify 사이트 **Deploys** 에도 "Deploy Preview" 로 보임 |
+| 잘못 합쳤음 | Netlify **Deploys** 에서 이전 배포 → **[Publish deploy]** 로 즉시 되돌리고, GitHub에서 되돌리기(Revert) |
 
 ## ✅ 확인 질문 (인터뷰)
 

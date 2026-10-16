@@ -14,7 +14,7 @@
     <nav aria-label="목차">
     <div class="group"><a href="index.html">처음 화면</a><a href="prework.html">사전 과제 안내</a><a href="homework.html">과제 안내</a></div>
     <div class="group"><h3>본 강의</h3><a href="m01.html">01 구글 업무 계정 만들기</a><a href="m02.html">02 ChatGPT · Claude 가입</a><a href="m03.html">03 프롬프트 · 파일 · 프로젝트</a><a href="m04.html">04 옵시디언과 MD 파일</a><a href="m05.html">05 PRD 작성하기</a><a href="m06.html">06 스킬 만들기</a><a href="m07.html">07 PRD로 결과물 만들기</a><a href="m08.html">08 AI 브라우저 Aside</a></div>
-    <div class="group"><h3>심화 · 직접 만들기</h3><a href="m09.html">09 HTML · CSS · JS 뜯어보기</a><a href="m10.html">10 GitHub · Vercel 배포</a><a href="m12.html" aria-current="page">12 Claude Code로 내 화면</a></div>
+    <div class="group"><h3>심화 · 직접 만들기</h3><a href="m09.html">09 HTML · CSS · JS 뜯어보기</a><a href="m10.html">10 Netlify 배포</a><a href="m12.html" aria-current="page">12 Claude Code로 내 화면</a></div>
     <div class="group"><h3>선택 자료 (수업 외)</h3><a href="m11.html">11 Firebase 공용 장부 (선택)</a></div>
     <div class="group"><h3>자료</h3><a href="prompts.html">프롬프트 모음</a><a href="files.html">실습 파일 내려받기</a></div>
   </nav>
@@ -23,12 +23,12 @@
     <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>12 Claude Code로 내 화면</span></div>
     <article><h1>모듈 12 (심화 3). Claude Code로 내 PRD 화면 만들고 배포하기</h1>
 <p>📌 <strong>이 과정의 Claude Team 계정에는 Claude Code가 포함되어 있어 모두 직접 실습합니다.</strong></p>
-<p>모듈 10에서는 강의평가 화면을 <strong>손으로</strong> 올리고(커밋) 배포했습니다. 이번에는 <strong>모듈 05에서 쓴 내 업무 PRD</strong>를 <strong>AI 에이전트(Claude Code)</strong> 에게 건네 <strong>내 화면</strong>을 만들게 합니다. 말로 지시하면 Claude가 저장소에 파일을 만들고, 시험하고, 커밋·푸시까지 합니다. 사람은 검토하고 승인한 뒤 배포합니다.</p>
+<p>모듈 10에서는 강의평가 화면을 <strong>손으로</strong> 끌어다 놓아 배포했습니다. 이번에는 <strong>모듈 05에서 쓴 내 업무 PRD</strong>를 <strong>AI 에이전트(Claude Code)</strong> 에게 건네 <strong>내 화면</strong>을 만들게 합니다. 말로 지시하면 Claude가 저장소에 파일을 만들고, 시험하고, 커밋·푸시까지 합니다. 사람은 검토하고 승인한 뒤 배포합니다.</p>
 <p>과정의 마지막 장면은 <strong>각자 자기 업무 화면을 휴대폰으로 여는 것</strong>입니다.</p>
 <p>모듈 08의 AI 브라우저(Aside)가 <strong>웹사이트 화면</strong>을 조작했다면, Claude Code는 <strong>저장소의 파일과 코드</strong>를 조작합니다.</p>
 <p>이 모듈의 핵심은 &quot;AI가 해 준다&quot;가 아니라 <strong>&quot;AI가 한 일을 내가 검토하고 승인한다&quot;</strong> 입니다.</p>
-<pre><code> 모듈 10 (손으로):  나 ── 복사·붙여넣기 ──▶ GitHub ──▶ Vercel
- 모듈 12 (AI와):    나 ── 지시 ──▶ Claude Code ── 커밋·푸시 ──▶ GitHub ──▶ Vercel
+<pre><code> 모듈 10 (손으로):  나 ── 폴더 끌어다 놓기 ─────────────────────────▶ Netlify
+ 모듈 12 (AI와):    나 ── 지시 ──▶ Claude Code ── 커밋·푸시 ──▶ GitHub ──▶ Netlify (저절로)
                      ▲                                          │
                      └──────────── 변경 내용 검토·승인 ◀──────────┘
 </code></pre>
@@ -54,12 +54,12 @@
 </tbody></table></div>
 <hr>
 <h2>0단계: 준비 확인 (2분)</h2>
-<p>모듈 10의 <strong>8번</strong>에서 <code>my-tool</code> 저장소를 만들고 Claude Code에 연결해 두었습니다.</p>
+<p>모듈 10의 <strong>7번</strong>에서 <code>my-tool</code> 저장소를 만들고 Claude Code에 연결해 두었습니다.</p>
 <ol>
 <li>업무 Chrome 프로필에서 <a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a> 접속</li>
 <li>작업할 저장소로 <code>my-tool</code> 선택</li>
 </ol>
-<p><strong>아직 안 했다면</strong> 모듈 10의 8번(①저장소 만들기, ②Claude Code 연결)을 지금 합니다(약 10분). 저장소는 <strong>Private</strong>, README 체크, GitHub 앱은 <strong>Only select repositories → <code>my-tool</code> 하나만</strong>입니다.</p>
+<p><strong>아직 안 했다면</strong> 모듈 10의 7번(①저장소 만들기, ②Claude Code 연결)을 지금 합니다(약 10분). 저장소는 <strong>Private</strong>, README 체크, GitHub 앱은 <strong>Only select repositories → <code>my-tool</code> 하나만</strong>입니다.</p>
 <h2>1단계: 내 PRD 다듬기 (5분)</h2>
 <p>옵시디언 <code>01_기획(PRD)</code> 의 <strong>내 PRD</strong>를 열어 세 가지만 확인합니다.</p>
 <div class="table-wrap"><table>
@@ -183,20 +183,25 @@
 <h2>5단계: 합치고 배포하기 (15분)</h2>
 <ol>
 <li>GitHub에서 <strong>Compare &amp; pull request</strong> (또는 Claude Code 화면의 PR 만들기) → 변경 내용 확인 → <strong>Merge pull request</strong> → <strong>Confirm merge</strong></li>
-<li>Vercel 대시보드 <strong>[Add New…] → [Project]</strong> → <code>my-tool</code> → <strong>[Import]</strong> → <strong>[Deploy]</strong> (모듈 10의 5단계와 같음)<ul>
-<li>목록에 <code>my-tool</code> 이 안 보이면 <strong>Adjust GitHub App Permissions</strong> 에서 <code>my-tool</code> 접근을 추가</li>
+<li>Netlify에서 <strong>[Add new site] → [Import an existing project]</strong> → <strong>GitHub</strong> 선택<ul>
+<li>처음이면 Netlify GitHub 앱 설치 화면이 나옵니다 → <strong>Only select repositories</strong> → <code>my-tool</code> <strong>하나만</strong> 선택</li>
 </ul>
 </li>
-<li><strong>Domains</strong> 주소를 QR로 만들어 <strong>내 휴대폰</strong>으로 열기 (모듈 10의 QR 방법)</li>
+<li>목록에서 <code>my-tool</code> → 설정은 <strong>비워 둔 채로</strong> (Build command 비움, Publish directory 비움) → <strong>[Deploy]</strong></li>
+<li>주소 이름 바꾸기 (모듈 10의 3번): 예) <code>my-tool-hong</code> → <code>https://my-tool-hong.netlify.app</code></li>
+<li>그 주소를 QR로 만들어 <strong>내 휴대폰</strong>으로 열기 (모듈 10의 4번)</li>
 </ol>
-<pre><code> 내 PRD ──▶ Claude Code ──▶ 브랜치 ──(검토)──▶ 합치기(Merge) ──▶ main ──▶ Vercel ──▶ 📱 내 화면
+<pre><code> 내 PRD ──▶ Claude Code ──▶ 브랜치 ──(검토)──▶ 합치기(Merge) ──▶ main ──▶ Netlify ──▶ 📱 내 화면
 </code></pre>
+<blockquote>
+<p>💡 모듈 10에서는 폴더를 손으로 끌어다 놓았습니다. 이제는 Netlify가 GitHub 창고를 지켜보다가 <code>main</code> 이 바뀌면 <strong>저절로 다시 배포</strong>합니다.</p>
+</blockquote>
 <h2>6단계: 한 번 더 고치기 — 미리보기로 확인 (시간이 남으면, 20분)</h2>
-<p>이제 저장소가 Vercel에 연결되어 있으니, 고칠 때마다 <strong>미리보기(Preview) 주소</strong>가 따로 생깁니다.</p>
+<p>이제 저장소가 Netlify에 연결되어 있으니, 합치기 전에 <strong>미리보기(Deploy Preview) 주소</strong>로 먼저 확인할 수 있습니다.</p>
 <ol>
 <li>Claude Code에 수정 하나를 지시: 예) &quot;제목 아래에 사용 방법을 한 줄로 넣어 줘&quot;, &quot;버튼 색을 소방 적색으로&quot;</li>
-<li>Vercel <strong>Deployments</strong> → Claude 브랜치의 배포 → <strong>Visit</strong> 으로 미리보기 확인</li>
-<li>운영 주소(Domains)는 <strong>아직 그대로</strong>인지 확인 → 괜찮으면 합치기 → 운영 주소에 반영</li>
+<li>Claude Code 화면에서 <strong>PR 만들기</strong> → GitHub의 그 PR 화면에 Netlify가 남긴 <strong>Deploy Preview</strong> 링크(댓글 또는 아래쪽 확인 목록)를 눌러 미리보기 확인</li>
+<li>운영 주소(netlify.app)는 <strong>아직 그대로</strong>인지 확인 → 괜찮으면 합치기 → 1~2분 뒤 운영 주소에 반영</li>
 </ol>
 <div class="table-wrap"><table>
 <thead>
@@ -206,11 +211,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>미리보기 (Preview)</td>
-<td>아직 합치기 전, Claude 브랜치의 결과</td>
+<td>미리보기 (Deploy Preview)</td>
+<td>아직 합치기 전, Claude가 고친 결과</td>
 </tr>
 <tr>
-<td>운영 (Production, Domains)</td>
+<td>운영 (<code>○○.netlify.app</code>)</td>
 <td><code>main</code> 의 결과. 실제로 쓰는 주소</td>
 </tr>
 </tbody></table></div>
@@ -252,12 +257,16 @@
 <td><code>data.csv</code> 가 저장소 맨 위(index.html과 같은 곳)에 있는지, 파일 이름 대소문자가 같은지 확인</td>
 </tr>
 <tr>
+<td>Netlify 목록에 <code>my-tool</code> 이 없음</td>
+<td>Netlify GitHub 앱 설정(<strong>Configure the Netlify app on GitHub</strong>)에서 <code>my-tool</code> 접근 추가</td>
+</tr>
+<tr>
 <td>미리보기 주소가 안 보임</td>
-<td>Vercel <strong>Deployments</strong> 에서 Claude 브랜치 배포가 Ready 인지 확인</td>
+<td>PR 화면 아래 확인 목록이 끝날 때까지 1~2분 기다리기. Netlify 사이트 <strong>Deploys</strong> 에도 &quot;Deploy Preview&quot; 로 보임</td>
 </tr>
 <tr>
 <td>잘못 합쳤음</td>
-<td>Vercel <strong>Instant Rollback</strong> 으로 이전 배포로 즉시 되돌리고, GitHub에서 되돌리기(Revert)</td>
+<td>Netlify <strong>Deploys</strong> 에서 이전 배포 → <strong>[Publish deploy]</strong> 로 즉시 되돌리고, GitHub에서 되돌리기(Revert)</td>
 </tr>
 </tbody></table></div>
 <h2>✅ 확인 질문 (인터뷰)</h2>

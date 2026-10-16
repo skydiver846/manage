@@ -20,7 +20,7 @@ const MODULES = [
   ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "1교시"],
   ["08_AI 브라우저 Aside로 코딩 없이 업무 자동화", "AI 브라우저 Aside", "1교시"],
   ["09_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "1교시"],
-  ["10_(심화) 프로토타입 배포", "GitHub · Vercel 배포", "1교시"],
+  ["10_(심화) 프로토타입 배포", "Netlify 배포", "1교시"],
   ["11_(심화) Firebase로 공용 장부 연결", "Firebase 공용 장부 (선택)", "수업 외"],
   ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code로 내 화면", "2교시"],
 ].map(([file, short, time], i) => ({ file, short, time, num: i + 1, page: `m${String(i + 1).padStart(2, "0")}.html` }));
@@ -52,7 +52,7 @@ const SITES = {
   "accounts.google.com/signup": "https://accounts.google.com/signup", "google.com": "https://www.google.com/",
   "gmail.com": "https://mail.google.com/", "chatgpt.com": "https://chatgpt.com/", "claude.ai": "https://claude.ai/",
   "claude.ai/code": "https://claude.ai/code", "notebooklm.google.com": "https://notebooklm.google.com/",
-  "obsidian.md": "https://obsidian.md/", "github.com": "https://github.com/", "vercel.com": "https://vercel.com/",
+  "obsidian.md": "https://obsidian.md/", "github.com": "https://github.com/", "vercel.com": "https://vercel.com/", "app.netlify.com": "https://app.netlify.com/", "app.netlify.com/drop": "https://app.netlify.com/drop",
   "console.firebase.google.com": "https://console.firebase.google.com/", "aside.com": "https://aside.com/",
 };
 
@@ -233,8 +233,8 @@ fs.writeFileSync(path.join(OUT, "files.html"), page("files.html", "실습 파일
 
 const siteLinks = [
   ["Google 계정 만들기", "accounts.google.com/signup", "01"], ["ChatGPT", "chatgpt.com", "02"], ["Claude", "claude.ai", "02"],
-  ["옵시디언 내려받기", "obsidian.md", "04"], ["Gemini Notebook", "notebooklm.google.com", "07"], ["GitHub", "github.com", "10"],
-  ["Vercel", "vercel.com", "10"], ["Firebase 콘솔", "console.firebase.google.com", "11"], ["Claude Code", "claude.ai/code", "12"], ["Aside", "aside.com", "08"],
+  ["옵시디언 내려받기", "obsidian.md", "04"], ["Gemini Notebook", "notebooklm.google.com", "07"], ["GitHub", "github.com", "12"],
+  ["Netlify", "app.netlify.com", "10"], ["Firebase 콘솔", "console.firebase.google.com", "11"], ["Claude Code", "claude.ai/code", "12"], ["Aside", "aside.com", "08"],
 ].sort((a, b) => a[2].localeCompare(b[2])).map(([label, host, mod]) => `<a class="tile" href="${SITES[host]}" target="_blank" rel="noopener"><b>${esc(label)}</b><span>${host}</span><small>모듈 ${mod}</small></a>`).join("");
 const modItems = (list) => list.map((m) => `<li><a href="${m.page}"><span class="no">${String(m.num).padStart(2, "0")}</span><span class="t">${esc(m.short)}</span><span class="time">${m.time}</span></a></li>`).join("");
 fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
