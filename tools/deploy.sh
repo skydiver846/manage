@@ -9,7 +9,7 @@ SITE_REPO="${SITE_REPO:-$ROOT/../fire-ai-classroom}"
 git -C "$SITE_REPO" pull -q --rebase origin main   # 다른 과정(예: ai-literacy)이 먼저 올라가 있을 수 있음
 cd "$ROOT"
 NODE_PATH=$(npm root -g) node tools/classroom/build.mjs >/dev/null
-git checkout classroom-site/files/prd-interview.zip classroom-site/files/quiz-generator.zip 2>/dev/null || true
+git checkout classroom-site/files/prd-interview.zip 2>/dev/null || true
 cp -r classroom-site/. "$SITE_REPO/fire-ai/"
 cp prototype-demo/network-check.html "$SITE_REPO/network-check.html"
 git add -A lecture classroom-site tools prototype-demo
