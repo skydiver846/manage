@@ -34,10 +34,6 @@ const FILES = {
   prompts: ["files/프롬프트 모음.md", "lecture/실습자료/프롬프트 모음.md", "프롬프트 모음.md", "프롬프트 모음 파일 (옵시디언 99_프롬프트 폴더 보관용)"],
   skill: ["files/prd-interview.zip", null, "prd-interview.zip", "PRD 인터뷰 스킬 (Claude에 바로 올리는 ZIP)"],
   skillmd: ["files/SKILL.md", "lecture/실습자료/스킬/prd-interview/SKILL.md", "SKILL.md", "PRD 인터뷰 스킬 원본 SKILL.md"],
-  quizreq: ["files/문제출제_의뢰서_예시.md", "lecture/실습자료/문제출제_의뢰서_예시.md", "문제출제_의뢰서_예시.md", "문제출제 의뢰서 (실습용 예시)"],
-  quizsrc: ["files/교재발췌_연소와소화의기초.md", "lecture/실습자료/교재발췌_연소와소화의기초.md", "교재발췌_연소와소화의기초.md", "교재 발췌: 연소와 소화의 기초 (실습용)"],
-  quizcard: ["files/객관식_문제카드_양식(별지제4호서식).hwpx", "lecture/실습자료/객관식_문제카드_양식(별지제4호서식).hwpx", "객관식_문제카드_양식(별지제4호서식).hwpx", "객관식 문제카드 빈 양식 (별지 제4호서식)"],
-  quizzip: ["files/quiz-generator.zip", null, "quiz-generator.zip", "문제출제 스킬 (조직 배포가 안 됐을 때 개인 등록용 ZIP)"],
   step1: ["steps/1-html.html", "prototype-demo/steps/1-html.html", "1-html.html", "1단계 HTML (뼈대)"],
   step2: ["steps/2-css.html", "prototype-demo/steps/2-css.html", "2-css.html", "2단계 CSS (옷)"],
   step3: ["steps/3-js.html", "prototype-demo/steps/3-js.html", "3-js.html", "3단계 JavaScript (움직임)"],
@@ -45,7 +41,7 @@ const FILES = {
   room3d: ["files/3D 방 꾸미기 (예시).html", "prototype-demo/examples/room3d.html", "3D 방 꾸미기 (예시).html", "3D 방 꾸미기 완성 예시 (라이브러리를 파일 안에 넣어 인터넷 없이 열림)"],
   final: ["prototype/index.html", "prototype-demo/index.html", "index.html", "강의평가 집계 완성본 (배포 실습용 index.html)"],
 };
-const MODULE_FILES = { 3: ["mine", "prd", "opinions"], 4: ["prd", "opinions"], 5: ["template", "prd"], 6: ["skill", "skillmd", "quizreq", "quizsrc", "quizcard", "quizzip"], 7: ["prd", "opinions"], 9: ["step1", "step2", "step3", "final", "planner", "room3d"], 10: ["final"] };
+const MODULE_FILES = { 3: ["mine", "prd", "opinions"], 4: ["prd", "opinions"], 5: ["template", "prd"], 6: ["skill", "skillmd"], 7: ["prd", "opinions"], 9: ["step1", "step2", "step3", "final", "planner", "room3d"], 10: ["final"] };
 
 const SITES = {
   "accounts.google.com/signup": "https://accounts.google.com/signup", "google.com": "https://www.google.com/",
@@ -98,8 +94,6 @@ function wikiTarget(raw) {
   if (mod) return [`${String(mod.num).padStart(2, "0")} ${mod.short}`, mod.page];
   if (name === "PRD_강의평가 결과보고") return ["예시 PRD 파일", "files.html#prd"];
   if (name === "강의평가_자유의견_예시") return ["자유의견 예시 파일", "files.html#opinions"];
-  if (name === "문제출제_의뢰서_예시") return ["출제 의뢰서 파일", "files.html#quizreq"];
-  if (name === "교재발췌_연소와소화의기초") return ["교재 발췌 파일", "files.html#quizsrc"];
   if (name === "PRD 템플릿") return ["PRD 템플릿 파일", "files.html#template"];
   if (name === "프롬프트 모음") return ["프롬프트 모음", "prompts.html"];
   if (name === "SKILL") return ["스킬 예시 파일", "files.html#skill"];
@@ -199,7 +193,6 @@ for (const [key, [dest, src]] of Object.entries(FILES)) {
 }
 // 스킬 ZIP: 폴더째 압축해야 Claude가 읽는다 (prd-interview/SKILL.md)
 execFileSync("zip", ["-q", "-r", path.join(OUT, FILES.skill[0]), "prd-interview"], { cwd: path.join(LECTURE, "실습자료/스킬") });
-execFileSync("zip", ["-q", "-r", path.join(OUT, FILES.quizzip[0]), "quiz-generator", "-x", "*/__pycache__/*"], { cwd: path.join(LECTURE, "실습자료/스킬") });
 
 MODULES.forEach((m, i) => {
   const md = fs.readFileSync(path.join(LECTURE, m.file + ".md"), "utf8");

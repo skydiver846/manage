@@ -21,6 +21,9 @@
   <main>
     <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>12 Claude Code로 내 화면</span></div>
     <article><h1>모듈 12 (심화 3). Claude Code로 내 PRD 화면 만들고 배포하기</h1>
+<blockquote>
+<p>🎯 <strong>이 모듈에서 만들 것:</strong> <strong>휴대폰으로 여는 내 업무 화면</strong> 주소</p>
+</blockquote>
 <p>📌 <strong>이 과정의 Claude Team 계정에는 Claude Code가 포함되어 있어 모두 직접 실습합니다.</strong></p>
 <p>모듈 10에서는 강의평가 화면을 <strong>손으로</strong> 끌어다 놓아 배포했습니다. 이번에는 <strong>모듈 05에서 쓴 내 업무 PRD</strong>를 <strong>AI 에이전트(Claude Code)</strong> 에게 건네 <strong>내 화면</strong>을 만들게 합니다. 말로 지시하면 Claude가 저장소에 파일을 만들고, 시험하고, 커밋·푸시까지 합니다. 사람은 검토하고 승인한 뒤 배포합니다.</p>
 <p>과정의 마지막 장면은 <strong>각자 자기 업무 화면을 휴대폰으로 여는 것</strong>입니다.</p>
@@ -44,7 +47,7 @@
 </thead>
 <tbody><tr>
 <td><strong>교육생 모두</strong></td>
-<td>각자 새 저장소 <code>my-tool</code> 에서 0~6단계. 화면 주제는 <strong>A. 내 PRD</strong> 또는 <strong>B. 공공데이터</strong> 중 하나</td>
+<td>각자 새 저장소 <code>my-tool</code> 에서 0~5단계. 화면 주제는 <strong>A. 내 PRD</strong> 또는 <strong>B. 공공데이터</strong> 중 하나</td>
 </tr>
 <tr>
 <td>강사</td>
@@ -162,26 +165,34 @@
 </tr>
 <tr>
 <td>커밋·푸시</td>
-<td>변경 내용을 기록해 GitHub로 올림</td>
+<td>만든 것을 저장해 GitHub 창고에 올림</td>
 </tr>
 </tbody></table></div>
 <ul>
 <li>중간에 <strong>허락을 묻는 화면</strong>이 나오면 무엇을 하려는지 읽고 승인합니다. 모르는 내용이면 승인하지 말고 손을 들어 주세요.</li>
-<li>Claude Code는 보통 <code>main</code>(운영)이 아니라 <strong>별도 작업 줄기(브랜치)</strong> 에 올립니다. 원본을 바로 건드리지 않는 안전장치입니다.</li>
+<li>Claude Code는 원본(<code>main</code>)을 바로 고치지 않고 <strong>연습장(브랜치)</strong> 에 먼저 올립니다. 내가 확인하고 <strong>합치기</strong> 전까지는 실제 화면이 바뀌지 않는 안전장치입니다.</li>
 </ul>
-<h2>4단계: AI가 한 일 검토하기 (10분) ⭐</h2>
+<h2>4단계: AI가 한 일 확인하기 (10분) ⭐</h2>
+<p>코드를 한 줄씩 읽지 않아도 됩니다. <strong>표 · 질문 · 화면</strong> 세 가지로 확인합니다.</p>
 <ol>
-<li>Claude가 보여 준 표를 확인합니다. <strong>A</strong>는 성공 기준 표를 내 PRD 7번과 대조, <strong>B</strong>는 숫자 대조 표를 보고 하나는 직접 CSV(엑셀)를 열어 맞는지 확인. 안 맞으면 &quot;○○가 안 맞아, 고쳐 줘&quot;로 이어서 지시</li>
-<li>GitHub 저장소 → 위쪽 <strong>브랜치 선택</strong>(main 이라고 적힌 버튼) → Claude가 만든 브랜치 → <strong>커밋 기록(시계 아이콘)</strong> → Claude의 커밋</li>
-<li>확인할 것:<ul>
-<li>PRD에 적은 기능이 들어 있나? 범위 밖으로 정한 것을 멋대로 넣지 않았나?</li>
-<li>내 실제 정보나 모르는 외부 주소가 들어가지 않았나?</li>
-</ul>
-</li>
+<li><strong>표 보기:</strong> Claude가 마지막에 보여 준 표를 봅니다. <strong>A</strong>는 성공 기준 표를 내 PRD 7번과 비교, <strong>B</strong>는 숫자 대조 표에서 하나를 직접 CSV(엑셀)로 열어 맞는지 확인</li>
+<li><strong>물어보기:</strong> Claude Code에 이어서 입력합니다.</li>
+</ol>
+<pre><code>방금 만든 것을 코딩을 모르는 사람에게 설명하듯 알려 줘.
+- 화면에 무엇이 있고 어떻게 쓰는지 3줄로
+- PRD 범위 밖 기능을 넣은 것이 있는지
+- 외부 주소나 실제 개인정보가 들어간 것이 있는지
+</code></pre>
+<ol start="3">
+<li>이상한 점이 있으면 &quot;○○는 빼 줘&quot;, &quot;○○가 PRD와 달라, 고쳐 줘&quot;로 이어서 지시합니다.</li>
+<li><strong>화면 보기</strong>는 5단계에서 배포한 뒤 휴대폰으로 합니다.</li>
 </ol>
 <h2>5단계: 합치고 배포하기 (15분)</h2>
 <ol>
-<li>GitHub에서 <strong>Compare &amp; pull request</strong> (또는 Claude Code 화면의 PR 만들기) → 변경 내용 확인 → <strong>Merge pull request</strong> → <strong>Confirm merge</strong></li>
+<li><strong>합치기 (버튼 두 번):</strong> Claude Code 화면의 <strong>[PR 만들기]</strong>(Create PR) → 열린 GitHub 화면에서 초록 버튼 <strong>[Merge pull request]</strong> → <strong>[Confirm merge]</strong><ul>
+<li>PR(풀 리퀘스트)은 &quot;연습장의 내용을 원본에 합쳐도 될까요?&quot;라는 <strong>결재 요청서</strong>입니다. 합치기를 누르는 것이 <strong>결재</strong>입니다.</li>
+</ul>
+</li>
 <li>Netlify에서 <strong>[Add new site] → [Import an existing project]</strong> → <strong>GitHub</strong> 선택<ul>
 <li>처음이면 Netlify GitHub 앱 설치 화면이 나옵니다 → <strong>Only select repositories</strong> → <code>my-tool</code> <strong>하나만</strong> 선택</li>
 </ul>
@@ -189,13 +200,14 @@
 <li>목록에서 <code>my-tool</code> → 설정은 <strong>비워 둔 채로</strong> (Build command 비움, Publish directory 비움) → <strong>[Deploy]</strong></li>
 <li>주소 이름 바꾸기 (모듈 10의 3번): 예) <code>my-tool-hong</code> → <code>https://my-tool-hong.netlify.app</code></li>
 <li>그 주소를 QR로 만들어 <strong>내 휴대폰</strong>으로 열기 (모듈 10의 4번)</li>
+<li><strong>화면으로 확인:</strong> PRD 7번 성공 기준 중 <strong>3개</strong>를 휴대폰에서 직접 해 봅니다. 안 되는 것이 있으면 Claude Code에 &quot;○○가 안 돼, 고쳐 줘&quot; → 다시 합치기 → 1~2분 뒤 같은 주소에 반영</li>
 </ol>
 <pre><code> 내 PRD ──▶ Claude Code ──▶ 브랜치 ──(검토)──▶ 합치기(Merge) ──▶ main ──▶ Netlify ──▶ 📱 내 화면
 </code></pre>
 <blockquote>
 <p>💡 모듈 10에서는 폴더를 손으로 끌어다 놓았습니다. 이제는 Netlify가 GitHub 창고를 지켜보다가 <code>main</code> 이 바뀌면 <strong>저절로 다시 배포</strong>합니다.</p>
 </blockquote>
-<h2>6단계: 한 번 더 고치기 — 미리보기로 확인 (시간이 남으면, 20분)</h2>
+<h2>더 해 보기 (수업 뒤): 합치기 전에 미리보기로 확인</h2>
 <p>이제 저장소가 Netlify에 연결되어 있으니, 합치기 전에 <strong>미리보기(Deploy Preview) 주소</strong>로 먼저 확인할 수 있습니다.</p>
 <ol>
 <li>Claude Code에 수정 하나를 지시: 예) &quot;제목 아래에 사용 방법을 한 줄로 넣어 줘&quot;, &quot;버튼 색을 소방 적색으로&quot;</li>
@@ -219,6 +231,19 @@
 </tr>
 </tbody></table></div>
 <hr>
+<h2>마무리: 꾸준히 하면 업무 자동화까지</h2>
+<p>이틀 동안 사다리를 다섯 칸 올라왔습니다. 마지막 칸은 <strong>정해진 때 저절로 돌아가게</strong> 하는 것입니다.</p>
+<pre><code>① 잘 시키기      프롬프트 5요소                         (03)
+② 자료 맡기기    프로젝트 · MD 파일                     (03 · 04)
+③ 방법 맡기기    스킬 = 업무 매뉴얼                     (06)
+④ 클릭 맡기기    AI 브라우저 · 루틴                     (08)
+⑤ 내 도구 만들기 웹 화면 만들고 배포                   (07 · 09 · 10 · 12)  ← 오늘 여기까지
+⑥ 저절로 돌아가게 정해진 때 자동 실행, 여러 사람 자료 모으기  (다음 단계)
+</code></pre>
+<ul>
+<li>한 번에 다 하지 않아도 됩니다. <strong>일주일에 한 번, 내 업무 하나</strong>에 한 칸씩 써 보는 것이 가장 빠릅니다. 구체적인 순서는 <a href="homework.html">과제 안내</a>의 &quot;꾸준히 하기 4주 계획&quot;에 있습니다.</li>
+<li>처음에는 AI가 만든 것을 <strong>내가 확인하고 승인</strong>하는 습관이 가장 중요합니다. 오늘 12에서 한 것처럼요.</li>
+</ul>
 <h2>자주 막히는 곳</h2>
 <div class="table-wrap"><table>
 <thead>
