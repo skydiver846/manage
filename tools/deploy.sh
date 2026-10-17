@@ -12,6 +12,7 @@ NODE_PATH=$(npm root -g) node tools/classroom/build.mjs >/dev/null
 git checkout classroom-site/files/prd-interview.zip 2>/dev/null || true
 cp -r classroom-site/. "$SITE_REPO/fire-ai/"
 cp prototype-demo/network-check.html "$SITE_REPO/network-check.html"
+mkdir -p "$SITE_REPO/api/fire-quiz" && cp tools/fire-quiz/api/fire-quiz/*.js "$SITE_REPO/api/fire-quiz/" && cp tools/fire-quiz/api/_lib/fire-quiz-key.js "$SITE_REPO/api/_lib/"   # 오늘의 퀴즈 서버 함수
 git add -A lecture classroom-site tools prototype-demo
 git commit -qm "$MSG" && git push -q -u origin "$(git branch --show-current)" && echo pushed-manage
 cd "$SITE_REPO"

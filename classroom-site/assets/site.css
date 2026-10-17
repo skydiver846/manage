@@ -112,3 +112,49 @@ li input[type="checkbox"] { width: 17px; height: 17px; margin-right: 6px; vertic
   article h1 { font-size: 27px; }
 }
 @media (prefers-reduced-motion: reduce) { .side { transition: none; } }
+
+/* 오늘의 퀴즈 · 결과 공유판 */
+.quiz { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; margin: 22px 0; scroll-margin-top: 16px; }
+.quiz h2 { margin-top: 4px; }
+.quiz-kind { font-size: 13px; color: var(--accent); font-weight: 700; margin: 0; }
+.quiz-lede, .board-updated { color: var(--muted); font-size: 14px; }
+.quiz-name { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 12px 0 4px; }
+.quiz-name label { font-weight: 700; font-size: 14px; }
+.quiz-name input, .board-admin-body input { font: inherit; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); min-width: 0; max-width: 100%; }
+.quiz-list { padding-left: 1.4em; }
+.quiz-item { margin: 16px 0; }
+.quiz-q { font-weight: 700; margin: 0 0 8px; }
+.quiz-options { display: grid; gap: 6px; }
+.quiz-option { display: flex; gap: 8px; align-items: flex-start; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+.quiz-option:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.quiz-option input { margin-top: 4px; }
+.quiz-option .mark { color: var(--muted); }
+.quiz-item.is-right .quiz-q::after { content: "  ⭕"; }
+.quiz-item.is-wrong .quiz-q::after { content: "  ❌"; }
+.quiz-where { font-size: 13.5px; color: var(--accent); margin: 6px 0 0; }
+.quiz-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.quiz-actions .btn { border: 0; cursor: pointer; font-size: 15px; padding: 8px 18px; }
+.quiz-actions .btn:disabled { opacity: .45; cursor: not-allowed; }
+.quiz-status { color: var(--muted); font-size: 14px; margin: 0; }
+.quiz-result { margin-top: 12px; padding: 12px 14px; border-radius: 8px; background: var(--code); }
+.quiz-score { font-size: 17px; margin: 0 0 6px; }
+.quiz-score.warn { color: var(--accent); }
+.rate-group { margin: 18px 0; }
+.rate-group h3 small { color: var(--muted); font-weight: 400; }
+.rate-row { border-bottom: 1px solid var(--line); }
+.rate-q { width: 100%; display: grid; grid-template-columns: 1fr minmax(60px, 120px) 3.2em; gap: 10px; align-items: center; text-align: left; background: none; border: 0; padding: 9px 2px; color: var(--ink); font: inherit; font-size: 14px; cursor: pointer; }
+.rate-bar { height: 8px; background: var(--code); border-radius: 4px; overflow: hidden; }
+.rate-bar span { display: block; height: 100%; background: var(--muted); }
+.rate-row.worst .rate-bar span, .rate-row.worst strong { background: none; color: var(--accent); }
+.rate-row.worst .rate-bar span { background: var(--accent); }
+.rate-options { list-style: none; padding: 0 0 10px; margin: 0; font-size: 13.5px; }
+.rate-options li { display: flex; justify-content: space-between; gap: 10px; padding: 3px 0; }
+.rate-options li.is-answer { color: var(--accent); font-weight: 700; }
+.muted-line { color: var(--muted); }
+.board-admin { margin-top: 18px; font-size: 14px; }
+.board-admin summary { cursor: pointer; color: var(--muted); }
+.board-admin-body { display: grid; gap: 8px; padding-top: 10px; }
+.board-buttons { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.board-buttons .btn { border: 0; cursor: pointer; }
+.board-buttons .btn.ghost { border: 1px solid var(--line); }
+@media (max-width: 560px) { .rate-q { grid-template-columns: 1fr 3.2em; } .rate-bar { display: none; } }
