@@ -13,8 +13,9 @@
     <a class="brand" href="index.html"><small>소방학교 · 처음 시작하는 분들을 위한</small><strong>생성형 AI 입문</strong></a>
     <nav aria-label="목차">
     <div class="group"><a href="index.html">처음 화면</a><a href="prework.html">사전 과제 안내</a><a href="homework.html">과제 안내</a><a href="quiz.html">오늘의 퀴즈</a></div>
-    <div class="group"><h3>본 강의</h3><a href="m01.html">01 구글 업무 계정 만들기</a><a href="m02.html">02 ChatGPT · Claude 가입</a><a href="m03.html">03 프롬프트 · 파일 · 프로젝트</a><a href="m04.html">04 옵시디언과 MD 파일</a><a href="m05.html">05 PRD 작성하기</a><a href="m06.html">06 스킬 만들기</a><a href="m07.html">07 PRD로 결과물 만들기</a><a href="m08.html">08 AI 브라우저 Aside</a></div>
-    <div class="group"><h3>심화 · 직접 만들기</h3><a href="m09.html">09 HTML · CSS · JS 뜯어보기</a><a href="m10.html">10 Netlify 배포</a><a href="m12.html" aria-current="page">12 Claude Code로 내 화면</a></div>
+    <div class="group"><h3>본 강의</h3><a href="m01.html">01 구글 업무 계정 만들기</a><a href="m02.html">02 ChatGPT · Claude 가입</a><a href="m03.html">03 프롬프트 · 파일 · 프로젝트</a><a href="m05.html">05 PRD 작성하기</a><a href="m06.html">06 스킬 만들기</a><a href="m07.html">07 PRD로 결과물 만들기</a><a href="m08.html">08 AI 브라우저 Aside</a></div>
+    <div class="group"><h3>심화 · 직접 만들기</h3><a href="m09.html">09 HTML · CSS · JS 맛보기</a><a href="m10.html">10 Netlify 배포</a><a href="m12.html" aria-current="page">12 Claude Code로 내 화면</a></div>
+    <div class="group"><h3>선택 자료 (수업 외)</h3><a href="m04.html">04 옵시디언 (선택)</a></div>
     <div class="group"><h3>자료</h3><a href="prompts.html">프롬프트 모음</a><a href="files.html">실습 파일 내려받기</a></div>
   </nav>
   </aside>
@@ -26,7 +27,7 @@
 <p>🤔 <strong>생각해 보기:</strong> AI가 만든 화면을 그대로 공개해도 될까요? 공개 전에 무엇을 확인해야 할까요? (답은 이 모듈에서 찾아보세요. 점수 없음)</p>
 </blockquote>
 <p>📌 <strong>이 과정의 Claude Team 계정에는 Claude Code가 포함되어 있어 모두 직접 실습합니다.</strong></p>
-<p>모듈 10에서는 강의평가 화면을 <strong>손으로</strong> 끌어다 놓아 배포했습니다. 이번에는 어제 쓰고 저녁에 다듬은 <strong>내 업무 PRD</strong>를 <strong>AI 에이전트(Claude Code)</strong> 에게 건네, 어제 시안으로 본 <strong>내 화면을 제대로 만들어 웹에 공개</strong>합니다. 말로 지시하면 Claude가 저장소에 파일을 만들고, 시험하고, 커밋·푸시까지 합니다. 사람은 검토하고 승인한 뒤 배포합니다.</p>
+<p>모듈 10에서는 강의평가 화면을 <strong>손으로</strong> 끌어다 놓아 배포했습니다. 이번에는 어제 쓰고 다듬은 <strong>내 업무 PRD</strong>를 <strong>AI 에이전트(Claude Code)</strong> 에게 건네, 어제 시안으로 본 <strong>내 화면을 제대로 만들어 웹에 공개</strong>합니다. 말로 지시하면 Claude가 저장소에 파일을 만들고, 시험하고, 커밋·푸시까지 합니다. 사람은 검토하고 승인한 뒤 배포합니다.</p>
 <p>과정의 마지막 장면은 <strong>각자 자기 업무 화면을 휴대폰으로 여는 것</strong>입니다.</p>
 <p>모듈 08의 AI 브라우저(Aside)가 <strong>웹사이트 화면</strong>을 조작했다면, Claude Code는 <strong>저장소의 파일과 코드</strong>를 조작합니다.</p>
 <p>이 모듈의 핵심은 &quot;AI가 해 준다&quot;가 아니라 <strong>&quot;AI가 한 일을 내가 검토하고 승인한다&quot;</strong> 입니다.</p>
@@ -64,7 +65,7 @@
 </ol>
 <p><strong>아직 안 했다면</strong> 모듈 10의 7번(①저장소 만들기, ②Claude Code 연결)을 지금 합니다(약 10분). 저장소는 <strong>Private</strong>, README 체크, GitHub 앱은 <strong>Only select repositories → <code>my-tool</code> 하나만</strong>입니다.</p>
 <h2>1단계: 내 PRD 다듬기 (5분)</h2>
-<p>옵시디언 <code>01_기획(PRD)</code> 의 <strong>내 PRD</strong>를 열어 세 가지만 확인합니다.</p>
+<p>내 업무 폴더 <code>01_기획(PRD)</code> 의 <strong>내 PRD</strong>를 열어, 어제 07-3 화면 시안에서 메모한 <strong>바꾸고 싶은 점 3가지</strong>를 먼저 반영하고(아직 안 했다면) 아래 세 가지를 확인합니다.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -235,7 +236,7 @@
 <h2>마무리: 꾸준히 하면 업무 자동화까지</h2>
 <p>이틀 동안 사다리를 다섯 칸 올라왔습니다. 마지막 칸은 <strong>정해진 때 저절로 돌아가게</strong> 하는 것입니다.</p>
 <pre><code>① 잘 시키기      프롬프트 5요소                         (03)
-② 자료 맡기기    프로젝트 · MD 파일                     (03 · 04)
+② 자료 맡기기    프로젝트 · MD 파일                     (03 · 05)
 ③ 방법 맡기기    스킬 = 업무 매뉴얼                     (06)
 ④ 클릭 맡기기    AI 브라우저 · 루틴                     (08)
 ⑤ 내 도구 만들기 웹 화면 만들고 배포                   (07 · 09 · 10 · 12)  ← 오늘 여기까지
