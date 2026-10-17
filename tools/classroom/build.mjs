@@ -140,7 +140,7 @@ function nav(current) {
   const mods = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to)
     .map((m) => link(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`)).join("");
   return `<nav aria-label="목차">
-    <div class="group">${link("index.html", "처음 화면")}${link("prework.html", "사전 과제 안내")}${link("homework.html", "과제 안내")}</div>
+    <div class="group">${link("index.html", "처음 화면")}${link("prework.html", "사전 과제 안내")}${link("homework.html", "과제 안내")}${link("quiz.html", "오늘의 퀴즈")}</div>
     <div class="group"><h3>본 강의</h3>${mods(1, 8)}</div>
     <div class="group"><h3>심화 · 직접 만들기</h3>${mods(9, 10)}${mods(12, 12)}</div>
     <div class="group"><h3>자료</h3>${link("prompts.html", "프롬프트 모음")}${link("files.html", "실습 파일 내려받기")}</div>
@@ -188,6 +188,17 @@ for (const d of ["assets", "files", "steps", "prototype"]) fs.mkdirSync(path.joi
 fs.copyFileSync(path.join(import.meta.dirname, "site.css"), path.join(OUT, "assets/site.css"));
 fs.copyFileSync(path.join(import.meta.dirname, "site.js"), path.join(OUT, "assets/site.js"));
 
+// 오늘의 퀴즈: 문항(정답 제외)은 사이트로, 정답·다시 볼 곳은 서버 함수(api/_lib)로 나눠 만든다
+const quizData = JSON.parse(fs.readFileSync(path.join(ROOT, "tools/fire-quiz/quiz-data.json"), "utf8"));
+const quizPublic = Object.fromEntries(Object.entries(quizData).map(([id, q]) => [id, { title: q.title, questions: q.questions.map(({ q: text, options }) => ({ q: text, options })) }]));
+fs.writeFileSync(path.join(OUT, "assets/fire-quiz-data.js"), `// tools/fire-quiz/quiz-data.json 에서 만든 파일입니다 (정답 없음).\nwindow.FIRE_QUIZ = ${JSON.stringify(quizPublic)};\n`);
+fs.copyFileSync(path.join(import.meta.dirname, "fire-quiz.js"), path.join(OUT, "assets/fire-quiz.js"));
+fs.mkdirSync(path.join(ROOT, "tools/fire-quiz/api/_lib"), { recursive: true });
+fs.writeFileSync(path.join(ROOT, "tools/fire-quiz/api/_lib/fire-quiz-key.js"),
+  `// tools/fire-quiz/quiz-data.json 에서 build.mjs 가 만든 파일입니다. 직접 고치지 말고 quiz-data.json 을 고친 뒤 다시 만드세요.\n` +
+  `module.exports = { keys: ${JSON.stringify(Object.fromEntries(Object.entries(quizData).map(([id, q]) => [id, q.questions.map((x) => x.answer)])))}, ` +
+  `where: ${JSON.stringify(Object.fromEntries(Object.entries(quizData).map(([id, q]) => [id, q.questions.map((x) => x.where)])))} };\n`);
+
 for (const [key, [dest, src]] of Object.entries(FILES)) {
   if (src) fs.copyFileSync(path.join(ROOT, src), path.join(OUT, dest));
 }
@@ -205,6 +216,16 @@ const preworkMd = fs.readFileSync(path.join(LECTURE, "사전 과제 안내.md"),
 fs.writeFileSync(path.join(OUT, "prework.html"), page("prework.html", "사전 과제 안내", render(preworkMd)));
 const homeworkMd = fs.readFileSync(path.join(LECTURE, "과제 안내.md"), "utf8");
 fs.writeFileSync(path.join(OUT, "homework.html"), page("homework.html", "과제 안내", render(homeworkMd)));
+fs.writeFileSync(path.join(OUT, "quiz.html"), page("quiz.html", "오늘의 퀴즈", `
+  <h1>오늘의 퀴즈</h1>
+  <p class="lead">하루가 끝날 때 출구 카드와 함께 풉니다. 보기에서 하나를 고르는 8문항, 약 4분입니다. 외울 것은 없고, 오늘 해 본 것을 떠올리면 풀 수 있습니다.</p>
+  <p><a class="btn ghost" href="#day1">1일차 퀴즈</a> <a class="btn ghost" href="#day2">2일차 퀴즈</a> <a class="btn ghost" href="#board">결과 공유판</a></p>
+  <section class="quiz" id="day1" data-quiz="day1"></section>
+  <section class="quiz" id="day2" data-quiz="day2"></section>
+  <section class="quiz board" id="board"><h2>결과 공유판</h2><div data-board></div></section>
+  <noscript><p>퀴즈는 JavaScript가 켜져 있어야 보입니다.</p></noscript>
+  <script src="assets/fire-quiz-data.js"></script>
+  <script src="assets/fire-quiz.js"></script>`));
 
 const promptsMd = fs.readFileSync(path.join(ROOT, FILES.prompts[1]), "utf8").replace(/^←.*\n/m, "");
 fs.writeFileSync(path.join(OUT, "prompts.html"), page("prompts.html", "프롬프트 모음",
