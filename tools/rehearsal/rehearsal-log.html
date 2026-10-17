@@ -1,4 +1,4 @@
-<title>12교시 리허설 기록</title>
+<title>10교시 리허설 기록</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <style>
   /* 레이아웃: 위에 요약 띠, 아래로 일차별 교시 카드가 한 줄씩. 강사 노트북 옆 화면에 띄워 두고 쓰는 기록장 */
@@ -93,13 +93,13 @@
 <div class="wrap">
   <header>
     <small>생성형 AI 업무 활용 입문 · 1기 리허설</small>
-    <h1>12교시 리허설 기록</h1>
+    <h1>10교시 리허설 기록</h1>
     <p>교시를 시작할 때 <b>시작</b>, 끝날 때 <b>끝</b>을 누르고 결과와 막힌 곳을 적어 두세요. 계획은 1교시 50분 기준입니다. 리허설 시간 × 1.3~1.5배를 실제 교육생 시간으로 봅니다.</p>
     <div class="store" id="store">저장소를 연결하는 중…</div>
   </header>
 
   <section class="summary" aria-label="요약">
-    <div class="stat"><span>기록한 교시</span><strong id="sDone">0 / 12</strong></div>
+    <div class="stat"><span>기록한 교시</span><strong id="sDone">0 / 10</strong></div>
     <div class="stat"><span>계획 합계</span><strong id="sPlan">0분</strong></div>
     <div class="stat"><span>실제 합계 (기록한 교시)</span><strong id="sReal">0분</strong></div>
     <div class="stat"><span>막힘 · 메뉴 다름</span><strong id="sStuck">0 · 0</strong></div>
@@ -123,19 +123,18 @@
 const PLAN = [
   { round: "사전 과제", sub: "수업 전, 리허설용 새 크롬 프로필에서", items: [
     { id: "pre", label: "사전 과제", title: "01 업무 계정 · 02 ChatGPT·Claude 가입 · GitHub 가입", mods: "01 · 02 · 10의 1단계", plan: 35 } ] },
-  { round: "1일차", sub: "1~6교시 · AI에게 일 시키기 → 내 자료 → PRD → 스킬 → 보고 자료", items: [
+  // id는 내용 기준으로 유지(12교시판에서 적은 기록이 같은 내용 칸에 그대로 보이게). p03(옵시디언)은 수업 외로 빠짐
+  { round: "1일차", sub: "1~5교시 · AI에게 일 시키기 → 내 업무 폴더 → PRD → 스킬 → 보고 자료·내 화면 시안", items: [
     { id: "p01", label: "1교시", title: "생성형 AI 첫 경험과 프롬프트", mods: "00 · 3-0 몸풀기 HTML · 3-1", plan: 50 },
-    { id: "p02", label: "2교시", title: "파일 건네기와 프로젝트", mods: "3-2 · 3-3", plan: 50 },
-    { id: "p03", label: "3교시", title: "옵시디언과 MD 파일", mods: "04 (설치 포함)", plan: 50 },
-    { id: "p04", label: "4교시", title: "업무 기획서(PRD) 작성", mods: "05", plan: 50 },
-    { id: "p05", label: "5교시", title: "스킬로 업무 방법 맡기기", mods: "06", plan: 50 },
-    { id: "p06", label: "6교시", title: "PRD로 보고 자료 · 내 화면 시안", mods: "07", plan: 50 } ] },
-  { round: "2일차", sub: "7~12교시 · 코딩 없이 자동화 → 화면 구조 → 웹 공개 → 내 업무 화면 → 공유", items: [
-    { id: "p07", label: "7교시", title: "코딩 없이 업무 자동화", mods: "08 Aside (설치 포함)", plan: 50 },
-    { id: "p08", label: "8교시", title: "웹 화면의 구조", mods: "09", plan: 50 },
-    { id: "p09", label: "9교시", title: "내 화면을 웹에 공개", mods: "10", plan: 50 },
-    { id: "p10", label: "10~11교시", title: "AI 에이전트로 내 업무 화면 만들기", mods: "12 (A 내 PRD / B 공공데이터)", plan: 100 },
-    { id: "p12", label: "12교시", title: "결과 공유와 업무 적용 계획", mods: "공유 · 과정 평가", plan: 50 } ] },
+    { id: "p02", label: "2교시", title: "파일 건네기와 프로젝트", mods: "3-2 · 3-3 · 내 업무 폴더", plan: 50 },
+    { id: "p04", label: "3교시", title: "업무 기획서(PRD) 작성", mods: "05", plan: 50 },
+    { id: "p05", label: "4교시", title: "스킬로 업무 방법 맡기기", mods: "(PRD 마무리 10분) · 06", plan: 50 },
+    { id: "p06", label: "5교시", title: "PRD로 보고 자료 · 내 화면 시안", mods: "07", plan: 50 } ] },
+  { round: "2일차", sub: "6~10교시 · 코딩 없이 자동화 → 화면 구조 맛보기·웹 공개 → 내 업무 화면 → 공유", items: [
+    { id: "p07", label: "6교시", title: "코딩 없이 업무 자동화", mods: "08 Aside (설치 포함)", plan: 50 },
+    { id: "p0910", label: "7교시", title: "화면 구조 맛보기와 웹에 공개", mods: "09 맛보기 20분 · 10 Netlify 30분", plan: 50 },
+    { id: "p10", label: "8~9교시", title: "AI 에이전트로 내 업무 화면 만들기", mods: "10-7 연결 · 12 (A 내 PRD / B 공공데이터)", plan: 100 },
+    { id: "p12", label: "10교시", title: "결과 공유와 업무 적용 계획", mods: "공유 · 2일차 퀴즈 · 과정 평가", plan: 50 } ] },
 ];
 const ALL = PLAN.flatMap((g) => g.items);
 const CHECKS = [
@@ -146,7 +145,7 @@ const CHECKS = [
   ["pages", "강의장 PC에 강사용 열람 페이지와 이 기록 페이지 열기"],
   ["netcheck", "교육생 PC 한 대에서 접속 점검 페이지 확인 (Claude 3개는 주소를 눌러 직접 확인)"],
   ["html", "(1일차) 교육생 PC 한 대로 HTML 파일 내려받기 → 바탕화면 더블클릭 실행 확인"],
-  ["install", "그날 설치가 있으면(1일차 3교시 옵시디언, 2일차 7교시 Aside) 교육생 PC 한 대로 설치 확인"],
+  ["install", "2일차 6교시 Aside 설치가 교육생 PC 한 대로 되는지 확인"],
   ["logout", "수업 후 강의장 PC에서 개인 Claude 로그아웃, 크롬 프로필 정리"],
 ];
 const RESULTS = [["ok", "됨"], ["stuck", "막힘"], ["diff", "메뉴 이름 다름"]];
@@ -199,8 +198,8 @@ function rowHTML(it) {
       <span class="live" id="live-${it.id}"></span>
     </div>
     <div class="notes">
-      <label for="issue-${it.id}">막힌 곳과 이유<textarea id="issue-${it.id}" placeholder="예: 옵시디언 설치 때 관리자 권한 창이 뜸"></textarea></label>
-      <label for="text-${it.id}">교재에서 헷갈린 문장<textarea id="text-${it.id}" placeholder="예: 4-2의 '보관소' 설명이 부족"></textarea></label>
+      <label for="issue-${it.id}">막힌 곳과 이유<textarea id="issue-${it.id}" placeholder="예: Aside 설치 때 관리자 권한 창이 뜸"></textarea></label>
+      <label for="text-${it.id}">교재에서 헷갈린 문장<textarea id="text-${it.id}" placeholder="예: 5-3의 '내려받게 해 줘' 설명이 부족"></textarea></label>
     </div>
     <div class="saved" data-saved="${it.id}"></div>
   </article>`;

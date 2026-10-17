@@ -14,13 +14,13 @@ const MODULES = [
   ["01_구글 업무 계정 만들기", "구글 업무 계정 만들기", "사전 과제"],
   ["02_ChatGPT와 Claude 가입", "ChatGPT · Claude 가입", "사전 과제"],
   ["03_프롬프트·파일·폴더 활용", "프롬프트 · 파일 · 프로젝트", "2교시"],
-  ["04_옵시디언 설치와 MD 파일 만들기", "옵시디언과 MD 파일", "1교시"],
+  ["04_옵시디언 설치와 MD 파일 만들기", "옵시디언 (선택)", "수업 외"],
   ["05_PRD 작성하기", "PRD 작성하기", "1교시"],
   ["06_스킬 만들기", "스킬 만들기", "1교시"],
   ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "1교시"],
   ["08_AI 브라우저 Aside로 코딩 없이 업무 자동화", "AI 브라우저 Aside", "1교시"],
-  ["09_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "1교시"],
-  ["10_(심화) 프로토타입 배포", "Netlify 배포", "1교시"],
+  ["09_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 맛보기", "20분"],
+  ["10_(심화) 프로토타입 배포", "Netlify 배포", "30분"],
   ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code로 내 화면", "2교시"],
 ].map(([file, short, time]) => { const num = parseInt(file, 10); return { file, short, time, num, page: `m${String(num).padStart(2, "0")}.html` }; });
 
@@ -31,7 +31,7 @@ const FILES = {
   prd: ["files/PRD_강의평가 결과보고.md", "lecture/실습자료/PRD_강의평가 결과보고.md", "PRD_강의평가 결과보고.md", "예시 PRD (강의평가 결과보고 v0.1)"],
   opinions: ["files/강의평가_자유의견_예시.md", "lecture/실습자료/강의평가_자유의견_예시.md", "강의평가_자유의견_예시.md", "강의평가 자유의견 예시 (서술형 요약 실습용)"],
   template: ["files/PRD 템플릿.md", "lecture/실습자료/PRD 템플릿.md", "PRD 템플릿.md", "빈 PRD 양식"],
-  prompts: ["files/프롬프트 모음.md", "lecture/실습자료/프롬프트 모음.md", "프롬프트 모음.md", "프롬프트 모음 파일 (옵시디언 99_프롬프트 폴더 보관용)"],
+  prompts: ["files/프롬프트 모음.md", "lecture/실습자료/프롬프트 모음.md", "프롬프트 모음.md", "프롬프트 모음 파일 (내 업무 폴더 99_프롬프트 보관용)"],
   skill: ["files/prd-interview.zip", null, "prd-interview.zip", "PRD 인터뷰 스킬 (Claude에 바로 올리는 ZIP)"],
   skillmd: ["files/SKILL.md", "lecture/실습자료/스킬/prd-interview/SKILL.md", "SKILL.md", "PRD 인터뷰 스킬 원본 SKILL.md"],
   step1: ["steps/1-html.html", "prototype-demo/steps/1-html.html", "1-html.html", "1단계 HTML (뼈대)"],
@@ -141,8 +141,9 @@ function nav(current) {
     .map((m) => link(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`)).join("");
   return `<nav aria-label="목차">
     <div class="group">${link("index.html", "처음 화면")}${link("prework.html", "사전 과제 안내")}${link("homework.html", "과제 안내")}${link("quiz.html", "오늘의 퀴즈")}</div>
-    <div class="group"><h3>본 강의</h3>${mods(1, 8)}</div>
+    <div class="group"><h3>본 강의</h3>${mods(1, 3)}${mods(5, 8)}</div>
     <div class="group"><h3>심화 · 직접 만들기</h3>${mods(9, 10)}${mods(12, 12)}</div>
+    <div class="group"><h3>선택 자료 (수업 외)</h3>${mods(4, 4)}</div>
     <div class="group"><h3>자료</h3>${link("prompts.html", "프롬프트 모음")}${link("files.html", "실습 파일 내려받기")}</div>
   </nav>`;
 }
@@ -175,9 +176,14 @@ function page(file, title, body, pager = "") {
 `;
 }
 
+// 이전/다음은 수업 순서대로. 선택 자료(04)는 순서에서 빼고, 04 페이지에서는 앞뒤 수업(03·05)으로 잇는다
+const SEQ = MODULES.filter((m) => m.num !== 4);
 function pagerFor(i) {
+  const cur = MODULES[i];
+  const j = cur.num === 4 ? SEQ.findIndex((m) => m.num === 5) - 0.5 : SEQ.indexOf(cur);
+  const prev = SEQ[Math.ceil(j) - 1], next = SEQ[Math.floor(j) + 1];
   const a = (m, cls, label) => `<a class="${cls}" href="${m.page}"><span>${label}</span>${String(m.num).padStart(2, "0")} ${esc(m.short)}</a>`;
-  return `<div class="pager">${i > 0 ? a(MODULES[i - 1], "prev", "← 이전") : '<a class="prev" href="index.html"><span>← 처음</span>처음 화면</a>'}${i < MODULES.length - 1 ? a(MODULES[i + 1], "next", "다음 →") : '<a class="next" href="prompts.html"><span>다음 →</span>프롬프트 모음</a>'}</div>`;
+  return `<div class="pager">${prev ? a(prev, "prev", "← 이전") : '<a class="prev" href="index.html"><span>← 처음</span>처음 화면</a>'}${next ? a(next, "next", "다음 →") : '<a class="next" href="prompts.html"><span>다음 →</span>프롬프트 모음</a>'}</div>`;
 }
 
 const render = (md) => enhance(marked.parse(wikify(studentMarkdown(md)), { gfm: true }));
@@ -229,7 +235,7 @@ fs.writeFileSync(path.join(OUT, "quiz.html"), page("quiz.html", "오늘의 퀴�
 
 const promptsMd = fs.readFileSync(path.join(ROOT, FILES.prompts[1]), "utf8").replace(/^←.*\n/m, "");
 fs.writeFileSync(path.join(OUT, "prompts.html"), page("prompts.html", "프롬프트 모음",
-  `<p class="lead">수업에서 쓰는 프롬프트를 모았습니다. 상자 오른쪽 위 <b>[복사]</b>를 누르고 ChatGPT·Claude 입력창에 붙여넣으세요. </p><p class="lead"><a class="btn" href="${encodeURI(FILES.prompts[0])}" download="${FILES.prompts[2]}">프롬프트 모음 파일(.md) 내려받기</a> 옵시디언 <code>99_프롬프트</code> 폴더에 넣어 두면 수업 뒤에도 쓸 수 있습니다.</p>` + render(promptsMd)));
+  `<p class="lead">수업에서 쓰는 프롬프트를 모았습니다. 상자 오른쪽 위 <b>[복사]</b>를 누르고 ChatGPT·Claude 입력창에 붙여넣으세요. </p><p class="lead"><a class="btn" href="${encodeURI(FILES.prompts[0])}" download="${FILES.prompts[2]}">프롬프트 모음 파일(.md) 내려받기</a> 내 업무 폴더(<code>문서 &gt; AI업무자료 &gt; 99_프롬프트</code>)에 넣어 두면 수업 뒤에도 쓸 수 있습니다.</p>` + render(promptsMd)));
 
 const allFiles = Object.entries(FILES).map(([k, [dest, , dl, label]]) => {
   const href = encodeURI(dest);
@@ -238,28 +244,29 @@ const allFiles = Object.entries(FILES).map(([k, [dest, , dl, label]]) => {
   return `<tr id="${k === "skillmd" ? "skill" : k}"><td>${esc(label)}</td><td>${used}</td><td class="acts"><a class="btn" href="${href}" download="${esc(dl)}">내려받기</a>${open}</td></tr>`;
 }).join("");
 fs.writeFileSync(path.join(OUT, "files.html"), page("files.html", "실습 파일 내려받기",
-  `<h1>실습 파일 내려받기</h1><p class="lead">내려받은 파일은 옵시디언 보관소(<code>문서 &gt; AI업무자료</code>)의 알맞은 폴더로 옮겨 두세요.</p>
+  `<h1>실습 파일 내려받기</h1><p class="lead">내려받은 파일은 내 업무 폴더(<code>문서 &gt; AI업무자료</code>)의 알맞은 폴더로 옮겨 두세요.</p>
   <div class="table-wrap"><table><thead><tr><th>파일</th><th>쓰는 모듈</th><th></th></tr></thead><tbody>${allFiles}</tbody></table></div>
-  <h2>스킬 파일 내용 (SKILL.md)</h2><p>ZIP을 올릴 수 없는 경우, 아래 내용을 복사해 옵시디언 <code>98_스킬/prd-interview/SKILL</code> 노트에 붙여넣으세요.</p>
+  <h2>스킬 파일 내용 (SKILL.md)</h2><p>ZIP을 올릴 수 없는 경우, 아래 내용을 복사해 메모장에 붙여넣고 <code>98_스킬</code> 폴더에 <code>SKILL.md</code>로 저장해 두세요.</p>
   <pre><code>${esc(fs.readFileSync(path.join(ROOT, FILES.skillmd[1]), "utf8"))}</code></pre>`));
 
 const siteLinks = [
   ["Google 계정 만들기", "accounts.google.com/signup", "01"], ["ChatGPT", "chatgpt.com", "02"], ["Claude", "claude.ai", "02"],
-  ["옵시디언 내려받기", "obsidian.md", "04"], ["Gemini Notebook", "notebooklm.google.com", "07"], ["GitHub", "github.com", "12"],
+  ["Gemini Notebook", "notebooklm.google.com", "07"], ["GitHub", "github.com", "12"],
   ["Netlify", "app.netlify.com", "10"], ["Claude Code", "claude.ai/code", "12"], ["Aside", "aside.com", "08"],
 ].sort((a, b) => a[2].localeCompare(b[2])).map(([label, host, mod]) => `<a class="tile" href="${SITES[host]}" target="_blank" rel="noopener"><b>${esc(label)}</b><span>${host}</span><small>모듈 ${mod}</small></a>`).join("");
+const mods3 = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to && m.num !== 4);
 const modItems = (list) => list.map((m) => `<li><a href="${m.page}"><span class="no">${String(m.num).padStart(2, "0")}</span><span class="t">${esc(m.short)}</span><span class="time">${m.time}</span></a></li>`).join("");
 fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 입문</h1>
-  <p class="lead">계정 만들기부터 프롬프트, 옵시디언, 스킬, PRD, 그리고 PRD로 만든 강의평가 집계 화면을 웹에 공개하고 AI 에이전트로 자동화하기까지 한 단계씩 따라 합니다.</p>
+  <p class="lead">계정 만들기부터 프롬프트, PRD, 스킬, 그리고 PRD로 만든 강의평가 집계 화면을 웹에 공개하고 AI 에이전트로 자동화하기까지 한 단계씩 따라 합니다.</p>
   <h2>사전 과제 · 수업 전에 각자</h2>
   <ol class="mods">${modItems(MODULES.slice(0, 2))}</ol>
   <p><a class="btn" href="prework.html">사전 과제 안내 보기</a> 첫날 전까지 해 올 것과 준비물을 한 장에 정리했습니다.</p>
-  <h2>1일차 (1~6교시) · AI에게 일 시키기, PRD, 스킬, 보고 자료</h2>
-  <ol class="mods">${modItems(MODULES.slice(2, 7))}</ol>
-  <h2>2일차 (7~12교시) · 코딩 없이 자동화, 웹에 공개하기, 내 업무 화면 만들기</h2>
+  <h2>1일차 (1~5교시) · AI에게 일 시키기, PRD, 스킬, 내 화면 시안</h2>
+  <ol class="mods">${modItems(mods3(3, 7))}</ol>
+  <h2>2일차 (6~10교시) · 코딩 없이 자동화, 웹에 공개하기, 내 업무 화면 만들기</h2>
   <ol class="mods">${modItems(MODULES.filter((m) => m.num >= 8))}</ol>
-  <p class="note">2일 연속, 총 12시간(하루 6교시, 1교시 = 50분 수업 + 10분 휴식)입니다. 1일차 저녁 과제와 과정 뒤 과제는 <a href="homework.html">과제 안내</a>에 있습니다.</p>
+  <p class="note">2일 연속, 총 10시간(하루 5교시, 1교시 = 50분 수업 + 10분 휴식)입니다. 04 옵시디언은 수업 외 선택 자료입니다. 1일차 저녁 과제와 과정 뒤 과제는 <a href="homework.html">과제 안내</a>에 있습니다.</p>
   <h2>바로가기</h2>
   <div class="tiles">${siteLinks}</div>
   <h2>자료</h2>
