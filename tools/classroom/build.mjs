@@ -218,7 +218,7 @@ const homeworkMd = fs.readFileSync(path.join(LECTURE, "과제 안내.md"), "utf8
 fs.writeFileSync(path.join(OUT, "homework.html"), page("homework.html", "과제 안내", render(homeworkMd)));
 fs.writeFileSync(path.join(OUT, "quiz.html"), page("quiz.html", "오늘의 퀴즈", `
   <h1>오늘의 퀴즈</h1>
-  <p class="lead">하루가 끝날 때 출구 카드와 함께 풉니다. 보기에서 하나를 고르는 8문항, 약 4분입니다. 외울 것은 없고, 오늘 해 본 것을 떠올리면 풀 수 있습니다.</p>
+  <p class="lead">보기에서 하나를 고르는 8문항, 약 4분입니다. 외울 것은 없고, 오늘 해 본 것을 떠올리면 풀 수 있습니다. <b>1일차 퀴즈는 저녁 과제</b>로 휴대폰에서 풀고, <b>2일차 퀴즈는 마지막 교시</b>에 함께 풉니다.</p>
   <p><a class="btn ghost" href="#day1">1일차 퀴즈</a> <a class="btn ghost" href="#day2">2일차 퀴즈</a> <a class="btn ghost" href="#board">결과 공유판</a></p>
   <section class="quiz" id="day1" data-quiz="day1"></section>
   <section class="quiz" id="day2" data-quiz="day2"></section>
