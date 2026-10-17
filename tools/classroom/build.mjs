@@ -224,7 +224,7 @@ const homeworkMd = fs.readFileSync(path.join(LECTURE, "과제 안내.md"), "utf8
 fs.writeFileSync(path.join(OUT, "homework.html"), page("homework.html", "과제 안내", render(homeworkMd)));
 fs.writeFileSync(path.join(OUT, "quiz.html"), page("quiz.html", "오늘의 퀴즈", `
   <h1>오늘의 퀴즈</h1>
-  <p class="lead">보기에서 하나를 고르는 8문항, 약 4분입니다. 외울 것은 없고, 오늘 해 본 것을 떠올리면 풀 수 있습니다. <b>1일차 퀴즈는 저녁 과제</b>로 휴대폰에서 풀고, <b>2일차 퀴즈는 마지막 교시</b>에 함께 풉니다.</p>
+  <p class="lead">보기에서 하나를 고르는 8문항, 약 4분입니다. 외울 것은 없고, 수업에서 해 본 것을 떠올리면 풀 수 있습니다. <b>1일차 퀴즈는 2일차 첫 시간</b>에, <b>2일차 퀴즈는 마지막 교시</b>에 휴대폰으로 함께 풉니다.</p>
   <p><a class="btn ghost" href="#day1">1일차 퀴즈</a> <a class="btn ghost" href="#day2">2일차 퀴즈</a> <a class="btn ghost" href="#board">결과 공유판</a></p>
   <section class="quiz" id="day1" data-quiz="day1"></section>
   <section class="quiz" id="day2" data-quiz="day2"></section>
@@ -266,7 +266,7 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <ol class="mods">${modItems(mods3(3, 7))}</ol>
   <h2>2일차 (6~10교시) · 코딩 없이 자동화, 웹에 공개하기, 내 업무 화면 만들기</h2>
   <ol class="mods">${modItems(MODULES.filter((m) => m.num >= 8))}</ol>
-  <p class="note">2일 연속, 총 10시간(하루 5교시, 1교시 = 50분 수업 + 10분 휴식)입니다. 04 옵시디언은 수업 외 선택 자료입니다. 1일차 저녁 과제와 과정 뒤 과제는 <a href="homework.html">과제 안내</a>에 있습니다.</p>
+  <p class="note">2일 연속, 총 10시간입니다. <b>1일차 16:00~21:00, 2일차 08:00~13:00</b> (하루 5교시, 1교시 = 50분 수업 + 10분 휴식). 04 옵시디언은 수업 외 선택 자료입니다. 1일차 끝나고 해 볼 것과 과정 뒤 과제는 <a href="homework.html">과제 안내</a>에 있습니다.</p>
   <h2>바로가기</h2>
   <div class="tiles">${siteLinks}</div>
   <h2>자료</h2>
