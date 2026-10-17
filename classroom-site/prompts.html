@@ -15,7 +15,6 @@
     <div class="group"><a href="index.html">처음 화면</a><a href="prework.html">사전 과제 안내</a><a href="homework.html">과제 안내</a></div>
     <div class="group"><h3>본 강의</h3><a href="m01.html">01 구글 업무 계정 만들기</a><a href="m02.html">02 ChatGPT · Claude 가입</a><a href="m03.html">03 프롬프트 · 파일 · 프로젝트</a><a href="m04.html">04 옵시디언과 MD 파일</a><a href="m05.html">05 PRD 작성하기</a><a href="m06.html">06 스킬 만들기</a><a href="m07.html">07 PRD로 결과물 만들기</a><a href="m08.html">08 AI 브라우저 Aside</a></div>
     <div class="group"><h3>심화 · 직접 만들기</h3><a href="m09.html">09 HTML · CSS · JS 뜯어보기</a><a href="m10.html">10 Netlify 배포</a><a href="m12.html">12 Claude Code로 내 화면</a></div>
-    <div class="group"><h3>선택 자료 (수업 외)</h3><a href="m11.html">11 Firebase 공용 장부 (선택)</a></div>
     <div class="group"><h3>자료</h3><a href="prompts.html" aria-current="page">프롬프트 모음</a><a href="files.html">실습 파일 내려받기</a></div>
   </nav>
   </aside>
@@ -215,19 +214,6 @@ PRD의 어느 규칙과 연결되는지도 표로 정리해 줘.
 - 브라우저에 자동 저장, 삭제 후 되돌리기
 - 부드러운 애니메이션, 깔끔한 디자인
 - HTML·CSS·JavaScript만, 외부 라이브러리 없이
-</code></pre>
-<h2>Firebase 공용 장부로 바꾸기 (선택 자료 11, 수업 외)</h2>
-<pre><code>첨부한 index.html은 강의평가를 브라우저(localStorage)에 저장하는 집계 화면이야.
-첨부한 PRD v0.4에 맞게, 평가를 Firebase Firestore에 저장하도록 고쳐 줘.
-
-- 내 Firebase 설정값은 아래와 같아:
-  (여기에 firebaseConfig 붙여넣기)
-- HTML 파일 하나로 유지하고, Firebase는 공식 CDN(gstatic.com)의 모듈 방식으로 불러와 줘
-- 컬렉션 이름은 evaluations, 필드는 subject, instructor, score(1~5 정수), date(YYYY-MM-DD)만 써 줘
-- 문서 ID는 Firestore가 자동으로 만들게 해 줘 (addDoc)
-- 모든 평가를 실시간으로 받아서 과목·교관별 집계는 화면에서 해 줘
-- 마지막 응답 취소, 전체 초기화, 예시 데이터는 없애 줘
-- 나머지 화면 디자인과 개선 필요 판정(평균 3.5 미만)은 그대로 둬
 </code></pre>
 <h2>Claude Code로 내 PRD 화면 만들기 (모듈 12)</h2>
 <pre><code>이 저장소에 아래 PRD의 업무 화면을 만들어 줘.
