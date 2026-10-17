@@ -29,7 +29,6 @@ add("본 강의", L + "07_PRD로 결과물 만들기 (NotebookLM·생성형 AI).
 add("본 강의", L + "08_AI 브라우저 Aside로 코딩 없이 업무 자동화.md", "08 AI 브라우저 Aside")
 add("심화", L + "09_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기.md", "09 HTML · CSS · JS")
 add("심화", L + "10_(심화) 프로토타입 배포.md", "10 GitHub · Vercel 배포")
-add("심화", L + "11_(심화) Firebase로 공용 장부 연결.md", "11 Firebase 공용 장부")
 add("심화", L + "12_(심화) Claude Code로 한 번에 만들고 배포하기.md", "12 Claude Code")
 add("실습자료", L + "실습자료/PRD_강의평가 결과보고.md", "PRD 강의평가 v0.1")
 add("실습자료", L + "실습자료/PRD_강의평가 결과보고 (v0.3 완성본).md", "PRD 강의평가 v0.3 (정답)")
@@ -43,7 +42,6 @@ add("실습자료", L + "실습자료/스킬/prd-interview/SKILL.md", "스킬 �
 docs[-1]["body"] = ("# 스킬 예시: prd-interview\n\n모듈 6 실습 파일입니다. 옵시디언 `98_스킬/prd-interview/` 폴더에 **SKILL** 이라는 노트를 만들고, "
     "아래 상자의 [복사] 버튼으로 **전체를** 복사해 붙여넣으세요. 맨 위 `---` 사이가 이름(name)과 설명(description)입니다.\n\n"
     "~~~~markdown\n" + docs[-1]["body"] + "\n~~~~\n")
-add("강사용", "prototype-demo/firebase/README.md", "Firebase 완성본 안내")
 
 def addfile(file, short, note, preview=True):
     docs.append({"id": "d%02d" % len(docs), "group": "실습 파일", "title": os.path.basename(file), "short": short,
@@ -53,8 +51,6 @@ addfile("prototype-demo/steps/1-html.html", "1단계 HTML (뼈대)", "모듈 09 
 addfile("prototype-demo/steps/2-css.html", "2단계 CSS (옷)", "모듈 09 2단계. HTML은 그대로, 모양만 더했습니다.")
 addfile("prototype-demo/steps/3-js.html", "3단계 JS (움직임)", "모듈 09 3단계. 평가를 내면 과목·교관별 평균이 계산됩니다. 새로고침하면 사라집니다.")
 addfile("prototype-demo/index.html", "4단계 완성본 (v0.3)", "모듈 07·09의 완성본. 과목·교관별 집계, 3.5 미만 개선 필요, 브라우저 저장, 결과 내려받기.")
-addfile("prototype-demo/firebase/index.html", "Firebase 완성본 (코드)", "모듈 11 강사용 완성본. 실제 Firebase 설정값이 필요해 이 페이지에서는 코드만 볼 수 있습니다.", preview=False)
-addfile("prototype-demo/firebase/firestore.rules", "Firestore 규칙", "모듈 11 3단계 보안 규칙.", preview=False)
 addfile("prototype-demo/network-check.html", "강의장 접속 점검 (코드)", "강의장 PC의 Chrome에서 열어야 정확합니다. 이 열람 페이지 안에서는 다른 사이트 접속이 막혀 있어 코드만 보여 줍니다.", preview=False)
 
 qr = None
@@ -63,3 +59,4 @@ data = json.dumps({"docs": docs, "qr": qr}, ensure_ascii=False).replace("</", "<
 html = open(os.path.join(HERE, "viewer_template.html"), encoding="utf-8").read()
 open(OUT, "w", encoding="utf-8").write(html.replace("/*__DATA__*/null", data))
 print(OUT, os.path.getsize(OUT), "bytes,", len(docs), "docs")
+

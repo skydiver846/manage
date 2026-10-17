@@ -21,9 +21,8 @@ const MODULES = [
   ["08_AI 브라우저 Aside로 코딩 없이 업무 자동화", "AI 브라우저 Aside", "1교시"],
   ["09_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 뜯어보기", "1교시"],
   ["10_(심화) 프로토타입 배포", "Netlify 배포", "1교시"],
-  ["11_(심화) Firebase로 공용 장부 연결", "Firebase 공용 장부 (선택)", "수업 외"],
   ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code로 내 화면", "2교시"],
-].map(([file, short, time], i) => ({ file, short, time, num: i + 1, page: `m${String(i + 1).padStart(2, "0")}.html` }));
+].map(([file, short, time]) => { const num = parseInt(file, 10); return { file, short, time, num, page: `m${String(num).padStart(2, "0")}.html` }; });
 
 // 교육생이 내려받는 파일: [사이트 안 경로, 원본, 내려받을 때 이름, 설명]
 // 사이트 안 경로도 한글 이름으로 둔다. 행정망 보안 프로그램 등이 download 속성을 무시해도 주소의 파일 이름으로 저장되기 때문
@@ -53,7 +52,7 @@ const SITES = {
   "gmail.com": "https://mail.google.com/", "chatgpt.com": "https://chatgpt.com/", "claude.ai": "https://claude.ai/",
   "claude.ai/code": "https://claude.ai/code", "notebooklm.google.com": "https://notebooklm.google.com/",
   "obsidian.md": "https://obsidian.md/", "github.com": "https://github.com/", "vercel.com": "https://vercel.com/", "app.netlify.com": "https://app.netlify.com/", "app.netlify.com/drop": "https://app.netlify.com/drop",
-  "console.firebase.google.com": "https://console.firebase.google.com/", "aside.com": "https://aside.com/",
+  "aside.com": "https://aside.com/",
 };
 
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -150,7 +149,6 @@ function nav(current) {
     <div class="group">${link("index.html", "처음 화면")}${link("prework.html", "사전 과제 안내")}${link("homework.html", "과제 안내")}</div>
     <div class="group"><h3>본 강의</h3>${mods(1, 8)}</div>
     <div class="group"><h3>심화 · 직접 만들기</h3>${mods(9, 10)}${mods(12, 12)}</div>
-    <div class="group"><h3>선택 자료 (수업 외)</h3>${mods(11, 11)}</div>
     <div class="group"><h3>자료</h3>${link("prompts.html", "프롬프트 모음")}${link("files.html", "실습 파일 내려받기")}</div>
   </nav>`;
 }
@@ -234,7 +232,7 @@ fs.writeFileSync(path.join(OUT, "files.html"), page("files.html", "실습 파일
 const siteLinks = [
   ["Google 계정 만들기", "accounts.google.com/signup", "01"], ["ChatGPT", "chatgpt.com", "02"], ["Claude", "claude.ai", "02"],
   ["옵시디언 내려받기", "obsidian.md", "04"], ["Gemini Notebook", "notebooklm.google.com", "07"], ["GitHub", "github.com", "12"],
-  ["Netlify", "app.netlify.com", "10"], ["Firebase 콘솔", "console.firebase.google.com", "11"], ["Claude Code", "claude.ai/code", "12"], ["Aside", "aside.com", "08"],
+  ["Netlify", "app.netlify.com", "10"], ["Claude Code", "claude.ai/code", "12"], ["Aside", "aside.com", "08"],
 ].sort((a, b) => a[2].localeCompare(b[2])).map(([label, host, mod]) => `<a class="tile" href="${SITES[host]}" target="_blank" rel="noopener"><b>${esc(label)}</b><span>${host}</span><small>모듈 ${mod}</small></a>`).join("");
 const modItems = (list) => list.map((m) => `<li><a href="${m.page}"><span class="no">${String(m.num).padStart(2, "0")}</span><span class="t">${esc(m.short)}</span><span class="time">${m.time}</span></a></li>`).join("");
 fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
@@ -246,8 +244,8 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <h2>1일차 (1~6교시) · AI에게 일 시키기, PRD, 스킬, 보고 자료</h2>
   <ol class="mods">${modItems(MODULES.slice(2, 7))}</ol>
   <h2>2일차 (7~12교시) · 코딩 없이 자동화, 웹에 공개하기, 내 업무 화면 만들기</h2>
-  <ol class="mods">${modItems([MODULES[7], MODULES[8], MODULES[9], MODULES[11]])}</ol>
-  <p class="note">2일 연속, 총 12시간(하루 6교시, 1교시 = 50분 수업 + 10분 휴식)입니다. 1일차 저녁 과제와 과정 뒤 과제는 <a href="homework.html">과제 안내</a>에 있습니다. 모듈 11(Firebase)은 수업에서 다루지 않는 선택 자료입니다.</p>
+  <ol class="mods">${modItems(MODULES.filter((m) => m.num >= 8))}</ol>
+  <p class="note">2일 연속, 총 12시간(하루 6교시, 1교시 = 50분 수업 + 10분 휴식)입니다. 1일차 저녁 과제와 과정 뒤 과제는 <a href="homework.html">과제 안내</a>에 있습니다.</p>
   <h2>바로가기</h2>
   <div class="tiles">${siteLinks}</div>
   <h2>자료</h2>
