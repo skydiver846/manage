@@ -19,7 +19,7 @@ const MODULES = [
   ["06_스킬 만들기", "스킬 만들기", "1교시"],
   ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "1교시"],
   ["08_AI 브라우저 Aside로 코딩 없이 업무 자동화", "AI 브라우저 Aside", "1교시"],
-  ["09_(심화) HTML·CSS·JavaScript로 강의평가 화면 뜯어보기", "HTML · CSS · JS 맛보기", "20분"],
+  ["09_(심화) HTML·CSS·JavaScript로 준비물 화면 뜯어보기", "HTML · CSS · JS 맛보기", "20분"],
   ["10_(심화) 프로토타입 배포", "Netlify 배포", "30분"],
   ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code로 내 화면", "2교시"],
 ].map(([file, short, time]) => { const num = parseInt(file, 10); return { file, short, time, num, page: `m${String(num).padStart(2, "0")}.html` }; });
@@ -28,8 +28,9 @@ const MODULES = [
 // 사이트 안 경로도 한글 이름으로 둔다. 행정망 보안 프로그램 등이 download 속성을 무시해도 주소의 파일 이름으로 저장되기 때문
 const FILES = {
   mine: ["files/지뢰찾기_화면.png", "lecture/실습자료/지뢰찾기_화면.png", "지뢰찾기_화면.png", "지뢰찾기 화면 그림 (몸풀기 화면 캡처용)"],
-  prd: ["files/PRD_강의평가 결과보고.md", "lecture/실습자료/PRD_강의평가 결과보고.md", "PRD_강의평가 결과보고.md", "예시 PRD (강의평가 결과보고 v0.1)"],
-  opinions: ["files/강의평가_자유의견_예시.md", "lecture/실습자료/강의평가_자유의견_예시.md", "강의평가_자유의견_예시.md", "강의평가 자유의견 예시 (서술형 요약 실습용)"],
+  prd: ["files/PRD_경주 여행 준비물.md", "lecture/실습자료/PRD_경주 여행 준비물.md", "PRD_경주 여행 준비물.md", "예시 PRD (경주 여행 준비물 체크 v0.1)"],
+  guide: ["files/경주 여행 자료_관광지 안내.md", "lecture/실습자료/경주 여행 자료_관광지 안내.md", "경주 여행 자료_관광지 안내.md", "경주 관광지 안내 자료 (파일 건네기 · Gemini Notebook 실습용)"],
+  opinions: ["files/경주 여행 후기_예시.md", "lecture/실습자료/경주 여행 후기_예시.md", "경주 여행 후기_예시.md", "경주 여행 후기 모음 (후기 요약 실습용)"],
   template: ["files/PRD 템플릿.md", "lecture/실습자료/PRD 템플릿.md", "PRD 템플릿.md", "빈 PRD 양식"],
   prompts: ["files/프롬프트 모음.md", "lecture/실습자료/프롬프트 모음.md", "프롬프트 모음.md", "프롬프트 모음 파일 (내 업무 폴더 99_프롬프트 보관용)"],
   skill: ["files/prd-interview.zip", null, "prd-interview.zip", "PRD 인터뷰 스킬 (Claude에 바로 올리는 ZIP)"],
@@ -39,9 +40,9 @@ const FILES = {
   step3: ["steps/3-js.html", "prototype-demo/steps/3-js.html", "3-js.html", "3단계 JavaScript (움직임)"],
   planner: ["files/일정 플래너 (예시).html", "prototype-demo/examples/planner.html", "일정 플래너 (예시).html", "일정 플래너 완성 예시 (캘린더 + 간트차트)"],
   room3d: ["files/3D 방 꾸미기 (예시).html", "prototype-demo/examples/room3d.html", "3D 방 꾸미기 (예시).html", "3D 방 꾸미기 완성 예시 (라이브러리를 파일 안에 넣어 인터넷 없이 열림)"],
-  final: ["prototype/index.html", "prototype-demo/index.html", "index.html", "강의평가 집계 완성본 (배포 실습용 index.html)"],
+  final: ["prototype/index.html", "prototype-demo/index.html", "index.html", "여행 준비물 체크 완성본 (배포 실습용 index.html)"],
 };
-const MODULE_FILES = { 3: ["mine", "prd", "opinions"], 4: ["prd", "opinions"], 5: ["template", "prd"], 6: ["skill", "skillmd"], 7: ["prd", "opinions"], 9: ["step1", "step2", "step3", "final", "planner", "room3d"], 10: ["final"] };
+const MODULE_FILES = { 3: ["mine", "prd", "guide", "opinions"], 5: ["template", "prd"], 6: ["skill", "skillmd"], 7: ["prd", "guide", "opinions"], 9: ["step1", "step2", "step3", "final", "planner", "room3d"], 10: ["final"] };
 
 const SITES = {
   "accounts.google.com/signup": "https://accounts.google.com/signup", "google.com": "https://www.google.com/",
@@ -92,8 +93,9 @@ function wikiTarget(raw) {
   const name = raw.split("/").pop();
   const mod = MODULES.find((m) => m.file === name);
   if (mod) return [`${String(mod.num).padStart(2, "0")} ${mod.short}`, mod.page];
-  if (name === "PRD_강의평가 결과보고") return ["예시 PRD 파일", "files.html#prd"];
-  if (name === "강의평가_자유의견_예시") return ["자유의견 예시 파일", "files.html#opinions"];
+  if (name === "PRD_경주 여행 준비물") return ["예시 PRD 파일", "files.html#prd"];
+  if (name === "경주 여행 자료_관광지 안내") return ["경주 관광지 안내 파일", "files.html#guide"];
+  if (name === "경주 여행 후기_예시") return ["경주 여행 후기 파일", "files.html#opinions"];
   if (name === "PRD 템플릿") return ["PRD 템플릿 파일", "files.html#template"];
   if (name === "프롬프트 모음") return ["프롬프트 모음", "prompts.html"];
   if (name === "SKILL") return ["스킬 예시 파일", "files.html#skill"];
@@ -258,7 +260,7 @@ const mods3 = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to &
 const modItems = (list) => list.map((m) => `<li><a href="${m.page}"><span class="no">${String(m.num).padStart(2, "0")}</span><span class="t">${esc(m.short)}</span><span class="time">${m.time}</span></a></li>`).join("");
 fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 입문</h1>
-  <p class="lead">계정 만들기부터 프롬프트, PRD, 스킬, 그리고 PRD로 만든 강의평가 집계 화면을 웹에 공개하고 AI 에이전트로 자동화하기까지 한 단계씩 따라 합니다.</p>
+  <p class="lead"><b>AI 시대, 여행 계획이 달라졌다.</b> 우리 집 여행 담당이 되어 경주 2박 3일 가족 여행을 AI와 함께 준비합니다. 일정 짜기, 자료 정리, 여행 일정표 스킬, 준비물 체크 화면을 만들어 가족에게 링크로 보내기까지 한 단계씩 따라 하고, 같은 방법을 내 업무에 옮깁니다.</p>
   <h2>사전 과제 · 수업 전에 각자</h2>
   <ol class="mods">${modItems(MODULES.slice(0, 2))}</ol>
   <p><a class="btn" href="prework.html">사전 과제 안내 보기</a> 첫날 전까지 해 올 것과 준비물을 한 장에 정리했습니다.</p>
@@ -272,7 +274,7 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <h2>자료</h2>
   <p><a href="prompts.html">프롬프트 모음</a> · <a href="files.html">실습 파일 내려받기</a></p>
   <h2>준비물</h2>
-  <ul><li><b>사전 과제</b>: 업무용 구글 계정, ChatGPT 가입, 업무 이메일 제출 → Claude Team 초대 수락, GitHub 가입 — <a href="prework.html">사전 과제 안내</a></li><li>본인 명의 휴대폰 (문자 인증, 배포한 강의평가 화면 확인용)</li><li>비밀번호를 적어 둘 수첩</li><li>내 업무 중 "AI로 도움받고 싶은 일" 한 가지</li></ul>
+  <ul><li><b>사전 과제</b>: 업무용 구글 계정, ChatGPT 가입, 업무 이메일 제출 → Claude Team 초대 수락, GitHub 가입 — <a href="prework.html">사전 과제 안내</a></li><li>본인 명의 휴대폰 (문자 인증, 배포한 내 화면 확인용)</li><li>비밀번호를 적어 둘 수첩</li><li>내 업무 중 "AI로 도움받고 싶은 일" 한 가지</li></ul>
   <p class="note">체크박스 표시는 이 PC의 브라우저에만 저장됩니다.</p>`));
 
 console.log("built", OUT, fs.readdirSync(OUT).length, "entries");

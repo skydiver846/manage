@@ -23,12 +23,12 @@
     <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>12 Claude Code로 내 화면</span></div>
     <article><h1>모듈 12 (심화 3). Claude Code로 내 PRD 화면 만들고 배포하기</h1>
 <blockquote>
-<p>🎯 <strong>이 모듈에서 만들 것:</strong> <strong>휴대폰으로 여는 내 업무 화면</strong> 주소</p>
+<p>🎯 <strong>이 모듈에서 만들 것:</strong> <strong>휴대폰으로 여는 내 화면</strong> 주소 (업무든 일상이든 내 PRD로)</p>
 <p>🤔 <strong>생각해 보기:</strong> AI가 만든 화면을 그대로 공개해도 될까요? 공개 전에 무엇을 확인해야 할까요? (답은 이 모듈에서 찾아보세요. 점수 없음)</p>
 </blockquote>
 <p>📌 <strong>이 과정의 Claude Team 계정에는 Claude Code가 포함되어 있어 모두 직접 실습합니다.</strong></p>
-<p>모듈 10에서는 강의평가 화면을 <strong>손으로</strong> 끌어다 놓아 배포했습니다. 이번에는 어제 쓰고 다듬은 <strong>내 업무 PRD</strong>를 <strong>AI 에이전트(Claude Code)</strong> 에게 건네, 어제 시안으로 본 <strong>내 화면을 제대로 만들어 웹에 공개</strong>합니다. 말로 지시하면 Claude가 저장소에 파일을 만들고, 시험하고, 커밋·푸시까지 합니다. 사람은 검토하고 승인한 뒤 배포합니다.</p>
-<p>과정의 마지막 장면은 <strong>각자 자기 업무 화면을 휴대폰으로 여는 것</strong>입니다.</p>
+<p>모듈 10에서는 준비물 화면을 <strong>손으로</strong> 끌어다 놓아 배포했습니다. 이번에는 어제 쓰고 다듬은 <strong>내 PRD</strong>를 <strong>AI 에이전트(Claude Code)</strong> 에게 건네, 어제 시안으로 본 <strong>내 화면을 제대로 만들어 웹에 공개</strong>합니다. 말로 지시하면 Claude가 저장소에 파일을 만들고, 시험하고, 커밋·푸시까지 합니다. 사람은 검토하고 승인한 뒤 배포합니다.</p>
+<p>과정의 마지막 장면은 <strong>각자 자기 PRD로 만든 화면을 휴대폰으로 여는 것</strong>입니다. 여행 준비물 화면을 따라 만들었던 그 흐름을, 이번엔 내 주제로 합니다.</p>
 <p>모듈 08의 AI 브라우저(Aside)가 <strong>웹사이트 화면</strong>을 조작했다면, Claude Code는 <strong>저장소의 파일과 코드</strong>를 조작합니다.</p>
 <p>이 모듈의 핵심은 &quot;AI가 해 준다&quot;가 아니라 <strong>&quot;AI가 한 일을 내가 검토하고 승인한다&quot;</strong> 입니다.</p>
 <pre><code> 모듈 10 (손으로):  나 ── 폴더 끌어다 놓기 ─────────────────────────▶ Netlify
@@ -126,7 +126,7 @@
 </blockquote>
 <h2>2단계: Claude Code에 지시하기 (5분)</h2>
 <p><strong>A. 내 PRD 화면</strong></p>
-<pre><code>이 저장소에 아래 PRD의 업무 화면을 만들어 줘.
+<pre><code>이 저장소에 아래 PRD의 화면을 만들어 줘.
 
 (여기에 내 PRD 전체를 붙여넣기)
 
@@ -245,7 +245,50 @@
 <ul>
 <li>한 번에 다 하지 않아도 됩니다. <strong>일주일에 한 번, 내 업무 하나</strong>에 한 칸씩 써 보는 것이 가장 빠릅니다. 구체적인 순서는 <a href="homework.html">과제 안내</a>의 &quot;꾸준히 하기 4주 계획&quot;에 있습니다.</li>
 <li>처음에는 AI가 만든 것을 <strong>내가 확인하고 승인</strong>하는 습관이 가장 중요합니다. 오늘 12에서 한 것처럼요.</li>
+<li>여는 이야기의 <strong>여행길 도우미</strong>는 한 칸 더 간 모습입니다. 날씨·주차처럼 <strong>실시간 정보</strong>가 필요하면 서버와 공공데이터 API(기상청, 한국교통안전공단)를 씁니다. 오늘 만든 화면(기록은 내 브라우저에만)의 다음 단계입니다.</li>
 </ul>
+<h3>여행 담당에서 업무 담당으로</h3>
+<p>이틀 동안 우리 집 여행 담당으로 해 본 것은 그대로 업무에 옮겨집니다. <strong>다음 주에 쓸 한 가지</strong>를 골라 적어 보세요.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>오늘 해 본 것</th>
+<th>업무에서는</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>가족 조건을 넣은 일정 요청 (03)</td>
+<td>대상·날짜·조건을 넣은 안내문, 공문 초안</td>
+</tr>
+<tr>
+<td>관광지 자료·후기 요약 (03 · 07)</td>
+<td>규정·공문·회의 자료 요약</td>
+</tr>
+<tr>
+<td>&quot;다 같이&quot;에서 빠진 할머니·아이 (05)</td>
+<td>교육생·교관·직원처럼 <strong>대상 구분</strong></td>
+</tr>
+<tr>
+<td>여행 일정표 스킬 (06)</td>
+<td>교육 일정표, 출장 계획, 주간보고 양식</td>
+</tr>
+<tr>
+<td>축제·날씨 찾기 루틴 (08)</td>
+<td>공개 공지 확인, 자료 내려받기</td>
+</tr>
+<tr>
+<td>준비물 체크리스트 화면 (09 · 10)</td>
+<td>행사·교육 준비 체크리스트</td>
+</tr>
+<tr>
+<td>가족 단톡방에 링크 공유 (10)</td>
+<td>부서 안내 페이지</td>
+</tr>
+<tr>
+<td>각자 체크하면 흩어짐 (10)</td>
+<td>회신 취합이 번거로운 이유</td>
+</tr>
+</tbody></table></div>
 <h2>하루 마무리: 2일차 오늘의 퀴즈 (4분)</h2>
 <p>출구 카드와 함께 <a href="quiz.html">오늘의 퀴즈</a>를 풉니다. 보기에서 하나를 고르는 8문항이고, 외울 것은 없습니다. 이름 대신 별명으로 내도 됩니다.</p>
 <h2>자주 막히는 곳</h2>

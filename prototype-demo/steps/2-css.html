@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>강의평가 결과 집계 - 2단계 CSS</title>
+  <title>우리 가족 여행 준비물 체크 - 2단계 CSS</title>
 
   <!--
     2단계: CSS = 옷과 인테리어
@@ -27,12 +27,13 @@
       padding: 24px 16px;
     }
 
-    h1 { margin: 0; font-size: 32px; }
+    h1 { margin: 0; font-size: 30px; line-height: 1.25; word-break: keep-all; }  /* 한글 낱말 중간에서 줄이 안 끊기게 */
     .sub { margin: 4px 0 24px; color: #5d6676; }
+    h2 { font-size: 18px; margin: 28px 0 8px; }
 
     /* 입력 영역: 칸과 버튼을 한 줄에, 좁으면 다음 줄로 */
     form { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; }
-    .field { display: grid; gap: 4px; flex: 1 1 140px; }
+    .field { display: grid; gap: 4px; flex: 1 1 140px; min-width: 0; }
     label { font-size: 13px; font-weight: 600; }
     input, select {
       padding: 10px 12px;
@@ -41,8 +42,9 @@
       font-size: 15px;
       background: white;
     }
+    .field input, .field select { width: 100%; box-sizing: border-box; }
 
-    /* 제출 버튼: 소방 적색 */
+    /* 추가 버튼: 소방 적색 */
     button {
       padding: 10px 18px;
       border: 0;
@@ -53,57 +55,76 @@
       font-weight: 600;
     }
 
-    /* 결과표: 줄마다 구분선, 숫자는 오른쪽 정렬 */
+    /* 가족별 표: 줄마다 구분선, 숫자는 오른쪽 정렬 */
     table { width: 100%; border-collapse: collapse; }
     th, td { padding: 10px 4px; border-bottom: 1px solid #dde1e8; text-align: left; }
     th { font-size: 12px; color: #5d6676; }
     .num { text-align: right; }
 
-    /* 양호/개선 필요 표시: 색으로 구분 */
+    /* 순조로움/서둘러요 표시: 색으로 구분 */
     .ok  { color: #1f7a4d; font-weight: 600; }
     .bad { color: #c8321e; font-weight: 600; }
     .error { flex-basis: 100%; margin: 0; color: #c8321e; font-size: 13px; min-height: 1.6em; }
+
+    /* 준비물 목록: 점을 없애고 한 줄씩 하얀 칸으로 */
+    .list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .list li {
+      background: white;
+      border: 1px solid #dde1e8;
+      border-radius: 8px;
+      padding: 8px 12px;
+    }
+    .list label { display: flex; gap: 8px; align-items: center; font-size: 15px; font-weight: 400; }
+    .list input { width: 18px; height: 18px; accent-color: #c8321e; }
+    .who { color: #5d6676; font-size: 13px; }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>강의평가 결과 집계</h1>
-    <p class="sub">신임소방관 교육과정 · 평균 3.5 미만은 개선 필요</p>
+    <h1>우리 가족 여행 준비물 체크</h1>
+    <p class="sub">경주 2박 3일 · 챙김률 50% 미만은 서둘러요</p>
 
     <form>
       <div class="field">
-        <label for="subject">과목</label>
-        <input id="subject" placeholder="예: 화재진압 전술">
+        <label for="item">준비물</label>
+        <input id="item" placeholder="예: 멀미약">
       </div>
       <div class="field">
-        <label for="instructor">교관</label>
-        <input id="instructor" placeholder="예: 김교관">
-      </div>
-      <div class="field">
-        <label for="score">만족도</label>
-        <select id="score">
-          <option value="">선택</option>
-          <option value="5">5 매우 만족</option>
-          <option value="4">4 만족</option>
-          <option value="3">3 보통</option>
-          <option value="2">2 불만족</option>
-          <option value="1">1 매우 불만족</option>
+        <label for="who">누구 것</label>
+        <select id="who">
+          <option>가족 전체</option>
+          <option>나</option>
+          <option>배우자</option>
+          <option>아이</option>
+          <option>할머니</option>
         </select>
       </div>
-      <button type="submit">평가 제출</button>
+      <button type="submit">추가</button>
     </form>
 
-    <h2>과목·교관별 결과</h2>
+    <h2>가족별 챙김</h2>
     <table>
       <thead>
-        <tr><th>과목</th><th>교관</th><th class="num">응답</th><th class="num">평균</th><th class="num">상태</th></tr>
+        <tr><th>누구</th><th class="num">전체</th><th class="num">챙김</th><th class="num">챙김률</th><th class="num">상태</th></tr>
       </thead>
       <tbody>
-        <tr><td>화재진압 전술</td><td>김교관</td><td class="num">3</td><td class="num">4.7</td><td class="num ok">양호</td></tr>
-        <tr><td>화재진압 전술</td><td>이교관</td><td class="num">3</td><td class="num">3.3</td><td class="num bad">개선 필요</td></tr>
-        <tr><td>응급처치 실습</td><td>박교관</td><td class="num">2</td><td class="num">4.5</td><td class="num ok">양호</td></tr>
+        <tr><td>아이</td><td class="num">3</td><td class="num">1</td><td class="num">33%</td><td class="num bad">서둘러요</td></tr>
+        <tr><td>할머니</td><td class="num">3</td><td class="num">3</td><td class="num">100%</td><td class="num ok">다 챙김</td></tr>
+        <tr><td>가족 전체</td><td class="num">2</td><td class="num">2</td><td class="num">100%</td><td class="num ok">다 챙김</td></tr>
       </tbody>
     </table>
+
+    <h2>준비물 목록</h2>
+    <ul class="list">
+      <li><label><input type="checkbox"> 멀미약 <span class="who">· 아이</span></label></li>
+      <li><label><input type="checkbox"> 여벌 옷 <span class="who">· 아이</span></label></li>
+      <li><label><input type="checkbox" checked> 물놀이 가방 <span class="who">· 아이</span></label></li>
+      <li><label><input type="checkbox" checked> 혈압약 <span class="who">· 할머니</span></label></li>
+      <li><label><input type="checkbox" checked> 무릎 보호대 <span class="who">· 할머니</span></label></li>
+      <li><label><input type="checkbox" checked> 지팡이 <span class="who">· 할머니</span></label></li>
+      <li><label><input type="checkbox" checked> 충전기 <span class="who">· 가족 전체</span></label></li>
+      <li><label><input type="checkbox" checked> 우산 <span class="who">· 가족 전체</span></label></li>
+    </ul>
   </div>
 </body>
 </html>

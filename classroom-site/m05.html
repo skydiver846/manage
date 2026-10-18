@@ -21,13 +21,13 @@
   </aside>
   <main>
     <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>05 PRD 작성하기</span></div>
-    <article><h1>모듈 5. PRD 작성하기</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>빈 PRD 양식</span><span class="acts"><a class="btn" href="files/PRD%20%ED%85%9C%ED%94%8C%EB%A6%BF.md" download="PRD 템플릿.md">내려받기</a></span></li><li><span>예시 PRD (강의평가 결과보고 v0.1)</span><span class="acts"><a class="btn" href="files/PRD_%EA%B0%95%EC%9D%98%ED%8F%89%EA%B0%80%20%EA%B2%B0%EA%B3%BC%EB%B3%B4%EA%B3%A0.md" download="PRD_강의평가 결과보고.md">내려받기</a></span></li></ul></aside>
+    <article><h1>모듈 5. PRD 작성하기</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>빈 PRD 양식</span><span class="acts"><a class="btn" href="files/PRD%20%ED%85%9C%ED%94%8C%EB%A6%BF.md" download="PRD 템플릿.md">내려받기</a></span></li><li><span>예시 PRD (경주 여행 준비물 체크 v0.1)</span><span class="acts"><a class="btn" href="files/PRD_%EA%B2%BD%EC%A3%BC%20%EC%97%AC%ED%96%89%20%EC%A4%80%EB%B9%84%EB%AC%BC.md" download="PRD_경주 여행 준비물.md">내려받기</a></span></li></ul></aside>
 <blockquote>
-<p>🎯 <strong>이 모듈에서 만들 것:</strong> <strong>내 업무 PRD</strong> 한 장 (2일차에 웹 화면이 될 설계도)</p>
+<p>🎯 <strong>이 모듈에서 만들 것:</strong> <strong>내 PRD</strong> 한 장 (업무든 일상이든 내가 쓰고 싶은 도구. 2일차에 웹 화면이 될 설계도)</p>
 <p>🤔 <strong>생각해 보기:</strong> &quot;출석 관리 화면 만들어 줘&quot; 한 줄이면 우리 기관에 맞는 화면이 나올까요? (답은 이 모듈에서 찾아보세요. 점수 없음)</p>
 </blockquote>
 <h2>5-0. 맛보기: 한 줄로 시키면? (3분)</h2>
-<p><strong>먼저 보기:</strong> 이번 과정이 끝나면 이런 <strong>나만의 업무 화면</strong>을 만들어 휴대폰으로 엽니다. 모듈 9 실습 파일의 <strong>일정 플래너 완성 예시</strong>와 강의평가 화면을 열어 30초씩 눌러 보세요.</p>
+<p><strong>먼저 보기:</strong> 이번 과정이 끝나면 이런 <strong>나만의 화면</strong>을 만들어 휴대폰으로 엽니다. 모듈 9 실습 파일의 <strong>일정 플래너 완성 예시</strong>와 <strong>여행 준비물 화면</strong>을 열어 30초씩 눌러 보세요.</p>
 <p>이제 Claude 새 대화에 <strong>딱 한 줄만</strong> 넣어 봅니다.</p>
 <pre><code>출석 관리 화면 만들어 줘
 </code></pre>
@@ -43,7 +43,7 @@
 <p>비유: 집을 짓기 전 <strong>설계 요청서</strong>. 목수(개발자, 또는 AI)가 이것만 보고도 무엇을 지을지 알 수 있어야 합니다.</p>
 </blockquote>
 <h3>왜 AI 시대에 PRD가 중요한가?</h3>
-<pre><code> &quot;강의평가 앱 만들어 줘&quot;        →  AI가 마음대로 상상해서 만듦  →  내 의도와 다름
+<pre><code> &quot;여행 준비물 앱 만들어 줘&quot;     →  AI가 마음대로 상상해서 만듦  →  내 의도와 다름
  PRD.md 를 첨부하고 &quot;만들어 줘&quot;  →  AI가 요구사항대로 만듦       →  한 번에 가까운 결과
 </code></pre>
 <p>PRD는 <strong>한 번 잘 써 두면 여러 도구에 재사용</strong>됩니다.</p>
@@ -112,17 +112,18 @@
 <p>💡 <strong>6번 &quot;범위 밖&quot;이 가장 중요합니다.</strong> 이것이 없으면 AI도 사람도 일을 끝없이 키웁니다.</p>
 </blockquote>
 <h2>5-2. 예시 보기</h2>
-<p>완성된 예시: <a href="files.html#prd">예시 PRD 파일</a></p>
+<p>완성된 예시: <a href="files.html#prd">예시 PRD 파일</a> (우리 가족 여행 준비물 체크)</p>
 <p>수업에서는 예시를 화면에 띄워 7개 항목을 짚되, <strong>6번 범위 밖</strong>과 <strong>7번 성공 기준</strong>에 시간을 씁니다. 교육생이 혼자 쓸 때 가장 많이 비워 두는 칸입니다.</p>
-<h2>5-2-1. 구멍 메우기 실습: 교관이 여러 명인 과목</h2>
+<h2>5-2-1. 구멍 메우기 실습: 누구 것인지 구분이 없는 준비물</h2>
 <p>모듈 3에서 AI가 찾아 준 구멍을 직접 고칩니다. 관련된 줄은 1번 배경과 4번 핵심 기능입니다.</p>
-<pre><code>- 일부 과목은 교관 2~3명이 반별로 나눠 강의한다.            ← 1번 배경
-| 필수 | 과목별 집계 | 과목별로 응답 수와 평균(소수 첫째 자리)을 표로 보여 줌 |   ← 4번 기능
+<pre><code>- 가족마다 챙길 것이 다르다. 할머니는 혈압약·무릎 보호대·지팡이, 아이는 멀미약·여벌 옷이 꼭 필요하다.   ← 1번 배경
+| 필수 | 챙김률과 상태 | 전체 준비물 중 챙긴 비율(%)을 보여 주고, 50% 미만이면 &quot;서둘러요&quot; ... |   ← 4번 기능
 </code></pre>
-<p>화이트보드에 숫자로 보여 주면 바로 이해합니다.</p>
-<pre><code>화재진압 전술  김교관 반: 5, 4, 5  → 4.7
-              이교관 반: 3, 3, 4  → 3.3   ← 개선이 필요한 반
-과목별로만 합치면:  평균 4.0 → &quot;양호&quot;     ← 보고서에서 사라짐
+<p>배경에는 &quot;가족마다 다르다&quot;고 적었는데, 기능은 준비물을 <strong>한 목록으로만</strong> 셉니다. 화이트보드에 숫자로 보여 주면 바로 이해합니다.</p>
+<pre><code>할머니 것: 혈압약 ✔ 무릎 보호대 ✔ 지팡이 ✔        → 3개 중 3개 100%
+아이 것:   멀미약 ✘ 여벌 옷 ✘ 물놀이 가방 ✔       → 3개 중 1개  33%  ← 서둘러야 함
+가족 공용: 충전기 ✔ 우산 ✔                        → 2개 중 2개 100%
+한 목록으로만 세면: 8개 중 6개 75% → &quot;순조로움&quot;   ← 아이 것이 안 보임
 </code></pre>
 <p>교육생에게 <strong>기획자로서</strong> 고르게 합니다 (손들기 토론).</p>
 <div class="table-wrap"><table>
@@ -135,27 +136,27 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><strong>A. 과목 + 교관</strong></td>
-<td>평가할 때 <strong>교관</strong>도 입력. 과목과 교관이 모두 같은 응답끼리 집계</td>
-<td>반별 차이가 보임</td>
+<td><strong>A. 누구 것 고르기</strong></td>
+<td>준비물마다 <strong>누구 것</strong>(가족 전체 / 나 / 배우자 / 아이 / 할머니)을 고르고, 누구 것이 같은 준비물끼리 집계</td>
+<td>덜 챙긴 사람이 보임</td>
 <td>입력이 하나 늘어남</td>
 </tr>
 <tr>
-<td><strong>B. 경고만</strong></td>
-<td>과목별로 집계하되, 교관이 여러 명인 과목에 &quot;반별 차이 확인 필요&quot; 표시</td>
+<td><strong>B. 표시만</strong></td>
+<td>한 목록으로 집계하되, 약·옷처럼 사람마다 다른 준비물에 &quot;사람별 확인 필요&quot; 표시</td>
 <td>입력 간단</td>
-<td>어느 반이 낮은지는 모름</td>
+<td>누가 덜 챙겼는지는 모름</td>
 </tr>
 <tr>
 <td><strong>C. 범위 밖으로</strong></td>
-<td>이번에는 교관 구분을 하지 않음을 6번 칸에 명시</td>
+<td>이번에는 누구 것 구분을 하지 않음을 6번 칸에 명시</td>
 <td>가장 빠름</td>
-<td>실제 결과보고에선 문제</td>
+<td>실제 짐 싸기에선 문제</td>
 </tr>
 </tbody></table></div>
 <ul>
 <li>정답은 없습니다. <strong>어느 쪽이든 PRD에 적는 것</strong>이 핵심입니다. C도 훌륭한 답입니다. &quot;알고 있지만 안 한다&quot;와 &quot;몰라서 빠뜨림&quot;은 다릅니다.</li>
-<li>결과보고를 써 본 교육생은 대부분 <strong>A</strong>를 고릅니다. 이후 실습은 A 기준으로 진행합니다.</li>
+<li>가족 짐을 챙겨 본 교육생은 대부분 <strong>A</strong>를 고릅니다. 이후 실습은 A 기준으로 진행합니다.</li>
 <li>고친 뒤 버전을 <strong>v0.1 → v0.2</strong> 로 올리게 합니다.</li>
 </ul>
 <h2>5-3. 내 PRD 쓰기 — AI와 함께 (인터뷰 방식)</h2>
@@ -174,12 +175,12 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 <p>💡 이 프롬프트를 기억해 두세요. 기획할 때마다 이 긴 글을 다시 찾아 붙여넣어야 합니다. 다음 모듈(스킬)에서 이것을 <strong>한 문장</strong>으로 줄입니다.</p>
 </blockquote>
 <ol start="2">
-<li>AI 질문에 답하기 → 마지막에 이어서 입력: <code>이 PRD를 &quot;PRD_내 업무.md&quot; 파일로 내려받게 해 줘</code> → 내려받은 파일을 내 업무 폴더 <code>01_기획(PRD)</code> 에 옮기기</li>
+<li>AI 질문에 답하기 → 마지막에 이어서 입력: <code>이 PRD를 &quot;PRD_내 도구.md&quot; 파일로 내려받게 해 줘</code> → 내려받은 파일을 내 업무 폴더 <code>01_기획(PRD)</code> 에 옮기기</li>
 <li><strong>[확인 필요]</strong> 부분을 직접 채우고(<strong>Ctrl + F</strong> 로 검색), 틀린 내용을 고칩니다. <strong>최종 책임자는 나</strong>입니다.</li>
 </ol>
 <h3>주제 고르는 기준 (2일차까지 이어 씁니다)</h3>
 <p>여기서 쓰는 <strong>내 PRD</strong>는 06 스킬, 07 화면 시안을 거쳐 2일차 모듈 12에서 <strong>내 화면</strong>으로 만들어집니다. 그래서 주제를 처음에 잘 고르는 것이 중요합니다.</p>
-<p><strong>1. 기본은 실제 내 업무입니다.</strong> 수요조사서에 적은 &quot;AI로 해결해 보고 싶은 내 업무&quot;가 있으면 그것으로 시작합니다.</p>
+<p><strong>1. 업무든 일상이든 &quot;내가 정말 쓰고 싶은 것&quot;을 고릅니다.</strong> 수요조사서에 적은 &quot;AI로 해결해 보고 싶은 내 업무&quot;도 좋고, 집에서 매번 손으로 정리하던 일도 좋습니다. 내가 쓰고 싶어야 2일차까지 끝까지 만듭니다.</p>
 <p><strong>2. 크기는 &quot;화면 1장, 핵심 기능 3개&quot;까지.</strong> 2일차에 한 시간 안에 만들 수 있는 크기입니다.</p>
 <div class="table-wrap"><table>
 <thead>
@@ -189,7 +190,7 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 </tr>
 </thead>
 <tbody><tr>
-<td>자주 반복하는 일 (매주·매 기수 손으로 다시 정리하는 것)</td>
+<td>자주 반복하는 일 (매주·매달 손으로 다시 정리하는 것)</td>
 <td>화면 여러 장, 로그인, 결재·승인 흐름</td>
 </tr>
 <tr>
@@ -201,11 +202,11 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 <td>실명·연락처·내부 기밀이 꼭 들어가야 하는 일, 기관 전산시스템과 연결해야 하는 일</td>
 </tr>
 </tbody></table></div>
-<p><strong>3. 업무가 떠오르지 않거나 기밀 때문에 어렵다면 취미·관심사도 됩니다.</strong> 배우는 방법은 같습니다(모으기 → 정리·계산 → 결과 보기). 같은 모양의 일이면 나중에 업무로 그대로 옮길 수 있습니다.</p>
+<p><strong>3. 일상 주제도 배우는 방법은 같습니다</strong>(모으기 → 정리·계산 → 결과 보기). 같은 모양의 일이면 나중에 업무로 그대로 옮길 수 있습니다.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
-<th>관심사 예시</th>
+<th>일상 주제 예시</th>
 <th>같은 모양의 업무</th>
 </tr>
 </thead>
@@ -215,7 +216,7 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 </tr>
 <tr>
 <td>운동·독서 기록과 월별 통계</td>
-<td>강의평가 결과 집계</td>
+<td>교육 실적 월별 집계</td>
 </tr>
 <tr>
 <td>가족 여행 일정·준비물 체크</td>
@@ -226,15 +227,32 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 <td>교육 장비 대여·반납 대장</td>
 </tr>
 </tbody></table></div>
-<p>관심사로 한 사람은 마지막 10교시 업무 적용 계획에 <strong>&quot;이 방법을 내 업무 어디에 쓸지&quot; 한 줄</strong>을 꼭 적습니다.</p>
-<h3>실습 주제 예시 (업무 관련으로 고르게 하기)</h3>
-<ul>
-<li>과정별 강의평가 결과 집계 (예시와 같은 주제)</li>
-<li>교육생 출결·외출 관리 화면</li>
-<li>교육 장비 대여·반납 대장</li>
-<li>교관 강의 시간표·강사료 정리 도구</li>
-<li>신규 직원 업무 안내 가이드북</li>
-</ul>
+<p>일상 주제로 한 사람은 마지막 10교시 업무 적용 계획에 <strong>&quot;이 방법을 내 업무 어디에 쓸지&quot; 한 줄</strong>을 꼭 적습니다.</p>
+<h3>실습 주제 예시 (일상과 업무 섞어서)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>일상</th>
+<th>업무</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>우리 집 가계부 (항목별 지출 합계)</td>
+<td>부서 행사 준비 체크리스트</td>
+</tr>
+<tr>
+<td>아이 학원 일정 한눈에 보기</td>
+<td>교육 일정 안내 화면</td>
+</tr>
+<tr>
+<td>운동 기록과 주간 통계</td>
+<td>교육 장비 대여·반납 대장</td>
+</tr>
+<tr>
+<td>주간 식단표</td>
+<td>교육생 출결·외출 관리 화면</td>
+</tr>
+</tbody></table></div>
 <hr>
 <h2>좋은 PRD 체크리스트</h2>
 <pre><code>□ 처음 보는 사람이 읽어도 무엇을 만드는지 1분 안에 이해된다
@@ -245,6 +263,9 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 </code></pre>
 <blockquote>
 <p>🪜 <strong>업무 자동화 사다리:</strong> ① 잘 시키기 → ② 자료 맡기기 → ③ 방법 맡기기 → ④ 클릭 맡기기 → <strong>⑤ 내 도구 만들기 ✔</strong> → ⑥ 저절로 돌아가게 (⑤ 내 도구 만들기의 설계도를 그립니다)</p>
+</blockquote>
+<blockquote>
+<p>💼 <strong>업무에서는?</strong> 같은 방법으로 업무 도구 기획서나 전산 개발 요청서를 씁니다. &quot;무엇을, 누구를 위해, 어디까지&quot;와 범위 밖을 적어 건네면 담당자도 AI도 한 번에 알아듣습니다.</p>
 </blockquote>
 <h2>✅ 확인 질문 (인터뷰)</h2>
 <ol>

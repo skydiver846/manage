@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>강의평가 결과 집계 - 3단계 JavaScript</title>
+  <title>우리 가족 여행 준비물 체크 - 3단계 JavaScript</title>
 
   <!--
     3단계: JavaScript = 움직이는 근육
     HTML과 CSS는 2단계와 같습니다. 맨 아래 <script> 안에 "버튼을 누르면 무엇을 할지"를 더했습니다.
-    이제 결과표는 미리 적어 둔 글이 아니라, 평가를 낼 때마다 새로 계산됩니다.
+    이제 가족별 표는 미리 적어 둔 글이 아니라, 준비물을 추가하거나 체크할 때마다 새로 계산됩니다.
   -->
   <style>
     /* 페이지 전체: 배경색, 글자 */
@@ -27,12 +27,13 @@
       padding: 24px 16px;
     }
 
-    h1 { margin: 0; font-size: 32px; }
+    h1 { margin: 0; font-size: 30px; line-height: 1.25; word-break: keep-all; }  /* 한글 낱말 중간에서 줄이 안 끊기게 */
     .sub { margin: 4px 0 24px; color: #5d6676; }
+    h2 { font-size: 18px; margin: 28px 0 8px; }
 
     /* 입력 영역: 칸과 버튼을 한 줄에, 좁으면 다음 줄로 */
     form { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; }
-    .field { display: grid; gap: 4px; flex: 1 1 140px; }
+    .field { display: grid; gap: 4px; flex: 1 1 140px; min-width: 0; }
     label { font-size: 13px; font-weight: 600; }
     input, select {
       padding: 10px 12px;
@@ -41,8 +42,9 @@
       font-size: 15px;
       background: white;
     }
+    .field input, .field select { width: 100%; box-sizing: border-box; }
 
-    /* 제출 버튼: 소방 적색 */
+    /* 추가 버튼: 소방 적색 */
     button {
       padding: 10px 18px;
       border: 0;
@@ -53,117 +55,164 @@
       font-weight: 600;
     }
 
-    /* 결과표: 줄마다 구분선, 숫자는 오른쪽 정렬 */
+    /* 가족별 표: 줄마다 구분선, 숫자는 오른쪽 정렬 */
     table { width: 100%; border-collapse: collapse; }
     th, td { padding: 10px 4px; border-bottom: 1px solid #dde1e8; text-align: left; }
     th { font-size: 12px; color: #5d6676; }
     .num { text-align: right; }
 
-    /* 양호/개선 필요 표시: 색으로 구분 */
+    /* 순조로움/서둘러요 표시: 색으로 구분 */
     .ok  { color: #1f7a4d; font-weight: 600; }
     .bad { color: #c8321e; font-weight: 600; }
     .error { flex-basis: 100%; margin: 0; color: #c8321e; font-size: 13px; min-height: 1.6em; }
+
+    /* 준비물 목록: 점을 없애고 한 줄씩 하얀 칸으로 */
+    .list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .list li {
+      background: white;
+      border: 1px solid #dde1e8;
+      border-radius: 8px;
+      padding: 8px 12px;
+    }
+    .list label { display: flex; gap: 8px; align-items: center; font-size: 15px; font-weight: 400; }
+    .list input { width: 18px; height: 18px; accent-color: #c8321e; }
+    .who { color: #5d6676; font-size: 13px; }
+    .done { color: #5d6676; text-decoration: line-through; }
+    .empty { color: #5d6676; }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>강의평가 결과 집계</h1>
-    <p class="sub">신임소방관 교육과정 · 평균 3.5 미만은 개선 필요</p>
+    <h1>우리 가족 여행 준비물 체크</h1>
+    <p class="sub">경주 2박 3일 · 챙김률 50% 미만은 서둘러요</p>
 
-    <form id="eval-form">
+    <form id="item-form">
       <div class="field">
-        <label for="subject">과목</label>
-        <input id="subject" placeholder="예: 화재진압 전술">
+        <label for="item">준비물</label>
+        <input id="item" placeholder="예: 멀미약">
       </div>
       <div class="field">
-        <label for="instructor">교관</label>
-        <input id="instructor" placeholder="예: 김교관">
-      </div>
-      <div class="field">
-        <label for="score">만족도</label>
-        <select id="score">
-          <option value="">선택</option>
-          <option value="5">5 매우 만족</option>
-          <option value="4">4 만족</option>
-          <option value="3">3 보통</option>
-          <option value="2">2 불만족</option>
-          <option value="1">1 매우 불만족</option>
+        <label for="who">누구 것</label>
+        <select id="who">
+          <option>가족 전체</option>
+          <option>나</option>
+          <option>배우자</option>
+          <option>아이</option>
+          <option>할머니</option>
         </select>
       </div>
-      <button type="submit">평가 제출</button>
+      <button type="submit">추가</button>
       <p class="error" id="error"></p>
     </form>
 
-    <h2>과목·교관별 결과 (응답 <span id="count">0</span>건)</h2>
+    <h2>가족별 챙김 (준비물 <span id="count">0</span>개)</h2>
     <table>
       <thead>
-        <tr><th>과목</th><th>교관</th><th class="num">응답</th><th class="num">평균</th><th class="num">상태</th></tr>
+        <tr><th>누구</th><th class="num">전체</th><th class="num">챙김</th><th class="num">챙김률</th><th class="num">상태</th></tr>
       </thead>
       <tbody id="rows"></tbody>
     </table>
+
+    <h2>준비물 목록</h2>
+    <ul class="list" id="list"></ul>
   </div>
 
   <script>
     // 1) 화면에서 필요한 부분을 id로 찾아 둔다
-    const form = document.getElementById("eval-form");
+    const form = document.getElementById("item-form");
     const rows = document.getElementById("rows");
+    const list = document.getElementById("list");
     const count = document.getElementById("count");
     const error = document.getElementById("error");
 
-    // 2) 제출된 응답을 모아 두는 상자 (배열). 새로고침하면 비워진다.
-    const answers = [];
+    // 2) 추가한 준비물을 모아 두는 상자 (배열). 새로고침하면 비워진다.
+    //    준비물 하나 = { name: 이름, who: 누구 것, done: 챙겼는지 }
+    const items = [];
 
-    // 3) 평균이 3.5보다 낮으면 개선 필요 (PRD의 규칙을 코드로 옮긴 부분)
-    function needsImprovement(avg) {
-      return avg < 3.5;
+    // 3) 챙김률이 50%보다 낮으면 서둘러요 (PRD의 규칙을 코드로 옮긴 부분)
+    function isHurry(rate) {
+      return rate < 50;
     }
 
-    // 4) 과목 + 교관이 같은 응답끼리 묶어서 결과표를 다시 그린다
-    function drawTable() {
+    // 4) 누구 것이 같은 준비물끼리 묶어서 가족별 표와 목록을 다시 그린다
+    function draw() {
       const groups = {};
-      for (const a of answers) {
-        const key = a.subject + " / " + a.instructor;
-        if (!groups[key]) groups[key] = { subject: a.subject, instructor: a.instructor, count: 0, sum: 0 };
-        groups[key].count += 1;
-        groups[key].sum += a.score;
+      for (const it of items) {
+        const key = it.who;
+        if (!groups[key]) groups[key] = { who: it.who, total: 0, done: 0 };
+        groups[key].total += 1;
+        if (it.done) groups[key].done += 1;
       }
 
-      rows.innerHTML = "";
+      // 가족별 표
+      rows.textContent = "";
       for (const key in groups) {
         const g = groups[key];
-        const avg = g.sum / g.count;
+        const rate = Math.round(g.done / g.total * 100);
+        const state = isHurry(rate) ? "서둘러요" : (rate === 100 ? "다 챙김" : "순조로움");
         const tr = document.createElement("tr");
-        const cells = [g.subject, g.instructor, g.count, avg.toFixed(1),
-                       needsImprovement(avg) ? "개선 필요" : "양호"];
+        const cells = [g.who, g.total, g.done, rate + "%", state];
         cells.forEach(function (text, i) {
           const td = document.createElement("td");
           td.textContent = text;
-          if (i >= 2) td.className = "num";
-          if (i === 4) td.className = "num " + (needsImprovement(avg) ? "bad" : "ok");
+          if (i >= 1) td.className = "num";
+          if (i === 4) td.className = "num " + (isHurry(rate) ? "bad" : "ok");
           tr.append(td);
         });
         rows.append(tr);
       }
-      count.textContent = answers.length;
+
+      // 준비물 목록: 한 줄마다 체크 상자를 만들어 붙인다
+      list.textContent = "";
+      if (items.length === 0) {
+        const li = document.createElement("li");
+        li.className = "empty";
+        li.textContent = "아직 준비물이 없습니다. 위에서 적고 [추가]를 누르세요.";
+        list.append(li);
+      }
+      items.forEach(function (it) {
+        const li = document.createElement("li");
+        const label = document.createElement("label");
+        const box = document.createElement("input");
+        box.type = "checkbox";
+        box.checked = it.done;
+        // 체크하면 상자 속 준비물의 done을 바꾸고 다시 그린다
+        box.addEventListener("change", function () {
+          it.done = box.checked;
+          draw();
+        });
+        const name = document.createElement("span");
+        name.textContent = it.name;
+        if (it.done) name.className = "done";
+        const who = document.createElement("span");
+        who.className = "who";
+        who.textContent = "· " + it.who;
+        label.append(box, name, who);
+        li.append(label);
+        list.append(li);
+      });
+
+      count.textContent = items.length;
     }
 
-    // 5) 평가 제출 버튼을 누르면 실행된다
+    // 5) [추가] 버튼을 누르면 실행된다
     form.addEventListener("submit", function (event) {
       event.preventDefault();   // 페이지가 새로고침되지 않게 막는다
 
-      const subject = document.getElementById("subject").value.trim();
-      const instructor = document.getElementById("instructor").value.trim();
-      const score = Number(document.getElementById("score").value);
-      if (subject === "" || instructor === "" || score === 0) {
-        error.textContent = "과목, 교관, 만족도를 모두 입력하세요.";
+      const name = document.getElementById("item").value.trim();
+      const who = document.getElementById("who").value;
+      if (name === "") {
+        error.textContent = "준비물 이름을 적은 뒤 추가하세요.";
         return;
       }
 
-      answers.push({ subject: subject, instructor: instructor, score: score });
-      drawTable();
+      items.push({ name: name, who: who, done: false });
+      draw();
       error.textContent = "";
-      document.getElementById("score").value = "";   // 만족도만 비우기
+      document.getElementById("item").value = "";   // 준비물 칸만 비우기 (누구 것은 그대로)
     });
+
+    draw();   // 처음 열었을 때 빈 표와 안내 문구를 그린다
   </script>
 </body>
 </html>

@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>강의평가 결과 집계</title>
+  <title>우리 가족 여행 준비물 체크</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
   <style>
-    /* 레이아웃: 좁은 단일 컬럼 — 상단 요약, 입력 폼, 결과표 순 */
+    /* 레이아웃: 좁은 단일 컬럼 — 상단 요약, 입력 폼, 가족별 표, 준비물 목록 순 */
     :root {
       --bg: #f3f4f6;
       --surface: #ffffff;
@@ -57,7 +57,6 @@
       font-size: 12px;
       letter-spacing: .08em;
       color: var(--accent);
-      text-transform: uppercase;
     }
     h1 {
       margin: 0;
@@ -66,6 +65,7 @@
       font-size: 34px;
       line-height: 1.15;
       text-wrap: balance;
+      word-break: keep-all;   /* 한글 낱말 중간에서 줄이 끊기지 않게 */
     }
     header p { margin: 0; color: var(--muted); }
 
@@ -87,12 +87,12 @@
 
     form { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; }
     .field { flex: 1 1 200px; display: grid; gap: 4px; min-width: 0; }
-    .field.short { flex: 0 1 120px; }
-    .field.mid { flex: 1 1 140px; }
+    .field.short { flex: 1 1 120px; }
     label { font-size: 13px; font-weight: 600; }
     input, select {
       width: 100%;
       min-width: 0;
+      height: 44px;
       font: inherit;
       padding: 10px 12px;
       border: 1px solid var(--line);
@@ -120,15 +120,17 @@
     input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     .error { margin: 0; color: var(--accent); font-size: 13px; min-height: 1.6em; flex-basis: 100%; }
 
+    section { display: grid; gap: 8px; }
     .list-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .list-head h2 { margin: 0; font-size: 16px; }
+    h2 { margin: 0; font-size: 16px; }
     .list-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    /* 가족별 표 */
     table { width: 100%; border-collapse: collapse; border-top: 1px solid var(--line); }
     th, td { padding: 10px 4px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
     th { font-size: 12px; font-weight: 600; color: var(--muted); }
     th.num, td.num { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
-    td.who { overflow-wrap: anywhere; }
-    td.who small { display: block; color: var(--muted); font-size: 13px; }
+    td.who { overflow-wrap: anywhere; font-weight: 600; }
     td.state { text-align: right; white-space: nowrap; }
     .chip {
       font-size: 12px;
@@ -139,7 +141,29 @@
     }
     .chip.ok { color: var(--ok); }
     .chip.bad { color: var(--accent); }
-    tr.bad td.num.avg { color: var(--accent); font-weight: 600; }
+    .chip.done { color: var(--muted); }
+    tr.bad td.num.rate { color: var(--accent); font-weight: 600; }
+
+    /* 준비물 목록 */
+    .items { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .items li {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .items label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      font-size: 15px;
+      font-weight: 400;
+      cursor: pointer;
+    }
+    .items input { width: 20px; height: 20px; flex: none; accent-color: var(--accent); }
+    .items .name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+    .items .owner { flex: none; font-size: 12px; color: var(--muted); }
+    .items li.checked .name { color: var(--muted); text-decoration: line-through; }
     .empty { color: var(--muted); padding: 16px 2px; }
     .note { font-size: 12px; color: var(--muted); margin: 0; }
   </style>
@@ -147,180 +171,243 @@
 <body>
   <div class="wrap">
     <header>
-      <span class="eyebrow">신임소방관 교육과정 · 제12기</span>
-      <h1>강의평가 결과 집계</h1>
-      <p>만족도 1~5점 · 평균 <strong>3.5 미만</strong>은 “개선 필요”로 표시</p>
+      <span class="eyebrow">경주 2박 3일 · 가을 주말</span>
+      <h1>우리 가족 여행 준비물 체크</h1>
+      <p>가족별 챙김률 <strong>50% 미만</strong>은 “서둘러요”로 표시</p>
     </header>
 
-    <section class="stats" aria-label="평가 요약">
-      <div class="stat"><span>응답</span><strong id="count-total">0</strong></div>
-      <div class="stat"><span>평가 과목</span><strong id="count-subject">0</strong></div>
-      <div class="stat"><span>개선 필요</span><strong id="count-bad">0</strong></div>
+    <section class="stats" aria-label="준비물 요약">
+      <div class="stat"><span>전체</span><strong id="count-total">0</strong></div>
+      <div class="stat"><span>챙김</span><strong id="count-done">0</strong></div>
+      <div class="stat"><span>남은 것</span><strong id="count-left">0</strong></div>
     </section>
 
-    <form id="eval-form" novalidate>
+    <form id="item-form" novalidate>
       <div class="field">
-        <label for="subject">과목</label>
-        <input id="subject" list="subject-list" autocomplete="off" placeholder="예: 화재진압 전술">
-        <datalist id="subject-list"></datalist>
-      </div>
-      <div class="field mid">
-        <label for="instructor">교관</label>
-        <input id="instructor" autocomplete="off" placeholder="예: 김교관">
+        <label for="item">준비물</label>
+        <input id="item" autocomplete="off" maxlength="40" placeholder="예: 멀미약">
       </div>
       <div class="field short">
-        <label for="score">만족도</label>
-        <select id="score">
-          <option value="">선택</option>
-          <option value="5">5 매우 만족</option>
-          <option value="4">4 만족</option>
-          <option value="3">3 보통</option>
-          <option value="2">2 불만족</option>
-          <option value="1">1 매우 불만족</option>
+        <label for="who">누구 것</label>
+        <select id="who">
+          <option>가족 전체</option>
+          <option>나</option>
+          <option>배우자</option>
+          <option>아이</option>
+          <option>할머니</option>
         </select>
       </div>
-      <button type="submit">평가 제출</button>
+      <button type="submit">추가</button>
       <p class="error" id="error" role="alert"></p>
     </form>
 
     <section>
-      <div class="list-head">
-        <h2>과목·교관별 결과</h2>
-        <div class="list-actions">
-          <button type="button" class="ghost" id="undo">마지막 응답 취소</button>
-          <button type="button" class="ghost" id="download">결과 내려받기</button>
-          <button type="button" class="ghost" id="reset">전체 초기화</button>
-        </div>
-      </div>
+      <h2>가족별 챙김</h2>
       <table>
         <thead>
-          <tr><th>과목 · 교관</th><th class="num">응답</th><th class="num">평균</th><th class="num">상태</th></tr>
+          <tr><th>누구</th><th class="num">전체</th><th class="num">챙김</th><th class="num">챙김률</th><th class="num">상태</th></tr>
         </thead>
         <tbody id="rows"></tbody>
       </table>
+    </section>
+
+    <section>
+      <div class="list-head">
+        <h2>준비물 목록</h2>
+        <div class="list-actions">
+          <button type="button" class="ghost" id="undo">마지막 추가 취소</button>
+          <button type="button" class="ghost" id="download">목록 내려받기</button>
+          <button type="button" class="ghost" id="reset">전체 초기화</button>
+        </div>
+      </div>
+      <ul class="items" id="items"></ul>
     </section>
 
     <p class="note" id="note"></p>
   </div>
 
   <script>
-    const STORAGE_KEY = "lecture-eval-demo-v3";
-    const THRESHOLD = 3.5;   // 평균이 이 값보다 낮으면 개선 필요 (PRD)
+    const STORAGE_KEY = "trip-checklist-v1";
+    const HURRY_BELOW = 50;   // 챙김률(%)이 이 값보다 낮으면 서둘러요 (PRD)
+    const WHO_LIST = ["가족 전체", "나", "배우자", "아이", "할머니"];
 
-    // 처음 열면 예시 응답으로 시작한다 (저장된 기록이 있으면 그걸 사용).
+    // 처음 열면 예시 준비물로 시작한다 (저장된 기록이 있으면 그걸 사용).
+    // 한 목록으로만 세면 8개 중 6개(75%)라 순조로워 보이지만, 아이 것은 3개 중 1개(33%)다.
     const SAMPLE = [
-      ["화재진압 전술 (예시)", "김교관", 5], ["화재진압 전술 (예시)", "김교관", 4], ["화재진압 전술 (예시)", "김교관", 5],
-      ["화재진압 전술 (예시)", "이교관", 3], ["화재진압 전술 (예시)", "이교관", 3], ["화재진압 전술 (예시)", "이교관", 4],
-      ["응급처치 실습 (예시)", "박교관", 4], ["응급처치 실습 (예시)", "박교관", 5],
-      ["소방 관계법규 (예시)", "최교관", 3], ["소방 관계법규 (예시)", "최교관", 2],
-    ].map(([subject, instructor, score]) => ({ subject, instructor, score }));
+      ["혈압약", "할머니", true], ["무릎 보호대", "할머니", true], ["지팡이", "할머니", true],
+      ["멀미약", "아이", false], ["여벌 옷", "아이", false], ["물놀이 가방", "아이", true],
+      ["충전기", "가족 전체", true], ["우산", "가족 전체", true],
+    ].map(([name, who, done]) => ({ name: name + " (예시)", who, done }));
 
     const $ = (id) => document.getElementById(id);
+
+    function isValidItem(it) {
+      return it && typeof it.name === "string" && WHO_LIST.includes(it.who) && typeof it.done === "boolean";
+    }
 
     function load() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) return { records: JSON.parse(raw), sample: false };
+        if (raw) {
+          const items = JSON.parse(raw);
+          if (Array.isArray(items)) return { items: items.filter(isValidItem), sample: false };
+        }
       } catch (e) { /* 저장소를 못 쓰면 예시로 시작 */ }
-      return { records: SAMPLE.slice(), sample: true };
+      return { items: SAMPLE.map((it) => ({ ...it })), sample: true };
     }
 
     function save() {
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.records)); } catch (e) {}
+      if (state.sample) return;   // 예시는 저장하지 않는다
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items)); } catch (e) {}
     }
 
-    // 과목 + 교관이 같은 응답끼리 묶어 응답 수와 평균을 낸다 (PRD v0.3: 교관이 다르면 따로 집계).
-    function summarize(records) {
+    function stateOf(g) {
+      if (g.done === g.total) return { label: "다 챙김", cls: "done" };
+      if (g.rateExact < HURRY_BELOW) return { label: "서둘러요", cls: "bad" };
+      return { label: "순조로움", cls: "ok" };
+    }
+
+    // 누구 것이 같은 준비물끼리 묶어 전체·챙김·챙김률을 낸다 (PRD v0.3: 가족별 집계).
+    function summarize(items) {
       const groups = new Map();
-      records.forEach((r) => {
-        const key = r.subject + "\u0000" + r.instructor;
-        if (!groups.has(key)) groups.set(key, { subject: r.subject, instructor: r.instructor, count: 0, sum: 0 });
-        const g = groups.get(key);
-        g.count += 1;
-        g.sum += r.score;
+      items.forEach((it) => {
+        if (!groups.has(it.who)) groups.set(it.who, { who: it.who, total: 0, done: 0 });
+        const g = groups.get(it.who);
+        g.total += 1;
+        if (it.done) g.done += 1;
       });
       return [...groups.values()]
-        .map((g) => ({ ...g, avg: Math.round((g.sum / g.count) * 10) / 10 }))
-        .map((g) => ({ ...g, bad: g.avg < THRESHOLD }))
-        .sort((a, b) => a.avg - b.avg || a.subject.localeCompare(b.subject, "ko"));   // 평균이 낮은 것부터
+        .map((g) => {
+          const rateExact = (g.done / g.total) * 100;
+          return { ...g, rateExact, rate: Math.floor(rateExact) };   // 버림: 다 챙기기 전엔 100%로 안 보이게
+        })
+        .map((g) => ({ ...g, status: stateOf(g) }))
+        .sort((a, b) => a.rateExact - b.rateExact || WHO_LIST.indexOf(a.who) - WHO_LIST.indexOf(b.who));   // 챙김률이 낮은 사람부터
     }
 
     const state = load();
     let resetArmed = false;
+    let resetTimer = null;
 
     function render() {
+      const groups = summarize(state.items);
+
+      // 가족별 표
       const rows = $("rows");
-      rows.innerHTML = "";
-      const groups = summarize(state.records);
+      rows.textContent = "";
       if (groups.length === 0) {
         const tr = document.createElement("tr");
-        tr.innerHTML = '<td class="empty" colspan="4"></td>';
-        tr.firstChild.textContent = "아직 평가가 없습니다. 위에서 과목, 교관, 만족도를 골라 첫 평가를 제출하세요.";
+        const td = document.createElement("td");
+        td.className = "empty";
+        td.colSpan = 5;
+        td.textContent = "아직 준비물이 없습니다. 위에서 준비물과 누구 것을 골라 추가하세요.";
+        tr.append(td);
         rows.append(tr);
       }
       groups.forEach((g) => {
         const tr = document.createElement("tr");
-        if (g.bad) tr.className = "bad";
-        tr.innerHTML =
-          '<td class="who"><span></span><small></small></td>' +
-          '<td class="num"></td><td class="num avg"></td>' +
-          '<td class="state"><span class="chip ' + (g.bad ? "bad" : "ok") + '">' + (g.bad ? "개선 필요" : "양호") + "</span></td>";
-        tr.querySelector(".who span").textContent = g.subject;
-        tr.querySelector(".who small").textContent = g.instructor;
-        tr.children[1].textContent = g.count;
-        tr.children[2].textContent = g.avg.toFixed(1);
+        if (g.status.cls === "bad") tr.className = "bad";
+        const cells = [
+          ["who", g.who], ["num", g.total], ["num", g.done], ["num rate", g.rate + "%"],
+        ];
+        cells.forEach(([cls, text]) => {
+          const td = document.createElement("td");
+          td.className = cls;
+          td.textContent = text;
+          tr.append(td);
+        });
+        const td = document.createElement("td");
+        td.className = "state";
+        const chip = document.createElement("span");
+        chip.className = "chip " + g.status.cls;
+        chip.textContent = g.status.label;
+        td.append(chip);
+        tr.append(td);
         rows.append(tr);
       });
 
-      const subjects = new Set(state.records.map((r) => r.subject));
-      $("count-total").textContent = state.records.length;
-      $("count-subject").textContent = subjects.size;
-      $("count-bad").textContent = groups.filter((g) => g.bad).length;
-      $("subject-list").innerHTML = "";
-      subjects.forEach((s) => {
-        const o = document.createElement("option");
-        o.value = s;
-        $("subject-list").append(o);
+      // 준비물 목록: 아직 안 챙긴 것부터 (같으면 추가한 순서)
+      const list = $("items");
+      list.textContent = "";
+      const ordered = state.items.map((it, i) => ({ it, i })).sort((a, b) => (a.it.done - b.it.done) || (a.i - b.i));
+      ordered.forEach(({ it, i }) => {
+        const li = document.createElement("li");
+        if (it.done) li.className = "checked";
+        const label = document.createElement("label");
+        const box = document.createElement("input");
+        box.type = "checkbox";
+        box.checked = it.done;
+        box.dataset.index = i;
+        const name = document.createElement("span");
+        name.className = "name";
+        name.textContent = it.name;
+        const owner = document.createElement("span");
+        owner.className = "owner";
+        owner.textContent = it.who;
+        label.append(box, name, owner);
+        li.append(label);
+        list.append(li);
       });
+
+      const done = state.items.filter((it) => it.done).length;
+      $("count-total").textContent = state.items.length;
+      $("count-done").textContent = done;
+      $("count-left").textContent = state.items.length - done;
       $("note").textContent = state.sample
-        ? "‘(예시)’ 과목은 샘플 데이터입니다. 평가를 제출하면 이 브라우저에 저장됩니다."
-        : "기록은 이 브라우저에만 저장됩니다 (프로토타입). 평가는 익명이며 이름을 받지 않습니다.";
+        ? "‘(예시)’ 준비물은 연습용입니다. 체크해 볼 수 있고, 첫 준비물을 추가하면 예시는 사라집니다. 기록은 이 브라우저에만 저장됩니다."
+        : "기록은 이 브라우저에만 저장됩니다 (프로토타입). 가족의 다른 휴대폰에는 보이지 않습니다.";
       $("reset").textContent = resetArmed ? "한 번 더 누르면 삭제" : "전체 초기화";
     }
 
-    $("eval-form").addEventListener("submit", (e) => {
+    $("item-form").addEventListener("submit", (e) => {
       e.preventDefault();
-      const subject = $("subject").value.trim().replace(/\s+/g, " ");
-      const instructor = $("instructor").value.trim().replace(/\s+/g, " ");
-      const score = Number($("score").value);
-      if (!subject || !instructor || !Number.isInteger(score) || score < 1 || score > 5) {
-        $("error").textContent = "과목, 교관, 만족도를 모두 입력한 뒤 제출하세요.";
+      const name = $("item").value.trim().replace(/\s+/g, " ");
+      const who = $("who").value;
+      if (!name) {
+        $("error").textContent = "준비물 이름을 적은 뒤 추가하세요.";
+        $("item").focus();
+        return;
+      }
+      if (!WHO_LIST.includes(who)) {
+        $("error").textContent = "누구 것인지 골라 주세요.";
         return;
       }
       if (state.sample) {
-        state.records = [];
+        state.items = [];
         state.sample = false;
       }
-      state.records.push({ subject, instructor, score });
+      state.items.push({ name, who, done: false });
       $("error").textContent = "";
-      $("score").value = "";      // 과목·교관은 남겨 두어 같은 과목을 연달아 입력하기 쉽게
+      $("item").value = "";      // 누구 것은 남겨 두어 같은 사람 것을 연달아 적기 쉽게
+      $("item").focus();
       save();
       render();
     });
 
-    // 잘못 낸 마지막 응답 하나만 지운다
+    // 체크 상자: 누르면 챙김 ↔ 아직
+    $("items").addEventListener("change", (e) => {
+      const box = e.target;
+      if (!box.matches('input[type="checkbox"]')) return;
+      const it = state.items[Number(box.dataset.index)];
+      if (!it) return;
+      it.done = box.checked;
+      save();
+      render();
+    });
+
+    // 잘못 적은 마지막 준비물 하나만 지운다
     $("undo").addEventListener("click", () => {
-      if (state.sample || state.records.length === 0) {
-        $("error").textContent = "취소할 응답이 없습니다.";
+      if (state.sample || state.items.length === 0) {
+        $("error").textContent = "취소할 준비물이 없습니다.";
         return;
       }
-      state.records.pop();
+      state.items.pop();
       $("error").textContent = "";
       save();
       render();
     });
 
-    // 결과 내려받기 (PRD v0.5): 엑셀에서 열리는 CSV로 저장
+    // 목록 내려받기: 엑셀에서 열리는 CSV로 저장
     function csvCell(value) {
       let v = String(value);
       if (/^[=+\-@]/.test(v)) v = "'" + v;            // 엑셀이 수식으로 실행하지 않게
@@ -328,21 +415,22 @@
     }
 
     $("download").addEventListener("click", () => {
-      const groups = summarize(state.records);
-      if (groups.length === 0) {
-        $("error").textContent = "내려받을 평가 결과가 없습니다.";
+      if (state.items.length === 0) {
+        $("error").textContent = "내려받을 준비물이 없습니다.";
         return;
       }
-      const rows = [["과목", "교관", "응답 수", "평균", "상태"]].concat(
-        groups.map((g) => [g.subject, g.instructor, g.count, g.avg.toFixed(1), g.bad ? "개선 필요" : "양호"])
-      );
+      const groups = summarize(state.items);
+      const rows = [["준비물", "누구 것", "챙김"]]
+        .concat(state.items.map((it) => [it.name, it.who, it.done ? "챙김" : "아직"]))
+        .concat([[], ["누구", "전체", "챙김", "챙김률(%)", "상태"]])
+        .concat(groups.map((g) => [g.who, g.total, g.done, g.rate, g.status.label]));
       const csv = rows.map((row) => row.map(csvCell).join(",")).join("\r\n");
-      // 맨 앞의 \uFEFF(BOM) 덕분에 엑셀이 한글을 UTF-8로 읽어 깨지지 않는다
-      const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+      // 맨 앞의 ﻿(BOM) 덕분에 엑셀이 한글을 UTF-8로 읽어 깨지지 않는다
+      const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" });
       const d = new Date();
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = "강의평가_결과_" + d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0") + ".csv";
+      a.download = "여행준비물_" + d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0") + ".csv";
       document.body.append(a);
       a.click();
       a.remove();
@@ -352,16 +440,18 @@
 
     // confirm() 대신 두 번 눌러 확인하는 방식
     $("reset").addEventListener("click", () => {
+      clearTimeout(resetTimer);
       if (!resetArmed) {
         resetArmed = true;
         render();
-        setTimeout(() => { resetArmed = false; render(); }, 3000);
+        resetTimer = setTimeout(() => { resetArmed = false; render(); }, 3000);
         return;
       }
       resetArmed = false;
-      state.records = [];
+      state.items = [];
       state.sample = false;
-      save();
+      try { localStorage.setItem(STORAGE_KEY, "[]"); } catch (e) {}
+      $("error").textContent = "";
       render();
     });
 

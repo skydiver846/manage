@@ -21,14 +21,14 @@
   </aside>
   <main>
     <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>07 PRD로 결과물 만들기</span></div>
-    <article><h1>모듈 7. PRD로 결과물 만들기 (Gemini Notebook · 생성형 AI)</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>예시 PRD (강의평가 결과보고 v0.1)</span><span class="acts"><a class="btn" href="files/PRD_%EA%B0%95%EC%9D%98%ED%8F%89%EA%B0%80%20%EA%B2%B0%EA%B3%BC%EB%B3%B4%EA%B3%A0.md" download="PRD_강의평가 결과보고.md">내려받기</a></span></li><li><span>강의평가 자유의견 예시 (서술형 요약 실습용)</span><span class="acts"><a class="btn" href="files/%EA%B0%95%EC%9D%98%ED%8F%89%EA%B0%80_%EC%9E%90%EC%9C%A0%EC%9D%98%EA%B2%AC_%EC%98%88%EC%8B%9C.md" download="강의평가_자유의견_예시.md">내려받기</a></span></li></ul></aside>
+    <article><h1>모듈 7. PRD로 결과물 만들기 (Gemini Notebook · 생성형 AI)</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>예시 PRD (경주 여행 준비물 체크 v0.1)</span><span class="acts"><a class="btn" href="files/PRD_%EA%B2%BD%EC%A3%BC%20%EC%97%AC%ED%96%89%20%EC%A4%80%EB%B9%84%EB%AC%BC.md" download="PRD_경주 여행 준비물.md">내려받기</a></span></li><li><span>경주 관광지 안내 자료 (파일 건네기 · Gemini Notebook 실습용)</span><span class="acts"><a class="btn" href="files/%EA%B2%BD%EC%A3%BC%20%EC%97%AC%ED%96%89%20%EC%9E%90%EB%A3%8C_%EA%B4%80%EA%B4%91%EC%A7%80%20%EC%95%88%EB%82%B4.md" download="경주 여행 자료_관광지 안내.md">내려받기</a></span></li><li><span>경주 여행 후기 모음 (후기 요약 실습용)</span><span class="acts"><a class="btn" href="files/%EA%B2%BD%EC%A3%BC%20%EC%97%AC%ED%96%89%20%ED%9B%84%EA%B8%B0_%EC%98%88%EC%8B%9C.md" download="경주 여행 후기_예시.md">내려받기</a></span></li></ul></aside>
 <blockquote>
-<p>🎯 <strong>이 모듈에서 만들 것:</strong> PRD로 만든 슬라이드 · 결재 보고서 · <strong>화면 시안</strong> (내일 배포할 화면)</p>
-<p>🤔 <strong>생각해 보기:</strong> 기획서 한 장으로 보고서, 슬라이드, 내 업무 화면까지 만들 수 있을까요? (답은 이 모듈에서 찾아보세요. 점수 없음)</p>
+<p>🎯 <strong>이 모듈에서 만들 것:</strong> PRD와 여행 자료로 만든 가족 여행 소개 슬라이드 · 단톡방 안내 한 장 · <strong>화면 시안</strong> (내일 배포할 화면)</p>
+<p>🤔 <strong>생각해 보기:</strong> 기획서와 자료 한 묶음으로 가족 안내문, 슬라이드, 내 화면까지 만들 수 있을까요? (답은 이 모듈에서 찾아보세요. 점수 없음)</p>
 </blockquote>
 <h2>한 장의 PRD, 여러 개의 결과물</h2>
-<pre><code>                        ┌─▶ Gemini Notebook ─▶ 요약 · 오디오 해설 · 슬라이드 · 인포그래픽
- 📄 PRD.md (내 업무 폴더) ─┴─▶ Claude     ─▶ 결재 보고서 · 발표 개요 · 프로토타입(웹 화면)
+<pre><code>                              ┌─▶ Gemini Notebook ─▶ 요약 · 오디오 해설 · 슬라이드 · 인포그래픽
+ 📄 PRD.md + 여행 자료 (내 폴더) ─┴─▶ Claude     ─▶ 단톡방 여행 안내 · 일정표 · 프로토타입(웹 화면)
 </code></pre>
 <div class="table-wrap"><table>
 <thead>
@@ -66,8 +66,8 @@
 <h3>소스(자료) 넣기</h3>
 <ol>
 <li><strong>소스 추가</strong> 창에서 <strong>파일 업로드</strong> 선택</li>
-<li>내 업무 폴더 <code>문서 &gt; AI업무자료 &gt; 01_기획(PRD)</code> 의 <strong>PRD .md 파일</strong> 선택</li>
-<li><code>02_참고자료</code> 의 <strong><code>강의평가_자유의견_예시.md</code></strong> 도 함께 추가 (없으면 <a href="files.html#opinions">자유의견 예시 파일</a> 를 받아서)</li>
+<li>내 폴더 <code>문서 &gt; AI업무자료 &gt; 01_기획(PRD)</code> 의 <strong><code>PRD_경주 여행 준비물.md</code></strong> 선택 (모듈 5에서 고친 파일. 없으면 <a href="files.html#prd">예시 PRD 파일</a> 을 받아서)</li>
+<li><code>02_참고자료</code> 의 <strong><code>경주 여행 자료_관광지 안내.md</code></strong> 와 <strong><code>경주 여행 후기_예시.md</code></strong> 도 함께 추가 (없으면 <a href="files.html#guide">경주 관광지 안내 파일</a>, <a href="files.html#opinions">경주 여행 후기 파일</a> 를 받아서)</li>
 <li>그 밖에 함께 참고할 자료가 있으면 추가 (PDF, 텍스트, 웹사이트 주소, YouTube 링크, Google 문서 등)</li>
 </ol>
 <blockquote>
@@ -89,18 +89,18 @@
 </tr>
 <tr>
 <td><strong>오디오 개요</strong></td>
-<td>스튜디오 영역의 오디오 개요 생성</td>
-<td>두 사람이 PRD를 대화로 설명하는 <strong>팟캐스트형 음성</strong></td>
+<td>스튜디오 영역의 오디오 개요 생성 (아래 지시문)</td>
+<td>두 사람이 자료를 대화로 들려주는 <strong>팟캐스트형 음성</strong>. 이번에는 <strong>차에서 아이와 듣는 경주 라디오</strong></td>
 </tr>
 <tr>
 <td><strong>마인드맵</strong></td>
 <td>마인드맵 생성</td>
-<td>기능 구조를 한눈에 보는 그림</td>
+<td>장소·준비물 구조를 한눈에 보는 그림</td>
 </tr>
 <tr>
 <td><strong>슬라이드 · 인포그래픽</strong></td>
 <td>스튜디오에서 생성 (아래 7-1-1)</td>
-<td>발표 자료와 한 장 요약 그림</td>
+<td>가족과 나눠 볼 여행 소개 자료와 한 장 요약 그림</td>
 </tr>
 <tr>
 <td><strong>보고서·학습 가이드</strong></td>
@@ -108,11 +108,16 @@
 <td>브리핑 문서, 학습 가이드, FAQ 등</td>
 </tr>
 </tbody></table></div>
+<p>오디오 개요의 <strong>연필(맞춤 설정)</strong> 아이콘을 누르고 아래처럼 적어 두면, 가는 길 차 안에서 아이와 들을 수 있는 해설이 됩니다.</p>
+<pre><code>초등학교 3학년 아이가 경주 가는 차 안에서 듣는 라디오처럼 만들어 줘.
+첨성대, 동궁과 월지, 국립경주박물관 이야기를 쉬운 말로, 퀴즈를 섞어서.
+소스에 없는 요금이나 운영시간은 말하지 마.
+</code></pre>
 <blockquote>
 <p>메뉴 이름과 위치는 업데이트로 바뀔 수 있습니다. 오디오 개요는 생성에 몇 분 걸리고, 출력 언어 설정을 한국어로 확인하세요.</p>
 </blockquote>
 <h3>7-1-1. 슬라이드와 인포그래픽 만들기 (생성 버튼만 누르고 넘어가기)</h3>
-<p>같은 자료(PRD + 자유의견)로 <strong>결과보고 발표 자료(슬라이드)</strong> 와 <strong>한 장짜리 요약 그림(인포그래픽)</strong> 을 만듭니다. Gemini Notebook은 <strong>넣은 자료(소스)만</strong> 근거로 만들기 때문에, PRD에 없는 내용이 끼어들 가능성이 적습니다.</p>
+<p>같은 자료(PRD + 관광지 안내 + 후기)로 <strong>가족과 나눠 볼 여행 소개 자료(슬라이드)</strong> 와 <strong>한 장짜리 요약 그림(인포그래픽)</strong> 을 만듭니다. Gemini Notebook은 <strong>넣은 자료(소스)만</strong> 근거로 만들기 때문에, 자료에 없는 요금·시간이 끼어들 가능성이 적습니다.</p>
 <p><strong>① 슬라이드 (Slide Deck)</strong></p>
 <ol>
 <li>오른쪽 <strong>스튜디오</strong> → <strong>슬라이드(Slide Deck)</strong> 옆의 <strong>연필(맞춤 설정)</strong> 아이콘</li>
@@ -128,8 +133,8 @@
 </thead>
 <tbody><tr>
 <td>형식</td>
-<td><strong>발표자용 슬라이드(Presenter Slides)</strong></td>
-<td>글자가 적고 말로 설명하는 발표용. 나눠 줄 자료면 <strong>자세한 자료(Detailed Deck)</strong></td>
+<td><strong>자세한 자료(Detailed Deck)</strong></td>
+<td>단톡방에 올려 각자 읽는 자료. 모여서 말로 설명할 거면 <strong>발표자용 슬라이드(Presenter Slides)</strong></td>
 </tr>
 <tr>
 <td>언어</td>
@@ -139,7 +144,7 @@
 <tr>
 <td>길이</td>
 <td>짧게</td>
-<td>결재·보고용은 짧을수록 좋음</td>
+<td>휴대폰으로 볼 자료는 짧을수록 좋음</td>
 </tr>
 <tr>
 <td>프롬프트</td>
@@ -147,10 +152,10 @@
 <td>누구에게, 몇 장, 무엇을 강조할지</td>
 </tr>
 </tbody></table></div>
-<pre><code>교육운영과장님께 &quot;제12기 강의평가 결과와 집계 도구 도입&quot;을 보고하는 5장짜리 발표 자료로 만들어 줘.
-1장: 지금의 문제(네이버 폼 결과를 엑셀로 다시 집계, 반나절), 2장: 자유의견에서 나온 주요 개선 요구,
-3장: 집계 도구의 핵심 기능, 4장: 이번에 하지 않는 것, 5장: 성공 기준과 다음 단계.
-소스에 없는 숫자는 쓰지 마.
+<pre><code>우리 가족(나, 배우자, 초등 3학년 아이, 75세 할머니)에게 경주 2박 3일 여행을 소개하는 5장짜리 자료로 만들어 줘.
+1장: 여행 한눈에 보기(언제, 어디, 숙소), 2장: 할머니가 걷기 편한 곳, 3장: 아이가 좋아할 곳,
+4장: 비 오는 날 바꿀 곳, 5장: 각자 챙길 준비물.
+소스에 없는 요금·운영시간은 쓰지 마.
 </code></pre>
 <ol start="3">
 <li><strong>[생성]</strong> → 몇 분 기다리기 (오디오 개요와 함께 눌러 두면 시간을 아낄 수 있음)</li>
@@ -162,57 +167,69 @@
 <li>스튜디오 → <strong>인포그래픽</strong> 옆 <strong>연필</strong> 아이콘</li>
 <li><strong>방향</strong>(가로 / 세로 / 정사각형), <strong>언어: 한국어</strong>, 프롬프트 입력</li>
 </ol>
-<pre><code>강의평가 결과보고가 만들어지는 순서(휴대폰으로 평가 입력 → 과목·교관별 자동 집계
-→ 평균 3.5 미만 &quot;개선 필요&quot; 표시 → 결과보고서 작성)를 4단계 흐름 그림으로 만들어 줘.
-자유의견에서 가장 많이 나온 개선 요구 3개를 아래에 함께 넣어 줘.
-소방 적색을 강조색으로, 글자는 크게.
+<pre><code>경주에서 가 볼 만한 곳을 &quot;할머니가 걷기 편한 곳 / 아이가 좋아할 곳 / 비 오는 날 갈 곳&quot;
+세 묶음으로 나눈 한 장 그림으로 만들어 줘.
+아래에는 꼭 챙길 준비물 3개(할머니 혈압약, 아이 멀미약, 얇은 겉옷)를 넣어 줘.
+가을 단풍색을 강조색으로, 글자는 크게. 요금·시간은 넣지 마.
 </code></pre>
 <ol start="3">
 <li><strong>[생성]</strong> → 완성되면 이미지로 저장</li>
 </ol>
 <p><strong>③ 결과 검토 (꼭 하기)</strong></p>
-<pre><code>□ PRD에 없는 숫자나 기능이 들어가지 않았나?
+<pre><code>□ 자료에 없는 요금·운영시간·장소가 들어가지 않았나?
 □ 그림 속 한글에 오타나 깨진 글자가 없나? (그림으로 그린 글자라 틀릴 수 있음)
-□ &quot;범위 밖&quot;으로 정한 기능이 들어가 있지 않나?
-□ 개인정보(실명·연락처)가 보이지 않나?
+□ 할머니가 어려운 곳(계단·오르막)이 &quot;걷기 편한 곳&quot;에 들어가 있지 않나?
+□ 개인정보(가족 실명·연락처·사진)가 보이지 않나? (단톡방 밖으로 퍼질 수 있음)
 </code></pre>
 <blockquote>
-<p>💡 7-2의 Claude &quot;발표 개요&quot;와 비교해 보세요. Claude는 <strong>뼈대(장별 제목·문장)</strong> 를 주고, Gemini Notebook은 <strong>완성된 슬라이드</strong>를 줍니다. 뼈대로 생각을 정리하고, 슬라이드로 바로 보고하는 식으로 함께 쓰면 좋습니다.</p>
-<p>내려받은 PDF·PPTX·이미지는 내 업무 폴더 <code>03_AI결과물</code> 에 함께 보관합니다.</p>
+<p>💡 7-2의 Claude &quot;단톡방 안내 한 장&quot;과 비교해 보세요. Claude는 <strong>바로 고칠 수 있는 글</strong>을 주고, Gemini Notebook은 <strong>완성된 슬라이드·그림</strong>을 줍니다. 글로 내용을 정리하고, 슬라이드·그림으로 한눈에 보여 주는 식으로 함께 쓰면 좋습니다.</p>
+<p>내려받은 PDF·PPTX·이미지는 내 폴더 <code>03_AI결과물</code> 에 함께 보관합니다.</p>
 </blockquote>
 <h3>실습 질문 (Gemini Notebook 채팅창)</h3>
-<pre><code>이 PRD에서 &quot;범위 밖&quot;으로 정한 것과, 성공 기준을 표로 정리해 줘.
-그리고 PRD 안에서 서로 모순되거나 빠진 부분이 있으면 알려 줘.
+<pre><code>관광지 안내와 후기를 바탕으로, 무릎이 불편한 할머니와 초등 3학년 아이가
+함께 가기 좋은 곳과 피하면 좋을 곳을 표로 정리해 줘. 이유도 함께 적어 줘.
 </code></pre>
+<pre><code>둘째 날 비가 오면 어디로 바꾸면 좋을까? 자료에 있는 장소로만 답해 줘.
+</code></pre>
+<pre><code>PRD의 배경, 핵심 기능, 화면·흐름, 성공 기준이 서로 맞는지 비교해 줘.
+배경에 적힌 내용 중 기능에 빠진 것이 있으면 알려 줘.
+</code></pre>
+<blockquote>
+<p>💡 Gemini Notebook은 <strong>자료에 없는 것을 잘 지어내지 않습니다.</strong> 요금을 물으면 &quot;자료에 없다&quot;고 답하는지 보세요. &quot;서로 맞는지·빠진 것 찾기&quot;로 <strong>PRD 검토 도구</strong>로 쓰기에도 좋습니다.</p>
+</blockquote>
 <p><strong>볼 것 두 가지</strong></p>
 <ol>
-<li><strong>출처 번호</strong> [1], [2] 를 눌러 PRD의 어느 문장을 근거로 했는지 확인 (ChatGPT·Claude와 가장 다른 점)</li>
-<li><strong>불일치 찾기</strong>: 모듈 5에서 4번 칸만 &quot;과목 + 교관&quot;으로 고쳤다면, 5번 화면 흐름은 아직 &quot;과목 [____] 만족도 [▼]&quot;만 있고 교관 입력칸이 없습니다. Gemini Notebook이 이 불일치를 짚어 주면 Claude에게 5·7번 칸을 고치게 하고 <strong>v0.3</strong> 으로 올립니다.</li>
+<li><strong>출처 번호</strong> [1], [2] 를 눌러 관광지 안내·후기·PRD의 어느 문장을 근거로 했는지 확인 (ChatGPT·Claude와 가장 다른 점)</li>
+<li><strong>불일치 찾기</strong>: PRD v0.1 그대로라면 1번 배경(&quot;가족마다 챙길 것이 다르다&quot;)과 4번 기능(준비물을 한 목록으로만 셈)이 어긋납니다. 모듈 5에서 4번 칸만 &quot;누구 것 + 가족별 집계&quot;로 고쳤다면, 5번 화면 흐름은 아직 &quot;준비물 [____] [추가]&quot;만 있고 누구 것을 고르는 칸이 없습니다. 7번 성공 기준에도 &quot;가족 전체로는 순조로워도 덜 챙긴 사람은 따로 &#39;서둘러요&#39;&quot; 같은 문장이 없습니다. Gemini Notebook이 이 불일치를 짚어 주면 Claude에게 5·7번 칸을 고치게 하고 <strong>v0.3</strong> 으로 올립니다.</li>
 </ol>
 <pre><code> PRD 파일 수정 ─▶ Gemini Notebook에 다시 넣어 검토 ─▶ 불일치 발견 ─▶ 다시 수정
 </code></pre>
 <blockquote>
-<p>⚠️ Gemini Notebook에 올린 파일은 <strong>복사본</strong>입니다. 내 PC에서 PRD를 고쳐도 Gemini Notebook 안의 파일은 바뀌지 않으니, 다시 검토하려면 <strong>기존 소스를 지우고 새로 업로드</strong>합니다. 교육생이 가장 헷갈리는 부분입니다.</p>
-<p>AI가 불일치를 못 찾으면 &quot;4번과 5번 칸의 입력 항목이 서로 같은지 비교해 줘&quot;처럼 <strong>구체적으로</strong> 다시 묻게 하세요.</p>
+<p>⚠️ Gemini Notebook에 올린 파일은 <strong>복사본</strong>입니다. 내 PC에서 PRD를 고쳐도 Gemini Notebook 안의 파일은 바뀌지 않으니, 다시 검토하려면 <strong>기존 소스를 지우고 새로 업로드</strong>합니다. 가장 많이 헷갈리는 부분입니다.</p>
+<p>AI가 불일치를 못 찾으면 &quot;4번과 5번 칸의 입력 항목이 서로 같은지 비교해 줘&quot;처럼 <strong>구체적으로</strong> 다시 물어보세요.</p>
 </blockquote>
 <hr>
-<h2>7-2. Claude로 결재 보고서 · 발표 개요 만들기 (약 10분)</h2>
-<p>PRD.md 를 첨부(또는 모듈 3의 프로젝트에 추가)한 뒤:</p>
-<p><strong>① 결재용 보고서: 집계 도구 도입</strong></p>
-<pre><code>첨부한 PRD를 바탕으로 상급자 결재용 1페이지 보고서를 써 줘.
-형식: 제목 / 추진 배경 / 주요 내용 / 기대 효과 / 향후 일정(표).
-PRD에 없는 숫자는 만들지 말고 [확인 필요]로 표시해.
+<h2>7-2. Claude로 가족 단톡방용 여행 안내 한 장 만들기 (약 10분)</h2>
+<p><code>경주 여행 자료_관광지 안내.md</code> 와 <code>경주 여행 후기_예시.md</code> 를 첨부(또는 모듈 3의 &quot;우리 가족 여행&quot; 프로젝트에 추가)한 뒤:</p>
+<p><strong>① 단톡방용 여행 안내 한 장</strong></p>
+<pre><code>첨부한 관광지 안내와 후기를 바탕으로 가족 단톡방에 올릴 경주 2박 3일 여행 안내를 한 장으로 써 줘.
+형식: 제목 / 한 줄 요약 / 날짜별 일정(표: 시간·장소·이동·메모) / 각자 챙길 것 / 비 오면 / 출발 시각과 모이는 곳.
+할머니는 오래 걷기와 계단이 어렵고, 아이는 차멀미가 있어. 휴대폰으로 읽기 쉽게 짧게.
+자료에 없는 요금·운영시간은 만들지 말고 [확인 필요]로 표시해.
 </code></pre>
 <blockquote>
-<p>💡 모듈 6-4에서 <code>eval-report</code> 스킬을 만들었다면 자유의견 파일을 첨부하고 &quot;제12기 강의평가 결과보고서 써 줘&quot; 한 문장으로 <strong>결과보고서 자체</strong>도 만들어 보세요. 점수 숫자는 아직 없으니 [확인 필요]로 나오는 것이 정상입니다. 숫자는 7-3의 화면이 채워 줍니다.</p>
+<p>💡 모듈 6-3에서 <code>trip-plan</code>(여행 일정표) 스킬을 만들었다면 자료를 첨부하고 &quot;경주 2박 3일 우리 가족 여행 일정표 써 줘&quot; 한 문장으로 <strong>일정표 자체</strong>를 먼저 받아 보세요. 그다음 &quot;이걸 단톡방용 한 장으로 줄여 줘&quot;라고 이어 가면 됩니다. 요금·운영시간이 [확인 필요]로 나오는 것이 정상입니다. 실제 여행 전에는 공식 누리집에서 확인합니다.</p>
 </blockquote>
-<p><strong>② 발표 개요 (시간이 남으면)</strong></p>
-<pre><code>이 PRD로 10분 발표를 하려고 해. 슬라이드 7장 구성으로
-장마다 제목, 핵심 문장 1개, 들어갈 그림 아이디어를 표로 정리해 줘.
+<blockquote>
+<p>💼 <strong>업무에서는</strong> 같은 방법으로 결재 보고서를 만듭니다. PRD나 자료를 첨부하고 형식만 &quot;제목 / 추진 배경 / 주요 내용 / 기대 효과 / 향후 일정&quot;으로 바꾸면 됩니다.</p>
+</blockquote>
+<p><strong>② 비 오는 날 버전 (시간이 남으면)</strong></p>
+<pre><code>같은 안내를 둘째 날 비가 오는 경우로 바꿔 줘.
+실내 장소로만 바꾸고, 바뀐 부분은 굵게 표시해 줘.
 </code></pre>
 <hr>
 <h2>7-3. 내 PRD로 내 화면 시안 만들기 (약 20분) ⭐</h2>
-<p>오늘 3교시에 쓴 <strong>내 PRD</strong>를 Claude에 건네, 처음으로 <strong>내 업무 화면</strong>을 봅니다. 내일 오전(모듈 12)에 웹 주소가 있는 진짜 화면으로 만들 그 화면입니다.</p>
+<p>오늘 3교시에 쓴 <strong>내 PRD</strong>를 Claude에 건네, 처음으로 <strong>내 화면</strong>을 봅니다. 내일 오전(모듈 12)에 웹 주소가 있는 진짜 화면으로 만들 그 화면입니다.</p>
 <pre><code>첨부한 PRD를 읽고, 핵심 기능(필수)만 동작하는 프로토타입 웹 화면을 만들어 줘.
 - HTML 파일 하나로, 설치 없이 브라우저에서 바로 열리게
 - 휴대폰 화면에서도 보기 좋게
@@ -220,16 +237,19 @@ PRD에 없는 숫자는 만들지 말고 [확인 필요]로 표시해.
 - 처음 열었을 때 예시 데이터 3개를 보여 줘
 </code></pre>
 <ol>
-<li>내 업무 폴더 <code>01_기획(PRD)</code> 의 <strong>내 PRD 파일</strong>을 첨부하고 위 지시를 보냅니다.</li>
+<li>내 폴더 <code>01_기획(PRD)</code> 의 <strong>내 PRD 파일</strong>을 첨부하고 위 지시를 보냅니다.</li>
 <li>대화 옆 <strong>미리보기 창</strong>에서 내 화면을 눌러 봅니다.</li>
 <li>마음에 들지 않는 부분은 대화로 고칩니다: &quot;버튼을 더 크게&quot;, &quot;입력칸 순서를 바꿔 줘&quot;</li>
 <li><strong>바꾸고 싶은 점 3가지</strong>를 메모해 둡니다. 2일차 8교시를 시작할 때 PRD에 반영합니다.</li>
 </ol>
 <ul>
-<li><strong>내 PRD가 아직 덜 됐다면</strong> 예시 <a href="files.html#prd">예시 PRD 파일</a> 로 같은 실습을 합니다(아래 성공 기준 표가 예시 PRD 기준입니다).</li>
+<li><strong>내 PRD가 아직 덜 됐다면</strong> 예시 <a href="files.html#prd">예시 PRD 파일</a> (모듈 5에서 누구 것 구분을 넣어 고친 파일)로 같은 실습을 합니다(아래 성공 기준 표가 이 준비물 화면 기준입니다).</li>
 <li>미리보기 창이 <strong>빈 화면</strong>이면: 미리보기는 <code>claudeusercontent.com</code> 이라는 별도 주소에서 그려지는데, 행정망에서 이 주소가 막혔을 수 있습니다. 코드를 복사해 메모장에 <code>index.html</code>(UTF-8)로 저장하고 Chrome에서 열면 똑같이 동작합니다.</li>
 <li>답이 중간에 끊기면 <strong>&quot;계속해 줘&quot;</strong> 라고 입력합니다. 사용량 한도 안내가 뜨면 ChatGPT에 같은 지시를 넣어 진행합니다(ChatGPT는 캔버스에서 미리보기).</li>
 </ul>
+<blockquote>
+<p>예시 결과물: 이 저장소의 <code>prototype-demo/index.html</code> 이 강사 안내 자료 로 만든 준비물 체크 화면입니다. 생성이 늦어지면 이 화면을 먼저 보며 따라 합니다.</p>
+</blockquote>
 <h3>PRD의 성공 기준으로 검사하기</h3>
 <p>미리보기 화면에서 PRD 7번 칸을 그대로 시험해 봅니다. <strong>내 PRD</strong>로 했다면 내 7번 문장을 하나씩, <strong>예시 PRD</strong>로 했다면 아래 표대로 해 봅니다.</p>
 <div class="table-wrap"><table>
@@ -241,40 +261,46 @@ PRD에 없는 숫자는 만들지 말고 [확인 필요]로 표시해.
 </tr>
 </thead>
 <tbody><tr>
-<td>과목·교관·만족도로 평가가 기록된다</td>
-<td><code>화재진압 전술</code>, <code>김교관</code>, <code>5</code> → 평가 제출</td>
+<td>준비물 이름과 누구 것을 골라 추가된다</td>
+<td><code>혈압약</code>, 누구 것 <code>할머니</code> → [추가]</td>
 <td>☐</td>
 </tr>
 <tr>
-<td>평균 3.5 미만은 &quot;개선 필요&quot;로 표시된다</td>
-<td><code>화재진압 전술</code>, <code>이교관</code>, <code>3</code> 을 두 번 제출</td>
+<td>챙김률 50% 미만이면 &quot;서둘러요&quot;로 표시된다</td>
+<td>누구 것 <code>아이</code>로 <code>멀미약</code>, <code>여벌 옷</code>, <code>물놀이 가방</code> 추가 → <code>물놀이 가방</code>만 체크 (3개 중 1개, 33%)</td>
 <td>☐</td>
 </tr>
 <tr>
-<td>만족도를 고르지 않으면 막힌다</td>
-<td>만족도 비우고 제출</td>
+<td>준비물 이름이 비어 있으면 막힌다</td>
+<td>준비물 칸을 비우고 [추가]</td>
 <td>☐</td>
 </tr>
 <tr>
-<td><strong>같은 과목이라도 교관이 다르면 따로 집계된다</strong></td>
-<td>결과표에 김교관·이교관이 <strong>두 줄</strong>로 나오는지</td>
+<td><strong>가족 전체로는 순조로워도, 덜 챙긴 사람은 따로 &quot;서둘러요&quot;로 보인다</strong></td>
+<td>할머니 것 <code>무릎 보호대</code>·<code>지팡이</code>, 가족 전체 <code>충전기</code>·<code>우산</code>을 더 추가해 모두 체크 → 요약은 8개 중 6개 챙김(75%)인데 가족별 표에서 <strong>아이 줄만</strong> &quot;서둘러요&quot;인지</td>
 <td>☐</td>
 </tr>
 </tbody></table></div>
+<blockquote>
+<p>💡 처음 보이는 &quot;(예시)&quot; 준비물이 섞이면 숫자는 조금 달라도 됩니다. <strong>아이 줄이 따로 &quot;서둘러요&quot;로 보이는지</strong>만 확인하세요.</p>
+</blockquote>
 <hr>
-<h2>7-4. 결과물 정리 — 내 업무 폴더로 (과정 뒤)</h2>
-<p>오늘 만든 결과물을 내 업무 폴더 <code>03_AI결과물</code> 에 모아 둡니다. 수업 시간에는 건너뛰고 <strong>과정 뒤</strong>에 합니다(1일차 끝나고 해도 됩니다).</p>
+<h2>7-4. 결과물 정리 — 내 폴더로 (과정 뒤)</h2>
+<p>오늘 만든 결과물을 내 폴더 <code>03_AI결과물</code> 에 모아 둡니다. 수업 시간에는 건너뛰고 <strong>과정 뒤</strong>에 합니다(1일차 끝나고 해도 됩니다).</p>
 <pre><code>📁 AI업무자료
- ├─ 📁 01_기획(PRD)      ← 내 PRD.md, PRD_강의평가 결과보고.md
- ├─ 📁 02_참고자료       ← 강의평가_자유의견_예시.md
+ ├─ 📁 01_기획(PRD)      ← 내 PRD.md, PRD_경주 여행 준비물.md
+ ├─ 📁 02_참고자료       ← 경주 여행 자료_관광지 안내.md, 경주 여행 후기_예시.md
  ├─ 📁 03_AI결과물
- │   ├─ 결재 보고서.md      (Claude)
- │   ├─ 결과보고 슬라이드.pdf · 인포그래픽.png (Gemini Notebook)
+ │   ├─ 단톡방 여행 안내.md   (Claude)
+ │   ├─ 여행 소개 슬라이드.pdf · 인포그래픽.png · 경주 라디오(오디오) (Gemini Notebook)
  │   └─ 내 화면 시안/index.html (Claude)
 </code></pre>
 <p><strong>순환 구조</strong>: 결과를 보고 → PRD 수정 → 다시 생성. PRD가 좋아질수록 모든 결과물이 함께 좋아집니다.</p>
 <blockquote>
 <p>🪜 <strong>업무 자동화 사다리:</strong> ① 잘 시키기 → ② 자료 맡기기 → <strong>③ 방법 맡기기 ✔</strong> → ④ 클릭 맡기기 → <strong>⑤ 내 도구 만들기 ✔</strong> → ⑥ 저절로 돌아가게</p>
+</blockquote>
+<blockquote>
+<p>💼 <strong>업무에서는?</strong> PRD와 자료 한 묶음을 넣고 결재 보고서, 발표자료, 안내문을 한꺼번에 만듭니다. 기준은 언제나 PRD 한 장입니다.</p>
 </blockquote>
 <h2>하루 마무리: 출구 카드 (2분) · 퀴즈는 내일 첫 시간에</h2>
 <ul>
@@ -302,19 +328,23 @@ PRD에 없는 숫자는 만들지 말고 [확인 필요]로 표시해.
 <td>출력 언어 설정(설정 메뉴)을 한국어로 변경 후 다시 생성</td>
 </tr>
 <tr>
+<td>결과물에 요금·운영시간이 적혀 있음</td>
+<td>자료에 없는 정보입니다. 지우거나 [확인 필요]로 바꾸고, 실제 여행 전에는 공식 누리집에서 확인</td>
+</tr>
+<tr>
 <td>프로토타입 HTML이 메모장 저장 후 안 열림</td>
 <td>저장 시 &quot;파일 형식: 모든 파일&quot;, 인코딩 <strong>UTF-8</strong> 선택, 확장자 <code>.html</code> 확인</td>
 </tr>
 <tr>
 <td>결과물마다 내용이 다름</td>
-<td>정상입니다. 기준은 <strong>PRD</strong>. 결과물은 PRD와 대조해 검토</td>
+<td>정상입니다. 기준은 <strong>PRD</strong>와 자료. 결과물은 PRD·자료와 대조해 검토</td>
 </tr>
 </tbody></table></div>
 <h2>✅ 확인 질문 (인터뷰)</h2>
 <ol>
 <li>Gemini Notebook에서 <strong>출처 번호가 붙은 답</strong>을 받아 보셨나요?</li>
-<li>오디오 개요를 들어 보셨나요? PRD를 처음 듣는 사람도 이해할 만했나요?</li>
-<li>슬라이드와 인포그래픽에서 <strong>PRD와 다른 내용이나 틀린 글자</strong>를 찾으셨나요?</li>
+<li>오디오 개요를 들어 보셨나요? 아이가 차에서 들어도 이해할 만했나요?</li>
+<li>슬라이드와 인포그래픽에서 <strong>자료와 다른 내용(지어낸 요금·시간)이나 틀린 글자</strong>를 찾으셨나요?</li>
 <li>Claude가 만든 프로토타입에서 <strong>버튼을 눌러 동작</strong>을 확인하셨나요?</li>
 <li>결과물을 보고 <strong>PRD에서 고칠 점</strong>을 하나 찾으셨나요?</li>
 </ol>
