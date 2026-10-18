@@ -23,11 +23,11 @@
     <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>06 스킬 만들기</span></div>
     <article><h1>모듈 6. 스킬 만들기: Markdown으로 쓰는 나만의 업무 매뉴얼</h1><aside class="files-box" aria-label="이 모듈 실습 파일"><h2>이 모듈 실습 파일</h2><ul><li><span>PRD 인터뷰 스킬 (Claude에 바로 올리는 ZIP)</span><span class="acts"><a class="btn" href="files/prd-interview.zip" download="prd-interview.zip">내려받기</a></span></li><li><span>PRD 인터뷰 스킬 원본 SKILL.md</span><span class="acts"><a class="btn" href="files/SKILL.md" download="SKILL.md">내려받기</a></span></li></ul></aside>
 <blockquote>
-<p>🎯 <strong>이 모듈에서 만들 것:</strong> 한 문장으로 부르는 <strong>내 업무 스킬</strong> 1개</p>
-<p>🤔 <strong>생각해 보기:</strong> 같은 양식의 보고서를 쓸 때마다 AI에게 양식을 처음부터 다시 설명하고 있지는 않나요? (답은 이 모듈에서 찾아보세요. 점수 없음)</p>
+<p>🎯 <strong>이 모듈에서 만들 것:</strong> 한 문장으로 부르는 <strong>내 스킬</strong> 1개 (업무 문서든 일상 양식이든)</p>
+<p>🤔 <strong>생각해 보기:</strong> 여행 일정표나 주간보고처럼 같은 양식의 글을 쓸 때마다 AI에게 양식을 처음부터 다시 설명하고 있지는 않나요? (답은 이 모듈에서 찾아보세요. 점수 없음)</p>
 </blockquote>
 <p>모듈 3에서 프롬프트, 파일, 프로젝트를 배웠고, 모듈 5에서는 PRD 인터뷰를 받으려고 <strong>긴 프롬프트를 찾아 붙여넣었습니다.</strong> 다음에 또 기획할 때도 그 글을 다시 찾아야 합니다.</p>
-<p>이번 모듈은 그 불편을 없앱니다. <strong>자주 하는 일의 &quot;방법&quot;을 Markdown 파일로 적어 AI에게 맡기는 것</strong>, 이것이 스킬입니다. 첫 실습은 그 <strong>PRD 인터뷰 프롬프트를 스킬로 만들어 둔 것</strong>을 등록해 보는 것이고, 다음은 <strong>Claude에게 스킬을 만들어 달라고</strong> 해서 내 업무 스킬까지 만듭니다. 직접 파일을 쓰지 않습니다.</p>
+<p>이번 모듈은 그 불편을 없앱니다. <strong>자주 하는 일의 &quot;방법&quot;을 Markdown 파일로 적어 AI에게 맡기는 것</strong>, 이것이 스킬입니다. 첫 실습은 그 <strong>PRD 인터뷰 프롬프트를 스킬로 만들어 둔 것</strong>을 등록해 보는 것이고, 다음은 <strong>Claude에게 스킬을 만들어 달라고</strong> 해서 내 스킬까지 만듭니다. 직접 파일을 쓰지 않습니다.</p>
 <h2>AI에게 건네는 것의 단계</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -116,39 +116,39 @@ description: 사용자가 새 업무 도구를 기획하거나 &quot;PRD 써 줘
 <li><strong>[스킬 업로드]</strong> → <code>prd-interview.zip</code> 선택 → 목록에서 <strong>켜기</strong></li>
 <li><strong>새 대화</strong>에서 아무 설명 없이 입력:</li>
 </ol>
-<pre><code>교육 일정을 한눈에 관리하는 도구를 기획하고 싶어
+<pre><code>우리 가족 여행 준비를 한눈에 보는 도구를 기획하고 싶어
 </code></pre>
 <ol start="5">
 <li>Claude가 스킬을 꺼내 쓰면 화면에 스킬 사용 표시가 나오고, <strong>질문을 1~2개씩</strong> 하기 시작합니다 ✅</li>
 </ol>
 <h2>6-3. Claude에게 스킬을 만들어 달라고 하기 (10분)</h2>
-<p>스킬도 AI가 만들어 줍니다. 과정이 끝날 때마다 쓰는 <strong>강의평가 결과보고서</strong>를 예로 해 봅니다.</p>
-<pre><code>과정이 끝날 때마다 쓰는 &quot;강의평가 결과보고서&quot;를 우리 양식으로 써 주는 스킬을 만들어 줘.
-양식: 제목 / 1. 개요(과정·기간·응답률) / 2. 결과 요약(전체 평균) /
-      3. 개선 필요 과목(평균 3.5 미만, 표) / 4. 주요 의견 / 5. 조치 계획(표)
-- name은 eval-report
+<p>스킬도 AI가 만들어 줍니다. 여행 갈 때마다 다시 짜는 <strong>여행 일정표</strong>를 예로 해 봅니다.</p>
+<pre><code>여행 갈 때마다 쓰는 &quot;여행 일정표&quot;를 우리 집 양식으로 써 주는 스킬을 만들어 줘.
+양식: 제목 / 1. 개요(인원·기간·이동) / 2. 날짜별 일정(표: 시간·장소·이동·메모) /
+      3. 가족별 주의점 / 4. 준비물 / 5. 예산(표)
+- name은 trip-plan
 - description에 &quot;언제 쓰는지&quot;를 꼭 넣어 줘
-- 자료에 없는 숫자나 조치 일정은 [확인 필요]로 표시하게 해 줘
-- 바로 올릴 수 있게 eval-report 폴더째 ZIP 파일로 만들어 줘
+- 입장료·운영시간처럼 확인하지 않은 요금과 시간은 [확인 필요]로 표시하게 해 줘
+- 바로 올릴 수 있게 trip-plan 폴더째 ZIP 파일로 만들어 줘
 </code></pre>
 <ol>
-<li>Claude가 만든 <strong><code>eval-report.zip</code></strong> 내려받기</li>
+<li>Claude가 만든 <strong><code>trip-plan.zip</code></strong> 내려받기</li>
 <li>6-2와 같은 방법으로 <strong>[스킬 업로드]</strong> → 켜기</li>
-<li>새 대화에서 한 문장으로 불러 보기: <code>제12기 강의평가 결과보고서 써 줘</code> → 숫자가 없으니 <strong>[확인 필요]</strong> 가 표시되면 정상</li>
+<li>새 대화에서 한 문장으로 불러 보기: <code>제주 2박 3일 우리 가족 여행 일정표 써 줘</code> → 같은 양식으로 나오고, 요금·운영시간 자리에 <strong>[확인 필요]</strong> 가 표시되면 정상</li>
 </ol>
-<p>이 스킬은 모듈 7의 결재 보고서 실습과, 실제 과정이 끝날 때마다 쓰는 결과보고서에 그대로 쓸 수 있습니다.</p>
-<h2>6-4. 내 업무 스킬 만들기 (15분)</h2>
-<p>6-3과 같은 방법으로 <strong>내 업무</strong>의 스킬을 하나 만듭니다. 매번 같은 양식으로 쓰는 보고서, 안내문, 공문 초안이 가장 좋은 대상입니다.</p>
-<pre><code>내가 매번 같은 양식으로 쓰는 &quot;[문서 이름]&quot;을 우리 양식으로 써 주는 스킬을 만들어 줘.
+<p>경주에서 만든 스킬을 제주에도 그대로 씁니다. 양식이 같으면 장소만 바꿔 한 문장으로 부르면 됩니다. 이 스킬은 모듈 7의 <strong>가족 단톡방용 여행 안내 한 장</strong> 실습에도 쓸 수 있습니다.</p>
+<h2>6-4. 내 스킬 만들기 (15분)</h2>
+<p>6-3과 같은 방법으로 <strong>내 스킬</strong>을 하나 만듭니다. 매번 같은 양식으로 쓰는 글이 가장 좋은 대상입니다. 업무 문서(주간보고, 안내문, 공문 초안)도 좋고, 일상 양식(가족 행사 안내, 주간 식단표)도 좋습니다.</p>
+<pre><code>내가 매번 같은 양식으로 쓰는 &quot;[문서 이름]&quot;을 내 양식으로 써 주는 스킬을 만들어 줘.
 양식: [제목 / 1. ○○ / 2. ○○ / 3. ○○ 처럼 내 양식의 칸을 적기]
-- name은 영문 소문자와 하이픈으로 (예: weekly-report)
+- name은 영문 소문자와 하이픈으로 (예: weekly-report, family-event, weekly-menu)
 - description에 &quot;언제 쓰는지&quot;를 꼭 넣어 줘
 - 자료에 없는 숫자나 날짜는 [확인 필요]로 표시하게 해 줘
 - 바로 올릴 수 있게 폴더째 ZIP 파일로 만들어 줘
 </code></pre>
 <ol>
 <li>ZIP 내려받기 → <strong>[스킬 업로드]</strong> → 켜기</li>
-<li>새 대화에서 <strong>한 문장으로</strong> 불러 보기: 예) <code>이번 주 주간 업무보고 써 줘</code></li>
+<li>새 대화에서 <strong>한 문장으로</strong> 불러 보기: 예) <code>이번 주 주간 업무보고 써 줘</code>, <code>할머니 생신 가족 모임 안내 써 줘</code>, <code>다음 주 식단표 짜 줘</code></li>
 <li>(보관) ZIP 파일을 내 업무 폴더 <code>98_스킬</code> 에 넣어 둡니다. 나중에 고칠 때 씁니다.</li>
 </ol>
 <h3>참고: 무료 계정이라면 같은 파일을 다르게 건네기</h3>
@@ -174,7 +174,7 @@ description: 사용자가 새 업무 도구를 기획하거나 &quot;PRD 써 줘
 <hr>
 <h2>좋은 스킬 체크리스트</h2>
 <pre><code>□ description에 &quot;무엇을&quot;과 &quot;언제&quot;가 모두 있다
-□ 스킬 하나에 일 하나 (PRD 인터뷰 + 보고서 작성을 한 스킬에 섞지 않기)
+□ 스킬 하나에 일 하나 (PRD 인터뷰 + 일정표 작성을 한 스킬에 섞지 않기)
 □ 순서가 번호로 적혀 있다
 □ &quot;지어내지 말 것([확인 필요])&quot; 같은 지킬 것이 있다
 □ 개인정보·비밀번호·내부 기밀이 들어 있지 않다
@@ -182,13 +182,16 @@ description: 사용자가 새 업무 도구를 기획하거나 &quot;PRD 써 줘
 <h2>다음 모듈과의 연결</h2>
 <ul>
 <li><strong>다음에 기획할 때</strong>: 모듈 5의 긴 프롬프트 대신 <code>prd-interview</code> 스킬에 한 문장으로 맡깁니다. 숙제로 남긴 내 PRD를 이어 쓸 때 써 보세요.</li>
-<li><strong>모듈 7 결과물 만들기</strong>: 6-3에서 만든 <code>eval-report</code> 스킬로 강의평가 결과보고서를 한 문장으로 만듭니다.</li>
-<li><strong>수업 뒤 내 업무</strong>: 6-4에서 만든 <strong>내 스킬</strong>을 실제 문서에 써 보세요.</li>
+<li><strong>모듈 7 결과물 만들기</strong>: 6-3에서 만든 <code>trip-plan</code> 스킬로 여행 일정표를 한 문장으로 만들고, 이것을 바탕으로 <strong>가족 단톡방용 여행 안내 한 장</strong>을 만듭니다.</li>
+<li><strong>수업 뒤</strong>: 6-4에서 만든 <strong>내 스킬</strong>을 실제 문서나 집안일에 써 보세요.</li>
 <li><strong>모듈 08 AI 브라우저</strong>: 스킬이 &quot;일하는 방법&quot;을 맡기는 것이라면, AI 브라우저는 &quot;웹사이트에서 하는 클릭&quot;을 맡깁니다. 둘 다 코딩이 필요 없습니다.</li>
 <li><strong>모듈 12 Claude Code</strong>: Claude Code도 같은 방식의 스킬을 씁니다. 업무 방법을 Markdown으로 적어 두는 습관이 AI 에이전트를 다룰 때도 그대로 쓰입니다.</li>
 </ul>
 <blockquote>
 <p>🪜 <strong>업무 자동화 사다리:</strong> ① 잘 시키기 → ② 자료 맡기기 → <strong>③ 방법 맡기기 ✔</strong> → ④ 클릭 맡기기 → ⑤ 내 도구 만들기 → ⑥ 저절로 돌아가게</p>
+</blockquote>
+<blockquote>
+<p>💼 <strong>업무에서는?</strong> 여행 일정표 스킬처럼 <strong>주간보고·결과보고 양식</strong>을 스킬로 만들어 두면, 매주·매 기수 &quot;이번 주 주간보고 써 줘&quot; 한 문장으로 같은 양식의 초안을 받습니다.</p>
 </blockquote>
 <h2>자주 막히는 곳</h2>
 <div class="table-wrap"><table>
@@ -212,14 +215,19 @@ description: 사용자가 새 업무 도구를 기획하거나 &quot;PRD 써 줘
 </tr>
 <tr>
 <td>새 대화에서 스킬이 안 나옴</td>
-<td>목록에서 스킬이 <strong>켜짐</strong>인지, <code>description</code> 에 &quot;언제 쓰는지&quot;가 있는지 확인. &quot;PRD 인터뷰 스킬로 진행해 줘&quot;라고 직접 불러도 됨</td>
+<td>목록에서 스킬이 <strong>켜짐</strong>인지, <code>description</code> 에 &quot;언제 쓰는지&quot;가 있는지 확인. &quot;PRD 인터뷰 스킬로 진행해 줘&quot;, &quot;trip-plan 스킬로 써 줘&quot;처럼 직접 불러도 됨</td>
+</tr>
+<tr>
+<td>일정표에 요금·운영시간이 숫자로 나옴</td>
+<td>자료 없이 AI가 지어낸 것일 수 있음. &quot;확인하지 않은 요금·시간은 [확인 필요]로 바꿔 줘&quot;라고 시키고, 스킬 본문에도 이 규칙을 넣어 달라고 하기</td>
 </tr>
 </tbody></table></div>
 <h2>✅ 확인 질문 (인터뷰)</h2>
 <ol>
 <li>프롬프트, 프로젝트, 스킬의 차이를 한 줄씩 말해 볼까요? (구두 지시 / 서류함 / 업무 매뉴얼)</li>
 <li><code>description</code> 에 <strong>&quot;언제&quot;</strong> 를 꼭 써야 하는 이유는?</li>
-<li>내 업무 중 <strong>세 번 이상 같은 지시를 한 일</strong>은 무엇인가요? 그것이 다음 스킬 후보입니다.</li>
+<li><code>trip-plan</code> 일정표에서 요금·운영시간 자리에 <strong>[확인 필요]</strong> 가 나와야 하는 이유는?</li>
+<li>업무든 일상이든 <strong>세 번 이상 같은 지시를 한 일</strong>은 무엇인가요? 그것이 다음 스킬 후보입니다.</li>
 </ol>
 </article>
     <div class="pager"><a class="prev" href="m05.html"><span>← 이전</span>05 PRD 작성하기</a><a class="next" href="m07.html"><span>다음 →</span>07 PRD로 결과물 만들기</a></div>

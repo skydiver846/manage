@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>강의평가 결과 집계 - 1단계 HTML</title>
+  <title>우리 가족 여행 준비물 체크 - 1단계 HTML</title>
 </head>
 <body>
   <!--
@@ -12,35 +12,56 @@
     <태그>내용</태그> 처럼 여는 태그와 닫는 태그 사이에 내용을 넣습니다.
   -->
 
-  <h1>강의평가 결과 집계</h1>
-  <p>신임소방관 교육과정 · 평균 3.5 미만은 개선 필요</p>
+  <!-- h1: 가장 큰 제목 / p: 문단 한 줄 -->
+  <h1>우리 가족 여행 준비물 체크</h1>
+  <p>경주 2박 3일 · 챙김률 50% 미만은 서둘러요</p>
 
+  <!-- form: 입력칸과 버튼을 감싼 묶음 -->
   <form>
-    <label for="subject">과목</label>
-    <input id="subject" placeholder="예: 화재진압 전술">
+    <!-- label: 입력칸 이름표 / input: 글자를 적는 칸 -->
+    <label for="item">준비물</label>
+    <input id="item" placeholder="예: 멀미약">
 
-    <label for="instructor">교관</label>
-    <input id="instructor" placeholder="예: 김교관">
-
-    <label for="score">만족도</label>
-    <select id="score">
-      <option value="">선택</option>
-      <option value="5">5 매우 만족</option>
-      <option value="4">4 만족</option>
-      <option value="3">3 보통</option>
-      <option value="2">2 불만족</option>
-      <option value="1">1 매우 불만족</option>
+    <!-- select: 골라 넣는 칸 / option: 고를 수 있는 보기 하나 -->
+    <label for="who">누구 것</label>
+    <select id="who">
+      <option>가족 전체</option>
+      <option>나</option>
+      <option>배우자</option>
+      <option>아이</option>
+      <option>할머니</option>
     </select>
 
-    <button type="submit">평가 제출</button>
+    <!-- button: 누르는 버튼 (지금은 눌러도 계산하지 않습니다) -->
+    <button type="submit">추가</button>
   </form>
 
-  <h2>과목·교관별 결과</h2>
+  <!-- h2: 두 번째 크기 제목 -->
+  <h2>가족별 챙김</h2>
+
+  <!--
+    table: 표 / tr: 표의 한 줄 / th: 머리 칸 / td: 칸 하나
+    아래 숫자는 사람이 미리 계산해 적어 둔 "글자"입니다. 체크해도 바뀌지 않습니다.
+  -->
   <table>
-    <tr><th>과목</th><th>교관</th><th>응답</th><th>평균</th><th>상태</th></tr>
-    <tr><td>화재진압 전술</td><td>김교관</td><td>3</td><td>4.7</td><td>양호</td></tr>
-    <tr><td>화재진압 전술</td><td>이교관</td><td>3</td><td>3.3</td><td>개선 필요</td></tr>
-    <tr><td>응급처치 실습</td><td>박교관</td><td>2</td><td>4.5</td><td>양호</td></tr>
+    <tr><th>누구</th><th>전체</th><th>챙김</th><th>챙김률</th><th>상태</th></tr>
+    <tr><td>아이</td><td>3</td><td>1</td><td>33%</td><td>서둘러요</td></tr>
+    <tr><td>할머니</td><td>3</td><td>3</td><td>100%</td><td>다 챙김</td></tr>
+    <tr><td>가족 전체</td><td>2</td><td>2</td><td>100%</td><td>다 챙김</td></tr>
   </table>
+
+  <h2>준비물 목록</h2>
+
+  <!-- ul: 점 목록 / li: 목록의 한 줄 / input type="checkbox": 체크 상자 -->
+  <ul>
+    <li><label><input type="checkbox"> 멀미약 · 아이</label></li>
+    <li><label><input type="checkbox"> 여벌 옷 · 아이</label></li>
+    <li><label><input type="checkbox" checked> 물놀이 가방 · 아이</label></li>
+    <li><label><input type="checkbox" checked> 혈압약 · 할머니</label></li>
+    <li><label><input type="checkbox" checked> 무릎 보호대 · 할머니</label></li>
+    <li><label><input type="checkbox" checked> 지팡이 · 할머니</label></li>
+    <li><label><input type="checkbox" checked> 충전기 · 가족 전체</label></li>
+    <li><label><input type="checkbox" checked> 우산 · 가족 전체</label></li>
+  </ul>
 </body>
 </html>
