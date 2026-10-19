@@ -156,14 +156,14 @@ function page(file, title, body, pager = "") {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>${esc(title)} · 생성형 AI 입문</title>
+<title>${esc(title)} · 생성형 AI 활용능력 향상교육</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
 <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
 <div class="app">
   <aside class="side" id="side">
-    <a class="brand" href="index.html"><small>소방학교 · 처음 시작하는 분들을 위한</small><strong>생성형 AI 입문</strong></a>
+    <a class="brand" href="index.html"><small>소방학교 특별교육 · 처음 시작하는 분들을 위한</small><strong>생성형 AI 활용능력 향상교육</strong></a>
     ${nav(file)}
   </aside>
   <main>
@@ -259,7 +259,7 @@ const siteLinks = [
 const mods3 = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to && m.num !== 4);
 const modItems = (list) => list.map((m) => `<li><a href="${m.page}"><span class="no">${String(m.num).padStart(2, "0")}</span><span class="t">${esc(m.short)}</span><span class="time">${m.time}</span></a></li>`).join("");
 fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
-  <h1>생성형 AI 입문</h1>
+  <h1>생성형 AI 활용능력 향상교육</h1>
   <p class="lead"><b>AI 시대, 여행 계획이 달라졌다.</b> 우리 집 여행 담당이 되어 경주 2박 3일 가족 여행을 AI와 함께 준비합니다. 일정 짜기, 자료 정리, 여행 일정표 스킬, 준비물 체크 화면을 만들어 가족에게 링크로 보내기까지 한 단계씩 따라 하고, 같은 방법을 내 업무에 옮깁니다.</p>
   <h2>사전 과제 · 수업 전에 각자</h2>
   <ol class="mods">${modItems(MODULES.slice(0, 2))}</ol>
