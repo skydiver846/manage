@@ -158,3 +158,24 @@ li input[type="checkbox"] { width: 17px; height: 17px; margin-right: 6px; vertic
 .board-buttons .btn { border: 0; cursor: pointer; }
 .board-buttons .btn.ghost { border: 1px solid var(--line); }
 @media (max-width: 560px) { .rate-q { grid-template-columns: 1fr 3.2em; } .rate-bar { display: none; } }
+
+/* 교육 신청 */
+.signup form { display: grid; gap: 14px; }
+.signup-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+.signup label, #signup-lookup label { display: grid; gap: 4px; font-weight: 700; font-size: 14px; }
+.signup input[type="text"], .signup input:not([type]), .signup input[type="email"], #signup-lookup input { font: inherit; font-weight: 400; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); min-width: 0; width: 100%; box-sizing: border-box; }
+.signup fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 6px; }
+.signup legend { font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+.signup .quiz-option { font-weight: 400; display: flex; }
+.signup-email-hint, .signup-note { margin: -6px 0 0; font-size: 13.5px; color: var(--muted); }
+.signup-email-hint { color: var(--accent); }
+.signup-privacy { font-size: 14px; background: var(--code); border-radius: 8px; padding: 8px 12px; }
+.signup-privacy summary { cursor: pointer; font-weight: 700; }
+.signup-privacy ul { margin: 6px 0 0; padding-left: 1.2em; }
+.signup .signup-check { display: flex; gap: 8px; align-items: center; font-weight: 600; }
+.signup-check input { width: 18px; height: 18px; accent-color: var(--accent); }
+.signup-admin-view table { font-size: 13px; }
+.signup-admin-view { min-width: 0; max-width: 100%; overflow-x: auto; }
+.board-admin-body > * { min-width: 0; }
+.signup [hidden], #signup-lookup [hidden], #signup-admin [hidden] { display: none !important; }
+.signup-sched th { white-space: nowrap; }
