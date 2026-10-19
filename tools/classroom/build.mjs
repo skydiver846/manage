@@ -188,6 +188,12 @@ function pagerFor(i) {
   return `<div class="pager">${prev ? a(prev, "prev", "← 이전") : '<a class="prev" href="index.html"><span>← 처음</span>처음 화면</a>'}${next ? a(next, "next", "다음 →") : '<a class="next" href="prompts.html"><span>다음 →</span>프롬프트 모음</a>'}</div>`;
 }
 
+// 취소선은 ~~두 개~~ 일 때만. "16:00~21:00, 08:00~13:00" 처럼 시간 범위에 ~ 가 두 번 나오면 취소선으로 잘못 읽히기 때문
+marked.use({ tokenizer: { del(src) {
+  const m = /^~~(?=\S)([\s\S]*?\S)~~/.exec(src);
+  if (m) return { type: "del", raw: m[0], text: m[1], tokens: this.lexer.inlineTokens(m[1]) };
+  return undefined;
+} } });
 const render = (md) => enhance(marked.parse(wikify(studentMarkdown(md)), { gfm: true }));
 
 // ── 만들기 ──
