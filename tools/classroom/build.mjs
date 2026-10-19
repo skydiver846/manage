@@ -188,6 +188,12 @@ function pagerFor(i) {
   return `<div class="pager">${prev ? a(prev, "prev", "← 이전") : '<a class="prev" href="index.html"><span>← 처음</span>처음 화면</a>'}${next ? a(next, "next", "다음 →") : '<a class="next" href="prompts.html"><span>다음 →</span>프롬프트 모음</a>'}</div>`;
 }
 
+// 취소선은 ~~두 개~~ 일 때만. "16:00~21:00, 08:00~13:00" 처럼 시간 범위에 ~ 가 두 번 나오면 취소선으로 잘못 읽히기 때문
+marked.use({ tokenizer: { del(src) {
+  const m = /^~~(?=\S)([\s\S]*?\S)~~/.exec(src);
+  if (m) return { type: "del", raw: m[0], text: m[1], tokens: this.lexer.inlineTokens(m[1]) };
+  return undefined;
+} } });
 const render = (md) => enhance(marked.parse(wikify(studentMarkdown(md)), { gfm: true }));
 
 // ── 만들기 ──
@@ -292,7 +298,7 @@ fs.writeFileSync(path.join(OUT, "signup.html"), page("signup.html", "교육 신�
       <ol>
         <li>차수 배정 결과는 <b>10. 30.(금)</b>까지 개별로 안내합니다.</li>
         <li><a href="prework.html">사전 과제 안내</a>대로 <b>ChatGPT·GitHub</b>에 교육 시작 전날까지 가입합니다.</li>
-        <li>Claude 초대 메일이 오면 수락합니다 (1차 10. 30.경, 2차 11. 18. 저녁).</li>
+        <li>Claude 초대 메일이 오면 수락합니다 (1차 10. 30.경, 2차 11. 17. 저녁).</li>
       </ol>
       <p><button class="btn ghost signup-again" type="button">신청 내용 고치기</button> 같은 구글 계정으로 다시 내면 앞의 신청이 고쳐집니다.</p>
     </div>

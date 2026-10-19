@@ -160,6 +160,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
 <script>
+// 취소선은 ~~두 개~~ 일 때만 ("16:00~21:00, 08:00~13:00" 이 취소선으로 읽히지 않게)
+marked.use({ tokenizer: { del(src) { const m = /^~~(?=\S)([\s\S]*?\S)~~/.exec(src); if (m) return { type: "del", raw: m[0], text: m[1], tokens: this.lexer.inlineTokens(m[1]) }; return undefined; } } });
+
   const DATA = /*__DATA__*/null;
   const docs = DATA.docs;
   const byTitle = {};
