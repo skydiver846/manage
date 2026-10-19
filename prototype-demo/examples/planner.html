@@ -170,7 +170,7 @@
   <div class="modal" id="modal">
     <h3 id="m-title">새로 등록</h3>
     <div class="seg"><button id="t-event" class="on">일정</button><button id="t-proj">프로젝트</button></div>
-    <label for="f-title">제목</label><input id="f-title" placeholder="예: 신임 과정 입교식">
+    <label for="f-title">제목</label><input id="f-title" placeholder="예: 경주 여행 출발">
     <div class="only-event">
       <label for="f-date">날짜</label><input type="date" id="f-date">
       <div class="row2">
@@ -215,12 +215,12 @@ function sample() {
   const t = TODAY;
   return {
     events: [
-      { id: 1, title: "신임 과정 입교식 (예시)", date: t, start: "09:00", end: "10:00", color: COLORS[0], memo: "대강당" },
+      { id: 1, title: "부서 회의 (예시)", date: t, start: "09:00", end: "10:00", color: COLORS[0], memo: "회의실" },
       { id: 2, title: "교육 준비물 점검 (예시)", date: addDays(t, 2), start: "14:00", end: "15:00", color: COLORS[2], memo: "" },
-      { id: 3, title: "교관 회의 (예시)", date: addDays(t, 5), start: "10:00", end: "11:30", color: COLORS[1], memo: "" },
+      { id: 3, title: "가족 여행 출발 (예시)", date: addDays(t, 5), start: "10:00", end: "11:30", color: COLORS[1], memo: "" },
     ],
     projects: [
-      { id: 4, title: "1기 AI 공유교육 (예시)", from: addDays(t, -6), to: addDays(t, 8), prog: 40, color: COLORS[0], memo: "" },
+      { id: 4, title: "AI 활용능력 향상교육 준비 (예시)", from: addDays(t, -6), to: addDays(t, 8), prog: 40, color: COLORS[0], memo: "" },
       { id: 5, title: "준비물 체크 화면 개선 (예시)", from: addDays(t, 2), to: addDays(t, 16), prog: 10, color: COLORS[4], memo: "" },
       { id: 6, title: "교재 개정 (예시)", from: addDays(t, -14), to: addDays(t, 3), prog: 75, color: COLORS[1], memo: "" },
     ],

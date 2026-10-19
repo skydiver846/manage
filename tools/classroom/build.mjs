@@ -298,7 +298,7 @@ fs.writeFileSync(path.join(OUT, "signup.html"), page("signup.html", "교육 신�
       <ol>
         <li>차수 배정 결과는 <b>10. 30.(금)</b>까지 개별로 안내합니다.</li>
         <li><a href="prework.html">사전 과제 안내</a>대로 <b>ChatGPT·GitHub</b>에 교육 시작 전날까지 가입합니다.</li>
-        <li>Claude 초대 메일이 오면 수락합니다 (1차 10. 30.경, 2차 11. 17. 저녁).</li>
+        <li>Claude 초대 메일이 오면 수락합니다 (1차: 10. 30.경 → <b>11. 4.(수)까지</b>, 2차: 11. 17. 저녁 → <b>11. 18.(수)까지</b>).</li>
       </ol>
       <p><button class="btn ghost signup-again" type="button">신청 내용 고치기</button> 같은 구글 계정으로 다시 내면 앞의 신청이 고쳐집니다.</p>
     </div>
@@ -374,7 +374,7 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <h2>자료</h2>
   <p><a href="prompts.html">프롬프트 모음</a> · <a href="files.html">실습 파일 내려받기</a></p>
   <h2>준비물</h2>
-  <ul><li><b>사전 과제</b>: 업무용 구글 계정, ChatGPT 가입, 업무 이메일 제출 → Claude Team 초대 수락, GitHub 가입 — <a href="prework.html">사전 과제 안내</a></li><li>본인 명의 휴대폰 (문자 인증, 배포한 내 화면 확인용)</li><li>비밀번호를 적어 둘 수첩</li><li>내 업무 중 "AI로 도움받고 싶은 일" 한 가지</li></ul>
+  <ul><li><b>사전 과제</b>: 업무용 구글 계정 → <a href="signup.html">교육 신청</a>(구글 계정 적기, 10. 28. 18시까지) → ChatGPT·GitHub 가입 → Claude Team 초대 수락 — <a href="prework.html">사전 과제 안내</a></li><li>본인 명의 휴대폰 (문자 인증, 배포한 내 화면 확인용)</li><li>비밀번호를 적어 둘 수첩</li><li>내 업무 중 "AI로 도움받고 싶은 일" 한 가지</li></ul>
   <p class="note">체크박스 표시는 이 PC의 브라우저에만 저장됩니다.</p>`));
 
 console.log("built", OUT, fs.readdirSync(OUT).length, "entries");
