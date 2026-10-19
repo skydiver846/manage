@@ -2,6 +2,8 @@
 # 강의자료 → 교육생 사이트 빌드·배포 + 강사용 열람 페이지 다시 만들기
 # 사용: tools/deploy.sh "커밋 메시지"
 #   SITE_REPO  교육생 사이트 저장소 위치 (기본: 이 저장소 옆의 fire-ai-classroom)
+#   SITE_MODE  preview = 처음 화면·교육 신청·사전 과제만 공개, full = 전체 공개
+#              (기본: 한국 시간 2026-11-04 전이면 preview, 그날부터 full)
 set -e
 MSG="$1"; [ -n "$MSG" ] || { echo '사용: tools/deploy.sh "커밋 메시지"'; exit 1; }
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -10,7 +12,16 @@ git -C "$SITE_REPO" pull -q --rebase origin main   # 다른 과정(예: ai-liter
 cd "$ROOT"
 NODE_PATH=$(npm root -g) node tools/classroom/build.mjs >/dev/null
 git checkout classroom-site/files/prd-interview.zip 2>/dev/null || true
-cp -r classroom-site/. "$SITE_REPO/fire-ai/"
+OPEN_DAY=20261104
+SITE_MODE="${SITE_MODE:-$( [ "$(TZ=Asia/Seoul date +%Y%m%d)" -lt "$OPEN_DAY" ] && echo preview || echo full )}"
+if [ "$SITE_MODE" = preview ]; then
+  SITE_MODE=preview NODE_PATH=$(npm root -g) node tools/classroom/build.mjs >/dev/null
+  SRC=classroom-site-preview
+else
+  SRC=classroom-site
+fi
+echo "site-mode: $SITE_MODE"
+rm -rf "$SITE_REPO/fire-ai" && mkdir -p "$SITE_REPO/fire-ai" && cp -r "$SRC/." "$SITE_REPO/fire-ai/"   # 지운 파일도 사이트에서 빠지도록 통째로 바꾼다
 cp prototype-demo/network-check.html "$SITE_REPO/network-check.html"
 mkdir -p "$SITE_REPO/api/fire-quiz" && cp tools/fire-quiz/api/fire-quiz/*.js "$SITE_REPO/api/fire-quiz/" && cp tools/fire-quiz/api/_lib/fire-quiz-key.js "$SITE_REPO/api/_lib/"   # 오늘의 퀴즈 서버 함수
 mkdir -p "$SITE_REPO/api/fire-signup" && cp tools/fire-signup/api/fire-signup/*.js "$SITE_REPO/api/fire-signup/"   # 교육 신청 서버 함수

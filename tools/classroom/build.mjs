@@ -8,7 +8,10 @@ import path from "node:path";
 
 const ROOT = path.resolve(import.meta.dirname, "../..");
 const LECTURE = path.join(ROOT, "lecture");
-const OUT = path.join(ROOT, "classroom-site");
+// SITE_MODE=preview: 교육 신청 기간용. 처음 화면·교육 신청·사전 과제(01·02)만 열고, 나머지는 "곧 열립니다"로 바꾼다.
+const PREVIEW = process.env.SITE_MODE === "preview";
+const OPEN_DATE = "11. 4.(수)";
+const OUT = path.join(ROOT, PREVIEW ? "classroom-site-preview" : "classroom-site");
 
 const MODULES = [
   ["01_구글 업무 계정 만들기", "구글 업무 계정 만들기", "사전 과제"],
@@ -141,6 +144,11 @@ function nav(current) {
   const link = (href, label) => `<a href="${href}"${href === current ? ' aria-current="page"' : ""}>${esc(label)}</a>`;
   const mods = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to)
     .map((m) => link(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`)).join("");
+  if (PREVIEW) return `<nav aria-label="목차">
+    <div class="group">${link("index.html", "처음 화면")}${link("signup.html", "교육 신청")}${link("prework.html", "사전 과제 안내")}</div>
+    <div class="group"><h3>사전 과제</h3>${mods(1, 2)}</div>
+    <p class="note">본 강의 자료는 ${OPEN_DATE}에 열립니다.</p>
+  </nav>`;
   return `<nav aria-label="목차">
     <div class="group">${link("index.html", "처음 화면")}${link("signup.html", "교육 신청")}${link("prework.html", "사전 과제 안내")}${link("homework.html", "과제 안내")}${link("quiz.html", "오늘의 퀴즈")}</div>
     <div class="group"><h3>본 강의</h3>${mods(1, 3)}${mods(5, 8)}</div>
@@ -394,5 +402,32 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <h2>준비물</h2>
   <ul><li><b>사전 과제</b>: 업무용 구글 계정 → <a href="signup.html">교육 신청</a>(구글 계정 적기, 10. 28. 18시까지) → ChatGPT·GitHub 가입 → Claude Team 초대 수락 — <a href="prework.html">사전 과제 안내</a></li><li>본인 명의 휴대폰 (문자 인증, 배포한 내 화면 확인용)</li><li>비밀번호를 적어 둘 수첩</li><li>내 업무 중 "AI로 도움받고 싶은 일" 한 가지</li></ul>
   <p class="note">체크박스 표시는 이 PC의 브라우저에만 저장됩니다.</p>`));
+
+// ── 신청 기간 미리보기: 열어 둘 페이지 말고는 모두 "곧 열립니다"로 덮고, 실습 파일·퀴즈는 올리지 않는다 ──
+if (PREVIEW) {
+  const keep = new Set(["signup.html", "prework.html", ...MODULES.filter((m) => m.num <= 2).map((m) => m.page)]);
+  for (const d of ["files", "steps", "prototype"]) fs.rmSync(path.join(OUT, d), { recursive: true, force: true });
+  for (const f of fs.readdirSync(path.join(OUT, "assets"))) if (f.startsWith("fire-quiz")) fs.rmSync(path.join(OUT, "assets", f));
+  const soon = `<h1>곧 열립니다</h1>
+  <p class="lead">본 강의 자료는 <b>${OPEN_DATE}</b>에 열립니다.</p>
+  <p>지금은 <a href="signup.html">교육 신청</a>과 <a href="prework.html">사전 과제</a>만 볼 수 있습니다. 신청을 마치고 사전 과제를 해 오시면, 수업 이틀 전에 이 자리에서 강의 자료를 만나실 수 있습니다.</p>
+  <p><a class="btn" href="signup.html">교육 신청하기</a> <a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></p>`;
+  for (const f of fs.readdirSync(OUT)) {
+    if (!f.endsWith(".html") || f === "index.html" || keep.has(f)) continue;
+    fs.writeFileSync(path.join(OUT, f), page(f, "곧 열립니다", soon));
+  }
+  fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
+  <h1>생성형 AI 활용능력 향상교육</h1>
+  <p class="lead"><b>AI 시대, 여행 계획이 달라졌다.</b> 우리 집 여행 담당이 되어 경주 2박 3일 가족 여행을 AI와 함께 준비합니다. 일정 짜기, 자료 정리, 준비물 체크 화면을 만들어 가족에게 링크로 보내기까지 한 단계씩 따라 하고, 같은 방법을 내 업무에 옮깁니다.</p>
+  <p class="note"><b>1차</b> 11. 6.(금)~7.(토) · <b>2차</b> 11. 20.(금)~21.(토) · 1일차 16:00~21:00, 2일차 08:00~13:00 (총 10시간)<br>신청 마감 <b>10. 28.(수) 18:00</b></p>
+  <h2>지금 할 일</h2>
+  <ol>
+    <li><b>교육 신청</b> — 업무용 구글 계정을 적어 신청합니다. <a class="btn" href="signup.html">교육 신청하기</a></li>
+    <li><b>사전 과제</b> — 첫날 전까지 계정 만들기와 가입을 해 옵니다. <a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></li>
+  </ol>
+  <h2>사전 과제</h2>
+  <ol class="mods">${modItems(MODULES.slice(0, 2))}</ol>
+  <p class="note">본 강의 자료(3교시~10교시, 프롬프트 모음, 실습 파일)는 <b>${OPEN_DATE}</b>에 이 사이트에서 열립니다.</p>`));
+}
 
 console.log("built", OUT, fs.readdirSync(OUT).length, "entries");
