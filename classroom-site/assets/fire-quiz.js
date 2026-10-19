@@ -42,7 +42,7 @@
     host.innerHTML = `
       <p class="quiz-kind">오늘의 퀴즈 · ${quiz.questions.length}문항 · 약 4분 · 보기에서 하나 고르기</p>
       <h2 id="${uid}">${esc(quiz.title)}</h2>
-      <p class="quiz-lede">오늘 해 본 것을 확인합니다. 이름이나 별명을 적고 모든 문항에 답한 뒤 제출하세요. <strong>첫 제출만 기록</strong>되고, 개인 점수는 본인에게만 보입니다.</p>
+      <p class="quiz-lede">수업에서 해 본 것을 확인합니다. 이름이나 별명을 적고 모든 문항에 답한 뒤 제출하세요. <strong>첫 제출만 기록</strong>되고, 개인 점수는 본인에게만 보입니다.</p>
       <div class="quiz-name">
         <label for="${uid}-name">이름 (또는 별명)</label>
         <input id="${uid}-name" type="text" maxlength="20" autocomplete="off" placeholder="예: 홍길동, 불꽃1">
