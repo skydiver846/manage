@@ -15,7 +15,7 @@ const OUT = path.join(ROOT, PREVIEW ? "classroom-site-preview" : "classroom-site
 
 const MODULES = [
   ["01_구글 업무 계정 만들기", "구글 업무 계정 만들기", "사전 과제"],
-  ["02_ChatGPT와 Claude 가입", "ChatGPT · Claude 가입", "사전 과제"],
+  ["02_ChatGPT와 Claude 가입", "ChatGPT · Claude · GitHub 가입", "사전 과제"],
   ["03_프롬프트·파일·폴더 활용", "프롬프트 · 파일 · 프로젝트", "2교시"],
   ["04_옵시디언 설치와 MD 파일 만들기", "옵시디언 (선택)", "수업 외"],
   ["05_PRD 작성하기", "PRD 작성하기", "1교시"],
