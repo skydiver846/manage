@@ -194,7 +194,25 @@ marked.use({ tokenizer: { del(src) {
   if (m) return { type: "del", raw: m[0], text: m[1], tokens: this.lexer.inlineTokens(m[1]) };
   return undefined;
 } } });
-const render = (md) => enhance(marked.parse(wikify(studentMarkdown(md)), { gfm: true }));
+// "(과정 뒤)" "(수업 뒤)" "(쉬는 시간·집에서)" 가 붙은 절은 접어 둔다. 수업 중에는 눈에 덜 띄고, 수업 뒤에는 눌러서 본다.
+// 그 제목부터 같은 단계 이상의 다음 제목 직전까지를 <details>로 감싼다.
+const LATER = /\((과정 뒤|수업 뒤|쉬는 시간·집에서)[),:]/;
+function foldLater(html) {
+  const heads = [...html.matchAll(/<h([1-4])>([\s\S]*?)<\/h\1>/g)].map((m) => ({ at: m.index, end: m.index + m[0].length, level: +m[1], inner: m[2] }));
+  let out = "", pos = 0;
+  for (let i = 0; i < heads.length; i++) {
+    const h = heads[i];
+    if (h.at < pos || !LATER.test(h.inner.replace(/<[^>]+>/g, ""))) continue;
+    const next = heads.slice(i + 1).find((n) => n.level <= h.level);
+    const stop = next ? next.at : html.length;
+    const body = html.slice(h.end, stop);
+    const hr = body.match(/\s*<hr>\s*$/);   // 절 끝의 가로줄은 접힌 상자 밖에 둔다
+    out += html.slice(pos, h.at) + `<details class="later later-h${h.level}"><summary><span class="later-tag">과정 뒤에 더 해 보기</span> ${h.inner}</summary>${hr ? body.slice(0, hr.index) : body}</details>${hr ? hr[0] : ""}`;
+    pos = stop;
+  }
+  return out + html.slice(pos);
+}
+const render = (md) => foldLater(enhance(marked.parse(wikify(studentMarkdown(md)), { gfm: true })));
 
 // ── 만들기 ──
 fs.rmSync(OUT, { recursive: true, force: true });
