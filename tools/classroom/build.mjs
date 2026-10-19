@@ -142,7 +142,7 @@ function nav(current) {
   const mods = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to)
     .map((m) => link(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`)).join("");
   return `<nav aria-label="목차">
-    <div class="group">${link("index.html", "처음 화면")}${link("prework.html", "사전 과제 안내")}${link("homework.html", "과제 안내")}${link("quiz.html", "오늘의 퀴즈")}</div>
+    <div class="group">${link("index.html", "처음 화면")}${link("signup.html", "교육 신청")}${link("prework.html", "사전 과제 안내")}${link("homework.html", "과제 안내")}${link("quiz.html", "오늘의 퀴즈")}</div>
     <div class="group"><h3>본 강의</h3>${mods(1, 3)}${mods(5, 8)}</div>
     <div class="group"><h3>심화 · 직접 만들기</h3>${mods(9, 10)}${mods(12, 12)}</div>
     <div class="group"><h3>선택 자료 (수업 외)</h3>${mods(4, 4)}</div>
@@ -235,6 +235,99 @@ fs.writeFileSync(path.join(OUT, "quiz.html"), page("quiz.html", "오늘의 퀴�
   <script src="assets/fire-quiz-data.js"></script>
   <script src="assets/fire-quiz.js"></script>`));
 
+// 교육 신청 (서버: /api/fire-signup, tools/fire-signup/api)
+fs.copyFileSync(path.join(import.meta.dirname, "fire-signup.js"), path.join(OUT, "assets/fire-signup.js"));
+fs.writeFileSync(path.join(OUT, "signup.html"), page("signup.html", "교육 신청", `
+  <h1>교육 신청</h1>
+  <p class="lead">「생성형 AI 활용능력 향상교육」 참여 신청입니다. 이 페이지에서 직접 신청하면 됩니다. <b>신청 마감: 2026. 10. 28.(수) 18:00</b></p>
+  <div class="table-wrap"><table class="signup-sched"><tbody>
+    <tr><th>1차</th><td>11. 6.(금) 16:00~21:00 · 11. 7.(토) 08:00~13:00</td></tr>
+    <tr><th>2차</th><td>11. 20.(금) 16:00~21:00 · 11. 21.(토) 08:00~13:00</td></tr>
+    <tr><th>장소</th><td>교육훈련관 2층 정보화교육장 · 차수별 20명 내외 · 별도 식사 시간 없음</td></tr>
+  </tbody></table></div>
+
+  <h2>신청 전에: 구글 계정 만들기</h2>
+  <p>신청서에 <b>구글 계정(Gmail)</b>을 적습니다. 이 주소로 실습용 Claude 계정 초대가 갑니다. 계정이 없으면 먼저 만드세요. 행정망 PC에서는 가입 화면이 막힐 수 있으니 <b>휴대폰</b>에서 하는 것이 편합니다.</p>
+  <p><a class="btn" href="m01.html">01 구글 업무 계정 만들기 보기</a></p>
+
+  <section class="quiz signup" id="signup">
+    <h2>신청서</h2>
+    <form novalidate>
+      <div class="signup-grid">
+        <label>성명<input name="name" maxlength="20" autocomplete="name" required></label>
+        <label>소속<input name="dept" maxlength="30" placeholder="예: 교수부" required></label>
+        <label>직급<input name="rank" maxlength="15" placeholder="예: 소방위" required></label>
+      </div>
+      <fieldset><legend>희망 차수</legend>
+        <label class="quiz-option"><input type="radio" name="cohort" value="1"> 1차 (11. 6.~7.)</label>
+        <label class="quiz-option"><input type="radio" name="cohort" value="2"> 2차 (11. 20.~21.)</label>
+        <label class="quiz-option"><input type="radio" name="cohort" value="any"> 어느 차수든 가능</label>
+      </fieldset>
+      <fieldset><legend>생성형 AI(ChatGPT·Claude 등) 사용 경험</legend>
+        <label class="quiz-option"><input type="radio" name="exp" value="none"> 써 본 적 없음</label>
+        <label class="quiz-option"><input type="radio" name="exp" value="few"> 몇 번 써 봄</label>
+        <label class="quiz-option"><input type="radio" name="exp" value="some"> 가끔 업무에 씀</label>
+        <label class="quiz-option"><input type="radio" name="exp" value="often"> 자주 업무에 씀</label>
+      </fieldset>
+      <label class="signup-email">구글 계정(이메일)<input name="email" type="email" maxlength="100" autocomplete="email" placeholder="예: hong.gildong.work@gmail.com" required></label>
+      <p class="signup-email-hint" hidden>⚠️ Gmail 주소가 아닙니다. 01에서 만든 <b>구글 계정</b> 주소가 맞는지 확인해 주세요.</p>
+      <p class="signup-note">손으로 치지 말고 <b>복사해서 붙여넣어</b> 주세요. 오타가 있으면 초대를 받을 수 없습니다.</p>
+      <details class="signup-privacy" open><summary>개인정보 수집·이용 안내</summary>
+        <ul>
+          <li><b>수집 항목</b>: 성명, 소속, 직급, 구글 계정(이메일), 희망 차수, AI 사용 경험</li>
+          <li><b>목적</b>: 교육 차수 배정, 실습용 Claude Team 계정 초대, 교육 운영 안내</li>
+          <li><b>보관 기간</b>: 교육 종료 후 파기 (2026. 11. 30.까지)</li>
+          <li><b>보관 위치</b>: 이 교육자료 사이트의 결과 저장 서버 (관리 비밀번호가 있는 담당자만 열람)</li>
+          <li>동의하지 않으면 이 페이지로는 신청할 수 없습니다. 교수부 조영진(☎ 4984)에게 문의해 주세요.</li>
+        </ul>
+      </details>
+      <label class="signup-check"><input type="checkbox" name="agreePrivacy"> 위 개인정보 수집·이용에 동의합니다.</label>
+      <label class="signup-check"><input type="checkbox" name="agreeTeam"> 소속 팀장과 교육 일정을 협의했습니다.</label>
+      <div class="quiz-actions"><button class="btn" type="submit">신청하기</button><p class="quiz-status signup-status" aria-live="polite"></p></div>
+    </form>
+    <div class="signup-done quiz-result" hidden>
+      <p class="quiz-score signup-done-title"></p>
+      <p>초대 메일을 받을 주소: <b class="signup-done-email"></b></p>
+      <p><b>다음 할 일</b></p>
+      <ol>
+        <li>차수 배정 결과는 <b>10. 30.(금)</b>까지 개별로 안내합니다.</li>
+        <li><a href="prework.html">사전 과제 안내</a>대로 <b>ChatGPT·GitHub</b>에 교육 시작 전날까지 가입합니다.</li>
+        <li>Claude 초대 메일이 오면 수락합니다 (1차 10. 30.경, 2차 11. 18. 저녁).</li>
+      </ol>
+      <p><button class="btn ghost signup-again" type="button">신청 내용 고치기</button> 같은 구글 계정으로 다시 내면 앞의 신청이 고쳐집니다.</p>
+    </div>
+  </section>
+
+  <section class="quiz" id="signup-lookup">
+    <h2>내 신청 확인 · 취소</h2>
+    <div class="signup-grid">
+      <label>구글 계정(이메일)<input id="lookup-email" type="email" autocomplete="email"></label>
+      <label>성명<input id="lookup-name" maxlength="20" autocomplete="name"></label>
+    </div>
+    <div class="board-buttons">
+      <button class="btn" type="button" data-lookup="check">확인</button>
+      <button class="btn ghost" type="button" data-lookup="cancel-ask">신청 취소…</button>
+      <span class="lookup-confirm" hidden>정말 취소할까요? <button class="btn" type="button" data-lookup="cancel">네, 취소합니다</button> <button class="btn ghost" type="button" data-lookup="cancel-no">아니요</button></span>
+    </div>
+    <p class="quiz-status lookup-out" aria-live="polite"></p>
+  </section>
+
+  <details class="board-admin" id="signup-admin"><summary>담당자 전용: 신청 현황</summary>
+    <div class="board-admin-body">
+      <label for="signup-key">관리 비밀번호</label>
+      <input id="signup-key" type="password" autocomplete="off">
+      <div class="board-buttons">
+        <button class="btn" type="button" data-admin="list">신청 현황 불러오기</button>
+        <button class="btn ghost" type="button" data-admin="delete-all-ask">모든 신청 기록 삭제…</button>
+        <span class="signup-delete-confirm" hidden>교육이 끝났나요? 모든 신청 기록을 지웁니다. <button class="btn" type="button" data-admin="delete-all">네, 지웁니다</button> <button class="btn ghost" type="button" data-admin="delete-all-cancel">취소</button></span>
+      </div>
+      <p class="board-admin-status signup-admin-status" aria-live="polite"></p>
+      <div class="signup-admin-view"></div>
+    </div>
+  </details>
+  <noscript><p>신청서는 JavaScript가 켜져 있어야 보입니다.</p></noscript>
+  <script src="assets/fire-signup.js"></script>`));
+
 const promptsMd = fs.readFileSync(path.join(ROOT, FILES.prompts[1]), "utf8").replace(/^←.*\n/m, "");
 fs.writeFileSync(path.join(OUT, "prompts.html"), page("prompts.html", "프롬프트 모음",
   `<p class="lead">수업에서 쓰는 프롬프트를 모았습니다. 상자 오른쪽 위 <b>[복사]</b>를 누르고 ChatGPT·Claude 입력창에 붙여넣으세요. </p><p class="lead"><a class="btn" href="${encodeURI(FILES.prompts[0])}" download="${FILES.prompts[2]}">프롬프트 모음 파일(.md) 내려받기</a> 내 업무 폴더(<code>문서 &gt; AI업무자료 &gt; 99_프롬프트</code>)에 넣어 두면 수업 뒤에도 쓸 수 있습니다.</p>` + render(promptsMd)));
@@ -261,6 +354,7 @@ const modItems = (list) => list.map((m) => `<li><a href="${m.page}"><span class=
 fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 활용능력 향상교육</h1>
   <p class="lead"><b>AI 시대, 여행 계획이 달라졌다.</b> 우리 집 여행 담당이 되어 경주 2박 3일 가족 여행을 AI와 함께 준비합니다. 일정 짜기, 자료 정리, 여행 일정표 스킬, 준비물 체크 화면을 만들어 가족에게 링크로 보내기까지 한 단계씩 따라 하고, 같은 방법을 내 업무에 옮깁니다.</p>
+  <p class="note"><b>1차</b> 11. 6.(금)~7.(토) · <b>2차</b> 11. 20.(금)~21.(토) · 신청 마감 <b>10. 28.(수) 18:00</b> <a class="btn" href="signup.html">교육 신청하기</a></p>
   <h2>사전 과제 · 수업 전에 각자</h2>
   <ol class="mods">${modItems(MODULES.slice(0, 2))}</ol>
   <p><a class="btn" href="prework.html">사전 과제 안내 보기</a> 첫날 전까지 해 올 것과 준비물을 한 장에 정리했습니다.</p>
