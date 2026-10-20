@@ -177,7 +177,10 @@ li input[type="checkbox"] { width: 17px; height: 17px; margin-right: 6px; vertic
 .signup-admin-view table { font-size: 13px; }
 .signup-admin-view { min-width: 0; max-width: 100%; overflow-x: auto; }
 .board-admin-body > * { min-width: 0; }
-.signup [hidden], #signup-lookup [hidden], #signup-admin [hidden] { display: none !important; }
+.signup [hidden], #signup-lookup [hidden], #signup-admin [hidden], #survey-admin [hidden] { display: none !important; }
+.survey-row { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.survey-wish { display: grid; gap: 4px; font-weight: 700; font-size: 14px; }
+.survey-wish textarea { font: inherit; font-weight: 400; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); width: 100%; box-sizing: border-box; resize: vertical; }
 .signup-sched th { white-space: nowrap; }
 
 /* 과정 뒤 내용: 접어 둠 */

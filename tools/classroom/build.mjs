@@ -11,6 +11,8 @@ const LECTURE = path.join(ROOT, "lecture");
 // SITE_MODE=preview: 교육 신청 기간용. 처음 화면·교육 신청·사전 과제(01·02)만 열고, 나머지는 "곧 열립니다"로 바꾼다.
 const PREVIEW = process.env.SITE_MODE === "preview";
 const OPEN_DATE = "11. 4.(수)";
+// 교육 신청 페이지. 사전 수요조사로 계획을 확정한 뒤 true로 바꾸고 배포한다 (서버 쪽은 tools/fire-signup/.../_rules.js 의 PAUSED)
+const SIGNUP_OPEN = false;
 const OUT = path.join(ROOT, PREVIEW ? "classroom-site-preview" : "classroom-site");
 
 const MODULES = [
@@ -145,7 +147,7 @@ function nav(current) {
   const mods = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to)
     .map((m) => link(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`)).join("");
   if (PREVIEW) return `<nav aria-label="목차">
-    <div class="group">${link("index.html", "처음 화면")}${link("signup.html", "교육 신청")}${link("prework.html", "사전 과제 안내")}</div>
+    <div class="group">${link("index.html", "처음 화면")}${link("survey.html", "사전 수요조사")}${SIGNUP_OPEN ? link("signup.html", "교육 신청") : ""}${link("prework.html", "사전 과제 안내")}</div>
     <div class="group"><h3>사전 과제</h3>${mods(1, 2)}</div>
     <p class="note">본 강의 자료는 ${OPEN_DATE}에 열립니다.</p>
   </nav>`;
@@ -360,6 +362,88 @@ fs.writeFileSync(path.join(OUT, "signup.html"), page("signup.html", "교육 신�
   <noscript><p>신청서는 JavaScript가 켜져 있어야 보입니다.</p></noscript>
   <script src="assets/fire-signup.js"></script>`));
 
+// ── 사전 수요조사 (교육 계획 확정 전, 교직원 42명 대상) ──
+fs.copyFileSync(path.join(import.meta.dirname, "fire-survey.js"), path.join(OUT, "assets/fire-survey.js"));
+const opt = (type, name, value, label) => `<label class="quiz-option"><input type="${type}" name="${name}" value="${value}"> ${label}</label>`;
+fs.writeFileSync(path.join(OUT, "survey.html"), page("survey.html", "사전 수요조사", `
+  <h1>사전 수요조사</h1>
+  <p class="lead">「생성형 AI 활용능력 향상교육」 계획을 확정하기 전에 <b>참여 수요와 가능한 일정</b>을 알아보려고 합니다. 응답은 약 3분 걸립니다. <b>조사 마감: 2026. 10. 23.(금) 18:00</b></p>
+  <p class="note">이 조사는 <b>교육 신청이 아닙니다.</b> 참여 희망 인원이 20명 이하면 1차만, 20명을 넘으면 2차까지 운영합니다. 주말이 어려운 분이 많으면 평일 일정을 검토합니다. 교육 신청은 계획이 확정되면 따로 안내합니다.</p>
+
+  <h2>교육 개요 (예정)</h2>
+  <div class="table-wrap"><table class="signup-sched"><tbody>
+    <tr><th>주제</th><td><b>AI 시대, 여행 계획이 달라졌다</b> — 우리 집 여행 담당의 이틀. 경주 2박 3일 가족 여행을 AI와 준비하며, 같은 방법을 업무에 옮깁니다.</td></tr>
+    <tr><th>만드는 것</th><td>가족 단톡방 여행 일정 안내, 여행 자료 요약, "경주 일정표" 스킬, 여행 소개 슬라이드, 가족 준비물 체크 화면(휴대폰으로 여는 웹 화면), 내 업무 화면</td></tr>
+    <tr><th>운영</th><td>차수별 2일 10시간 · 1일차(금) 16:00~21:00, 2일차(토) 08:00~13:00 · 차수별 20명 내외 · AI를 처음 써도 참여 가능</td></tr>
+    <tr><th>예정 일정</th><td>1차 11. 6.(금)~7.(토) · 2차 11. 20.(금)~21.(토)</td></tr>
+    <tr><th>장소</th><td>교육훈련관 2층 정보화교육장 (1인 1PC)</td></tr>
+    <tr><th>사전 준비</th><td>업무용 구글 계정, ChatGPT · GitHub 가입 (약 40분, <a href="prework.html">따라 하기 안내</a> 제공)</td></tr>
+  </tbody></table></div>
+
+  <section class="quiz signup" id="survey">
+    <h2>응답</h2>
+    <form novalidate>
+      <div class="signup-grid">
+        <label>성명<input name="name" maxlength="20" autocomplete="name" required></label>
+        <label>소속<input name="dept" maxlength="30" placeholder="예: 교수부" required></label>
+        <label>직급<input name="rank" maxlength="15" placeholder="예: 소방위" required></label>
+      </div>
+      <fieldset><legend>1. 참여 의향</legend>
+        ${opt("radio", "intent", "yes", "꼭 참여하고 싶다")}${opt("radio", "intent", "maybe", "일정이 맞으면 참여하겠다")}${opt("radio", "intent", "no", "이번에는 어렵다")}
+      </fieldset>
+      <fieldset><legend>2. 예정 일정(금 저녁 + 토 오전) 중 가능한 차수</legend>
+        ${opt("radio", "cohort", "1", "1차 11. 6.(금)~7.(토)")}${opt("radio", "cohort", "2", "2차 11. 20.(금)~21.(토)")}${opt("radio", "cohort", "both", "둘 다 가능")}${opt("radio", "cohort", "none", "둘 다 어렵다")}
+      </fieldset>
+      <fieldset><legend>3. 주말이 어렵다면, 가능한 평일 방식 (여러 개 선택 가능)</legend>
+        ${opt("checkbox", "modes", "a", "이틀: 퇴근 무렵 + 다음 날 오전 (예: 목 16~21시, 금 08~13시)")}${opt("checkbox", "modes", "b", "이틀: 근무시간 중 하루 5시간 (예: 09~14시)")}${opt("checkbox", "modes", "c", "나흘: 하루 2시간 30분 (예: 16:00~18:30)")}${opt("checkbox", "modes", "etc", "기타")}
+        <label>기타 방식 (선택)<input name="modeEtc" maxlength="60" placeholder="예: 평일 저녁 3일"></label>
+      </fieldset>
+      <fieldset><legend>4. 평일에 가능한 요일 · 시기 (여러 개 선택 가능)</legend>
+        <div class="survey-row">${opt("checkbox", "days", "mon", "월")}${opt("checkbox", "days", "tue", "화")}${opt("checkbox", "days", "wed", "수")}${opt("checkbox", "days", "thu", "목")}${opt("checkbox", "days", "fri", "금")}</div>
+        ${opt("checkbox", "weeks", "w2", "11월 2주 (11. 9.~13.)")}${opt("checkbox", "weeks", "w3", "11월 3주 (11. 16.~20.)")}${opt("checkbox", "weeks", "w4", "11월 4주 (11. 23.~27.)")}${opt("checkbox", "weeks", "d1", "12월 1주 (11. 30.~12. 4.)")}
+      </fieldset>
+      <fieldset><legend>5. 생성형 AI(ChatGPT·Claude 등) 사용 경험</legend>
+        ${opt("radio", "exp", "none", "써 본 적 없음")}${opt("radio", "exp", "few", "몇 번 써 봄")}${opt("radio", "exp", "some", "가끔 씀")}${opt("radio", "exp", "often", "자주 씀")}
+      </fieldset>
+      <fieldset><legend>6. 써 본 AI 도구 (여러 개 선택 가능)</legend>
+        <div class="survey-row">${opt("checkbox", "tools", "chatgpt", "ChatGPT")}${opt("checkbox", "tools", "claude", "Claude")}${opt("checkbox", "tools", "gemini", "Gemini")}${opt("checkbox", "tools", "wrtn", "뤼튼")}${opt("checkbox", "tools", "etc", "기타")}${opt("checkbox", "tools", "none", "없음")}</div>
+        <label>기타 도구 (선택)<input name="toolEtc" maxlength="40"></label>
+      </fieldset>
+      <label class="survey-wish">7. AI로 도움받고 싶은 일 (선택)<textarea name="wish" maxlength="300" rows="3" placeholder="예: 매번 쓰는 보고서, 반복 집계, 안내문 작성, 가족 여행 계획"></textarea></label>
+      <details class="signup-privacy"><summary>개인정보 수집·이용 안내</summary>
+        <ul>
+          <li><b>수집 항목</b>: 성명, 소속, 직급, 위 응답 내용</li>
+          <li><b>목적</b>: 교육 차수·일정 결정 (교육 계획 수립)</li>
+          <li><b>보관 기간</b>: 교육 계획 확정 후 파기 (늦어도 2026. 11. 30.까지)</li>
+          <li><b>보관 위치</b>: 이 교육자료 사이트의 결과 저장 서버 (관리 비밀번호가 있는 담당자만 열람)</li>
+        </ul>
+      </details>
+      <label class="signup-check"><input type="checkbox" name="agree"> 위 개인정보 수집·이용에 동의합니다.</label>
+      <div class="quiz-actions"><button class="btn" type="submit">응답 보내기</button><p class="quiz-status signup-status" aria-live="polite"></p></div>
+    </form>
+    <div class="signup-done quiz-result" hidden>
+      <p class="quiz-score signup-done-title"></p>
+      <p>결과를 모아 교육 차수와 일정을 정한 뒤 <b>교육 신청</b>을 안내합니다.</p>
+      <p><button class="btn ghost signup-again" type="button">응답 고치기</button> 같은 소속·성명으로 다시 보내면 앞의 응답이 고쳐집니다.</p>
+    </div>
+  </section>
+
+  <details class="board-admin" id="survey-admin"><summary>담당자 전용: 수요조사 집계</summary>
+    <div class="board-admin-body">
+      <label for="survey-key">관리 비밀번호</label>
+      <input id="survey-key" type="password" autocomplete="off">
+      <div class="board-buttons">
+        <button class="btn" type="button" data-admin="list">집계 불러오기</button>
+        <button class="btn ghost" type="button" data-admin="delete-all-ask">모든 응답 삭제…</button>
+        <span class="signup-delete-confirm" hidden>계획이 확정됐나요? 모든 응답을 지웁니다. <button class="btn" type="button" data-admin="delete-all">네, 지웁니다</button> <button class="btn ghost" type="button" data-admin="delete-all-cancel">취소</button></span>
+      </div>
+      <p class="board-admin-status signup-admin-status" aria-live="polite"></p>
+      <div class="signup-admin-view"></div>
+    </div>
+  </details>
+  <noscript><p>조사표는 JavaScript가 켜져 있어야 보입니다.</p></noscript>
+  <script src="assets/fire-survey.js"></script>`));
+
 const promptsMd = fs.readFileSync(path.join(ROOT, FILES.prompts[1]), "utf8").replace(/^←.*\n/m, "");
 fs.writeFileSync(path.join(OUT, "prompts.html"), page("prompts.html", "프롬프트 모음",
   `<p class="lead">수업에서 쓰는 프롬프트를 모았습니다. 상자 오른쪽 위 <b>[복사]</b>를 누르고 ChatGPT·Claude 입력창에 붙여넣으세요. </p><p class="lead"><a class="btn" href="${encodeURI(FILES.prompts[0])}" download="${FILES.prompts[2]}">프롬프트 모음 파일(.md) 내려받기</a> 내 업무 폴더(<code>문서 &gt; AI업무자료 &gt; 99_프롬프트</code>)에 넣어 두면 수업 뒤에도 쓸 수 있습니다.</p>` + render(promptsMd)));
@@ -405,24 +489,29 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
 
 // ── 신청 기간 미리보기: 열어 둘 페이지 말고는 모두 "곧 열립니다"로 덮고, 실습 파일·퀴즈는 올리지 않는다 ──
 if (PREVIEW) {
-  const keep = new Set(["signup.html", "prework.html", ...MODULES.filter((m) => m.num <= 2).map((m) => m.page)]);
+  const keep = new Set(["survey.html", ...(SIGNUP_OPEN ? ["signup.html"] : []), "prework.html", ...MODULES.filter((m) => m.num <= 2).map((m) => m.page)]);
   for (const d of ["files", "steps", "prototype"]) fs.rmSync(path.join(OUT, d), { recursive: true, force: true });
   for (const f of fs.readdirSync(path.join(OUT, "assets"))) if (f.startsWith("fire-quiz")) fs.rmSync(path.join(OUT, "assets", f));
   const soon = `<h1>곧 열립니다</h1>
   <p class="lead">본 강의 자료는 <b>${OPEN_DATE}</b>에 열립니다.</p>
-  <p>지금은 <a href="signup.html">교육 신청</a>과 <a href="prework.html">사전 과제</a>만 볼 수 있습니다. 신청을 마치고 사전 과제를 해 오시면, 수업 이틀 전에 이 자리에서 강의 자료를 만나실 수 있습니다.</p>
-  <p><a class="btn" href="signup.html">교육 신청하기</a> <a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></p>`;
+  <p>지금은 ${SIGNUP_OPEN ? '<a href="signup.html">교육 신청</a>' : '<a href="survey.html">사전 수요조사</a>'}과 <a href="prework.html">사전 과제</a>만 볼 수 있습니다. 수업 이틀 전에 이 자리에서 강의 자료를 만나실 수 있습니다.</p>
+  <p>${SIGNUP_OPEN ? '<a class="btn" href="signup.html">교육 신청하기</a>' : '<a class="btn" href="survey.html">수요조사 응답하기</a>'} <a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></p>`;
   for (const f of fs.readdirSync(OUT)) {
     if (!f.endsWith(".html") || f === "index.html" || keep.has(f)) continue;
     fs.writeFileSync(path.join(OUT, f), page(f, "곧 열립니다", soon));
   }
+  if (!SIGNUP_OPEN) fs.writeFileSync(path.join(OUT, "signup.html"), page("signup.html", "교육 신청", `<h1>교육 신청은 곧 열립니다</h1>
+  <p class="lead">지금은 <b>사전 수요조사</b> 기간입니다. 조사 결과로 교육 차수와 일정을 확정한 뒤 이 페이지에서 교육 신청을 받습니다.</p>
+  <p>참여 의향과 가능한 일정을 먼저 알려 주세요 (3분, <b>10. 23.(금)까지</b>).</p>
+  <p><a class="btn" href="survey.html">수요조사 응답하기</a> <a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></p>`));
   fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 활용능력 향상교육</h1>
   <p class="lead"><b>AI 시대, 여행 계획이 달라졌다.</b> 우리 집 여행 담당이 되어 경주 2박 3일 가족 여행을 AI와 함께 준비합니다. 일정 짜기, 자료 정리, 준비물 체크 화면을 만들어 가족에게 링크로 보내기까지 한 단계씩 따라 하고, 같은 방법을 내 업무에 옮깁니다.</p>
-  <p class="note"><b>1차</b> 11. 6.(금)~7.(토) · <b>2차</b> 11. 20.(금)~21.(토) · 1일차 16:00~21:00, 2일차 08:00~13:00 (총 10시간)<br>신청 마감 <b>10. 28.(수) 18:00</b></p>
+  <p class="note"><b>1차</b> 11. 6.(금)~7.(토) · <b>2차</b> 11. 20.(금)~21.(토) · 1일차 16:00~21:00, 2일차 08:00~13:00 (총 10시간)${SIGNUP_OPEN ? '<br>신청 마감 <b>10. 28.(수) 18:00</b>' : ' · <b>예정</b>, 수요조사 뒤 확정'}</p>
   <h2>지금 할 일</h2>
+  <p><b>사전 수요조사</b> — 참여 의향과 가능한 일정을 알려 주세요 (3분, <b>10. 23.(금)까지</b>). 결과로 2차 운영 여부와 평일 일정을 정합니다. <a class="btn" href="survey.html">수요조사 응답하기</a></p>
   <ol>
-    <li><b>교육 신청</b> — 업무용 구글 계정을 적어 신청합니다. <a class="btn" href="signup.html">교육 신청하기</a></li>
+    <li><b>교육 신청</b> — ${SIGNUP_OPEN ? '업무용 구글 계정을 적어 신청합니다. <a class="btn" href="signup.html">교육 신청하기</a>' : '수요조사 뒤 계획이 확정되면 이 사이트에서 신청을 받습니다.'}</li>
     <li><b>사전 과제</b> — 첫날 전까지 계정 만들기와 가입을 해 옵니다. <a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></li>
   </ol>
   <h2>사전 과제</h2>

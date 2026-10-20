@@ -1,10 +1,11 @@
 // POST /api/fire-signup/submit  { name, dept, rank, cohort, exp, email, agreePrivacy, agreeTeam }
 // 생성형 AI 활용능력 향상교육 신청. 같은 구글 계정으로 다시 내면 앞의 신청을 고칩니다.
 const { redis, readBody, send, fail } = require('../_lib/store');
-const { HASH, MAX, COHORTS, EXPS, clean, normEmail, isEmail, closed } = require('./_rules');
+const { HASH, PAUSED, MAX, COHORTS, EXPS, clean, normEmail, isEmail, closed } = require('./_rules');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return send(res, 405, { error: '신청은 POST로만 받습니다.' });
+  if (PAUSED) return send(res, 403, { error: '교육 신청은 사전 수요조사 뒤 계획이 확정되면 열립니다.' });
   if (closed()) return send(res, 403, { error: '신청 기간이 끝났습니다. 교수부 조영진(☎ 4984)에게 문의해 주세요.' });
   try {
     const b = readBody(req);
