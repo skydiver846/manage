@@ -11,6 +11,8 @@ const LECTURE = path.join(ROOT, "lecture");
 // SITE_MODE=preview: 교육 신청 기간용. 처음 화면·교육 신청·사전 과제(01·02)만 열고, 나머지는 "곧 열립니다"로 바꾼다.
 const PREVIEW = process.env.SITE_MODE === "preview";
 const OPEN_DATE = "11. 4.(수)";
+// 교육 신청 페이지. 사전 수요조사로 계획을 확정한 뒤 true로 바꾸고 배포한다 (서버 쪽은 tools/fire-signup/.../_rules.js 의 PAUSED)
+const SIGNUP_OPEN = false;
 const OUT = path.join(ROOT, PREVIEW ? "classroom-site-preview" : "classroom-site");
 
 const MODULES = [
@@ -145,7 +147,7 @@ function nav(current) {
   const mods = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to)
     .map((m) => link(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`)).join("");
   if (PREVIEW) return `<nav aria-label="목차">
-    <div class="group">${link("index.html", "처음 화면")}${link("survey.html", "사전 수요조사")}${link("signup.html", "교육 신청")}${link("prework.html", "사전 과제 안내")}</div>
+    <div class="group">${link("index.html", "처음 화면")}${link("survey.html", "사전 수요조사")}${SIGNUP_OPEN ? link("signup.html", "교육 신청") : ""}${link("prework.html", "사전 과제 안내")}</div>
     <div class="group"><h3>사전 과제</h3>${mods(1, 2)}</div>
     <p class="note">본 강의 자료는 ${OPEN_DATE}에 열립니다.</p>
   </nav>`;
@@ -487,25 +489,29 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
 
 // ── 신청 기간 미리보기: 열어 둘 페이지 말고는 모두 "곧 열립니다"로 덮고, 실습 파일·퀴즈는 올리지 않는다 ──
 if (PREVIEW) {
-  const keep = new Set(["survey.html", "signup.html", "prework.html", ...MODULES.filter((m) => m.num <= 2).map((m) => m.page)]);
+  const keep = new Set(["survey.html", ...(SIGNUP_OPEN ? ["signup.html"] : []), "prework.html", ...MODULES.filter((m) => m.num <= 2).map((m) => m.page)]);
   for (const d of ["files", "steps", "prototype"]) fs.rmSync(path.join(OUT, d), { recursive: true, force: true });
   for (const f of fs.readdirSync(path.join(OUT, "assets"))) if (f.startsWith("fire-quiz")) fs.rmSync(path.join(OUT, "assets", f));
   const soon = `<h1>곧 열립니다</h1>
   <p class="lead">본 강의 자료는 <b>${OPEN_DATE}</b>에 열립니다.</p>
-  <p>지금은 <a href="signup.html">교육 신청</a>과 <a href="prework.html">사전 과제</a>만 볼 수 있습니다. 신청을 마치고 사전 과제를 해 오시면, 수업 이틀 전에 이 자리에서 강의 자료를 만나실 수 있습니다.</p>
-  <p><a class="btn" href="signup.html">교육 신청하기</a> <a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></p>`;
+  <p>지금은 ${SIGNUP_OPEN ? '<a href="signup.html">교육 신청</a>' : '<a href="survey.html">사전 수요조사</a>'}과 <a href="prework.html">사전 과제</a>만 볼 수 있습니다. 수업 이틀 전에 이 자리에서 강의 자료를 만나실 수 있습니다.</p>
+  <p>${SIGNUP_OPEN ? '<a class="btn" href="signup.html">교육 신청하기</a>' : '<a class="btn" href="survey.html">수요조사 응답하기</a>'} <a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></p>`;
   for (const f of fs.readdirSync(OUT)) {
     if (!f.endsWith(".html") || f === "index.html" || keep.has(f)) continue;
     fs.writeFileSync(path.join(OUT, f), page(f, "곧 열립니다", soon));
   }
+  if (!SIGNUP_OPEN) fs.writeFileSync(path.join(OUT, "signup.html"), page("signup.html", "교육 신청", `<h1>교육 신청은 곧 열립니다</h1>
+  <p class="lead">지금은 <b>사전 수요조사</b> 기간입니다. 조사 결과로 교육 차수와 일정을 확정한 뒤 이 페이지에서 교육 신청을 받습니다.</p>
+  <p>참여 의향과 가능한 일정을 먼저 알려 주세요 (3분, <b>10. 23.(금)까지</b>).</p>
+  <p><a class="btn" href="survey.html">수요조사 응답하기</a> <a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></p>`));
   fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 활용능력 향상교육</h1>
   <p class="lead"><b>AI 시대, 여행 계획이 달라졌다.</b> 우리 집 여행 담당이 되어 경주 2박 3일 가족 여행을 AI와 함께 준비합니다. 일정 짜기, 자료 정리, 준비물 체크 화면을 만들어 가족에게 링크로 보내기까지 한 단계씩 따라 하고, 같은 방법을 내 업무에 옮깁니다.</p>
-  <p class="note"><b>1차</b> 11. 6.(금)~7.(토) · <b>2차</b> 11. 20.(금)~21.(토) · 1일차 16:00~21:00, 2일차 08:00~13:00 (총 10시간)<br>신청 마감 <b>10. 28.(수) 18:00</b></p>
+  <p class="note"><b>1차</b> 11. 6.(금)~7.(토) · <b>2차</b> 11. 20.(금)~21.(토) · 1일차 16:00~21:00, 2일차 08:00~13:00 (총 10시간)${SIGNUP_OPEN ? '<br>신청 마감 <b>10. 28.(수) 18:00</b>' : ' · <b>예정</b>, 수요조사 뒤 확정'}</p>
   <h2>지금 할 일</h2>
   <p><b>사전 수요조사</b> — 참여 의향과 가능한 일정을 알려 주세요 (3분, <b>10. 23.(금)까지</b>). 결과로 2차 운영 여부와 평일 일정을 정합니다. <a class="btn" href="survey.html">수요조사 응답하기</a></p>
   <ol>
-    <li><b>교육 신청</b> — 업무용 구글 계정을 적어 신청합니다. <a class="btn" href="signup.html">교육 신청하기</a></li>
+    <li><b>교육 신청</b> — ${SIGNUP_OPEN ? '업무용 구글 계정을 적어 신청합니다. <a class="btn" href="signup.html">교육 신청하기</a>' : '수요조사 뒤 계획이 확정되면 이 사이트에서 신청을 받습니다.'}</li>
     <li><b>사전 과제</b> — 첫날 전까지 계정 만들기와 가입을 해 옵니다. <a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></li>
   </ol>
   <h2>사전 과제</h2>
