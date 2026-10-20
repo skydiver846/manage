@@ -25,6 +25,7 @@ rm -rf "$SITE_REPO/fire-ai" && mkdir -p "$SITE_REPO/fire-ai" && cp -r "$SRC/." "
 cp prototype-demo/network-check.html "$SITE_REPO/network-check.html"
 mkdir -p "$SITE_REPO/api/fire-quiz" && cp tools/fire-quiz/api/fire-quiz/*.js "$SITE_REPO/api/fire-quiz/" && cp tools/fire-quiz/api/_lib/fire-quiz-key.js "$SITE_REPO/api/_lib/"   # 오늘의 퀴즈 서버 함수
 mkdir -p "$SITE_REPO/api/fire-signup" && cp tools/fire-signup/api/fire-signup/*.js "$SITE_REPO/api/fire-signup/"   # 교육 신청 서버 함수
+mkdir -p "$SITE_REPO/api/fire-survey" && cp tools/fire-survey/api/fire-survey/*.js "$SITE_REPO/api/fire-survey/"   # 사전 수요조사 서버 함수
 git add -A lecture classroom-site tools prototype-demo
 git commit -qm "$MSG" && git push -q -u origin "$(git branch --show-current)" && echo pushed-manage
 cd "$SITE_REPO"
