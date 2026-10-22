@@ -364,7 +364,9 @@ fs.writeFileSync(path.join(OUT, "signup.html"), page("signup.html", "교육 신�
 
 // ── 사전 수요조사 (교육 계획 확정 전, 교직원 42명 대상) ──
 fs.copyFileSync(path.join(import.meta.dirname, "fire-survey.js"), path.join(OUT, "assets/fire-survey.js"));
+fs.copyFileSync(path.join(import.meta.dirname, "survey-og.png"), path.join(OUT, "assets/survey-og.png"));   // 카톡 등에 링크를 보낼 때 뜨는 미리보기 그림
 const opt = (type, name, value, label) => `<label class="quiz-option"><input type="${type}" name="${name}" value="${value}"> ${label}</label>`;
+const OG = (url, title, desc, img) => `<meta property="og:type" content="website">\n<meta property="og:url" content="${url}">\n<meta property="og:title" content="${title}">\n<meta property="og:description" content="${desc}">\n<meta property="og:image" content="${img}">\n<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n<meta name="description" content="${desc}">\n<meta name="twitter:card" content="summary_large_image">\n`;
 fs.writeFileSync(path.join(OUT, "survey.html"), page("survey.html", "사전 수요조사", `
   <h1>사전 수요조사</h1>
   <p class="lead">「생성형 AI 활용능력 향상교육」 계획을 확정하기 전에 <b>참여 수요와 가능한 일정</b>을 알아보려고 합니다. 응답은 약 3분 걸립니다. <b>조사 마감: 2026. 10. 23.(금) 18:00</b></p>
@@ -443,6 +445,8 @@ fs.writeFileSync(path.join(OUT, "survey.html"), page("survey.html", "사전 수�
   </details>
   <noscript><p>조사표는 JavaScript가 켜져 있어야 보입니다.</p></noscript>
   <script src="assets/fire-survey.js"></script>`));
+{ const f = path.join(OUT, "survey.html"); const base = "https://www.jg-sobang.com/fire-ai/";
+  fs.writeFileSync(f, fs.readFileSync(f, "utf8").replace("</title>", "</title>\n" + OG(base + "survey.html", "사전 수요조사 · 생성형 AI 활용능력 향상교육", "참여 의향과 가능한 일정을 알려 주세요 (휴대폰 3분, 10. 23.(금)까지). 결과로 2차 운영 여부와 평일 일정을 정합니다.", base + "assets/survey-og.png"))); }
 
 const promptsMd = fs.readFileSync(path.join(ROOT, FILES.prompts[1]), "utf8").replace(/^←.*\n/m, "");
 fs.writeFileSync(path.join(OUT, "prompts.html"), page("prompts.html", "프롬프트 모음",
