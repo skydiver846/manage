@@ -447,6 +447,16 @@ fs.writeFileSync(path.join(OUT, "survey.html"), page("survey.html", "사전 수�
   <script src="assets/fire-survey.js"></script>`));
 { const f = path.join(OUT, "survey.html"); const base = "https://www.jg-sobang.com/fire-ai/";
   fs.writeFileSync(f, fs.readFileSync(f, "utf8").replace("</title>", "</title>\n" + OG(base + "survey.html", "사전 수요조사 · 생성형 AI 활용능력 향상교육", "참여 의향과 가능한 일정을 알려 주세요 (휴대폰 3분, 10. 23.(금)까지). 결과로 2차 운영 여부와 평일 일정을 정합니다.", base + "assets/survey-og.png"))); }
+// 수요조사 현황 (숫자만, 카톡으로 보내는 링크). 목차에는 넣지 않는다
+fs.copyFileSync(path.join(import.meta.dirname, "fire-survey-status.js"), path.join(OUT, "assets/fire-survey-status.js"));
+fs.copyFileSync(path.join(import.meta.dirname, "survey-status-og.png"), path.join(OUT, "assets/survey-status-og.png"));
+fs.writeFileSync(path.join(OUT, "survey-status.html"), page("survey-status.html", "수요조사 현황", `
+  <h1>사전 수요조사 현황</h1>
+  <p class="lead">「생성형 AI 활용능력 향상교육」 수요조사 응답을 <b>숫자로만</b> 모았습니다. 이름·소속·자유 응답은 보이지 않습니다. 열 때마다 최신 결과로 바뀝니다.</p>
+  <div id="survey-status"></div>
+  <p><button class="btn ghost" type="button" id="survey-refresh">새로 고침</button> <a class="btn ghost" href="survey.html">수요조사 응답하러 가기</a></p>
+  <noscript><p>현황은 JavaScript가 켜져 있어야 보입니다.</p></noscript>
+  <script src="assets/fire-survey-status.js"></script>`).replace("</title>", "</title>\n" + OG("https://www.jg-sobang.com/fire-ai/survey-status.html", "수요조사 현황 · 생성형 AI 활용능력 향상교육", "응답 수, 참여 희망 인원, 가능한 차수·평일 일정을 숫자로 봅니다. 열 때마다 최신 결과입니다.", "https://www.jg-sobang.com/fire-ai/assets/survey-status-og.png")));
 
 const promptsMd = fs.readFileSync(path.join(ROOT, FILES.prompts[1]), "utf8").replace(/^←.*\n/m, "");
 fs.writeFileSync(path.join(OUT, "prompts.html"), page("prompts.html", "프롬프트 모음",
@@ -493,7 +503,7 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
 
 // ── 신청 기간 미리보기: 열어 둘 페이지 말고는 모두 "곧 열립니다"로 덮고, 실습 파일·퀴즈는 올리지 않는다 ──
 if (PREVIEW) {
-  const keep = new Set(["survey.html", ...(SIGNUP_OPEN ? ["signup.html"] : []), "prework.html", ...MODULES.filter((m) => m.num <= 2).map((m) => m.page)]);
+  const keep = new Set(["survey.html", "survey-status.html", ...(SIGNUP_OPEN ? ["signup.html"] : []), "prework.html", ...MODULES.filter((m) => m.num <= 2).map((m) => m.page)]);
   for (const d of ["files", "steps", "prototype"]) fs.rmSync(path.join(OUT, d), { recursive: true, force: true });
   for (const f of fs.readdirSync(path.join(OUT, "assets"))) if (f.startsWith("fire-quiz")) fs.rmSync(path.join(OUT, "assets", f));
   const soon = `<h1>곧 열립니다</h1>
