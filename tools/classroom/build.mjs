@@ -13,6 +13,8 @@ const PREVIEW = process.env.SITE_MODE === "preview";
 const OPEN_DATE = "11. 4.(수)";
 // 교육 신청 페이지. 사전 수요조사로 계획을 확정한 뒤 true로 바꾸고 배포한다 (서버 쪽은 tools/fire-signup/.../_rules.js 의 PAUSED)
 const SIGNUP_OPEN = false;
+// 사전 수요조사(10. 20.~23.)는 끝났다. false면 조사·현황 페이지를 만들지 않고, 담당자용 집계 페이지(survey-admin.html, 목차에 없음)만 남긴다
+const SURVEY_OPEN = false;
 const OUT = path.join(ROOT, PREVIEW ? "classroom-site-preview" : "classroom-site");
 
 const MODULES = [
@@ -147,7 +149,7 @@ function nav(current) {
   const mods = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to)
     .map((m) => link(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`)).join("");
   if (PREVIEW) return `<nav aria-label="목차">
-    <div class="group">${link("index.html", "처음 화면")}${link("survey.html", "사전 수요조사")}${SIGNUP_OPEN ? link("signup.html", "교육 신청") : ""}${link("prework.html", "사전 과제 안내")}</div>
+    <div class="group">${link("index.html", "처음 화면")}${SURVEY_OPEN ? link("survey.html", "사전 수요조사") : ""}${SIGNUP_OPEN ? link("signup.html", "교육 신청") : ""}${link("prework.html", "사전 과제 안내")}</div>
     <div class="group"><h3>사전 과제</h3>${mods(1, 2)}</div>
     <p class="note">본 강의 자료는 ${OPEN_DATE}에 열립니다.</p>
   </nav>`;
@@ -362,6 +364,7 @@ fs.writeFileSync(path.join(OUT, "signup.html"), page("signup.html", "교육 신�
   <noscript><p>신청서는 JavaScript가 켜져 있어야 보입니다.</p></noscript>
   <script src="assets/fire-signup.js"></script>`));
 
+if (SURVEY_OPEN) {
 // ── 사전 수요조사 (교육 계획 확정 전, 교직원 42명 대상) ──
 fs.copyFileSync(path.join(import.meta.dirname, "fire-survey.js"), path.join(OUT, "assets/fire-survey.js"));
 fs.copyFileSync(path.join(import.meta.dirname, "survey-og.png"), path.join(OUT, "assets/survey-og.png"));   // 카톡 등에 링크를 보낼 때 뜨는 미리보기 그림
@@ -457,6 +460,28 @@ fs.writeFileSync(path.join(OUT, "survey-status.html"), page("survey-status.html"
   <p><button class="btn ghost" type="button" id="survey-refresh">새로 고침</button> <a class="btn ghost" href="survey.html">수요조사 응답하러 가기</a></p>
   <noscript><p>현황은 JavaScript가 켜져 있어야 보입니다.</p></noscript>
   <script src="assets/fire-survey-status.js"></script>`).replace("</title>", "</title>\n" + OG("https://www.jg-sobang.com/fire-ai/survey-status.html", "수요조사 현황 · 생성형 AI 활용능력 향상교육", "응답 수, 참여 희망 인원, 가능한 차수·평일 일정을 숫자로 봅니다. 열 때마다 최신 결과입니다.", "https://www.jg-sobang.com/fire-ai/assets/survey-status-og.png")));
+}
+// 조사가 끝난 뒤: 담당자용 집계만 남긴다 (응답 내려받기·삭제용, 목차·검색에 나오지 않음)
+if (!SURVEY_OPEN) {
+  fs.copyFileSync(path.join(import.meta.dirname, "fire-survey.js"), path.join(OUT, "assets/fire-survey.js"));
+  fs.writeFileSync(path.join(OUT, "survey-admin.html"), page("survey-admin.html", "수요조사 집계 (담당자)", `
+  <h1>사전 수요조사 집계 (담당자 전용)</h1>
+  <p class="lead">수요조사는 2026. 10. 23.(금)에 마감했습니다. 결과를 내려받은 뒤, 계획이 확정되면 <b>모든 응답 삭제</b>로 지워 주세요.</p>
+  <details class="board-admin" id="survey-admin" open><summary>수요조사 집계</summary>
+    <div class="board-admin-body">
+      <label for="survey-key">관리 비밀번호</label>
+      <input id="survey-key" type="password" autocomplete="off">
+      <div class="board-buttons">
+        <button class="btn" type="button" data-admin="list">집계 불러오기</button>
+        <button class="btn ghost" type="button" data-admin="delete-all-ask">모든 응답 삭제…</button>
+        <span class="signup-delete-confirm" hidden>계획이 확정됐나요? 모든 응답을 지웁니다. <button class="btn" type="button" data-admin="delete-all">네, 지웁니다</button> <button class="btn ghost" type="button" data-admin="delete-all-cancel">취소</button></span>
+      </div>
+      <p class="board-admin-status signup-admin-status" aria-live="polite"></p>
+      <div class="signup-admin-view"></div>
+    </div>
+  </details>
+  <script src="assets/fire-survey.js"></script>`).replace("</title>", '</title>\n<meta name="robots" content="noindex, nofollow">'));
+}
 
 const promptsMd = fs.readFileSync(path.join(ROOT, FILES.prompts[1]), "utf8").replace(/^←.*\n/m, "");
 fs.writeFileSync(path.join(OUT, "prompts.html"), page("prompts.html", "프롬프트 모음",
@@ -503,29 +528,29 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
 
 // ── 신청 기간 미리보기: 열어 둘 페이지 말고는 모두 "곧 열립니다"로 덮고, 실습 파일·퀴즈는 올리지 않는다 ──
 if (PREVIEW) {
-  const keep = new Set(["survey.html", "survey-status.html", ...(SIGNUP_OPEN ? ["signup.html"] : []), "prework.html", ...MODULES.filter((m) => m.num <= 2).map((m) => m.page)]);
+  const keep = new Set([...(SURVEY_OPEN ? ["survey.html", "survey-status.html"] : ["survey-admin.html"]), ...(SIGNUP_OPEN ? ["signup.html"] : []), "prework.html", ...MODULES.filter((m) => m.num <= 2).map((m) => m.page)]);
   for (const d of ["files", "steps", "prototype"]) fs.rmSync(path.join(OUT, d), { recursive: true, force: true });
   for (const f of fs.readdirSync(path.join(OUT, "assets"))) if (f.startsWith("fire-quiz")) fs.rmSync(path.join(OUT, "assets", f));
   const soon = `<h1>곧 열립니다</h1>
   <p class="lead">본 강의 자료는 <b>${OPEN_DATE}</b>에 열립니다.</p>
-  <p>지금은 ${SIGNUP_OPEN ? '<a href="signup.html">교육 신청</a>' : '<a href="survey.html">사전 수요조사</a>'}과 <a href="prework.html">사전 과제</a>만 볼 수 있습니다. 수업 이틀 전에 이 자리에서 강의 자료를 만나실 수 있습니다.</p>
-  <p>${SIGNUP_OPEN ? '<a class="btn" href="signup.html">교육 신청하기</a>' : '<a class="btn" href="survey.html">수요조사 응답하기</a>'} <a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></p>`;
+  <p>지금은 ${SIGNUP_OPEN ? '<a href="signup.html">교육 신청</a>과 ' : ''}<a href="prework.html">사전 과제</a>만 볼 수 있습니다. 수업 이틀 전에 이 자리에서 강의 자료를 만나실 수 있습니다.</p>
+  <p>${SIGNUP_OPEN ? '<a class="btn" href="signup.html">교육 신청하기</a> ' : ''}<a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></p>`;
   for (const f of fs.readdirSync(OUT)) {
     if (!f.endsWith(".html") || f === "index.html" || keep.has(f)) continue;
     fs.writeFileSync(path.join(OUT, f), page(f, "곧 열립니다", soon));
   }
   if (!SIGNUP_OPEN) fs.writeFileSync(path.join(OUT, "signup.html"), page("signup.html", "교육 신청", `<h1>교육 신청은 곧 열립니다</h1>
-  <p class="lead">지금은 <b>사전 수요조사</b> 기간입니다. 조사 결과로 교육 차수와 일정을 확정한 뒤 이 페이지에서 교육 신청을 받습니다.</p>
-  <p>참여 의향과 가능한 일정을 먼저 알려 주세요 (3분, <b>10. 23.(금)까지</b>).</p>
-  <p><a class="btn" href="survey.html">수요조사 응답하기</a> <a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></p>`));
+  <p class="lead">사전 수요조사가 끝났습니다. 조사 결과로 교육 차수와 일정을 확정한 뒤 이 페이지에서 교육 신청을 받습니다.</p>
+  <p>그동안 사전 과제(업무용 구글 계정 만들기)를 미리 해 두시면 신청이 쉽습니다.</p>
+  <p><a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></p>`));
   fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 활용능력 향상교육</h1>
   <p class="lead"><b>AI 시대, 여행 계획이 달라졌다.</b> 우리 집 여행 담당이 되어 경주 2박 3일 가족 여행을 AI와 함께 준비합니다. 일정 짜기, 자료 정리, 준비물 체크 화면을 만들어 가족에게 링크로 보내기까지 한 단계씩 따라 하고, 같은 방법을 내 업무에 옮깁니다.</p>
-  <p class="note"><b>1차</b> 11. 6.(금)~7.(토) · <b>2차</b> 11. 20.(금)~21.(토) · 1일차 16:00~21:00, 2일차 08:00~13:00 (총 10시간)${SIGNUP_OPEN ? '<br>신청 마감 <b>10. 28.(수) 18:00</b>' : ' · <b>예정</b>, 수요조사 뒤 확정'}</p>
+  <p class="note"><b>1차</b> 11. 6.(금)~7.(토) · <b>2차</b> 11. 20.(금)~21.(토) · 1일차 16:00~21:00, 2일차 08:00~13:00 (총 10시간)${SIGNUP_OPEN ? '<br>신청 마감 <b>10. 28.(수) 18:00</b>' : ' · <b>예정</b>, 계획 확정 뒤 안내'}</p>
   <h2>지금 할 일</h2>
-  <p><b>사전 수요조사</b> — 참여 의향과 가능한 일정을 알려 주세요 (3분, <b>10. 23.(금)까지</b>). 결과로 2차 운영 여부와 평일 일정을 정합니다. <a class="btn" href="survey.html">수요조사 응답하기</a></p>
+${SURVEY_OPEN ? `  <p><b>사전 수요조사</b> — 참여 의향과 가능한 일정을 알려 주세요 (3분, <b>10. 23.(금)까지</b>). 결과로 2차 운영 여부와 평일 일정을 정합니다. <a class="btn" href="survey.html">수요조사 응답하기</a></p>` : ""}
   <ol>
-    <li><b>교육 신청</b> — ${SIGNUP_OPEN ? '업무용 구글 계정을 적어 신청합니다. <a class="btn" href="signup.html">교육 신청하기</a>' : '수요조사 뒤 계획이 확정되면 이 사이트에서 신청을 받습니다.'}</li>
+    <li><b>교육 신청</b> — ${SIGNUP_OPEN ? '업무용 구글 계정을 적어 신청합니다. <a class="btn" href="signup.html">교육 신청하기</a>' : '계획이 확정되면 이 사이트에서 신청을 받습니다.'}</li>
     <li><b>사전 과제</b> — 첫날 전까지 계정 만들기와 가입을 해 옵니다. <a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></li>
   </ol>
   <h2>사전 과제</h2>
