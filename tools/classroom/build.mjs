@@ -149,12 +149,12 @@ function nav(current) {
   const mods = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to)
     .map((m) => link(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`)).join("");
   if (PREVIEW) return `<nav aria-label="목차">
-    <div class="group">${link("index.html", "처음 화면")}${SURVEY_OPEN ? link("survey.html", "사전 수요조사") : ""}${SIGNUP_OPEN ? link("signup.html", "교육 신청") : ""}${link("prework.html", "사전 과제 안내")}</div>
+    <div class="group">${link("index.html", "처음 화면")}${SURVEY_OPEN ? link("survey.html", "사전 수요조사") : ""}${link("signup.html", SIGNUP_OPEN ? "교육 신청" : "교육 신청 안내")}${link("prework.html", "사전 과제 안내")}</div>
     <div class="group"><h3>사전 과제</h3>${mods(1, 2)}</div>
     <p class="note">본 강의 자료는 ${OPEN_DATE}에 열립니다.</p>
   </nav>`;
   return `<nav aria-label="목차">
-    <div class="group">${link("index.html", "처음 화면")}${link("signup.html", "교육 신청")}${link("prework.html", "사전 과제 안내")}${link("homework.html", "과제 안내")}${link("quiz.html", "오늘의 퀴즈")}</div>
+    <div class="group">${link("index.html", "처음 화면")}${link("signup.html", SIGNUP_OPEN ? "교육 신청" : "교육 신청 안내")}${link("prework.html", "사전 과제 안내")}${link("homework.html", "과제 안내")}${link("quiz.html", "오늘의 퀴즈")}</div>
     <div class="group"><h3>본 강의</h3>${mods(1, 3)}${mods(5, 8)}</div>
     <div class="group"><h3>심화 · 직접 만들기</h3>${mods(9, 10)}${mods(12, 12)}</div>
     <div class="group"><h3>선택 자료 (수업 외)</h3>${mods(4, 4)}</div>
@@ -364,6 +364,32 @@ fs.writeFileSync(path.join(OUT, "signup.html"), page("signup.html", "교육 신�
   <noscript><p>신청서는 JavaScript가 켜져 있어야 보입니다.</p></noscript>
   <script src="assets/fire-signup.js"></script>`));
 
+// 신청을 사이트로 받지 않을 때(계획: 부서별 메모 제출)는 신청서 대신 안내만 보여 준다
+const MEMO_DUE = "2026. 10. 30.(금) 18:00";
+if (!SIGNUP_OPEN) fs.writeFileSync(path.join(OUT, "signup.html"), page("signup.html", "교육 신청 안내", `
+  <h1>교육 신청 안내</h1>
+  <p class="lead">교육 신청은 <b>부서별로 모아 메모로 제출</b>합니다. 회신 기한 <b>${MEMO_DUE}</b> · 수신자 <b>교수부 소방위 조영진</b></p>
+  <div class="table-wrap"><table class="signup-sched"><tbody>
+    <tr><th>일시</th><td>2026. 11. 6.(금) 16:00~21:00 · 11. 7.(토) 08:00~13:00 (2일 10시간, 별도 식사 시간 없음)</td></tr>
+    <tr><th>장소</th><td>교육훈련관 2층 정보화교육장 (1인 1PC 실습)</td></tr>
+    <tr><th>대상</th><td>소방학교 전 직원 중 희망자 (20명 내외) · AI를 처음 써도 참여 가능</td></tr>
+  </tbody></table></div>
+  <h2>신청 순서</h2>
+  <ol>
+    <li><b>업무용 구글 계정 만들기</b> — <a href="m01.html">01 구글 업무 계정 만들기</a>를 따라 만듭니다 (휴대폰에서 하면 편합니다).</li>
+    <li><b>소속 부서에 알리기</b> — 성명·직급과 <b>구글 계정 이메일</b>을 부서 담당자에게 알립니다. 부서에서 서식으로 모아 메모로 제출합니다.</li>
+    <li><b>Claude 초대 수락</b> — 11. 2.(월)~4.(수) 중 그 이메일로 초대 메일이 옵니다. <b>휴대폰</b>에서 열어 11. 4.(수)까지 수락합니다.</li>
+    <li><b>ChatGPT · GitHub 가입</b> — 교육 시작 전날까지. <a href="prework.html">사전 과제 안내</a>를 따라 하면 약 30분입니다.</li>
+  </ol>
+  <h2>부서 제출 서식 항목</h2>
+  <p><b>연번 · 소속 · 직급 · 성명 · 이메일(구글 계정) · 비고</b><br>예) 1 · 교수부 · 소방위 · 홍길동 · <code>hong.gildong.work@gmail.com</code></p>
+  <ul>
+    <li><b>이메일은 필수</b>입니다. 이 주소로 실습용 Claude Team 초대가 갑니다. 오타가 있으면 초대를 받을 수 없으니 <b>복사해서 붙여넣어</b> 주세요.</li>
+    <li>직원 단체방에는 이메일을 올리지 마세요. 제출한 계정 정보는 교육 계정 초대에만 쓰고 교육이 끝나면 파기합니다.</li>
+    <li>희망 인원에 맞춰 유료 계정을 준비하므로 기한 안에 제출해 주세요.</li>
+  </ul>
+  <p><a class="btn" href="m01.html">01 구글 업무 계정 만들기</a> <a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></p>`));
+
 if (SURVEY_OPEN) {
 // ── 사전 수요조사 (교육 계획 확정 전, 교직원 42명 대상) ──
 fs.copyFileSync(path.join(import.meta.dirname, "fire-survey.js"), path.join(OUT, "assets/fire-survey.js"));
@@ -509,7 +535,7 @@ const modItems = (list) => list.map((m) => `<li><a href="${m.page}"><span class=
 fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 활용능력 향상교육</h1>
   <p class="lead"><b>AI 시대, 여행 계획이 달라졌다.</b> 우리 집 여행 담당이 되어 경주 2박 3일 가족 여행을 AI와 함께 준비합니다. 일정 짜기, 자료 정리, 여행 일정표 스킬, 준비물 체크 화면을 만들어 가족에게 링크로 보내기까지 한 단계씩 따라 하고, 같은 방법을 내 업무에 옮깁니다.</p>
-  <p class="note"><b>1차</b> 11. 6.(금)~7.(토) · <b>2차</b> 11. 20.(금)~21.(토) · 신청 마감 <b>10. 28.(수) 18:00</b> <a class="btn" href="signup.html">교육 신청하기</a></p>
+  <p class="note"><b>11. 6.(금)~7.(토)</b> · 교육훈련관 2층 정보화교육장 · <a href="signup.html">교육 신청 안내</a></p>
   <h2>사전 과제 · 수업 전에 각자</h2>
   <ol class="mods">${modItems(MODULES.slice(0, 2))}</ol>
   <p><a class="btn" href="prework.html">사전 과제 안내 보기</a> 첫날 전까지 해 올 것과 준비물을 한 장에 정리했습니다.</p>
@@ -523,12 +549,12 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <h2>자료</h2>
   <p><a href="prompts.html">프롬프트 모음</a> · <a href="files.html">실습 파일 내려받기</a></p>
   <h2>준비물</h2>
-  <ul><li><b>사전 과제</b>: 업무용 구글 계정 → <a href="signup.html">교육 신청</a>(구글 계정 적기, 10. 28. 18시까지) → ChatGPT·GitHub 가입 → Claude Team 초대 수락 — <a href="prework.html">사전 과제 안내</a></li><li>본인 명의 휴대폰 (문자 인증, 배포한 내 화면 확인용)</li><li>비밀번호를 적어 둘 수첩</li><li>내 업무 중 "AI로 도움받고 싶은 일" 한 가지</li></ul>
+  <ul><li><b>사전 과제</b>: 업무용 구글 계정 → 교육 신청(부서별 메모, 구글 계정 이메일 포함) → ChatGPT·GitHub 가입 → Claude Team 초대 수락 — <a href="prework.html">사전 과제 안내</a></li><li>본인 명의 휴대폰 (문자 인증, 배포한 내 화면 확인용)</li><li>비밀번호를 적어 둘 수첩</li><li>내 업무 중 "AI로 도움받고 싶은 일" 한 가지</li></ul>
   <p class="note">체크박스 표시는 이 PC의 브라우저에만 저장됩니다.</p>`));
 
 // ── 신청 기간 미리보기: 열어 둘 페이지 말고는 모두 "곧 열립니다"로 덮고, 실습 파일·퀴즈는 올리지 않는다 ──
 if (PREVIEW) {
-  const keep = new Set([...(SURVEY_OPEN ? ["survey.html", "survey-status.html"] : ["survey-admin.html"]), ...(SIGNUP_OPEN ? ["signup.html"] : []), "prework.html", ...MODULES.filter((m) => m.num <= 2).map((m) => m.page)]);
+  const keep = new Set([...(SURVEY_OPEN ? ["survey.html", "survey-status.html"] : ["survey-admin.html"]), "signup.html", "prework.html", ...MODULES.filter((m) => m.num <= 2).map((m) => m.page)]);
   for (const d of ["files", "steps", "prototype"]) fs.rmSync(path.join(OUT, d), { recursive: true, force: true });
   for (const f of fs.readdirSync(path.join(OUT, "assets"))) if (f.startsWith("fire-quiz")) fs.rmSync(path.join(OUT, "assets", f));
   const soon = `<h1>곧 열립니다</h1>
@@ -539,19 +565,17 @@ if (PREVIEW) {
     if (!f.endsWith(".html") || f === "index.html" || keep.has(f)) continue;
     fs.writeFileSync(path.join(OUT, f), page(f, "곧 열립니다", soon));
   }
-  if (!SIGNUP_OPEN) fs.writeFileSync(path.join(OUT, "signup.html"), page("signup.html", "교육 신청", `<h1>교육 신청은 곧 열립니다</h1>
-  <p class="lead">사전 수요조사가 끝났습니다. 조사 결과로 교육 차수와 일정을 확정한 뒤 이 페이지에서 교육 신청을 받습니다.</p>
-  <p>그동안 사전 과제(업무용 구글 계정 만들기)를 미리 해 두시면 신청이 쉽습니다.</p>
-  <p><a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></p>`));
   fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 활용능력 향상교육</h1>
   <p class="lead"><b>AI 시대, 여행 계획이 달라졌다.</b> 우리 집 여행 담당이 되어 경주 2박 3일 가족 여행을 AI와 함께 준비합니다. 일정 짜기, 자료 정리, 준비물 체크 화면을 만들어 가족에게 링크로 보내기까지 한 단계씩 따라 하고, 같은 방법을 내 업무에 옮깁니다.</p>
-  <p class="note"><b>1차</b> 11. 6.(금)~7.(토) · <b>2차</b> 11. 20.(금)~21.(토) · 1일차 16:00~21:00, 2일차 08:00~13:00 (총 10시간)${SIGNUP_OPEN ? '<br>신청 마감 <b>10. 28.(수) 18:00</b>' : ' · <b>예정</b>, 계획 확정 뒤 안내'}</p>
+  <p class="note"><b>11. 6.(금)~7.(토)</b> · 1일차 16:00~21:00, 2일차 08:00~13:00 (총 10시간)<br>신청: 부서별 메모 제출 <b>10. 30.(금) 18:00까지</b></p>
   <h2>지금 할 일</h2>
 ${SURVEY_OPEN ? `  <p><b>사전 수요조사</b> — 참여 의향과 가능한 일정을 알려 주세요 (3분, <b>10. 23.(금)까지</b>). 결과로 2차 운영 여부와 평일 일정을 정합니다. <a class="btn" href="survey.html">수요조사 응답하기</a></p>` : ""}
   <ol>
-    <li><b>교육 신청</b> — ${SIGNUP_OPEN ? '업무용 구글 계정을 적어 신청합니다. <a class="btn" href="signup.html">교육 신청하기</a>' : '계획이 확정되면 이 사이트에서 신청을 받습니다.'}</li>
-    <li><b>사전 과제</b> — 첫날 전까지 계정 만들기와 가입을 해 옵니다. <a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></li>
+    <li><b>업무용 구글 계정 만들기</b> — <a href="m01.html">01</a>을 따라 만듭니다.</li>
+    <li><b>교육 신청</b> — 소속 부서에 성명·직급·<b>구글 계정 이메일</b>을 알리면 부서에서 메모로 제출합니다 (<b>10. 30.(금) 18:00까지</b>). <a class="btn" href="signup.html">교육 신청 안내</a></li>
+    <li><b>Claude 초대 수락</b> — 11. 2.~4. 중 오는 초대 메일을 <b>휴대폰</b>에서 열어 <b>11. 4.(수)까지</b> 수락합니다.</li>
+    <li><b>ChatGPT · GitHub 가입</b> — 교육 시작 전날까지. <a class="btn ghost" href="prework.html">사전 과제 안내 보기</a></li>
   </ol>
   <h2>사전 과제</h2>
   <ol class="mods">${modItems(MODULES.slice(0, 2))}</ol>
