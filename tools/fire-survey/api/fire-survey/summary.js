@@ -7,6 +7,8 @@ const SEATS = 20;   // 차수별 정원
 
 module.exports = async (req, res) => {
   if (req.method !== 'GET') return send(res, 405, { error: 'GET으로만 받습니다.' });
+  // 조사가 끝나면 공개 현황도 닫는다 (결과는 담당자 집계 페이지에서 비밀번호로 봄)
+  if (R.closed()) return send(res, 410, { error: '수요조사가 끝나 현황 공개를 마쳤습니다.' });
   try {
     const rows = Object.values(toObject((await redis([['HGETALL', R.HASH]]))[0])).map(v => JSON.parse(v));
     const count = (labels, list, get) => Object.fromEntries(Object.keys(labels).map(k =>
