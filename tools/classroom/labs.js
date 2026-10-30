@@ -469,7 +469,86 @@
     });
   }
 
-  const LABS = { steps: stepsLab, ledger: ledgerLab, prompt: promptLab, delegate: delegateLab, prdgap: prdGapLab, review: reviewLab };
+  /* ───────── 03-2: 개인정보 지우고 건네기 ───────── */
+  // [글, 개인정보 종류|null]. 종류가 있는 조각은 통째로, 나머지는 낱말 단위로 누를 수 있다.
+  const MASK_TEXTS = [
+    { label: '여행 (가족 단톡방)', ask: '이 대화를 AI에게 건네 "경주 일정표를 짜 줘"라고 할 참입니다.', parts: [
+      ['🧑 나: 경주 숙소 예약했어. 예약자 ', null], ['홍길동', '이름'], [', 연락처 ', null], ['010-1234-5678', '전화번호'],
+      ['\n👵 할머니: 혈압약은 ', null], ['광주 북구 ○○로 12, 101동 1203호', '주소'], [' 집 서랍에 있다.', null],
+      ['\n🧒 아이: 체험학습 신청서에 ', null], ['○○초등학교 3학년 2반 홍서연', '학교·반·이름'], [' 쓰면 돼?', null],
+      ['\n🧑 배우자: 숙소는 내 카드 ', null], ['5412-3456-7890-7788', '카드 번호'], ['로 결제했어.', null],
+      ['\n🧑 나: 1일차 불국사, 2일차 박물관. 할머니 무릎 때문에 계단 적은 곳으로 가자.', null]
+    ] },
+    { label: '업무 (민원 처리 메모)', ask: '이 메모를 AI에게 건네 "소화전 주변 주정차 금지 안내문을 써 줘"라고 할 참입니다.', parts: [
+      ['10. 21. 14시 전화 민원. 민원인 ', null], ['박영수', '이름'], ['(', null], ['010-9876-5432', '전화번호'], [', 생년월일 ', null], ['1968. 3. 5.', '생년월일'],
+      [')가 ', null], ['북구 △△동 23-4', '주소'], [' 앞 소화전 주변 불법 주정차를 신고함.', null],
+      ['\n현장 확인 결과 차량 ', null], ['12가 3456', '차량 번호'], [' 확인, 관할 구청에 통보.', null],
+      ['\n같은 신고가 이번 달 3건째라 주민 안내문을 만들 예정.', null]
+    ] }
+  ];
+
+  function maskLab(host) {
+    const body = shell(host, {
+      time: '약 3분',
+      title: '개인정보 지우고 건네기',
+      goal: '실제 자료를 AI에게 건네기 전에, <b>누구인지 알 수 있는 정보</b>를 찾아 가립니다. 일에 필요한 내용(일정, 무릎이 불편함, 신고 내용)은 남깁니다.',
+      howTo: [
+        '<b>여행</b> 또는 <b>업무</b>를 고릅니다.',
+        '글에서 개인정보라고 생각되는 곳을 <b>눌러 가립니다</b>(■■). 다시 누르면 풀립니다.',
+        '<b>[확인하기]</b> → 놓친 것과 지나치게 가린 것을 보고, AI에게 넣을 <b>안전한 글</b>을 봅니다.'
+      ]
+    });
+    body.innerHTML = `
+      <div class="lab-steps" role="tablist">${MASK_TEXTS.map((m, i) => `<button type="button" role="tab" data-m="${i}">${esc(m.label)}</button>`).join('')}</div>
+      <p class="prompt-vague mask-ask"></p>
+      <div class="mask-text" aria-label="눌러서 가리기"></div>
+      <div class="lab-actions"><button type="button" class="btn" data-act="check">확인하기</button><button type="button" class="btn ghost" data-act="reset">다시 하기</button></div>
+      <div class="mask-result" aria-live="polite"></div>`;
+    let m = 0;
+
+    function pick(i) {
+      m = i;
+      body.querySelectorAll('[data-m]').forEach(b => b.setAttribute('aria-selected', String(Number(b.dataset.m) === i)));
+      body.querySelector('.mask-ask').innerHTML = `<b>상황</b> ${esc(MASK_TEXTS[i].ask)}`;
+      body.querySelector('.mask-text').innerHTML = MASK_TEXTS[i].parts.map(([text, kind], pi) => {
+        if (kind) return `<button type="button" class="mask-tok" data-kind="${esc(kind)}" data-p="${pi}">${esc(text)}</button>`;
+        return text.split(/(\s+)/).map(w => (/^\s+$/.test(w) || !w)
+          ? w.replace(/\n/g, '<br>')
+          : `<button type="button" class="mask-tok" data-p="${pi}">${esc(w)}</button>`).join('');
+      }).join('');
+      body.querySelector('.mask-result').innerHTML = '';
+    }
+
+    body.addEventListener('click', e => {
+      const tok = e.target.closest('.mask-tok');
+      if (!tok) return;
+      tok.classList.toggle('masked');
+      tok.classList.remove('miss', 'over', 'hit');
+    });
+    body.querySelector('[data-act="check"]').addEventListener('click', () => {
+      let hit = 0, miss = [], over = 0;
+      body.querySelectorAll('.mask-tok').forEach(tok => {
+        const kind = tok.dataset.kind, masked = tok.classList.contains('masked');
+        tok.classList.remove('miss', 'over', 'hit');
+        if (kind && masked) { hit += 1; tok.classList.add('hit'); }
+        else if (kind) { miss.push(kind); tok.classList.add('miss'); }
+        else if (masked) { over += 1; tok.classList.add('over'); }
+      });
+      const parts = MASK_TEXTS[m].parts;
+      const total = parts.filter(p => p[1]).length;
+      const safe = parts.map(([text, kind]) => (kind ? `[${kind}]` : text)).join('');
+      body.querySelector('.mask-result').innerHTML = `
+        <p><b>${hit} / ${total}</b> 가림${miss.length ? ` · 놓친 것: <b>${miss.map(esc).join(', ')}</b> (주황 테두리)` : ''}${over ? ` · 지나치게 가린 곳 ${over}군데 (점선)` : ''}</p>
+        ${over ? '<p class="mask-note">점선으로 표시된 곳은 <b>일에 필요한 내용</b>이라 남겨도 됩니다. 다 지우면 AI가 일을 못 합니다. "무릎이 불편하다"처럼 누구인지 알 수 없는 사정은 남깁니다.</p>' : ''}
+        <p><b>AI에게 넣을 안전한 글</b> 개인정보 자리는 <code>[이름]</code>처럼 바꿔 두면 글의 뜻은 그대로 남습니다.</p>
+        <pre class="review-fix">${esc(safe)}</pre>`;
+    });
+    body.querySelector('[data-act="reset"]').addEventListener('click', () => pick(m));
+    body.querySelectorAll('[data-m]').forEach(b => b.addEventListener('click', () => pick(Number(b.dataset.m))));
+    pick(0);
+  }
+
+  const LABS = { steps: stepsLab, ledger: ledgerLab, prompt: promptLab, delegate: delegateLab, prdgap: prdGapLab, review: reviewLab, mask: maskLab };
 
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.lab[data-lab]').forEach(host => {

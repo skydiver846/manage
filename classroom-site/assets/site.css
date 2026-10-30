@@ -304,3 +304,12 @@ details.later.later-h4 > summary { font-size: 15px; }
 .review-why { grid-column: 1 / -1; margin: 2px 0 0; font-size: 13.5px; }
 .review-result p { margin: 4px 0; }
 .review-fix { white-space: pre-wrap; font-family: inherit; font-size: 14px; }
+.mask-text { border: 1px solid var(--line); border-radius: 10px; background: #fff; color: #1b2230; padding: 10px 12px; font-size: 15px; line-height: 2; margin: 8px 0; }
+.mask-tok { font: inherit; border: 1px solid transparent; background: none; color: inherit; padding: 0 1px; border-radius: 4px; cursor: pointer; }
+.mask-tok:hover { background: #fff3c4; }
+.mask-tok.masked { background: #1b2230; color: #1b2230; }
+.mask-tok.hit { outline: 2px solid #2e8b57; }
+.mask-tok.miss { border: 2px solid #e07b00; background: #fff6e8; }
+.mask-tok.over { border: 2px dashed #9aa3b2; }
+.mask-note { font-size: 13.5px; color: var(--muted); }
+.mask-result p { margin: 4px 0; }
