@@ -667,7 +667,130 @@
     });
   }
 
-  const LABS = { steps: stepsLab, ledger: ledgerLab, prompt: promptLab, delegate: delegateLab, prdgap: prdGapLab, review: reviewLab, mask: maskLab, skill: skillLab, trouble: troubleLab };
+  /* ───────── 빈칸 채우기 프롬프트 (05-3 PRD 인터뷰, 12 Claude Code 지시) ─────────
+     칸에는 예시가 미리 들어 있다. 그대로 복사해도 되고, 칸만 바꿔 내 것으로 만들어도 된다.
+     본문의 {{키}} 자리에 칸의 값이 들어가고, 미리보기에서 예시 그대로인 칸과 바꾼 칸을 색으로 구분한다. */
+  const FILL = {
+    'prd-interview': {
+      title: 'PRD 인터뷰 프롬프트 만들기',
+      presets: [
+        { label: '부서 행사 준비', v: { what: '부서 행사 준비 체크리스트', now: '단톡방과 수첩에 흩어 적고, 행사 전날 처음부터 다시 확인한다', pain: '누가 무엇을 아직 안 챙겼는지 한눈에 안 보인다' } },
+        { label: '교육 장비 대여', v: { what: '교육 장비 대여·반납 대장', now: '종이 대장에 손으로 적는다', pain: '반납이 늦은 장비와 빌려 간 사람을 찾기 어렵다' } },
+        { label: '교육 일정 안내', v: { what: '교육 일정 안내 화면', now: '공문 붙임 표를 매번 새로 만든다', pain: '바뀐 일정을 교육생이 늦게 안다' } },
+        { label: '가계부', v: { what: '우리 집 가계부 (항목별 지출 합계)', now: '영수증을 모아 두고 월말에 엑셀에 옮긴다', pain: '이번 달 어디에 많이 썼는지 바로 안 보인다' } },
+        { label: '운동 기록', v: { what: '운동 기록과 주간 통계', now: '휴대폰 메모에 날짜별로 적는다', pain: '한 주에 몇 번, 얼마나 했는지 세기 귀찮다' } }
+      ],
+      fields: [
+        { k: 'what', label: '만들고 싶은 것', hint: '화면 1장, 핵심 기능 3개 크기' },
+        { k: 'now', label: '지금은 어떻게 하나', hint: '말하듯 편하게' },
+        { k: 'pain', label: '가장 불편한 점', hint: '한 가지만' }
+      ],
+      text: '너는 경험 많은 기획자야. 나는 "{{what}}"을 기획하려고 해.\n지금은 {{now}}. 가장 불편한 점은 {{pain}}.\nPRD를 쓰기 위해 나를 인터뷰해 줘.\n- 한 번에 질문 1~2개만 해.\n- 배경·목표·사용자·핵심 기능·화면 흐름·범위 밖·성공 기준 순서로 물어봐.\n- 크기는 화면 1장, 핵심 기능 3개까지로 잡아 줘.\n- 내가 다 답하면 Markdown 형식의 PRD 한 장으로 정리해 줘.\n- 내가 말하지 않은 내용은 [확인 필요]로 표시해.'
+    },
+    'cc-prd': {
+      title: 'A. 내 PRD 화면',
+      fields: [
+        { k: 'name', label: '화면 이름 (커밋 메시지에 씀)', v: '내 PRD 화면' },
+        { k: 'prd', label: '내 PRD 전체', area: true, v: '', ph: '01_기획(PRD) 폴더의 내 PRD.md를 열어 전체를 복사해 여기에 붙여넣으세요 (Ctrl + A → Ctrl + C → Ctrl + V)', empty: '(여기에 내 PRD 전체를 붙여넣기)' }
+      ],
+      text: '이 저장소에 아래 PRD의 화면을 만들어 줘.\n\n{{prd}}\n\n- index.html 파일 하나로 만들고, 외부 서버나 데이터베이스 없이 기록은 이 브라우저(localStorage)에만 저장해 줘\n- 휴대폰 화면(폭 약 400px)에서 가로 스크롤 없이 보이게 해 줘\n- 실제 개인정보 대신 예시 데이터로 처음 화면을 보여 줘\n- 다 만든 뒤 PRD 7번 성공 기준대로 시험해 보고, 기준마다 통과 여부를 표로 알려 줘\n- 커밋 메시지는 한국어로 "{{name}} v0.1"'
+    },
+    'cc-data': {
+      title: 'B. 공공데이터 화면',
+      presets: [
+        { label: '기본: 화재인명피해', v: { file: '소방청_화재인명피해 지역별 성별 현황', want: '시도별 사상자 막대그래프, 전국 평균보다 많은 지역 강조' } },
+        { label: '대안: 가스누출 화재', v: { file: '소방청_가스누출(폭발) 화재 발생 현황', want: '연도·장소별 건수, 많은 장소 순위' } }
+      ],
+      fields: [
+        { k: 'file', label: '공공데이터 파일 이름', hint: '1단계-B에서 받은 파일' },
+        { k: 'want', label: '첫 화면으로 보고 싶은 것', hint: '표나 그래프 한 가지' }
+      ],
+      text: '이 저장소의 data.csv는 공공데이터포털에서 받은 "{{file}}" 자료야.\n이 데이터로 한눈에 보는 현황 화면을 index.html 파일 하나로 만들어 줘.\n\n- 먼저 CSV의 칸 이름과 줄 수를 확인해 알려 주고, 어울리는 표·그래프 3가지를 제안한 뒤 "{{want}}"에 가장 가까운 것부터 만들어 줘\n- CSV가 EUC-KR(CP949)일 수 있으니 한글이 깨지지 않게 읽어 줘\n- 외부 서버나 외부 프로그램(라이브러리) 없이 같은 저장소의 data.csv를 읽고, 그래프도 직접 그려 줘\n- 휴대폰 화면(폭 약 400px)에서 가로 스크롤 없이 보이게 해 줘\n- 화면 아래에 출처(공공데이터포털, 제공기관, 기준일)를 적어 줘\n- 다 만든 뒤 화면의 숫자 3개를 CSV 원본과 대조해 맞는지 표로 알려 줘\n- 커밋 메시지는 한국어로 "공공데이터 화면 v0.1"'
+    }
+  };
+
+  function fillLab(host) {
+    const ids = host.dataset.tpl.split(',');
+    const multi = ids.length > 1;
+    const body = shell(host, {
+      time: host.dataset.time || '약 3분',
+      title: multi ? 'Claude Code 지시문 만들기' : FILL[ids[0]].title,
+      goal: '칸에 <b>예시가 미리 들어 있습니다.</b> 그대로 복사해도 되고, 칸만 바꿔 내 것으로 만들어도 됩니다. 아래 미리보기에서 <span class="fill-def">예시 그대로인 칸</span>과 <span class="fill-mine">내가 바꾼 칸</span>이 색으로 구분됩니다.',
+      howTo: [
+        multi ? '<b>A</b>(내 PRD) 또는 <b>B</b>(공공데이터)를 고릅니다.' : '위의 예시 버튼 중 내 일과 가까운 것을 누르거나, 칸에 직접 씁니다.',
+        multi ? '칸을 채웁니다. A는 <b>내 PRD 전체</b>를 붙여넣는 칸이 핵심입니다.' : '칸 이름 아래 작은 글씨(힌트)를 참고해 내 말로 바꿉니다.',
+        '<b>[프롬프트 복사]</b> → ' + (multi ? 'Claude Code' : 'Claude 새 대화') + ' 입력창에 붙여넣습니다.'
+      ]
+    });
+    body.innerHTML = `
+      ${multi ? `<div class="lab-steps" role="tablist">${ids.map(id => `<button type="button" role="tab" data-tpl="${id}">${esc(FILL[id].title)}</button>`).join('')}</div>` : ''}
+      <div class="fill-presets"></div>
+      <div class="fill-fields"></div>
+      <p class="skill-label">완성된 프롬프트 미리보기</p>
+      <div class="fill-preview"></div>
+      <div class="lab-actions"><button type="button" class="btn" data-act="copy">프롬프트 복사</button><button type="button" class="btn ghost" data-act="reset">예시로 되돌리기</button></div>
+      <p class="prompt-status" aria-live="polite"></p>`;
+    let id = ids[0];
+    const defaults = () => {
+      const t = FILL[id], d = {};
+      t.fields.forEach(f => { d[f.k] = f.v !== undefined ? f.v : ''; });
+      if (t.presets) Object.assign(d, t.presets[0].v);
+      return d;
+    };
+    let base = {}, vals = {};
+
+    function preview() {
+      const t = FILL[id];
+      const html = esc(t.text).replace(/\{\{(\w+)\}\}/g, (m, k) => {
+        const f = t.fields.find(x => x.k === k), v = (vals[k] || '').trim();
+        if (!v) return `<span class="fill-empty">${esc(f.empty || `(${f.label})`)}</span>`;
+        return `<span class="${v === (base[k] || '').trim() ? 'fill-def' : 'fill-mine'}">${esc(v)}</span>`;
+      });
+      body.querySelector('.fill-preview').innerHTML = html;
+    }
+    function render() {
+      const t = FILL[id];
+      body.querySelectorAll('[data-tpl]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tpl === id)));
+      body.querySelector('.fill-presets').innerHTML = t.presets
+        ? `<p class="skill-label">예시 고르기</p><div class="lab-steps">${t.presets.map((p, i) => `<button type="button" data-preset="${i}" aria-selected="${i === 0}">${esc(p.label)}</button>`).join('')}</div>` : '';
+      body.querySelector('.fill-fields').innerHTML = t.fields.map(f => `<label class="fill-field"><span>${esc(f.label)}${f.hint ? ` <small>${esc(f.hint)}</small>` : ''}</span>
+        ${f.area ? `<textarea data-k="${f.k}" rows="5" placeholder="${esc(f.ph || '')}"></textarea>` : `<input data-k="${f.k}" type="text">`}</label>`).join('');
+      body.querySelectorAll('[data-k]').forEach(el => { el.value = vals[el.dataset.k] || ''; });
+      preview();
+    }
+    const saved = {};   // 탭을 오가도 쓴 내용이 남게 (A에 붙여넣은 PRD가 B를 보고 와도 그대로)
+    function load(nextId, fresh = false) {
+      if (id && !fresh) saved[id] = { base, vals };
+      id = nextId;
+      if (!fresh && saved[id]) ({ base, vals } = saved[id]); else { base = defaults(); vals = { ...base }; }
+      render(); body.querySelector('.prompt-status').textContent = '';
+    }
+
+    body.addEventListener('input', e => { const k = e.target.dataset && e.target.dataset.k; if (k) { vals[k] = e.target.value; preview(); } });
+    body.addEventListener('click', e => {
+      const t = e.target.closest('[data-tpl]'); if (t && t.closest('.lab-body')) { load(t.dataset.tpl); return; }
+      const p = e.target.closest('[data-preset]');
+      if (p) {
+        const v = FILL[id].presets[Number(p.dataset.preset)].v;
+        base = { ...base, ...v }; vals = { ...vals, ...v };
+        body.querySelectorAll('[data-preset]').forEach(x => x.setAttribute('aria-selected', String(x === p)));
+        body.querySelectorAll('[data-k]').forEach(el => { el.value = vals[el.dataset.k] || ''; });
+        preview();
+      }
+    });
+    body.querySelector('[data-act="reset"]').addEventListener('click', () => load(id, true));
+    body.querySelector('[data-act="copy"]').addEventListener('click', async () => {
+      const status = body.querySelector('.prompt-status');
+      const t = FILL[id];
+      const missing = t.fields.filter(f => !(vals[f.k] || '').trim());
+      const text = t.text.replace(/\{\{(\w+)\}\}/g, (m, k) => (vals[k] || '').trim() || (t.fields.find(x => x.k === k).empty || `[${k}]`));
+      try { await navigator.clipboard.writeText(text); status.textContent = missing.length ? `복사했습니다. 다만 "${missing.map(f => f.label).join(', ')}" 칸이 비어 있어 그 자리는 붙여넣은 뒤 채워야 합니다.` : '복사했습니다. 입력창에 붙여넣으세요 (Ctrl + V).'; }
+      catch (_) { status.textContent = '복사가 막혔습니다. 미리보기 글을 직접 끌어서 선택한 뒤 Ctrl + C 로 복사하세요.'; }
+    });
+    load(id, true);
+  }
+
+  const LABS = { steps: stepsLab, ledger: ledgerLab, prompt: promptLab, delegate: delegateLab, prdgap: prdGapLab, review: reviewLab, mask: maskLab, skill: skillLab, trouble: troubleLab, fill: fillLab };
 
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.lab[data-lab]').forEach(host => {

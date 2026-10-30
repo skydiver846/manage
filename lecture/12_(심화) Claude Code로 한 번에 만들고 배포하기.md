@@ -80,6 +80,10 @@
 
 ## 2단계: Claude Code에 지시하기 (5분)
 
+아래 [바로 해 보기]에서 **A** 또는 **B**를 고르고 칸을 채운 뒤 **[프롬프트 복사]** → Claude Code 입력창에 붙여넣습니다. 칸 채우기가 낯설면 그 아래 **원본**을 복사해 괄호 자리만 바꿔도 됩니다.
+
+<div class="lab" data-lab="fill" data-tpl="cc-prd,cc-data"></div>
+
 **A. 내 PRD 화면**
 
 ```
