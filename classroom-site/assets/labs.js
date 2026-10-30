@@ -409,7 +409,67 @@
     draw();
   }
 
-  const LABS = { steps: stepsLab, ledger: ledgerLab, prompt: promptLab, delegate: delegateLab, prdgap: prdGapLab };
+  /* ───────── 12-4: 합치기 전 확인 (AI 작업 보고서에서 이상한 곳 찾기) ───────── */
+  const REVIEW = [
+    { sec: '성공 기준 (PRD 7번)', text: '휴대폰 화면(폭 400px)에서 가로 스크롤 없음 — ✅ 시험함', bad: false },
+    { sec: '성공 기준 (PRD 7번)', text: '준비물과 누구 것을 골라 버튼 한 번으로 추가 — ✅ 시험함', bad: false },
+    { sec: '성공 기준 (PRD 7번)', text: '챙김률 50% 미만이면 "서둘러요" — ✅ 시험함 (아이 1/3 → 서둘러요)', bad: false },
+    { sec: '성공 기준 (PRD 7번)', text: '새로고침해도 기록이 남음 — ✅ (시험은 생략)', bad: true,
+      why: '✅ 표시인데 실제로는 <b>시험하지 않았습니다.</b> 확인하지 않은 기준을 통과로 적으면 안 됩니다.', fix: '"새로고침해도 기록이 남는지 실제로 시험하고 결과를 알려 줘"' },
+    { sec: '더 넣은 기능', text: '목록 내려받기(CSV) 버튼', bad: false },
+    { sec: '더 넣은 기능', text: '가족 단톡방으로 바로 공유하는 버튼 (카카오톡 연결)', bad: true,
+      why: 'PRD에 없는 기능이고(<b>범위 밖</b>), 외부 서비스와 연결됩니다. 좋아 보여도 PRD를 고치기 전에는 넣지 않습니다.', fix: '"카카오톡 공유 버튼은 PRD 범위 밖이니 빼 줘"' },
+    { sec: '더 넣은 기능', text: '방문 통계를 보려고 analytics.example.com 스크립트 추가', bad: true,
+      why: '내 화면을 연 사람의 정보가 <b>외부 주소</b>로 나갈 수 있습니다. 묻지 않은 외부 연결은 빼야 합니다.', fix: '"외부 주소로 보내는 스크립트는 모두 빼 줘"' },
+    { sec: '예시 데이터', text: '(예시) 할머니 혈압약 — 연락처 010-2345-6789', bad: true,
+      why: '예시에 <b>실제처럼 보이는 전화번호</b>가 들어갔습니다. 예시 데이터에도 개인정보는 넣지 않습니다.', fix: '"예시 데이터에서 전화번호는 빼 줘"' },
+    { sec: '저장', text: '연습장(브랜치)에 커밋 "준비물 화면 v0.1" — 원본(main)은 아직 그대로', bad: false }
+  ];
+
+  function reviewLab(host) {
+    const body = shell(host, {
+      time: '약 4분',
+      title: '합치기 전 확인: 보고서에서 이상한 곳 찾기',
+      goal: 'Claude Code가 준비물 화면(PRD v0.3)을 만들고 남긴 보고서라고 해 봅시다. 내 화면을 검토하기 전에, 이 보고서로 먼저 연습합니다.',
+      howTo: [
+        '줄마다 읽고, 그대로 합치면 안 될 것 같은 줄에 <b>⚠️ 이상함</b>을 체크합니다.',
+        '<b>[확인하기]</b> → 찾은 것과 놓친 것, 그리고 Claude에게 보낼 <b>고쳐 달라는 말</b>을 봅니다.',
+        '세 가지만 기억하세요: <b>PRD 범위 밖 기능 · 외부 주소 · 개인정보</b>, 그리고 <b>시험하지 않은 ✅</b>.'
+      ]
+    });
+    let sec = '';
+    body.innerHTML = `
+      <div class="review-report"><p class="review-head">🤖 Claude Code 작업 보고</p>${REVIEW.map((r, i) => {
+        const h = r.sec !== sec ? `<p class="review-sec">${esc(r.sec)}</p>` : '';
+        sec = r.sec;
+        return `${h}<div class="review-row" data-i="${i}"><span class="review-text">${esc(r.text)}</span><label class="review-flag"><input type="checkbox"> ⚠️ 이상함</label><p class="review-why" hidden></p></div>`;
+      }).join('')}</div>
+      <div class="lab-actions"><button type="button" class="btn" data-act="check">확인하기</button><button type="button" class="btn ghost" data-act="reset">다시 하기</button></div>
+      <div class="review-result" aria-live="polite"></div>`;
+    body.querySelector('[data-act="check"]').addEventListener('click', () => {
+      let found = 0, wrong = 0;
+      const fixes = [];
+      body.querySelectorAll('.review-row').forEach(row => {
+        const r = REVIEW[row.dataset.i], flagged = row.querySelector('input').checked, why = row.querySelector('.review-why');
+        row.classList.remove('right', 'wrong', 'missed');
+        why.hidden = true;
+        if (r.bad && flagged) { found += 1; row.classList.add('right'); why.hidden = false; why.innerHTML = `✅ 찾았습니다. ${r.why}`; fixes.push(r.fix); }
+        else if (r.bad) { row.classList.add('missed'); why.hidden = false; why.innerHTML = `👀 놓쳤습니다. ${r.why}`; fixes.push(r.fix); }
+        else if (flagged) { wrong += 1; row.classList.add('wrong'); why.hidden = false; why.textContent = '이 줄은 PRD대로이고 문제가 없습니다.'; }
+      });
+      const total = REVIEW.filter(r => r.bad).length;
+      body.querySelector('.review-result').innerHTML = `
+        <p><b>${found} / ${total}</b> 찾음${wrong ? ` · 문제없는 줄 ${wrong}개를 이상하다고 고름` : ''}</p>
+        <p><b>이 상태로 합쳐도 될까요?</b> 아니요. 아래처럼 고쳐 달라고 한 뒤 보고서를 <b>다시</b> 확인하고 합칩니다.</p>
+        <pre class="review-fix">${fixes.map(esc).join('\n')}</pre>`;
+    });
+    body.querySelector('[data-act="reset"]').addEventListener('click', () => {
+      body.querySelectorAll('.review-row').forEach(row => { row.classList.remove('right', 'wrong', 'missed'); row.querySelector('input').checked = false; row.querySelector('.review-why').hidden = true; });
+      body.querySelector('.review-result').innerHTML = '';
+    });
+  }
+
+  const LABS = { steps: stepsLab, ledger: ledgerLab, prompt: promptLab, delegate: delegateLab, prdgap: prdGapLab, review: reviewLab };
 
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.lab[data-lab]').forEach(host => {
