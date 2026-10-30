@@ -84,6 +84,8 @@
   .check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; cursor: pointer; }
   .check input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--ok); flex: none; }
   .check.done span { color: var(--muted); text-decoration: line-through; }
+  .checks.steps { display: grid; gap: 4px; padding: 8px 10px; background: var(--bg); border-radius: 8px; }
+  .checks.steps .check { font-size: 13.5px; }
   .copybox { width: 100%; min-height: 140px; font: 13px/1.5 var(--font-mono); }
   .hint { font-size: 13px; color: var(--muted); margin: 0; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -94,7 +96,7 @@
   <header>
     <small>생성형 AI 활용능력 향상교육 · 1차 리허설</small>
     <h1>10교시 리허설 기록</h1>
-    <p>교시를 시작할 때 <b>시작</b>, 끝날 때 <b>끝</b>을 누르고 결과와 막힌 곳을 적어 두세요. 계획은 1교시 50분 기준입니다. 리허설 시간 × 1.3~1.5배를 실제 교육생 시간으로 봅니다.</p>
+    <p>교육생 화면(테스트 계정)으로 처음부터 끝까지 따라 하며 기록합니다. 교시를 시작할 때 <b>시작</b>, 끝날 때 <b>끝</b>을 누르고, 교시 안의 <b>확인할 것</b>을 하나씩 체크하세요. 막힌 곳과 헷갈린 문장은 적어 두면 바로 고칩니다. 리허설 시간 × 1.3~1.5배를 실제 교육생 시간으로 봅니다. 특히 <b>2교시와 7교시</b>가 빠듯합니다.</p>
     <div class="store" id="store">저장소를 연결하는 중…</div>
   </header>
 
@@ -102,6 +104,7 @@
     <div class="stat"><span>기록한 교시</span><strong id="sDone">0 / 10</strong></div>
     <div class="stat"><span>계획 합계</span><strong id="sPlan">0분</strong></div>
     <div class="stat"><span>실제 합계 (기록한 교시)</span><strong id="sReal">0분</strong></div>
+    <div class="stat"><span>확인한 항목</span><strong id="sSteps">0 / 0</strong></div>
     <div class="stat"><span>막힘 · 메뉴 다름</span><strong id="sStuck">0 · 0</strong></div>
   </section>
 
@@ -121,31 +124,117 @@
 
 <script>
 const PLAN = [
-  { round: "사전 과제", sub: "수업 전, 리허설용 새 크롬 프로필에서", items: [
-    { id: "pre", label: "사전 과제", title: "01 업무 계정 · 02 ChatGPT·Claude 가입 · GitHub 가입", mods: "01 · 02 · 10의 1단계", plan: 35 } ] },
-  // id는 내용 기준으로 유지(12교시판에서 적은 기록이 같은 내용 칸에 그대로 보이게). p03(옵시디언)은 수업 외로 빠짐
-  { round: "1일차", sub: "16:00~21:00 · 1~5교시 · AI에게 일 시키기 → 내 업무 폴더 → PRD → 스킬 → 보고 자료·내 화면 시안", items: [
-    { id: "p01", label: "1교시", title: "생성형 AI 첫 경험과 프롬프트", mods: "00 · 3-0 몸풀기 HTML · 3-1", plan: 50 },
-    { id: "p02", label: "2교시", title: "파일 건네기와 프로젝트", mods: "3-2 · 3-3 · 내 업무 폴더", plan: 50 },
-    { id: "p04", label: "3교시", title: "업무 기획서(PRD) 작성", mods: "05", plan: 50 },
+  { round: "사전 과제", sub: "수업 전, 리허설용 테스트 구글 계정 · 새 크롬 프로필에서", items: [
+    { id: "pre", label: "사전 과제", title: "01 업무 계정 · 02 ChatGPT 가입 · Claude 초대 수락 · GitHub 가입", mods: "01 · 02 · 사전 과제 안내", plan: 30 } ] },
+  // id는 예전 기록이 같은 칸에 그대로 보이게 유지
+  { round: "1일차", sub: "16:00~21:00 · 1~5교시 · 고정관념 세 문장 → 요청·파일·프로젝트 → PRD → 스킬 → 내 화면 시안", items: [
+    { id: "p01", label: "1교시", title: "고정관념 · 말로 만든 계산기 · 프롬프트 5요소", mods: "00 · 03 시작하며 · 3-0 · 3-1", plan: 50 },
+    { id: "p02", label: "2교시", title: "파일 건네기 · 개인정보 지우기 · 프로젝트", mods: "3-2 · 3-3 · 내 업무 폴더", plan: 50 },
+    { id: "p04", label: "3교시", title: "PRD 구멍 찾기 · 내 PRD 인터뷰", mods: "05", plan: 50 },
     { id: "p05", label: "4교시", title: "스킬로 업무 방법 맡기기", mods: "(PRD 마무리 10분) · 06", plan: 50 },
-    { id: "p06", label: "5교시", title: "PRD로 보고 자료 · 내 화면 시안", mods: "07", plan: 50 } ] },
-  { round: "2일차", sub: "08:00~13:00 · 6~10교시 · 코딩 없이 자동화 → 화면 구조 맛보기·웹 공개 → 내 업무 화면 → 공유", items: [
-    { id: "p07", label: "6교시", title: "코딩 없이 업무 자동화", mods: "08 Aside (설치 포함)", plan: 50 },
-    { id: "p0910", label: "7교시", title: "화면 구조 맛보기와 웹에 공개", mods: "09 맛보기 20분 · 10 Netlify 30분", plan: 50 },
-    { id: "p10", label: "8~9교시", title: "AI 에이전트로 내 업무 화면 만들기", mods: "10-7 연결 · 12 (A 내 PRD / B 공공데이터)", plan: 100 },
-    { id: "p12", label: "10교시", title: "결과 공유와 업무 적용 계획", mods: "공유 · 2일차 퀴즈 · 과정 평가", plan: 50 } ] },
+    { id: "p06", label: "5교시", title: "PRD로 결과물 · 내 화면 시안", mods: "07 · 출구 카드(말로)", plan: 50 } ] },
+  { round: "2일차", sub: "08:00~13:00 · 6~10교시 · 코딩 없이 자동화 → 화면 뜯어보기·웹 공개 → 내 화면 → 처음 질문, 다시", items: [
+    { id: "p07", label: "6교시", title: "1일차 퀴즈 · AI 브라우저로 업무 자동화", mods: "퀴즈 8분 · 08 Aside 42분", plan: 50 },
+    { id: "p0910", label: "7교시", title: "화면 뜯어보기와 웹에 공개", mods: "09 1~4단계 17분 · 10 Netlify 32분", plan: 50 },
+    { id: "p10", label: "8~9교시", title: "Claude Code로 내 화면 만들고 배포", mods: "10-7 연결 · 12 (A 내 PRD / B 공공데이터)", plan: 100 },
+    { id: "p12", label: "10교시", title: "처음 질문, 다시 · 결과 공유 · 의견 나누기", mods: "12 끝 · 2일차 퀴즈 · 오프라인 의견", plan: 50 } ] },
+  { round: "과정 뒤 (선택)", sub: "시간 날 때. 교육생이 집에서 이어서 할 것들이 되는지만 확인", items: [
+    { id: "after", label: "과정 뒤", title: "09 이어서 해 보기 · 과제 안내", mods: "09 ①~④ · 과제 안내", plan: 30 } ] },
 ];
+// 교시마다 확인할 것. 리허설 때 하나씩 체크하면서 진행
+const STEPS = {
+  pre: [
+    ["acct", "테스트 구글 계정 만들기 (01) · 크롬 \"업무\" 프로필"],
+    ["gpt", "ChatGPT 가입 (02 2-1)"],
+    ["invite", "Claude 초대 메일을 휴대폰 Gmail에서 수락 → PC에서 Team 화면 확인 (02 2-2)"],
+    ["gh", "GitHub 가입, Username 적어 두기 (02 2-3)"],
+    ["site", "교육생 사이트 처음 화면 · 사전 과제 안내 문구가 실제와 맞는지"],
+  ],
+  p01: [
+    ["myth", "고정관념 세 문장 (1분, 개요 안에서)"],
+    ["helper", "여행길 도우미 QR → 휴대폰으로 열기"],
+    ["calc", "3-0 계산기 → 미리보기 → 다운로드 → 바탕화면 더블클릭"],
+    ["pick", "택1 (폭탄 뽑기 · 지뢰찾기 · 캐릭터 이모티콘)"],
+    ["drop", "계산기 Netlify Drop 시연 → QR"],
+    ["lab-prompt", "교안 실습: 막연한 요청 다듬기 ([5요소 확인], [내 요청 복사])"],
+    ["goodbad", "나쁜 예 vs 좋은 예 (Claude 새 채팅 2개) · 같은 지시 ChatGPT에도"],
+  ],
+  p02: [
+    ["file", "3-2 파일 첨부 요약 · 구멍 찾기 · 후기 요약"],
+    ["lab-mask", "교안 실습: 개인정보 지우고 건네기"],
+    ["team-proj", "3-3 팀 공유 프로젝트 \"우리 가족 여행 실습\" 효과 보기"],
+    ["fill-project", "빈칸 채우기: 내 업무 프로젝트 지침 → [지침 복사] → 지침 칸"],
+    ["folder", "내 업무 폴더 만들기"],
+  ],
+  p04: [
+    ["taste", "5-0 한 줄로 시키면?"],
+    ["lab-gap", "교안 실습: PRD 구멍 찾기 (한 목록 vs 누구 것별, A·B·C)"],
+    ["fill-prd", "빈칸 채우기: PRD 인터뷰 프롬프트 → 인터뷰 → PRD.md 내려받기"],
+  ],
+  p05: [
+    ["lab-skill", "교안 실습: SKILL.md 맞춰 보기"],
+    ["skill-up", "6-2 prd-interview ZIP 업로드 → 켜기 → 한 문장으로 부르기"],
+    ["trip", "6-3 trip-plan 스킬 ZIP 만들기 → 업로드 → \"제주 2박 3일\"로 부르기"],
+    ["fill-skill", "빈칸 채우기: 내 스킬 → ZIP → 업로드"],
+  ],
+  p06: [
+    ["nb", "7-1 Gemini Notebook 생성 버튼만 누르고 넘어가기"],
+    ["family", "7-2 가족 안내 한 장"],
+    ["fill-mock", "빈칸 채우기: 내 화면 시안 → 미리보기 (빈 화면이면 claudeusercontent 막힘)"],
+    ["exit", "바꿀 점 3가지 메모 · 출구 카드 말로 한 줄"],
+  ],
+  p07: [
+    ["quiz1", "1일차 퀴즈 함께 풀기 → 공유판"],
+    ["aside", "Aside 로그인 (설치 여부 확인)"],
+    ["aside-1", "실습 1: 준비물 화면 조작 맡기기 (아이 33% 서둘러요)"],
+    ["aside-2", "실습 2: 경주 축제·박물관 안내 표 · 루틴 저장"],
+    ["lab-del", "교안 실습: AI에게 맡길 일 나누기"],
+  ],
+  p0910: [
+    ["lab-steps", "09 단계 실습 화면이 페이지 안에 뜨는지 (행정망 PC)"],
+    ["code-css", "✏️ 2단계 버튼 색 바꾸고 [▶ 실행]"],
+    ["code-js", "✏️ 3단계 rate < 50 → 30 → 같은 33%가 순조로움, [새로고침]하면 사라짐"],
+    ["why", "10 도입: 내 PC는 \"우리 집\" (2분)"],
+    ["netlify", "Netlify 가입 → 끌어다 놓기 → 주소 이름 → QR → 다시 올리기"],
+    ["lab-ledger", "교안 실습: 각자 수첩 vs 공용 장부"],
+  ],
+  p10: [
+    ["repo", "10-7 my-tool 저장소(README 체크) + Claude Code 연결 (Only select repositories)"],
+    ["fill-cc", "빈칸 채우기: Claude Code 지시문 (A 내 PRD / B 공공데이터)"],
+    ["csv", "(B) 공공데이터 CSV 내려받기 → data.csv 업로드"],
+    ["work", "Claude Code 작업·허락 화면·연습장(브랜치)"],
+    ["lab-review", "교안 실습: 합치기 전 확인 (보고서에서 이상한 곳 찾기)"],
+    ["merge", "합치기 → Netlify 연결·배포 → 휴대폰으로 성공 기준 3개"],
+  ],
+  p12: [
+    ["again", "처음 질문, 다시 (세 문장 2분)"],
+    ["share", "결과 공유: \"나는 ○○를 만들어 ○○에 쓴다\" 한 줄"],
+    ["quiz2", "2일차 퀴즈 → 공유판"],
+    ["talk", "의견 나누기 (질문지)"],
+    ["hw", "과정 뒤 과제 · Team 사용 기간 안내"],
+  ],
+  after: [
+    ["ai-edit", "09 ① AI에게 고쳐 달라고 하고, 받은 코드로 실행 (바뀐 줄 표시)"],
+    ["js10", "09 ② JavaScript 10가지 눌러 보기"],
+    ["play", "09 ③ 응용: 일정 플래너 만들어 실행기에 붙여넣기 · 파일로 저장"],
+    ["hw-check", "과제 안내 링크·내용이 실제와 맞는지"],
+  ],
+};
 const ALL = PLAN.flatMap((g) => g.items);
 const CHECKS = [
   ["proj", "프로젝터 입력을 노트북(HDMI)으로 전환하고, 강의장 PC 화면이 나가지 않는지 확인"],
   ["cable", "노트북 연결 단자(HDMI · USB-C 젠더)와 전원"],
   ["net", "노트북 인터넷 (기관 와이파이, 예비로 휴대폰 핫스팟)"],
   ["team", "노트북 Claude가 Team 화면인지(왼쪽 아래 Team 이름), 크롬 확대 125~150%"],
+  ["admin", "Team 관리자 설정: 스킬 · 코드 실행·파일 만들기 · Claude Code 허용, 팀 공유 프로젝트 \"우리 가족 여행 실습\" 준비"],
   ["pages", "강의장 PC에 강사용 열람 페이지와 이 기록 페이지 열기"],
   ["netcheck", "교육생 PC 한 대에서 접속 점검 페이지 확인 (Claude 3개는 주소를 눌러 직접 확인)"],
+  ["google", "교육생 PC에서 accounts.google.com 로그인 → claude.ai Team 화면"],
+  ["copy", "교육생 PC에서 교안 실습의 [복사] 버튼이 되는지 (클립보드)"],
   ["html", "(1일차) 교육생 PC 한 대로 HTML 파일 내려받기 → 바탕화면 더블클릭 실행 확인"],
-  ["install", "2일차 6교시 Aside 설치가 교육생 PC 한 대로 되는지 확인"],
+  ["install", "(2일차) Aside 설치·로그인이 교육생 PC 한 대로 되는지"],
+  ["quiz", "오늘의 퀴즈 공유판 비어 있는지 (관리 → 결과 지우기)"],
+  ["paper", "피드백 질문지 출력, 고정관념 세 문장 띄울 화면"],
   ["logout", "수업 후 강의장 PC에서 개인 Claude 로그아웃, 크롬 프로필 정리"],
 ];
 const RESULTS = [["ok", "됨"], ["stuck", "막힘"], ["diff", "메뉴 이름 다름"]];
@@ -197,6 +286,7 @@ function rowHTML(it) {
       ${RESULTS.map(([v, t]) => `<button type="button" class="chip" data-act="result" data-id="${it.id}" data-v="${v}" aria-pressed="false">${t}</button>`).join("")}
       <span class="live" id="live-${it.id}"></span>
     </div>
+    <div class="checks steps">${(STEPS[it.id] || []).map(([k, t]) => `<label class="check" id="stp-${it.id}-${k}"><input type="checkbox" data-step-id="${it.id}" data-step-k="${k}"><span>${t}</span></label>`).join("")}</div>
     <div class="notes">
       <label for="issue-${it.id}">막힌 곳과 이유<textarea id="issue-${it.id}" placeholder="예: Aside 설치 때 관리자 권한 창이 뜸"></textarea></label>
       <label for="text-${it.id}">교재에서 헷갈린 문장<textarea id="text-${it.id}" placeholder="예: 5-3의 '내려받게 해 줘' 설명이 부족"></textarea></label>
@@ -213,6 +303,10 @@ function build() {
     c.items[k] = e.target.checked; persist("checks"); paint();
   });
   $("groups").innerHTML = PLAN.map((g) => `<section class="group"><h2>${g.round} <span>${g.sub}</span></h2>${g.items.map(rowHTML).join("")}</section>`).join("");
+  $("groups").addEventListener("change", (e) => {
+    const id = e.target.dataset.stepId, k = e.target.dataset.stepK; if (!id) return;
+    const r = rec(id); r.steps = r.steps || {}; r.steps[k] = e.target.checked; persist(id); paint();
+  });
   for (const it of ALL) {
     const id = it.id;
     $("start-" + id).addEventListener("change", (e) => { rec(id).start = e.target.value; persist(id); paint(); });
@@ -246,6 +340,7 @@ function paint() {
     row.dataset.result = r.result || "";
     row.classList.toggle("running", !!(r.start && !r.end && !(r.minutes > 0)));
     row.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.v === r.result)));
+    for (const [k] of STEPS[id] || []) { const on = !!(r.steps && r.steps[k]), lab = $(`stp-${id}-${k}`); lab.querySelector("input").checked = on; lab.classList.toggle("done", on); }
   }
   const items = (state.checks && state.checks.items) || {};
   for (const [k] of CHECKS) { const on = !!items[k]; $("cb-" + k).checked = on; $("chk-" + k).classList.toggle("done", on); }
@@ -260,16 +355,20 @@ function tick() {
   }
 }
 function paintSummary() {
-  const lessons = ALL.filter((it) => it.id !== "pre");
-  let done = 0, plan = 0, real = 0, stuck = 0, diff = 0; const lines = [];
+  const extra = (id) => id === "pre" || id === "after";
+  const lessons = ALL.filter((it) => !extra(it.id));
+  let done = 0, plan = 0, real = 0, stuck = 0, diff = 0, sDone = 0, sAll = 0; const lines = [];
   for (const it of ALL) {
     const r = state[it.id] || {}, m = minutesOf(r);
-    if (it.id !== "pre") plan += it.plan;
-    if (m != null) { if (it.id !== "pre") done += it.plan / 50; real += m; }
+    if (!extra(it.id)) plan += it.plan;
+    if (m != null) { if (!extra(it.id)) done += it.plan / 50; real += m; }
     if (r.result === "stuck") stuck++; if (r.result === "diff") diff++;
-    if (m != null || r.result || r.issue || r.text) {
+    const st = STEPS[it.id] || [], stDone = st.filter(([k]) => r.steps && r.steps[k]);
+    sAll += st.length; sDone += stDone.length;
+    if (m != null || r.result || r.issue || r.text || stDone.length) {
       const res = RESULTS.find(([v]) => v === r.result);
-      lines.push(`[${it.label}] ${r.start || "?"}~${r.end || "?"} (${m == null ? "?" : m + "분"}, 계획 ${it.plan}분) / ${res ? res[1] : "-"} / ${r.issue || "-"} / ${r.text || "-"}`);
+      const left = st.filter(([k]) => !(r.steps && r.steps[k])).map(([, t]) => t);
+      lines.push(`[${it.label}] ${r.start || "?"}~${r.end || "?"} (${m == null ? "?" : m + "분"}, 계획 ${it.plan}분) / ${res ? res[1] : "-"} / 확인 ${stDone.length}/${st.length}${left.length ? " (남음: " + left.join(", ") + ")" : ""} / ${r.issue || "-"} / ${r.text || "-"}`);
     }
   }
   $("sDone").textContent = done + " / " + lessons.reduce((a, it) => a + it.plan / 50, 0);
@@ -278,6 +377,7 @@ function paintSummary() {
   $("sReal").textContent = real + "분";
   $("sReal").className = real > recordedPlan && recordedPlan > 0 ? "over" : "";
   $("sStuck").textContent = stuck + " · " + diff;
+  $("sSteps").textContent = sDone + " / " + sAll;
   const items = (state.checks && state.checks.items) || {};
   const notDone = CHECKS.filter(([k]) => !items[k]).map(([, t]) => "- " + t);
   const checkLine = "수업 전 점검: " + (CHECKS.length - notDone.length) + "/" + CHECKS.length + (notDone.length ? " (남은 것)\n" + notDone.join("\n") : " 완료");
