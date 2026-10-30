@@ -548,7 +548,126 @@
     pick(0);
   }
 
-  const LABS = { steps: stepsLab, ledger: ledgerLab, prompt: promptLab, delegate: delegateLab, prdgap: prdGapLab, review: reviewLab, mask: maskLab };
+  /* ───────── 06-1: SKILL.md 맞춰 보기 ───────── */
+  const SKILL_NAMES = [
+    { v: 'trip-plan', ok: true, why: '영문 소문자와 하이픈(-)만 썼습니다.' },
+    { v: '여행 일정표', ok: false, why: 'name에는 한글을 쓸 수 없습니다. 한글 설명은 description에 씁니다.' },
+    { v: 'Trip Plan', ok: false, why: '대문자와 띄어쓰기는 안 됩니다. 소문자와 하이픈으로: trip-plan' },
+    { v: 'trip_plan', ok: false, why: '밑줄(_) 대신 하이픈(-)을 씁니다. GitHub Username과 같은 규칙입니다.' }
+  ];
+  const SKILL_DESCS = [
+    { v: '여행 일정표를 만든다.', ok: false, why: '"무엇"만 있고 <b>"언제"</b>가 없습니다. AI가 이 스킬을 꺼낼 때를 모릅니다.' },
+    { v: '사용자가 여행 일정을 짜 달라거나 "일정표 써 줘"라고 할 때 사용한다. 우리 집 양식(개요·날짜별 표·가족별 주의점·준비물·예산)으로 쓴다.', ok: true, why: '<b>언제</b>(일정을 짜 달라고 할 때)와 <b>무엇</b>(우리 집 양식)이 모두 있습니다.' },
+    { v: '아주 유용한 스킬입니다. 잘 써 주세요.', ok: false, why: '칭찬만 있고 언제·무엇이 없습니다. 표지에 내용이 없는 매뉴얼입니다.' }
+  ];
+  const SKILL_BODY = [
+    { v: '1. 인원·기간·이동 수단을 먼저 확인한다', ok: true },
+    { v: '2. 날짜별 일정은 표(시간·장소·이동·메모)로 쓴다', ok: true },
+    { v: '3. 입장료·운영시간처럼 확인하지 않은 것은 [확인 필요]로 쓴다', ok: true },
+    { v: '우리 가족 카드 번호: 5412-3456-…', ok: false, why: '스킬 본문은 매번 AI에게 건네지는 매뉴얼입니다. <b>개인정보는 넣지 않습니다.</b>' }
+  ];
+
+  function skillLab(host) {
+    const body = shell(host, {
+      time: '약 3분',
+      title: 'SKILL.md 맞춰 보기',
+      goal: '6-3에서 만들 <code>trip-plan</code> 스킬의 SKILL.md를 조각으로 골라 직접 맞춰 봅니다.',
+      howTo: [
+        '<b>name</b>과 <b>description</b>을 하나씩 고르고, <b>본문</b>에 넣을 줄을 체크합니다.',
+        '오른쪽(아래) 미리보기에 SKILL.md가 만들어지는 것을 봅니다.',
+        '<b>[점검하기]</b> → 스킬이 제대로 동작할지 확인합니다.'
+      ]
+    });
+    const radio = (group, list) => list.map((x, i) => `<label class="skill-opt"><input type="radio" name="${group}" value="${i}"> <span>${esc(x.v)}</span></label>`).join('');
+    const gid = 'sk' + Math.random().toString(36).slice(2, 7);
+    body.innerHTML = `
+      <div class="skill-grid">
+        <div class="skill-pick">
+          <p class="skill-label">name (스킬 이름)</p>${radio(gid + 'n', SKILL_NAMES)}
+          <p class="skill-label">description (무엇을, <b>언제</b>)</p>${radio(gid + 'd', SKILL_DESCS)}
+          <p class="skill-label">본문 (일하는 순서)</p>${SKILL_BODY.map((x, i) => `<label class="skill-opt"><input type="checkbox" value="${i}"> <span>${esc(x.v)}</span></label>`).join('')}
+        </div>
+        <div class="skill-preview"><p class="skill-label">📄 trip-plan / SKILL.md 미리보기</p><pre></pre></div>
+      </div>
+      <div class="lab-actions"><button type="button" class="btn" data-act="check">점검하기</button></div>
+      <ul class="prompt-score skill-result"></ul>`;
+    const val = n => { const x = body.querySelector(`input[name="${n}"]:checked`); return x ? Number(x.value) : null; };
+    const lines = () => [...body.querySelectorAll('.skill-pick input[type=checkbox]:checked')].map(x => Number(x.value));
+    function preview() {
+      const n = val(gid + 'n'), d = val(gid + 'd');
+      body.querySelector('.skill-preview pre').textContent = [
+        '---', `name: ${n === null ? '(고르기)' : SKILL_NAMES[n].v}`, `description: ${d === null ? '(고르기)' : SKILL_DESCS[d].v}`, '---', '',
+        '# 여행 일정표', ...(lines().length ? lines().map(i => SKILL_BODY[i].v) : ['(본문 줄을 체크하세요)'])
+      ].join('\n');
+    }
+    body.addEventListener('change', preview);
+    body.querySelector('[data-act="check"]').addEventListener('click', () => {
+      const n = val(gid + 'n'), d = val(gid + 'd'), ls = lines();
+      const out = [];
+      out.push(n === null ? '<li>⬜ <b>name</b>을 골라 주세요.</li>' : `<li class="${SKILL_NAMES[n].ok ? 'done' : ''}">${SKILL_NAMES[n].ok ? '✅' : '❌'} <b>name</b> ${SKILL_NAMES[n].why}</li>`);
+      out.push(d === null ? '<li>⬜ <b>description</b>을 골라 주세요.</li>' : `<li class="${SKILL_DESCS[d].ok ? 'done' : ''}">${SKILL_DESCS[d].ok ? '✅' : '❌'} <b>description</b> ${SKILL_DESCS[d].why}</li>`);
+      const goodMissing = SKILL_BODY.filter((x, i) => x.ok && !ls.includes(i)).length;
+      const bad = SKILL_BODY.find((x, i) => !x.ok && ls.includes(i));
+      out.push(bad ? `<li>❌ <b>본문</b> ${bad.why}</li>`
+        : goodMissing ? `<li>⬜ <b>본문</b> 일하는 순서 ${goodMissing}줄이 빠졌습니다. 특히 [확인 필요] 줄이 있어야 요금을 지어내지 않습니다.</li>`
+        : '<li class="done">✅ <b>본문</b> 순서·양식·지킬 것이 모두 들어갔습니다.</li>');
+      const allOk = n !== null && d !== null && SKILL_NAMES[n].ok && SKILL_DESCS[d].ok && !bad && !goodMissing;
+      out.push(`<li class="prompt-total">${allOk ? '<b>완성!</b> 이 SKILL.md를 trip-plan 폴더에 넣어 ZIP으로 올리면 스킬이 됩니다. 6-3에서는 Claude가 이 모양대로 써 줍니다.' : '고칠 곳을 바꾸고 다시 점검해 보세요.'}</li>`);
+      body.querySelector('.skill-result').innerHTML = out.join('');
+    });
+    preview();
+  }
+
+  /* ───────── 10: 배포 장애, 원인부터 좁히기 ───────── */
+  const TROUBLES = [
+    { q: '휴대폰으로 연 내 화면 주소를 단톡방에 보냈는데, 가족이 "열 수 없음"이라고 한다. 주소가 <code>file:///C:/Users/…</code> 로 시작한다.',
+      opts: ['가족 휴대폰의 인터넷이 느리다', '내 PC 안의 주소(우리 집)를 보냈다. Netlify에 올린 주소를 보내야 한다', 'HTML 파일이 깨졌다', '카카오톡이 링크를 막았다'], a: 1,
+      why: '<code>file:///</code> 는 내 PC 안의 위치입니다. 가족 휴대폰은 자기 휴대폰 안에서 찾다가 실패합니다. <code>https://…netlify.app</code> 주소를 보냅니다.' },
+    { q: '준비물 화면을 고쳤는데, 휴대폰으로 열면 예전 화면이 그대로다.',
+      opts: ['고친 폴더를 Netlify에 다시 끌어다 놓았는지 확인한다', 'Netlify 가입을 다시 한다', '휴대폰을 바꾼다', '주소 이름을 다시 바꾼다'], a: 0,
+      why: '내 PC에서 고친 것은 Netlify에 다시 올려야 반영됩니다(5번). 올렸는데도 그대로면 휴대폰에서 새로고침합니다.' },
+    { q: 'Netlify에 폴더를 올렸더니 주소는 생겼는데 "Page not found"가 나온다.',
+      opts: ['Netlify가 고장 났다', '폴더에 그림이 없다', '대문 파일 이름이 <code>index.html</code> 이 아니다', '와이파이를 바꿔야 한다'], a: 2,
+      why: '웹사이트는 주소로 들어오면 <code>index.html</code> 을 먼저 엽니다. 이름이 <code>준비물.html</code> 이면 대문을 찾지 못합니다(0번).' },
+    { q: '짝꿍이 내 주소로 열어 체크한 준비물이 내 휴대폰 화면에는 체크되어 있지 않다.',
+      opts: ['배포가 실패했다', '정상이다. 기록이 각자 브라우저의 수첩에만 저장된다', '짝꿍이 다른 주소를 열었다', '휴대폰 시간이 틀렸다'], a: 1,
+      why: '지금 화면은 네 칸 표의 ①입니다. 함께 보려면 공용 장부(②)가 필요합니다(6번).' },
+    { q: '주소 이름을 <code>gyeongju-checklist</code> 로 바꿨더니, 아까 나눠 준 QR로는 화면이 안 열린다.',
+      opts: ['옛 주소는 사라졌다. 새 주소로 QR을 다시 만들어 나눈다', 'QR 코드는 하루 지나야 열린다', '화면 파일을 다시 만든다', 'Netlify 계정을 지운다'], a: 0,
+      why: '주소 이름을 바꾸면 옛 주소는 더 이상 쓰이지 않습니다(3번). 이름은 처음에 정하고 QR을 만드는 것이 좋습니다.' },
+    { q: '고쳐서 다시 올렸더니 화면이 깨져 버렸다. 가족이 지금 쓰고 있다.',
+      opts: ['Netlify 사이트를 지우고 새로 만든다', 'Deploys에서 이전 배포를 골라 Publish deploy로 되돌린다', '가족에게 기다리라고 한다', '주소 이름을 바꾼다'], a: 1,
+      why: 'Netlify는 배포 기록을 남깁니다. 이전 배포로 바로 되돌린 뒤 천천히 고칩니다(5번). 주소는 그대로입니다.' }
+  ];
+
+  function troubleLab(host) {
+    const body = shell(host, {
+      time: '약 5분',
+      title: '배포 장애, 원인부터 좁히기',
+      goal: '배포하다 자주 만나는 증상입니다. 가장 먼저 의심할 원인을 고르세요. 막혔을 때 혼자 원인을 좁히는 연습입니다.',
+      howTo: ['증상을 읽고 보기 하나를 누릅니다. 바로 정답과 이유가 나옵니다.', '6문제를 모두 풀고 맨 아래 점수를 봅니다.']
+    });
+    body.innerHTML = `<ol class="sort-list">${TROUBLES.map((t, i) => `<li data-i="${i}"><p class="sort-q">${t.q}</p>
+      <div class="trouble-opts">${t.opts.map((o, j) => `<button type="button" data-j="${j}">${o}</button>`).join('')}</div><p class="sort-why" hidden></p></li>`).join('')}</ol>
+      <p class="sort-result" aria-live="polite"></p>`;
+    const answered = {};
+    body.addEventListener('click', e => {
+      const b = e.target.closest('[data-j]');
+      if (!b) return;
+      const li = b.closest('li'), i = li.dataset.i, t = TROUBLES[i], j = Number(b.dataset.j);
+      if (answered[i] !== undefined) return;
+      answered[i] = j === t.a;
+      li.querySelectorAll('[data-j]').forEach(x => { x.disabled = true; if (Number(x.dataset.j) === t.a) x.classList.add('ans'); });
+      if (j !== t.a) b.classList.add('pick-wrong');
+      li.classList.add(j === t.a ? 'right' : 'wrong');
+      const why = li.querySelector('.sort-why'); why.hidden = false;
+      why.innerHTML = `${j === t.a ? '✅ 맞았습니다.' : '❌ 정답은 초록 보기입니다.'} ${t.why}`;
+      const n = Object.keys(answered).length, r = Object.values(answered).filter(Boolean).length;
+      body.querySelector('.sort-result').innerHTML = `<b>${r} / ${n}</b> ${n < TROUBLES.length ? `(${TROUBLES.length - n}문제 남음)` : '다 풀었습니다. 막히면 "어디가 문제일까?"보다 <b>"무엇이 달라졌나?"</b>부터 묻습니다.'}`;
+    });
+  }
+
+  const LABS = { steps: stepsLab, ledger: ledgerLab, prompt: promptLab, delegate: delegateLab, prdgap: prdGapLab, review: reviewLab, mask: maskLab, skill: skillLab, trouble: troubleLab };
 
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.lab[data-lab]').forEach(host => {
