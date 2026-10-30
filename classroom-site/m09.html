@@ -39,31 +39,31 @@
 </thead>
 <tbody><tr>
 <td>준비</td>
-<td>2분</td>
-<td>실습 파일 4개 받기</td>
+<td>1분</td>
+<td>이 페이지를 엽니다 (파일 내려받기 없음)</td>
 </tr>
 <tr>
 <td>1단계 HTML</td>
-<td>4분</td>
-<td>열어 보고 <strong>[추가]</strong> 와 체크 눌러 보기 → 표가 안 바뀜</td>
+<td>3분</td>
+<td>단계마다 있는 <strong>[바로 해 보기]</strong> 화면에서 <strong>[추가]</strong> 와 체크 눌러 보기 → 표가 안 바뀜</td>
 </tr>
 <tr>
 <td>2단계 CSS</td>
 <td>3분</td>
-<td>열어 보고 1단계와 비교 → 같은 내용에 옷만 입힘</td>
+<td>1단계와 번갈아 보기 → 같은 내용에 옷만 입힘</td>
 </tr>
 <tr>
 <td>3단계 JavaScript</td>
-<td>7분</td>
-<td>준비물 추가·체크해 보기 → <strong>AI에게 기준 하나 바꾸게 하기</strong> → F5 하면 사라짐</td>
+<td>6분</td>
+<td>준비물 추가·체크 → <strong>기준 숫자 50을 30으로 바꿔 보기</strong>(같은 33%가 &quot;순조로움&quot;으로) → [새로고침] 하면 사라짐</td>
 </tr>
 <tr>
 <td>4단계 완성본</td>
 <td>4분</td>
-<td>열어 보고 무엇이 더해졌는지 보기 → 이 파일을 10에서 공개</td>
+<td>무엇이 더해졌는지 보기 → [새로고침] 해도 남음 → 이 파일을 10에서 공개</td>
 </tr>
 </tbody></table></div>
-<p>각 단계의 <strong>코드 읽기 표·다른 바꿔 보기·개발자 도구·더 알아보기·응용 실습</strong>은 과정 뒤 복습용입니다. 수업 중에는 건너뛰어도 됩니다.</p>
+<p>각 단계의 <strong>코드 읽기 표·AI로 바꿔 보기·개발자 도구·더 알아보기·응용 실습</strong>은 과정 뒤 복습용입니다. 수업 중에는 건너뛰어도 됩니다.</p>
 </blockquote>
 <h2>웹 화면을 만드는 세 가지 재료</h2>
 <div class="table-wrap"><table>
@@ -106,8 +106,9 @@
                                                                  │
                                        모듈 10: 이 파일을 웹에 공개 ◀┘
 </code></pre>
-<h2>준비 (2분)</h2>
-<p><strong>실습 파일 4개</strong>: 강의 사이트 <strong>[실습 파일 내려받기]</strong> 에서 4개를 받아 <strong>다운로드 폴더에서 바로</strong> 엽니다 (폴더 정리는 과정 뒤)</p>
+<h2>준비 (1분)</h2>
+<p>수업에서는 <strong>파일을 내려받지 않습니다.</strong> 단계마다 이 페이지 안에 있는 <strong>[바로 해 보기]</strong> 화면에서 실제 실습 파일을 그대로 눌러 봅니다. 화면이 작으면 <strong>[새 창으로 열기]</strong>, 코드는 <strong>[이 단계의 코드 보기]</strong> 로 봅니다.</p>
+<p><strong>(과정 뒤) 실습 파일 4개</strong>: 메모장으로 직접 고치거나 AI에게 첨부해 바꿔 볼 때는 강의 사이트 <strong>[실습 파일 내려받기]</strong> 에서 4개를 받습니다.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -151,7 +152,9 @@
 </blockquote>
 <hr>
 <h2>1단계: HTML = 뼈대 (4분)</h2>
-<p><code>1-html.html</code> 을 Chrome으로 엽니다. 색도 배치도 없이 <strong>글자만 나열</strong>되어 있습니다. 정상입니다.</p>
+<p>아래 화면은 <code>1-html.html</code> 입니다. 색도 배치도 없이 <strong>글자만 나열</strong>되어 있습니다. 정상입니다.</p>
+<div class="lab" data-lab="steps" data-step="1"></div>
+
 <details class="later later-h3"><summary><span class="later-tag">과정 뒤에 더 해 보기</span> 코드 읽기 (과정 뒤)</summary>
 <p>메모장으로 열어 보면 <code>&lt;이름&gt;내용&lt;/이름&gt;</code> 모양이 반복됩니다. 이것을 <strong>태그</strong>라고 합니다.</p>
 <div class="table-wrap"><table>
@@ -211,14 +214,15 @@
 <blockquote>
 <p>💡 PRD에서 쓴 MD 파일과 비교해 보세요. MD의 <code>#</code> 이 HTML의 <code>&lt;h1&gt;</code>, <code>- 항목</code> 이 <code>&lt;li&gt;</code> 입니다. <strong>구조를 표시한다</strong>는 생각은 같습니다.</p>
 </blockquote>
-</details><h3>바꿔 보기 (수업 중에는 3번만, 1·2번은 과정 뒤)</h3>
+</details><details class="later later-h3"><summary><span class="later-tag">과정 뒤에 더 해 보기</span> AI로 바꿔 보기 (과정 뒤, 파일을 받아서)</summary>
 <ol>
 <li><code>1-html.html</code> 을 Claude에 첨부하고: &quot;제목을 <strong>우리 가족 경주 여행 준비물</strong>로, 가족별 표에 <strong>나 / 2 / 0 / 0% / 서둘러요</strong> 한 줄을 추가해서 미리보기로 보여 줘. 바뀐 줄만 따로 알려 줘&quot;</li>
 <li>미리보기에서 제목과 새 줄을 확인 → 알려 준 바뀐 줄이 <code>&lt;h1&gt;</code>, <code>&lt;tr&gt;&lt;td&gt;</code> 인지 위 표와 맞춰 보기</li>
-<li>Chrome에서 연 원래 파일에서 <strong>[추가]</strong> 를 누르고, 목록의 체크 상자도 몇 개 눌러 보기 → [추가]는 페이지만 새로 뜨고, 체크 표시는 바뀌어도 <strong>가족별 표의 숫자는 그대로</strong>입니다</li>
 </ol>
-<h2>2단계: CSS = 옷 (3분)</h2>
-<p><code>2-css.html</code> 을 열어 1단계와 <strong>나란히</strong> 비교합니다. 같은 내용인데 제대로 된 앱 화면처럼 보입니다.</p>
+</details><h2>2단계: CSS = 옷 (3분)</h2>
+<p><code>2-css.html</code> 을 1단계와 <strong>번갈아</strong> 비교합니다. 같은 내용인데 제대로 된 앱 화면처럼 보입니다.</p>
+<div class="lab" data-lab="steps" data-step="2"></div>
+
 <details class="later later-h3"><summary><span class="later-tag">과정 뒤에 더 해 보기</span> 코드 읽기 (과정 뒤)</summary>
 <p>HTML은 거의 그대로이고, 위쪽 <code>&lt;style&gt;</code> 안에 규칙이 추가됐습니다. 규칙 모양은 하나뿐입니다.</p>
 <pre><code class="language-css">대상 { 속성: 값; }
@@ -270,9 +274,11 @@ button {
 </details><details class="later later-h3"><summary><span class="later-tag">과정 뒤에 더 해 보기</span> 🔍 개발자 도구로 남의 화면 들여다보기 (과정 뒤)</summary>
 <p>Chrome에서 <strong>F12</strong> → 왼쪽 위 <strong>화살표 아이콘</strong> → 추가 버튼 클릭 → 오른쪽 <strong>Styles</strong> 에서 <code>background</code> 값을 클릭해 바꿔 보기</p>
 </details><h2>3단계: JavaScript = 근육 (7분)</h2>
-<p><code>3-js.html</code> 을 엽니다. 이번엔 <strong>표와 목록이 비어</strong> 있습니다. 준비물 <code>멀미약</code>·<code>여벌 옷</code>·<code>체험학습 보고서</code> 를 누구 것 <code>아이</code> 로 골라 차례로 <strong>[추가]</strong> → 목록과 가족별 표에 생깁니다. 그중 <strong>하나만 체크</strong>하면 아이 줄이 <strong>3개 중 1개, 33%, &quot;서둘러요&quot;</strong> 로 저절로 바뀝니다. 처음으로 화면이 <strong>계산을 했습니다.</strong></p>
+<p>아래 화면은 <code>3-js.html</code> 입니다. 이번엔 <strong>표와 목록이 비어</strong> 있습니다. 준비물 <code>멀미약</code>·<code>여벌 옷</code>·<code>체험학습 보고서</code> 를 누구 것 <code>아이</code> 로 골라 차례로 <strong>[추가]</strong> → 목록과 가족별 표에 생깁니다. 그중 <strong>하나만 체크</strong>하면 아이 줄이 <strong>3개 중 1개, 33%, &quot;서둘러요&quot;</strong> 로 저절로 바뀝니다. 처음으로 화면이 <strong>계산을 했습니다.</strong></p>
+<div class="lab" data-lab="steps" data-step="3"></div>
+
 <blockquote>
-<p>수업에서는 아래 코드 읽기 표 가운데 <strong>③ <code>rate &lt; 50</code> 한 줄만</strong> 화면으로 함께 짚어 봅니다. 나머지는 과정 뒤에 읽어 봅니다.</p>
+<p>수업에서는 위 실습의 <strong>기준 바꿔 보기</strong>로 코드 아래 표의 <strong>③ <code>rate &lt; 50</code> 한 줄</strong>이 PRD 규칙이라는 것을 확인합니다. 나머지는 과정 뒤에 읽어 봅니다.</p>
 </blockquote>
 <details class="later later-h3"><summary><span class="later-tag">과정 뒤에 더 해 보기</span> 코드 읽기 (과정 뒤)</summary>
 <p>맨 아래 <code>&lt;script&gt;</code> 안이 JavaScript입니다. 주석(<code>//</code>)을 따라 다섯 부분으로 읽습니다.</p>
@@ -314,12 +320,55 @@ button {
 <p>💡 ③번을 보세요. PRD에 한국어로 쓴 규칙 &quot;챙김률 50% 미만이면 서둘러요&quot;가 코드에서는 <code>rate &lt; 50</code> 한 줄입니다. <strong>PRD를 코드로 옮기는 것</strong>, 그게 프로그래밍입니다.</p>
 <p>④번의 <code>const key = it.who;</code> 가 모듈 5에서 고친 구멍입니다. 누구 것(<code>who</code>) 구분을 빼면 모든 준비물이 <strong>가족 전체 한 줄로만</strong> 세어집니다. 예시처럼 할머니 3개(다 챙김)·아이 3개(1개 챙김)·가족 공용 2개(다 챙김)를 넣으면 &quot;8개 중 6개, 75%, 순조로움&quot;이 되고, <strong>아이의 &quot;서둘러요&quot;가 화면에서 사라집니다.</strong> Claude에게 &quot;<strong>누구 것 구분(<code>who</code>)을 빼면</strong> 어떻게 되는지 미리보기로 보여 줘&quot;라고 해 보면 PRD 한 줄의 무게가 실감 납니다.</p>
 </blockquote>
-</details><h3>바꿔 보기 (AI에게 맡기고 확인)</h3>
+</details><details class="later later-h3"><summary><span class="later-tag">과정 뒤에 더 해 보기</span> AI로 바꿔 보기 (과정 뒤, 파일을 받아서)</summary>
 <ol>
 <li><code>3-js.html</code> 을 첨부하고: &quot;서둘러요 기준을 <strong>80% 미만</strong>으로, 빈칸 오류 문구를 <strong>&#39;준비물 이름을 적어 주세요&#39;</strong> 로 바꿔서 미리보기로 보여 줘. 바뀐 줄만 알려 줘&quot;</li>
 <li>바뀐 줄 <code>rate &lt; 80</code> 이 위 표의 ③번(PRD 규칙)과 같은 곳인지 확인</li>
-<li>Chrome에서 연 원래 파일로 준비물 몇 개 추가·체크 → <strong>F5</strong> → 표와 목록이 <strong>사라집니다</strong></li>
 </ol>
+</details><h2>4단계: 완성본 = 기억과 편의 (함께 보기, 4분)</h2>
+<p>아래 화면은 <code>index.html</code> (모듈 7에서 Claude가 만든 것과 같은 기능)입니다. 3단계에서 <strong>무엇이 더해졌는지</strong> 확인하고, 몇 개 체크한 뒤 <strong>[새로고침]</strong> 을 눌러 그대로 남는지 봅니다.</p>
+<div class="lab" data-lab="steps" data-step="4"></div>
+
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>더해진 것</th>
+<th>3단계의 문제</th>
+<th>완성본</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>저장</strong></td>
+<td>F5 하면 사라짐</td>
+<td>브라우저 저장소(localStorage)에 기억</td>
+</tr>
+<tr>
+<td><strong>요약 숫자</strong></td>
+<td>준비물 개수만</td>
+<td>전체 / 챙김 / 남은 것</td>
+</tr>
+<tr>
+<td><strong>정렬</strong></td>
+<td>입력한 순서대로</td>
+<td>가족별 표는 챙김률이 <strong>낮은 사람부터</strong>, 목록은 <strong>안 챙긴 것부터</strong></td>
+</tr>
+<tr>
+<td><strong>예시 데이터</strong></td>
+<td>처음엔 빈 화면</td>
+<td>처음 열면 &quot;(예시)&quot; 준비물 8개 (아이만 &quot;서둘러요&quot;)</td>
+</tr>
+<tr>
+<td><strong>취소·초기화</strong></td>
+<td>잘못 적으면 끝</td>
+<td>마지막 추가 취소, 두 번 눌러 초기화</td>
+</tr>
+<tr>
+<td><strong>목록 내려받기</strong></td>
+<td>화면을 보며 다시 받아 적기</td>
+<td>엑셀에서 열리는 CSV</td>
+</tr>
+</tbody></table></div>
+<hr>
 <details class="later later-h2"><summary><span class="later-tag">과정 뒤에 더 해 보기</span> 더 알아보기: JavaScript가 할 수 있는 일 10가지 (쉬는 시간·집에서)</summary>
 <p>세 재료 중 화면을 <strong>살아 움직이게</strong> 하는 것은 JavaScript입니다. 공통점은 <strong>새로고침 없이 그 자리에서 바로 바뀐다</strong>는 것입니다.</p>
 <div class="table-wrap"><table>
@@ -507,6 +556,10 @@ PRD의 어느 규칙과 연결되는지도 표로 정리해 줘.
 </tr>
 </thead>
 <tbody><tr>
+<td>[바로 해 보기] 화면이 안 보이거나 작음</td>
+<td><strong>[새 창으로 열기]</strong> 를 누르거나, 강의 사이트 [실습 파일 내려받기]에서 파일을 받아 더블클릭</td>
+</tr>
+<tr>
 <td>고쳤는데 화면이 그대로</td>
 <td>메모장 <strong>Ctrl + S</strong> 를 했는지, Chrome <strong>F5</strong> 를 했는지</td>
 </tr>
@@ -544,12 +597,13 @@ PRD의 어느 규칙과 연결되는지도 표로 정리해 줘.
 <li>1단계에서 [추가]를 누르거나 체크해도 가족별 표가 안 바뀌는 이유는?</li>
 <li>버튼 색을 바꾸려면 HTML, CSS, JavaScript 중 어디를 고쳐야 할까요?</li>
 <li>PRD의 &quot;챙김률 50% 미만이면 서둘러요&quot;는 3단계 코드의 어느 줄인가요?</li>
-<li>3단계에서 F5를 누르면 표와 목록이 사라지는 이유와, 완성본은 어떻게 해결했나요?</li>
+<li>3단계에서 새로고침(F5)하면 표와 목록이 사라지는 이유와, 완성본은 어떻게 해결했나요?</li>
 </ol>
 </article>
     <div class="pager"><a class="prev" href="m08.html"><span>← 이전</span>08 AI 브라우저 Aside</a><a class="next" href="m10.html"><span>다음 →</span>10 Netlify 배포</a></div>
   </main>
 </div>
 <script src="assets/site.js"></script>
+<script src="assets/labs.js"></script>
 </body>
 </html>

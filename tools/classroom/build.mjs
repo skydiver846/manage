@@ -65,7 +65,7 @@ const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, 
 
 // ── 교육생판으로 거르기 ──
 const TEACHER = /🧑‍🏫|강사|리허설/;
-const TEACHER_SECTION = /수업 전|강사|완성본/;
+const TEACHER_SECTION = /강사/;   // "
 const TEACHER_LINE = /준비해 두세요|강의 전에|교육생을 위해/;   // 인용 상자 안의 강사용 줄
 
 function studentMarkdown(md) {
@@ -187,6 +187,7 @@ function page(file, title, body, pager = "") {
   </main>
 </div>
 <script src="assets/site.js"></script>
+${body.includes('class="lab"') ? '<script src="assets/labs.js"></script>' : ""}
 </body>
 </html>
 `;
@@ -233,6 +234,7 @@ fs.rmSync(OUT, { recursive: true, force: true });
 for (const d of ["assets", "files", "steps", "prototype"]) fs.mkdirSync(path.join(OUT, d), { recursive: true });
 fs.copyFileSync(path.join(import.meta.dirname, "site.css"), path.join(OUT, "assets/site.css"));
 fs.copyFileSync(path.join(import.meta.dirname, "site.js"), path.join(OUT, "assets/site.js"));
+fs.copyFileSync(path.join(import.meta.dirname, "labs.js"), path.join(OUT, "assets/labs.js"));   // 본문 속 "바로 해 보기" 실습
 
 // 오늘의 퀴즈: 문항(정답 제외)은 사이트로, 정답·다시 볼 곳은 서버 함수(api/_lib)로 나눠 만든다
 const quizData = JSON.parse(fs.readFileSync(path.join(ROOT, "tools/fire-quiz/quiz-data.json"), "utf8"));

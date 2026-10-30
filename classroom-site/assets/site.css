@@ -218,3 +218,25 @@ details.later.later-h4 > summary { font-size: 15px; }
 .sv-track span { display: block; height: 100%; background: var(--bar); border-radius: 7px; }
 .sv-top .sv-label { font-weight: 700; }
 .sv-c1 { --bar: #c8321e; } .sv-c2 { --bar: #ef8a17; } .sv-c3 { --bar: #2f6fd0; } .sv-c4 { --bar: #7a52c7; } .sv-c5 { --bar: #13897a; } .sv-mute { --bar: #9aa3b2; }
+
+/* 본문 속 "바로 해 보기" 실습 (labs.js) */
+.inline-lab { border: 2px solid var(--accent); border-radius: 14px; padding: 12px 16px 16px; margin: 18px 0; background: var(--paper); }
+.lab-kind { display: flex; gap: 8px; align-items: center; margin: 0; font-size: 13px; color: var(--muted); }
+.lab-kind span { background: var(--accent); color: #fff; font-weight: 700; border-radius: 999px; padding: 2px 10px; }
+.lab-title { margin: 8px 0 4px; font-size: 18px; }
+.lab-goal { margin: 0 0 8px; font-size: 14.5px; color: var(--muted); }
+.how-to { background: var(--code); border-radius: 10px; padding: 8px 12px; margin: 8px 0; font-size: 14px; }
+.how-to-title { margin: 0 0 4px; font-weight: 700; }
+.how-to ol { margin: 0; padding-left: 1.3em; }
+.lab-steps { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.lab-steps button { font: inherit; font-size: 14px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; }
+.lab-steps button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+.lab-observe { background: #fff8e1; border-left: 4px solid #f2b705; border-radius: 6px; padding: 8px 12px; font-size: 14.5px; margin: 8px 0; color: #3b3000; }
+.lab-tweak { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 8px 0; font-size: 14.5px; }
+.lab-tweak input { width: 64px; font: inherit; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; }
+.lab-tweak-out { flex-basis: 100%; color: var(--muted); }
+.lab-frame { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #fff; }
+.lab-frame iframe { display: block; width: 100%; height: 560px; border: 0; }
+.lab-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.lab-code pre { max-height: 320px; overflow: auto; font-size: 12.5px; }
+@media print { .inline-lab .lab-frame, .inline-lab .lab-actions { display: none; } }
