@@ -55,6 +55,9 @@
 </tr>
 </tbody></table></div>
 <hr>
+<h2>시작하며: 이런 생각, 해 보신 적 있나요? (1분)</h2>
+<p>① <strong>AI는 검색을 조금 편하게 해 주는 것</strong>이다<br>② <strong>프로그램은 개발자만</strong> 만든다<br>③ 나는 <strong>컴퓨터를 잘 못해서</strong> 어렵다</p>
+<p>하나라도 고개가 끄덕여졌다면 이 과정이 맞습니다. 이틀 동안 이 세 생각이 하나씩 깨지고, 마지막에는 <strong>내가 생각한 것을 내가 만들어 쓰는</strong> 데까지 갑니다. 마지막 시간에 같은 질문을 다시 하겠습니다.</p>
 <h2>여는 이야기: 여행길 도우미 (3분)</h2>
 <p>화면의 QR을 휴대폰으로 찍어 <strong>여행길 도우미</strong>를 열어 보세요.
 → <a href="https://gwangju-traffic-helper.skydiver846.chatgpt.site/" target="_blank" rel="noopener">https://gwangju-traffic-helper.skydiver846.chatgpt.site/</a></p>
@@ -147,6 +150,7 @@
 <ul>
 <li>옆 사람과 비교해 보세요. <strong>같은 AI인데 지시가 다르면 결과가 다릅니다.</strong> 그 차이를 만드는 방법이 바로 다음 3-1입니다.</li>
 <li>오늘 만든 것은 놀이였지만, 2일차에는 같은 방법으로 <strong>내 화면</strong>을 만들어 휴대폰으로 엽니다.</li>
+<li>🔓 처음에 물은 <strong>② &quot;프로그램은 개발자만 만든다&quot;</strong> 가 방금 깨졌습니다. 코드는 한 줄도 쓰지 않았습니다.</li>
 <li><strong>함께 보기:</strong> 앞 화면에서 계산기 파일을 폴더에 넣어 <a class="site" href="https://app.netlify.com/drop" target="_blank" rel="noopener"><code>app.netlify.com/drop</code></a> 에 <strong>끌어다 놓으면</strong>, 몇 초 만에 웹 주소가 생깁니다. QR을 찍어 <strong>내 휴대폰</strong>에서 열어 보세요. 방금 말로 만든 프로그램이 <strong>누구나 여는 웹사이트</strong>가 됐습니다. 2일차에 각자 직접 해 봅니다(모듈 10).</li>
 <li><strong>조심할 것:</strong> 출처를 모르는 <code>.html</code> 첨부파일은 열지 않습니다(피싱에 자주 쓰입니다). 내가 만들었거나 믿을 수 있는 사람이 준 파일만 엽니다.</li>
 </ul>
@@ -205,59 +209,6 @@
 <p>💡 둘을 <strong>Claude에서 새 채팅 2개</strong>로 나눠 넣고 나란히 비교합니다. 대부분 &quot;좋은 예&quot;가 바로 쓸 수 있는 결과를 냅니다.</p>
 </blockquote>
 <p><strong>같은 지시, 다른 AI (2분):</strong> 방금 &quot;좋은 예&quot;를 <strong>ChatGPT</strong>에도 그대로 붙여넣어 보세요. 같은 지시인데 표 모양, 말투, 일정 고르는 방식이 조금씩 다릅니다. 어느 쪽이 우리 가족 단톡방에 더 맞는지 골라 보세요. <strong>한 AI의 답이 정답은 아니니, 중요한 일은 두 곳에 물어 비교하는 습관</strong>을 들입니다.</p>
-<h3>첨삭 예시: 공식은 지켰는데 맥락이 빈 프롬프트</h3>
-<p><strong>교육생 초안</strong></p>
-<pre><code>[역할] 너는 여행 도우미야.
-[목표] 경주 여행 일정 짜 줘.
-[맥락] 가족 여행.
-[형식] 표로.
-[조건] 짧게.
-</code></pre>
-<p>아래 질문을 <strong>스스로 물어보며</strong> 빈 곳을 채워 보세요.</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>요소</th>
-<th>스스로 물어볼 질문</th>
-<th>고친 내용</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>역할</td>
-<td>&quot;누가 누구에게 보내나요?&quot;</td>
-<td>우리 집 여행 담당인 내가 → <strong>가족 단톡방에</strong> 올릴 안내</td>
-</tr>
-<tr>
-<td>목표</td>
-<td>&quot;일정만? 다른 것도 필요한가요?&quot;</td>
-<td>2박 3일 일정 + <strong>꼭 챙길 것</strong></td>
-</tr>
-<tr>
-<td><strong>맥락</strong></td>
-<td>&quot;누가 가고, 언제 어디서 출발하나요?&quot;</td>
-<td>할머니 75세(<strong>무릎 불편, 계단 어려움</strong>), 아이 <strong>초3(차멀미 있음)</strong>, <strong>금요일 오후 2시 광주 출발</strong>, 숙소는 <strong>보문단지 근처</strong></td>
-</tr>
-<tr>
-<td>형식</td>
-<td>&quot;단톡방에서 어떻게 보이면 좋나요?&quot;</td>
-<td>인사 1줄, 날짜별 표(시간·장소·이동·메모), 꼭 챙길 것 3가지</td>
-</tr>
-<tr>
-<td>조건</td>
-<td>&quot;지어내면 안 되는 것은요?&quot;</td>
-<td>하루 2곳 이내, <strong>입장료·운영시간은 [확인 필요]로</strong></td>
-</tr>
-</tbody></table></div>
-<p><strong>고친 프롬프트</strong></p>
-<pre><code>[역할] 너는 가족 여행을 돕는 여행 도우미야. 우리 집 여행 담당인 내가 가족 단톡방에 올릴 안내를 쓰는 상황이야.
-[목표] 경주 2박 3일 일정 안내와 꼭 챙길 것을 정리해 줘.
-[맥락] 가족 4명: 나, 배우자, 아이(초등 3학년, 차멀미 있음), 할머니(75세, 무릎이 불편해 오래 걷기·계단이 어려움).
-       금요일 오후 2시 광주에서 자가용 출발(약 3시간), 일요일 저녁 귀가. 숙소는 보문단지 근처.
-[형식] 인사 1줄, 날짜별 일정은 표(시간·장소·이동·메모), 끝에 꼭 챙길 것 3가지.
-[조건] 하루 2곳 이내. 계단·오르막이 많은 곳은 빼거나 대안을 적어 줘.
-       입장료·운영시간처럼 내가 주지 않은 정보는 [확인 필요]로 표시해.
-</code></pre>
-<p>맥락을 채우면 결과가 달라집니다. 보통 계단과 오르막이 많은 일정이 빠지거나 &quot;입구 근처만 보기&quot; 같은 대안이 붙고, 첫날은 도착 시각에 맞춰 숙소 근처 산책이나 야경처럼 가벼운 일정이 됩니다. 입장료·운영시간 자리에는 숫자 대신 [확인 필요]가 남습니다.</p>
 <blockquote>
 <p>💡 기억할 것: AI는 우리 할머니 무릎이 불편한지, 몇 시에 출발하는지 절대 알 수 없습니다. <strong>내가 아는 사실은 내가 건네고</strong>, 요금·시간처럼 확인 안 된 것은 <strong>[확인 필요]로 남기게</strong> 합니다.</p>
 </blockquote>
@@ -353,12 +304,14 @@
 <p>만드는 연습은 <strong>내 업무 프로젝트</strong> 하나로 합니다. &quot;교육 일정 관리&quot;, &quot;출장·복무 정리&quot;처럼 <strong>실제 내 업무 이름</strong>으로 만듭니다.</p>
 <ol>
 <li><strong>만들기:</strong> 왼쪽 사이드바 <strong>[Projects]</strong> → <strong>[+ 새 프로젝트]</strong> → 이름에 내 업무 이름, 설명은 비워도 됨 → [만들기]</li>
-<li><strong>지침 붙여넣기:</strong> <strong>지침(Instructions)</strong> 에 아래 &quot;지침 예시&quot;를 복사해 붙여넣고, 가족 이야기를 <strong>내 업무 내용</strong>으로 바꿉니다. (예: 교육 일정 관리 → &quot;날짜는 표로, 겹치는 일정은 경고&quot;)</li>
+<li><strong>지침 붙여넣기:</strong> 아래 [바로 해 보기]에서 내 업무와 가까운 예시를 고르거나 칸을 바꾼 뒤 <strong>[지침 복사]</strong> → <strong>지침(Instructions)</strong> 칸에 붙여넣습니다. (아래 &quot;지침 예시&quot;를 복사해 가족 이야기를 내 업무로 바꿔도 됩니다)</li>
 <li><strong>짧게 물어보기:</strong> 프로젝트 안에서 대화를 시작하고 아래 한 줄을 입력합니다. 파일을 아직 넣지 않았어도 지침만으로 확인할 수 있습니다.<pre><code>이 프로젝트에서 내가 도움받을 수 있는 일 3가지를 제안하고, 각각 어떤 파일을 넣어 두면 좋을지 표로 알려 줘
 </code></pre>
 </li>
 </ol>
 <p>지침에 적은 말투와 형식(표, &quot;다음에 할 일&quot;)대로 답이 나오면 성공입니다. 시간이 부족하면 과정 뒤 과제(과제 안내 4번)로 합니다.</p>
+<div class="lab" data-lab="fill" data-tpl="project"></div>
+
 <blockquote>
 <p>메뉴 이름과 위치는 서비스 업데이트에 따라 조금씩 바뀔 수 있습니다. 프로젝트 공유 범위(나만 / 팀 전체)는 프로젝트를 만들 때나 프로젝트 설정에서 정합니다.</p>
 </blockquote>

@@ -326,3 +326,11 @@ details.later.later-h4 > summary { font-size: 15px; }
 .trouble-opts button.ans { border-color: #2e8b57; background: #e8f5ec; color: #1d5a39; font-weight: 700; opacity: 1; }
 .trouble-opts button.pick-wrong { border-color: #d64545; background: #fff3f2; }
 @media (max-width: 560px) { .skill-grid { grid-template-columns: 1fr; } }
+.fill-fields { display: grid; gap: 8px; margin: 8px 0; }
+.fill-field { display: grid; gap: 3px; font-size: 14px; font-weight: 700; }
+.fill-field small { font-weight: 400; color: var(--muted); }
+.fill-field input, .fill-field textarea { font: inherit; font-weight: 400; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); width: 100%; box-sizing: border-box; }
+.fill-preview { white-space: pre-wrap; font-size: 14px; line-height: 1.6; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: #f7f8fa; color: #1b2230; max-height: 360px; overflow: auto; }
+.fill-def { background: #e7efff; color: #1d3f8a; border-radius: 3px; padding: 0 2px; }
+.fill-mine { background: #d3f2dc; color: #12502b; border-radius: 3px; padding: 0 2px; font-weight: 700; }
+.fill-empty { background: #fff1e0; color: #8a4b00; border-radius: 3px; padding: 0 2px; }

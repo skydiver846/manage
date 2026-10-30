@@ -517,7 +517,7 @@ const mods3 = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to &
 const modItems = (list) => list.map((m) => `<li><a href="${m.page}"><span class="no">${String(m.num).padStart(2, "0")}</span><span class="t">${esc(m.short)}</span><span class="time">${m.time}</span></a></li>`).join("");
 fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 활용능력 향상교육</h1>
-  <p class="lead"><b>AI 시대, 여행 계획이 달라졌다.</b> 우리 집 여행 담당이 되어 경주 2박 3일 가족 여행을 AI와 함께 준비합니다. 일정 짜기, 자료 정리, 여행 일정표 스킬, 준비물 체크 화면을 만들어 가족에게 링크로 보내기까지 한 단계씩 따라 하고, 같은 방법을 내 업무에 옮깁니다.</p>
+  <p class="lead"><b>AI 시대, 여행 계획이 달라졌다.</b> <b>내가 생각한 것을 내가 만들어 쓰는 이틀</b>입니다. 우리 집 여행 담당이 되어 경주 2박 3일 가족 여행을 AI와 함께 준비합니다. 일정 짜기, 자료 정리, 여행 일정표 스킬, 준비물 체크 화면을 만들어 가족에게 링크로 보내기까지 한 단계씩 따라 하고, 같은 방법을 내 업무에 옮깁니다.</p>
   <p class="note"><b>11. 6.(금)~7.(토)</b> · 교육훈련관 2층 정보화교육장</p>
   <h2>사전 과제 · 수업 전에 각자</h2>
   <ol class="mods">${modItems(MODULES.slice(0, 2))}</ol>
@@ -550,7 +550,7 @@ if (PREVIEW) {
   }
   fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 활용능력 향상교육</h1>
-  <p class="lead"><b>AI 시대, 여행 계획이 달라졌다.</b> 우리 집 여행 담당이 되어 경주 2박 3일 가족 여행을 AI와 함께 준비합니다. 일정 짜기, 자료 정리, 준비물 체크 화면을 만들어 가족에게 링크로 보내기까지 한 단계씩 따라 하고, 같은 방법을 내 업무에 옮깁니다.</p>
+  <p class="lead"><b>AI 시대, 여행 계획이 달라졌다.</b> <b>내가 생각한 것을 내가 만들어 쓰는 이틀</b>입니다. 우리 집 여행 담당이 되어 경주 2박 3일 가족 여행을 AI와 함께 준비합니다. 일정 짜기, 자료 정리, 준비물 체크 화면을 만들어 가족에게 링크로 보내기까지 한 단계씩 따라 하고, 같은 방법을 내 업무에 옮깁니다.</p>
   <p class="note"><b>11. 6.(금)~7.(토)</b> · 1일차 16:00~21:00, 2일차 08:00~13:00 (총 10시간)</p>
   <h2>지금 할 일</h2>
 ${SURVEY_OPEN ? `  <p><b>사전 수요조사</b> — 참여 의향과 가능한 일정을 알려 주세요 (3분, <b>10. 23.(금)까지</b>). 결과로 2차 운영 여부와 평일 일정을 정합니다. <a class="btn" href="survey.html">수요조사 응답하기</a></p>` : ""}
