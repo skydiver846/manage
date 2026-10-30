@@ -169,7 +169,102 @@
     draw();
   }
 
-  const LABS = { steps: stepsLab, ledger: ledgerLab };
+  /* ───────── 03-1: 막연한 요청 다듬기 (프롬프트 5요소) ───────── */
+  // 낱말로 대략 찾는다. 정답 채점이 아니라 "빠진 요소가 있는지" 스스로 돌아보게 하는 거울이다.
+  const ELEMENTS = [
+    { key: '역할', re: /너는|역할|로서|처럼\s*(답|써|생각)|전문가|도우미|담당자/g, hint: '누구처럼 답할까? 예) "너는 가족 여행을 꼼꼼히 챙기는 여행 도우미야"' },
+    { key: '목표', re: /목표|안내문?|일정표|계획표|공문|보고서|요약|(써|만들어|짜|정리해|알려)\s*줘/g, hint: '무엇을 원하나? 예) "가족 단톡방에 올릴 일정 안내를 써 줘"' },
+    { key: '맥락', re: /맥락|배경|할머니|아이|초등|가족\s*\d|\d+\s*명|무릎|광주|자가용|가을|주말|금[~～\-]일|숙소|대상|기간|일시/g, hint: '배경은? 예) "가족 4명, 할머니 75세 무릎 불편, 아이 초3, 광주에서 자가용"' },
+    { key: '형식', re: /형식|표로?|목록|글머리|\d+\s*줄|문단|인사|제목|항목/g, hint: '어떤 모양으로? 예) "인사 1줄 + 날짜별 일정 표(시간·장소·이동·메모)"' },
+    { key: '조건', re: /조건|이내|이하|넘지|하지\s*마|빼고|\[?확인\s*필요\]?|짧게|쉽게|쉬엄쉬엄|\d+\s*곳|반말|존댓말|휴대폰에서/g, hint: '지킬 것은? 예) "하루 2곳 이내, 모르는 요금은 [확인 필요]로"' }
+  ];
+  const PROMPT_TASKS = [
+    { label: '여행', vague: '경주 여행 일정 짜 줘',
+      model: '[역할] 너는 가족 여행을 꼼꼼히 챙기는 여행 도우미야.\n[목표] 가족 단톡방에 올릴 경주 2박 3일 일정 안내를 써 줘.\n[맥락] 가을 주말(금~일), 광주에서 자가용으로 약 3시간. 가족 4명: 나, 배우자, 아이(초등 3학년),\n       할머니(75세, 무릎이 불편해 오래 걷기·계단이 어려움). 숙소는 보문단지 근처.\n[형식] 인사 1줄, 날짜별 일정은 표(시간·장소·이동·메모), 끝에 꼭 챙길 것 3가지.\n[조건] 휴대폰에서 읽기 쉽게 짧게, 하루 2곳 정도로 쉬엄쉬엄. 입장료·운영시간처럼 확인되지 않은 내용은 [확인 필요]로 표시.' },
+    { label: '업무', vague: '교육 안내문 써 줘',
+      model: '[역할] 너는 소방학교 교육 운영 담당자야.\n[목표] 직원들에게 보낼 「생성형 AI 활용능력 향상교육」 참여 안내문을 써 줘.\n[맥락] 대상은 전 직원 희망자 20명 내외, 일시 11. 6.(금) 16~21시·11. 7.(토) 08~13시, 장소 교육훈련관 2층 정보화교육장.\n       AI를 처음 써도 참여할 수 있고, 수업 전에 구글 계정을 만들어 와야 함.\n[형식] 제목 1줄, 인사 2줄, 핵심 안내 4항목(글머리표), 끝에 문의처 한 줄.\n[조건] 메신저로 보내기 좋게 10줄 이내, 존댓말, 날짜·장소 등 모르는 내용은 [확인 필요]로 표시.' }
+  ];
+
+  function promptLab(host) {
+    const body = shell(host, {
+      time: '약 3분',
+      title: '막연한 요청 다듬기',
+      goal: '한 줄짜리 막연한 요청을 5요소(역할·목표·맥락·형식·조건)를 넣어 다시 써 봅니다. 쓴 글에서 요소가 보이면 초록색으로 표시됩니다.',
+      howTo: [
+        '<b>여행</b> 또는 <b>업무</b> 버튼을 고르고, 회색 상자의 막연한 요청을 읽습니다.',
+        '아래 칸에 5요소를 넣어 다시 씁니다. <code>[역할]</code> 같은 머리말을 붙이면 쉽습니다.',
+        '<b>[5요소 확인]</b> → 빠진 요소의 힌트를 보고 보탭니다. 마지막에 <b>[좋은 예와 비교]</b>로 견줘 봅니다.'
+      ]
+    });
+    body.innerHTML = `
+      <div class="lab-steps" role="tablist">${PROMPT_TASKS.map((t, i) => `<button type="button" role="tab" data-t="${i}">${t.label}</button>`).join('')}</div>
+      <p class="prompt-vague"></p>
+      <label class="sr-only" for="${'pl-' + Math.random().toString(36).slice(2, 7)}">다듬은 요청</label>
+      <textarea class="prompt-input" rows="6" placeholder="[역할] 너는 …&#10;[목표] …&#10;[맥락] …&#10;[형식] …&#10;[조건] …"></textarea>
+      <div class="lab-actions">
+        <button type="button" class="btn" data-act="check">5요소 확인</button>
+        <button type="button" class="btn ghost" data-act="model">좋은 예와 비교</button>
+        <button type="button" class="btn ghost" data-act="copy">내 요청 복사</button>
+      </div>
+      <ul class="prompt-score"></ul>
+      <div class="prompt-mark" hidden></div>
+      <details class="prompt-model" hidden><summary>좋은 예</summary><pre></pre></details>
+      <p class="prompt-status" aria-live="polite"></p>`;
+    const input = body.querySelector('.prompt-input');
+    input.id = body.querySelector('label.sr-only').htmlFor;
+    let t = 0;
+
+    function pick(i) {
+      t = i;
+      body.querySelectorAll('[data-t]').forEach(b => b.setAttribute('aria-selected', String(Number(b.dataset.t) === i)));
+      body.querySelector('.prompt-vague').innerHTML = `<b>막연한 요청</b> <code>${esc(PROMPT_TASKS[i].vague)}</code> → AI는 누구를 위해, 어떤 모양으로, 무엇을 지켜야 하는지 모릅니다.`;
+      input.value = '';
+      body.querySelector('.prompt-score').innerHTML = '';
+      body.querySelector('.prompt-mark').hidden = true;
+      const model = body.querySelector('.prompt-model');
+      model.hidden = true; model.open = false;
+      model.querySelector('pre').textContent = PROMPT_TASKS[i].model;
+      body.querySelector('.prompt-status').textContent = '';
+    }
+
+    function check() {
+      const text = input.value.trim();
+      const status = body.querySelector('.prompt-status');
+      if (!text) { status.textContent = '먼저 아래 칸에 다듬은 요청을 써 주세요.'; return; }
+      status.textContent = '';
+      let found = 0;
+      const ranges = [];
+      body.querySelector('.prompt-score').innerHTML = ELEMENTS.map(el => {
+        const hits = [...text.matchAll(el.re)];
+        hits.forEach(m => ranges.push([m.index, m.index + m[0].length]));
+        if (hits.length) found += 1;
+        return hits.length
+          ? `<li class="done">✅ <b>${el.key}</b> <small>${esc(hits.slice(0, 3).map(m => m[0]).join(', '))}</small></li>`
+          : `<li>⬜ <b>${el.key}</b> <small>${esc(el.hint)}</small></li>`;
+      }).join('') + `<li class="prompt-total"><b>${found} / 5</b> ${found === 5 ? '모두 들어갔습니다. 이제 Claude에 붙여넣어 결과를 비교해 보세요.' : '빠진 요소를 보태 보세요.'}</li>`;
+      // 찾은 낱말에 초록 표시
+      ranges.sort((a, b) => a[0] - b[0]);
+      let html = '', pos = 0;
+      for (const [a, b] of ranges) { if (a < pos) continue; html += esc(text.slice(pos, a)) + `<mark>${esc(text.slice(a, b))}</mark>`; pos = b; }
+      html += esc(text.slice(pos));
+      const mark = body.querySelector('.prompt-mark');
+      mark.innerHTML = html; mark.hidden = false;
+    }
+
+    body.querySelectorAll('[data-t]').forEach(b => b.addEventListener('click', () => pick(Number(b.dataset.t))));
+    body.querySelector('[data-act="check"]').addEventListener('click', check);
+    body.querySelector('[data-act="model"]').addEventListener('click', () => {
+      const model = body.querySelector('.prompt-model'); model.hidden = false; model.open = true;
+    });
+    body.querySelector('[data-act="copy"]').addEventListener('click', async () => {
+      const status = body.querySelector('.prompt-status');
+      try { await navigator.clipboard.writeText(input.value); status.textContent = '복사했습니다. Claude 새 채팅에 붙여넣어 보세요.'; }
+      catch (_) { input.select(); status.textContent = '글이 선택되었습니다. Ctrl + C 로 복사하세요.'; }
+    });
+    pick(0);
+  }
+
+  const LABS = { steps: stepsLab, ledger: ledgerLab, prompt: promptLab };
 
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.lab[data-lab]').forEach(host => {

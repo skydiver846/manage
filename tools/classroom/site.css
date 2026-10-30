@@ -256,3 +256,14 @@ details.later.later-h4 > summary { font-size: 15px; }
 .lab-missions { list-style: none; padding: 0; margin: 6px 0 0; font-size: 14px; }
 .lab-missions li.done { color: #1d6b3f; }
 @media (max-width: 560px) { .ledger { grid-template-columns: 1fr 1fr; } .ledger-db { grid-column: 1 / -1; grid-row: 2; max-width: none; } }
+.prompt-vague { background: var(--code); border-radius: 8px; padding: 8px 12px; font-size: 14.5px; margin: 8px 0; }
+.prompt-input { width: 100%; box-sizing: border-box; font: inherit; font-size: 14.5px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); resize: vertical; }
+.prompt-score { list-style: none; padding: 0; margin: 6px 0; font-size: 14px; display: grid; gap: 4px; }
+.prompt-score li small { color: var(--muted); }
+.prompt-score li.done { color: #1d6b3f; }
+.prompt-score .prompt-total { margin-top: 4px; }
+.prompt-mark { white-space: pre-wrap; font-size: 14px; border: 1px dashed var(--line); border-radius: 8px; padding: 8px 10px; margin: 6px 0; }
+.prompt-mark mark { background: #d3f2dc; color: #12502b; border-radius: 3px; padding: 0 1px; }
+.prompt-model pre { white-space: pre-wrap; font-size: 13px; }
+.prompt-status { font-size: 13.5px; color: var(--muted); margin: 4px 0 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
