@@ -328,7 +328,88 @@
     });
   }
 
-  const LABS = { steps: stepsLab, ledger: ledgerLab, prompt: promptLab, delegate: delegateLab };
+  /* ───────── 05-2-1: PRD 구멍 찾기 (한 목록 집계 vs 누구 것별 집계) ───────── */
+  const GAP_ITEMS = [
+    ['혈압약', '할머니', true], ['무릎 보호대', '할머니', true], ['지팡이', '할머니', true],
+    ['멀미약', '아이', false], ['여벌 옷', '아이', false], ['체험학습 보고서', '아이', true],
+    ['충전기', '가족 공용', true], ['우산', '가족 공용', true]
+  ];
+  const GAP_FIX = {
+    A: { name: 'A. 누구 것 고르기', line: '4번 핵심 기능: 준비물마다 누구 것(가족 전체 / 나 / 배우자 / 아이 / 할머니)을 고르고, 누구 것이 같은 준비물끼리 전체·챙김·챙김률을 집계한다.', note: '덜 챙긴 사람이 보입니다. 대신 입력이 하나 늘어납니다. 이후 실습은 A로 진행합니다.' },
+    B: { name: 'B. 표시만', line: '4번 핵심 기능: 한 목록으로 집계하되, 약·옷처럼 사람마다 다른 준비물에는 "사람별 확인 필요"를 표시한다.', note: '입력은 간단하지만, 누가 덜 챙겼는지는 여전히 모릅니다.' },
+    C: { name: 'C. 범위 밖으로', line: '6번 범위 밖: 이번 버전은 누구 것 구분을 하지 않는다 (가족별 집계는 다음 버전).', note: '가장 빠릅니다. "알고 있지만 안 한다"를 적어 둔 것이라 훌륭한 답입니다.' }
+  };
+  const statusOf = r => (r < 50 ? '서둘러요' : r === 100 ? '다 챙김' : '순조로움');
+
+  function prdGapLab(host) {
+    const body = shell(host, {
+      time: '약 4분',
+      title: 'PRD 구멍 찾기: 한 목록 vs 누구 것별',
+      goal: 'v0.1 PRD대로 "한 목록"으로 세면 무엇이 안 보이는지 직접 확인하고, 기획자로서 고칠 방법을 골라 봅니다.',
+      howTo: [
+        '<b>한 목록으로 세기(v0.1)</b>의 결과를 봅니다. 8개 중 6개, 75%, "순조로움"입니다.',
+        '<b>누구 것별로 세기</b>를 누릅니다. 같은 체크인데 <b>아이</b> 줄이 "서둘러요"입니다.',
+        '아이 것을 모두 체크해 보고, 맨 아래에서 <b>A · B · C</b> 중 고칠 방법을 고릅니다.'
+      ]
+    });
+    body.innerHTML = `
+      <div class="lab-steps" role="tablist">
+        <button type="button" role="tab" data-mode="one">한 목록으로 세기 (v0.1)</button>
+        <button type="button" role="tab" data-mode="who">누구 것별로 세기</button>
+      </div>
+      <div class="gap-grid">
+        <ul class="gap-items"></ul>
+        <div class="gap-result"></div>
+      </div>
+      <p class="lab-observe"></p>
+      <p class="gap-ask"><b>기획자라면?</b> 4번 기능을 어떻게 고칠까요?</p>
+      <div class="lab-steps gap-fix">${Object.entries(GAP_FIX).map(([k, v]) => `<button type="button" data-fix="${k}">${esc(v.name)}</button>`).join('')}</div>
+      <div class="gap-line" hidden></div>
+      <div class="lab-actions"><button type="button" class="btn ghost" data-act="reset">처음 체크로 되돌리기</button></div>`;
+    let mode = 'one';
+    let checks = GAP_ITEMS.map(x => x[2]);
+
+    function draw() {
+      body.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.mode === mode)));
+      body.querySelector('.gap-items').innerHTML = GAP_ITEMS.map(([name, who], i) =>
+        `<li><label><input type="checkbox" data-i="${i}"${checks[i] ? ' checked' : ''}> ${esc(name)}${mode === 'who' ? ` <small>· ${esc(who)}</small>` : ''}</label></li>`).join('');
+      const done = checks.filter(Boolean).length, all = GAP_ITEMS.length, rate = Math.round(done / all * 100);
+      let html;
+      if (mode === 'one') {
+        html = `<table><thead><tr><th>전체</th><th>챙김</th><th>챙김률</th><th>상태</th></tr></thead><tbody><tr><td>${all}</td><td>${done}</td><td>${rate}%</td><td class="${rate < 50 ? 'hurry' : ''}">${statusOf(rate)}</td></tr></tbody></table>`;
+      } else {
+        const groups = {};
+        GAP_ITEMS.forEach(([, who], i) => { (groups[who] ||= [0, 0])[0] += 1; if (checks[i]) groups[who][1] += 1; });
+        html = `<table><thead><tr><th>누구</th><th>전체</th><th>챙김</th><th>챙김률</th><th>상태</th></tr></thead><tbody>${Object.entries(groups).map(([who, [n, c]]) => {
+          const r = Math.round(c / n * 100);
+          return `<tr><td>${esc(who)}</td><td>${n}</td><td>${c}</td><td>${r}%</td><td class="${r < 50 ? 'hurry' : ''}">${statusOf(r)}</td></tr>`;
+        }).join('')}</tbody></table>`;
+      }
+      body.querySelector('.gap-result').innerHTML = html;
+      const kidLow = (() => { const idx = GAP_ITEMS.map((x, i) => (x[1] === '아이' ? i : -1)).filter(i => i >= 0); return idx.filter(i => checks[i]).length / idx.length < 0.5; })();
+      body.querySelector('.lab-observe').innerHTML = mode === 'one'
+        ? (kidLow ? '<b>살펴보기</b> 전체로는 "순조로움"입니다. 그런데 이 숫자만 보고 출발하면 <b>아이 멀미약</b>이 또 빠집니다. PRD 1번 배경에는 "가족마다 챙길 것이 다르다"고 적었는데, 4번 기능은 한 목록으로만 셉니다. 이것이 <b>구멍</b>입니다.'
+                  : '<b>살펴보기</b> 이제 모두 순조롭습니다. 다시 아이 것 두 개를 풀어 보면, 한 목록에서는 여전히 "순조로움"으로 보입니다.')
+        : (kidLow ? '<b>살펴보기</b> 같은 체크인데 <b>아이 3개 중 1개, 33%, "서둘러요"</b>가 드러났습니다. 누구 것 구분 한 줄이 PRD에 있느냐 없느냐의 차이입니다.'
+                  : '<b>살펴보기</b> 아이 것을 챙기자 "서둘러요"가 사라졌습니다. 누가 덜 챙겼는지 보여 주는 것, 그것이 이 화면이 할 일입니다.');
+    }
+    body.addEventListener('change', e => {
+      const box = e.target.closest('input[data-i]');
+      if (!box) return;
+      checks[Number(box.dataset.i)] = box.checked; draw();
+    });
+    body.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => { mode = b.dataset.mode; draw(); }));
+    body.querySelectorAll('[data-fix]').forEach(b => b.addEventListener('click', () => {
+      body.querySelectorAll('[data-fix]').forEach(x => x.setAttribute('aria-selected', String(x === b)));
+      const f = GAP_FIX[b.dataset.fix], box = body.querySelector('.gap-line');
+      box.hidden = false;
+      box.innerHTML = `<p><b>PRD에 적을 문장</b></p><pre>${esc(f.line)}</pre><p>${esc(f.note)} 어느 쪽이든 <b>PRD에 적는 것</b>이 핵심이고, 고친 뒤 버전을 <b>v0.1 → v0.2</b>로 올립니다.</p>`;
+    }));
+    body.querySelector('[data-act="reset"]').addEventListener('click', () => { checks = GAP_ITEMS.map(x => x[2]); draw(); });
+    draw();
+  }
+
+  const LABS = { steps: stepsLab, ledger: ledgerLab, prompt: promptLab, delegate: delegateLab, prdgap: prdGapLab };
 
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.lab[data-lab]').forEach(host => {
