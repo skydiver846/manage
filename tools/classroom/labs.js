@@ -264,7 +264,71 @@
     pick(0);
   }
 
-  const LABS = { steps: stepsLab, ledger: ledgerLab, prompt: promptLab };
+  /* ───────── 08: AI에게 맡길 일 나누기 ───────── */
+  const BINS = { ai: '🤖 맡긴다', ok: '🤝 확인·승인', me: '🙋 직접' };
+  const BIN_LONG = { ai: '🤖 맡긴다 = AI에게 맡긴다', ok: '🤝 확인·승인 = AI가 준비하고 사람이 확인·승인', me: '🙋 직접 = 사람이 직접 (AI 쓰지 않음)' };
+  const TASKS = [
+    { t: '경주 숙소 빈방과 가격을 비교해 표로 만들기', tag: '여행', ok: ['ai'], why: '공개 정보 찾기·정리는 틀려도 되돌릴 수 있습니다. 표의 가격은 예약 전에 실제 화면과 대조합니다.' },
+    { t: '고른 숙소를 예약하고 카드로 결제하기', tag: '여행', ok: ['me', 'ok'], why: '결제·예약은 되돌리기 어렵습니다. AI가 빈방을 찾아 둬도 카드 번호와 마지막 [결제] 버튼은 사람이 누릅니다.' },
+    { t: '가족 단톡방에 여행 일정 안내 보내기', tag: '여행', ok: ['ok'], why: '글은 AI가 써도 좋지만, 메시지 보내기는 사람이 읽고 확인한 뒤 보냅니다.' },
+    { t: '출발 3일 전부터 매일 아침 경주 날씨 확인하기', tag: '여행', ok: ['ai'], why: '공개 사이트를 반복해서 보는 일은 루틴으로 맡기기 좋습니다(8-4).' },
+    { t: '기관 누리집의 새 공지를 확인해 세 줄로 요약하기', tag: '업무', ok: ['ai'], why: '공개 정보 확인은 처음 맡기기 좋은 일입니다. 요약이 원문과 맞는지만 확인합니다.' },
+    { t: '내부 업무 시스템에 로그인해 직원·민원 정보 조회하기', tag: '업무', ok: ['me'], why: '개인정보가 있는 내부 시스템은 기본적으로 AI 브라우저를 쓰지 않습니다. 기관 규정이 우선입니다.' },
+    { t: '공문 기안을 결재에 올리기', tag: '업무', ok: ['me', 'ok'], why: '게시·제출·결재는 사람이 하거나 최소한 사람이 승인합니다. 초안 작성까지가 AI의 몫입니다.' },
+    { t: '내가 만든 준비물 화면의 버튼이 잘 되는지 점검하기', tag: '업무', ok: ['ai'], why: '내가 만든 도구 점검은 틀려도 되돌릴 수 있는 일이라 맡기기 좋습니다(8-2). 보고와 실제 화면은 대조합니다.' }
+  ];
+
+  function delegateLab(host) {
+    const body = shell(host, {
+      time: '약 3분',
+      title: 'AI에게 맡길 일 나누기',
+      goal: '여행과 업무에서 나온 일 8가지를 위 기준표에 비추어 세 칸으로 나눠 봅니다.',
+      howTo: [
+        '일마다 <b>🤖 맡긴다 · 🤝 확인·승인 · 🙋 직접</b> 중 하나를 누릅니다.',
+        '모두 고르면 <b>[확인하기]</b>를 누르고, 일마다 나온 이유를 읽습니다.',
+        '헷갈리면 질문 하나만 기억하세요. <b>"틀렸을 때 되돌릴 수 있나?"</b>'
+      ]
+    });
+    body.innerHTML = `
+      <p class="sort-legend">${Object.values(BIN_LONG).map(esc).join('<br>')}</p>
+      <ol class="sort-list">${TASKS.map((x, i) => `<li data-i="${i}">
+        <p class="sort-q"><span class="sort-tag">${esc(x.tag)}</span> ${esc(x.t)}</p>
+        <div class="sort-bins" role="radiogroup">${Object.entries(BINS).map(([k, v]) => `<button type="button" role="radio" aria-checked="false" data-bin="${k}">${v}</button>`).join('')}</div>
+        <p class="sort-why" hidden></p></li>`).join('')}</ol>
+      <div class="lab-actions"><button type="button" class="btn" data-act="check">확인하기</button><button type="button" class="btn ghost" data-act="reset">다시 하기</button></div>
+      <p class="sort-result" aria-live="polite"></p>`;
+    const pickOf = {};
+    body.addEventListener('click', e => {
+      const b = e.target.closest('[data-bin]');
+      if (!b) return;
+      const li = b.closest('li'), i = li.dataset.i;
+      pickOf[i] = b.dataset.bin;
+      li.querySelectorAll('[data-bin]').forEach(x => x.setAttribute('aria-checked', String(x === b)));
+      li.classList.remove('right', 'wrong'); li.querySelector('.sort-why').hidden = true;
+    });
+    body.querySelector('[data-act="check"]').addEventListener('click', () => {
+      let right = 0, answered = 0;
+      body.querySelectorAll('.sort-list > li').forEach(li => {
+        const x = TASKS[li.dataset.i], pick = pickOf[li.dataset.i];
+        const why = li.querySelector('.sort-why');
+        if (!pick) { why.hidden = false; why.textContent = '아직 고르지 않았습니다.'; li.classList.remove('right', 'wrong'); return; }
+        answered += 1;
+        const ok = x.ok.includes(pick);
+        if (ok) right += 1;
+        li.classList.toggle('right', ok); li.classList.toggle('wrong', !ok);
+        why.hidden = false;
+        why.innerHTML = `${ok ? '✅' : `❌ 알맞은 칸: <b>${x.ok.map(k => BINS[k]).join(' 또는 ')}</b>.`} ${esc(x.why)}`;
+      });
+      body.querySelector('.sort-result').innerHTML = `<b>${right} / ${TASKS.length}</b> ${answered < TASKS.length ? `(${TASKS.length - answered}개는 아직 고르지 않음)` : right === TASKS.length ? '모두 맞았습니다. 기준표의 "되돌릴 수 있는 일부터"가 몸에 붙었습니다.' : '틀린 일의 이유를 읽고 기준표와 다시 비교해 보세요.'}`;
+    });
+    body.querySelector('[data-act="reset"]').addEventListener('click', () => {
+      Object.keys(pickOf).forEach(k => delete pickOf[k]);
+      body.querySelectorAll('.sort-list > li').forEach(li => { li.classList.remove('right', 'wrong'); li.querySelector('.sort-why').hidden = true; li.querySelectorAll('[data-bin]').forEach(x => x.setAttribute('aria-checked', 'false')); });
+      body.querySelector('.sort-result').textContent = '';
+    });
+  }
+
+  const LABS = { steps: stepsLab, ledger: ledgerLab, prompt: promptLab, delegate: delegateLab };
 
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.lab[data-lab]').forEach(host => {
