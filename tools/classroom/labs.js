@@ -33,65 +33,108 @@
     return response.text();
   }
 
+  // 단계별 "코드 직접 고쳐 보기" 도전 과제. find: [이 줄로 가기]가 찾아 줄 글자, ok: 고친 코드가 맞는지 확인
+  const CODE_TASKS = [
+    [
+      { t: '제목을 <b>우리 가족 경주 여행 준비물</b>로 바꾸기', find: '<h1>', ok: c => /<h1>[^<]*경주[^<]*<\/h1>/.test(c), tip: '<code>&lt;h1&gt;</code>과 <code>&lt;/h1&gt;</code> 사이 글자만 바꿉니다.' },
+      { t: '가족별 표에 <b>나 / 2 / 0 / 0% / 서둘러요</b> 한 줄 더하기', find: '<tr><td>가족 전체</td>', ok: c => /<td>\s*나\s*<\/td>/.test(c), tip: '바로 위 <code>&lt;tr&gt;…&lt;/tr&gt;</code> 한 줄을 복사해 붙여넣고 글자만 바꿉니다.' }
+    ],
+    [
+      { t: '[추가] 버튼 색을 <b>남색</b>(<code>#1f3a93</code>)으로', find: 'background: #c8321e;', ok: c => { const m = /button\s*\{[^}]*?background:\s*([^;]+);/.exec(c); return !!m && m[1].trim() !== '#c8321e'; }, tip: '<code>button { … }</code> 안의 <code>background</code> 값만 바꿉니다.' },
+      { t: '"서둘러요" 글자를 <b>보라색</b>(<code>purple</code>)으로', find: '.bad {', ok: c => { const m = /\.bad\s*\{[^}]*?color:\s*([^;]+);/.exec(c); return !!m && m[1].trim() !== '#c8321e'; }, tip: '<code>.bad { color: … }</code> 를 고칩니다. HTML은 그대로입니다.' },
+      { t: '화면 기둥 너비를 <b>300px</b>로', find: 'max-width: 520px;', ok: c => /max-width:\s*300px/.test(c), tip: '<code>520px</code> → <code>300px</code>' }
+    ],
+    [
+      { t: '서둘러요 기준을 <b>50% → 30%</b>로 (PRD 규칙 한 줄)', find: 'return rate < 50;', ok: c => /return rate < (?!50;)\d+;/.test(c), tip: '<code>rate &lt; 50</code> 의 숫자만 바꿉니다. 아이 33%가 "순조로움"이 됩니다.' },
+      { t: '빈칸 오류 문구를 <b>"준비물 이름을 적어 주세요"</b>로', find: '준비물 이름을 적은 뒤 추가하세요.', ok: c => /error\.textContent = "(?!준비물 이름을 적은 뒤 추가하세요\.)[^"]+"/.test(c), tip: '따옴표 <code>" "</code> 안의 글자만 바꿉니다. 따옴표를 지우면 버튼이 멈춥니다.' }
+    ]
+  ];
+
   function stepsLab(host) {
     const only = host.dataset.step ? Number(host.dataset.step) - 1 : null;   // data-step="3" 이면 그 단계만
     const steps = only === null ? STEPS.map((s, i) => i) : (only === 1 ? [0, 1] : [only]);
     const titles = ['HTML만 있는 화면', '같은 화면에 CSS 입히기', 'JavaScript가 계산하는 화면', '기억하는 완성본'];
-    const times = ['약 2분', '약 2분', '약 5분', '약 3분'];
+    const times = ['약 3분', '약 3분', '약 6분', '약 3분'];
     const body = shell(host, {
-      time: only === null ? '약 10분' : times[only],
+      time: only === null ? '약 15분' : times[only],
       title: only === null ? '준비물 화면, 단계별로 눌러 보기' : `준비물 화면 ${only + 1}단계 · ${titles[only]}`,
-      goal: '실습 파일을 내려받지 않고, 이 페이지 안에서 바로 눌러 봅니다. 아래 화면은 실제 실습 파일 그대로입니다.',
+      goal: '실습 파일을 내려받지 않고, 이 페이지 안에서 바로 눌러 보고 <b>코드도 직접 고쳐 봅니다.</b> 아래 화면은 실제 실습 파일 그대로입니다.',
       howTo: only === 2 ? [
-        '아래 화면에서 준비물 3개를 <b>아이</b> 것으로 추가하고 하나만 체크합니다.',
-        '<b>기준 바꿔 보기</b>에 <code>30</code>을 넣고 [적용] → 같은 준비물을 다시 넣고 하나만 체크하면, 같은 33%인데 이번엔 <b>"순조로움"</b>입니다. 코드에서는 <code>rate &lt; 50</code> 한 곳만 바뀌었습니다.',
+        '아래 화면에서 준비물 3개를 <b>아이</b> 것으로 추가하고 하나만 체크합니다. 33%, "서둘러요".',
+        '<b>✏️ 코드 직접 고쳐 보기</b>에서 [이 줄로 가기] → <code>50</code>을 <code>30</code>으로 → <b>[▶ 실행]</b> → 같은 준비물을 다시 넣으면 같은 33%가 <b>"순조로움"</b>입니다. PRD 규칙 한 줄을 고친 것입니다.',
         '준비물을 넣은 뒤 <b>[새로고침]</b>을 누릅니다. 목록과 표가 <b>사라집니다</b>. 기억해 둘 곳이 없기 때문입니다.'
       ] : null
     });
+    const editable = i => i < 3;
     body.innerHTML = `
       ${steps.length > 1 ? `<div class="lab-steps" role="tablist">${steps.map(i => `<button type="button" role="tab" data-i="${i}">${STEPS[i].label}</button>`).join('')}</div>` : ''}
       <p class="lab-observe"></p>
-      ${only === 2 ? `<div class="lab-tweak"><label>기준 바꿔 보기: 챙김률 <input type="number" min="1" max="100" value="50" inputmode="numeric"> % 미만이면 서둘러요</label> <button type="button" class="btn" data-act="tweak">적용</button> <small class="lab-tweak-out"></small></div>` : ''}
       <div class="lab-frame"><iframe title="실습 화면" loading="lazy"></iframe></div>
       <div class="lab-actions">
         <button type="button" class="btn ghost" data-act="reload">새로고침 (F5와 같음)</button>
         <a class="btn ghost" data-act="open" target="_blank" rel="noopener">새 창으로 열기</a>
       </div>
-      <details class="lab-code"><summary>이 단계의 코드 보기</summary><pre></pre></details>`;
+      <details class="lab-code"${only === 2 ? ' open' : ''}><summary></summary>
+        <ol class="code-tasks"></ol>
+        <textarea class="code-edit" spellcheck="false" autocomplete="off" aria-label="코드 편집"></textarea>
+        <div class="lab-actions">
+          <button type="button" class="btn" data-act="run">▶ 실행</button>
+          <button type="button" class="btn ghost" data-act="orig">이 단계 처음으로</button>
+          <small class="code-out"></small>
+        </div>
+      </details>`;
     const frame = body.querySelector('iframe');
-    const pre = body.querySelector('.lab-code pre');
-    let cur = 0;
-    let srcdoc = null;
+    const edit = body.querySelector('.code-edit');
+    const out = body.querySelector('.code-out');
+    let cur = 0, srcdoc = null, original = '';
 
+    function drawTasks() {
+      const list = body.querySelector('.code-tasks');
+      if (!editable(cur)) { list.innerHTML = ''; return; }
+      list.innerHTML = CODE_TASKS[cur].map((x, k) => `<li class="${x.ok(edit.value) ? 'done' : ''}">${x.ok(edit.value) ? '✅ ' : ''}${x.t} <button type="button" class="btn ghost code-go" data-go="${k}">이 줄로 가기</button><br><small>${x.tip}</small></li>`).join('');
+    }
     async function show(i) {
       cur = i; srcdoc = null;
       body.querySelectorAll('[data-i]').forEach(b => b.setAttribute('aria-selected', String(Number(b.dataset.i) === i)));
       body.querySelector('.lab-observe').innerHTML = `<b>살펴보기</b> ${STEPS[i].observe}`;
       body.querySelector('[data-act="open"]').href = STEPS[i].file;
+      body.querySelector('.lab-code summary').textContent = editable(i) ? '✏️ 코드 직접 고쳐 보기 (메모장 대신 여기서)' : '이 단계의 코드 보기';
+      body.querySelectorAll('[data-act="run"], [data-act="orig"]').forEach(b => { b.hidden = !editable(i); });
+      edit.readOnly = !editable(i);
       frame.removeAttribute('srcdoc');
       frame.src = STEPS[i].file;
-      pre.textContent = '불러오는 중…';
-      try { pre.textContent = await fetchText(STEPS[i].file); } catch (e) { pre.textContent = `코드를 불러오지 못했습니다: ${e.message}`; }
+      out.textContent = '';
+      edit.value = '불러오는 중…';
+      try { original = await fetchText(STEPS[i].file); edit.value = original; } catch (e) { edit.value = `코드를 불러오지 못했습니다: ${e.message}`; }
+      drawTasks();
+    }
+    function run() {
+      srcdoc = edit.value;
+      frame.srcdoc = srcdoc;
+      const tasks = CODE_TASKS[cur] || [];
+      const done = tasks.filter(x => x.ok(edit.value)).length;
+      out.textContent = `실행했습니다. 도전 ${done} / ${tasks.length} 완료${done === tasks.length && tasks.length ? ' 🎉' : ''}`;
+      drawTasks();
     }
 
+    body.addEventListener('click', e => {
+      const go = e.target.closest('[data-go]');
+      if (!go) return;
+      const needle = CODE_TASKS[cur][Number(go.dataset.go)].find, at = edit.value.indexOf(needle);
+      if (at < 0) { out.textContent = '그 줄을 찾지 못했습니다. [이 단계 처음으로]로 되돌린 뒤 다시 해 보세요.'; return; }
+      edit.focus();
+      edit.setSelectionRange(at, at + needle.length);
+      const line = edit.value.slice(0, at).split('\n').length;
+      edit.scrollTop = Math.max(0, (line - 4) * parseFloat(getComputedStyle(edit).lineHeight || '18'));
+    });
     body.querySelectorAll('[data-i]').forEach(b => b.addEventListener('click', () => show(Number(b.dataset.i))));
     body.querySelector('[data-act="reload"]').addEventListener('click', () => {
       if (srcdoc) { frame.srcdoc = srcdoc; return; }
       frame.src = STEPS[cur].file;
     });
-    const tweak = body.querySelector('[data-act="tweak"]');
-    if (tweak) tweak.addEventListener('click', async () => {
-      const out = body.querySelector('.lab-tweak-out');
-      const n = Math.min(100, Math.max(1, Math.round(Number(body.querySelector('.lab-tweak input').value) || 50)));
-      try {
-        const src = await fetchText(STEPS[2].file);
-        if (!/return rate < 50;/.test(src)) throw new Error('기준 줄을 찾지 못했습니다');
-        srcdoc = src.replace('return rate < 50;', `return rate < ${n};`).replace('챙김률 50% 미만은 서둘러요', `챙김률 ${n}% 미만은 서둘러요`);
-        frame.srcdoc = srcdoc;
-        pre.textContent = srcdoc;
-        out.innerHTML = `코드 한 줄이 <code>return rate &lt; ${n};</code> 으로 바뀌었습니다. 준비물을 다시 넣어 보세요.`;
-      } catch (e) { out.textContent = `바꾸지 못했습니다: ${e.message}`; }
-    });
+    body.querySelector('[data-act="run"]').addEventListener('click', run);
+    body.querySelector('[data-act="orig"]').addEventListener('click', () => { edit.value = original; srcdoc = null; frame.removeAttribute('srcdoc'); frame.src = STEPS[cur].file; out.textContent = '처음 코드로 되돌렸습니다.'; drawTasks(); });
+    edit.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); run(); } });
     show(only === null ? 0 : only);
   }
 
