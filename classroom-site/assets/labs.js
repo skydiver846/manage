@@ -95,7 +95,81 @@
     show(only === null ? 0 : only);
   }
 
-  const LABS = { steps: stepsLab };
+  /* ───────── 10-6: 각자 수첩 vs 공용 장부 ───────── */
+  const ITEMS = [['멀미약', '아이'], ['여벌 옷', '아이'], ['혈압약', '할머니'], ['무릎 보호대', '할머니'], ['우산', '가족 전체']];
+
+  function ledgerLab(host) {
+    const body = shell(host, {
+      time: '약 3분',
+      title: '각자 수첩 vs 공용 장부',
+      goal: '내 휴대폰과 배우자 휴대폰에 같은 준비물 화면이 열려 있습니다. 한쪽에서 체크하면 다른 쪽에도 보일까요?',
+      howTo: [
+        '<b>각자 수첩</b>이 골라진 상태에서 <b>배우자 휴대폰</b>의 멀미약·혈압약을 체크합니다. <b>내 휴대폰</b>은 어떤가요?',
+        '위에서 <b>공용 장부(데이터베이스)</b>를 고릅니다.',
+        '다시 배우자 휴대폰에서 체크해 봅니다. 이번엔 <b>두 휴대폰이 함께</b> 바뀌고, 가운데 장부에 기록이 쌓입니다.'
+      ]
+    });
+    body.innerHTML = `
+      <div class="lab-steps" role="tablist">
+        <button type="button" role="tab" data-mode="local" aria-selected="true">각자 수첩 (지금 화면)</button>
+        <button type="button" role="tab" data-mode="db" aria-selected="false">공용 장부 (데이터베이스)</button>
+      </div>
+      <p class="lab-observe"></p>
+      <div class="ledger">
+        <div class="phone" data-who="0"><p class="phone-name">📱 내 휴대폰</p><ul></ul><p class="phone-rate"></p><p class="phone-store"></p></div>
+        <div class="ledger-db" hidden><p class="phone-name">🗄️ 공용 장부</p><ol></ol></div>
+        <div class="phone" data-who="1"><p class="phone-name">📱 배우자 휴대폰</p><ul></ul><p class="phone-rate"></p><p class="phone-store"></p></div>
+      </div>
+      <div class="lab-actions"><button type="button" class="btn ghost" data-act="reset">처음부터 다시</button></div>
+      <ul class="lab-missions"></ul>`;
+    let mode = 'local';
+    const notes = { local: [ITEMS.map(() => false), ITEMS.map(() => false)], db: ITEMS.map(() => false) };
+    const log = [];
+    const seen = { split: false, shared: false };
+
+    const state = who => (mode === 'db' ? notes.db : notes.local[who]);
+    function draw() {
+      body.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.mode === mode)));
+      body.querySelector('.lab-observe').innerHTML = mode === 'local'
+        ? '<b>살펴보기</b> 지금 준비물 화면과 같습니다. 체크 기록은 <b>각 휴대폰 브라우저의 개인 수첩(localStorage)</b>에만 적힙니다.'
+        : '<b>살펴보기</b> 두 휴대폰이 <b>같은 장부</b>를 읽고 씁니다. 누가 체크하든 장부에 한 번 적히고, 모두가 그 장부를 봅니다. 아래 네 칸 표의 <b>②</b>입니다.';
+      body.querySelector('.ledger-db').hidden = mode !== 'db';
+      body.querySelectorAll('.phone').forEach(ph => {
+        const who = Number(ph.dataset.who), st = state(who);
+        ph.querySelector('ul').innerHTML = ITEMS.map(([name, owner], i) =>
+          `<li><label><input type="checkbox" data-i="${i}"${st[i] ? ' checked' : ''}> ${esc(name)} <small>· ${esc(owner)}</small></label></li>`).join('');
+        const done = st.filter(Boolean).length;
+        ph.querySelector('.phone-rate').innerHTML = `챙김 <b>${done} / ${ITEMS.length}</b> (${Math.round(done / ITEMS.length * 100)}%)`;
+        ph.querySelector('.phone-store').textContent = mode === 'db' ? '기록 위치: 공용 장부' : '기록 위치: 이 휴대폰 수첩';
+      });
+      body.querySelector('.ledger-db ol').innerHTML = log.length
+        ? log.slice(-6).map(t => `<li>${t}</li>`).join('')
+        : '<li class="muted">아직 기록이 없습니다</li>';
+      const a = notes.local[0].join(), b = notes.local[1].join();
+      if (mode === 'local' && a !== b) seen.split = true;
+      if (mode === 'db' && log.length) seen.shared = true;
+      body.querySelector('.lab-missions').innerHTML = [
+        [seen.split, '각자 수첩: 배우자가 체크한 것이 <b>내 휴대폰에는 안 보이는</b> 것을 확인'],
+        [seen.shared, '공용 장부: 한쪽에서 체크하면 <b>두 휴대폰이 함께</b> 바뀌는 것을 확인']
+      ].map(([ok, t]) => `<li class="${ok ? 'done' : ''}">${ok ? '✅' : '⬜'} ${t}</li>`).join('');
+    }
+    body.addEventListener('change', e => {
+      const box = e.target.closest('input[data-i]');
+      if (!box) return;
+      const who = Number(box.closest('.phone').dataset.who), i = Number(box.dataset.i);
+      state(who)[i] = box.checked;
+      if (mode === 'db') log.push(`${who ? '배우자' : '나'}: ${esc(ITEMS[i][0])} ${box.checked ? '챙김' : '취소'}`);
+      draw();
+    });
+    body.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => { mode = b.dataset.mode; draw(); }));
+    body.querySelector('[data-act="reset"]').addEventListener('click', () => {
+      notes.local = [ITEMS.map(() => false), ITEMS.map(() => false)]; notes.db = ITEMS.map(() => false);
+      log.length = 0; seen.split = seen.shared = false; mode = 'local'; draw();
+    });
+    draw();
+  }
+
+  const LABS = { steps: stepsLab, ledger: ledgerLab };
 
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.lab[data-lab]').forEach(host => {

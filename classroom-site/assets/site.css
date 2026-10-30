@@ -240,3 +240,19 @@ details.later.later-h4 > summary { font-size: 15px; }
 .lab-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
 .lab-code pre { max-height: 320px; overflow: auto; font-size: 12.5px; }
 @media print { .inline-lab .lab-frame, .inline-lab .lab-actions { display: none; } }
+.ledger { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: start; margin: 8px 0; }
+.ledger:has(.ledger-db[hidden]) { grid-template-columns: 1fr 1fr; }
+.phone { border: 3px solid #2b2f36; border-radius: 18px; padding: 8px 10px 10px; background: #fff; color: #1b2230; font-size: 14px; min-width: 0; }
+.phone-name, .ledger-db .phone-name { margin: 0 0 4px; font-weight: 700; font-size: 13.5px; }
+.phone ul { list-style: none; padding: 0; margin: 0; }
+.phone li { margin: 3px 0; }
+.phone li small { color: #6b7280; }
+.phone input { width: 18px; height: 18px; vertical-align: -3px; accent-color: var(--accent); }
+.phone-rate { margin: 6px 0 0; }
+.phone-store { margin: 2px 0 0; font-size: 12px; color: #6b7280; }
+.ledger-db { border: 2px dashed #13897a; border-radius: 12px; padding: 8px 10px; background: #e8f6f3; color: #0b4d44; font-size: 12.5px; max-width: 150px; }
+.ledger-db ol { margin: 0; padding-left: 1.2em; }
+.ledger-db .muted { list-style: none; margin-left: -1.2em; color: #4b6b66; }
+.lab-missions { list-style: none; padding: 0; margin: 6px 0 0; font-size: 14px; }
+.lab-missions li.done { color: #1d6b3f; }
+@media (max-width: 560px) { .ledger { grid-template-columns: 1fr 1fr; } .ledger-db { grid-column: 1 / -1; grid-row: 2; max-width: none; } }
