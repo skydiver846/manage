@@ -176,6 +176,7 @@ marked.use({ tokenizer: { del(src) { const m = /^~~(?=\S)([\s\S]*?\S)~~/.exec(sr
   // [[위키 링크]]를 페이지 안 링크로 바꾼다. 코드 블록과 `인라인 코드` 안은 그대로 둔다.
   function wikify(md) {
     const conv = (text) => text.replace(/\[\[([^\]]+)\]\]/g, (m, raw) => {
+      if (raw.startsWith("file:")) return "📎 (실습 파일)";
       const name = raw.split("/").pop();
       const d = byTitle[name];
       return d ? "[" + d.short + "](#" + d.id + ")" : "‘" + name + "’";
