@@ -706,6 +706,53 @@
         { k: 'want', label: '첫 화면으로 보고 싶은 것', hint: '표나 그래프 한 가지' }
       ],
       text: '이 저장소의 data.csv는 공공데이터포털에서 받은 "{{file}}" 자료야.\n이 데이터로 한눈에 보는 현황 화면을 index.html 파일 하나로 만들어 줘.\n\n- 먼저 CSV의 칸 이름과 줄 수를 확인해 알려 주고, 어울리는 표·그래프 3가지를 제안한 뒤 "{{want}}"에 가장 가까운 것부터 만들어 줘\n- CSV가 EUC-KR(CP949)일 수 있으니 한글이 깨지지 않게 읽어 줘\n- 외부 서버나 외부 프로그램(라이브러리) 없이 같은 저장소의 data.csv를 읽고, 그래프도 직접 그려 줘\n- 휴대폰 화면(폭 약 400px)에서 가로 스크롤 없이 보이게 해 줘\n- 화면 아래에 출처(공공데이터포털, 제공기관, 기준일)를 적어 줘\n- 다 만든 뒤 화면의 숫자 3개를 CSV 원본과 대조해 맞는지 표로 알려 줘\n- 커밋 메시지는 한국어로 "공공데이터 화면 v0.1"'
+    },
+    'project': {
+      title: '내 업무 프로젝트 지침 만들기', copy: '지침 복사', target: '프로젝트의 지침(Instructions) 칸',
+      presets: [
+        { label: '교육 일정 관리', v: { work: '교육 일정 관리', ctx: '소방학교 교육 과정 일정을 짜고 강사·교육장을 배정한다', fmt: '일정은 날짜별 표로 정리하고, 겹치는 일정이 있으면 맨 위에 경고한다', rule: '개인 연락처는 다루지 않는다' } },
+        { label: '출장·복무 정리', v: { work: '출장·복무 정리', ctx: '부서 직원의 출장·연가 일정을 정리하고 월별로 집계한다', fmt: '사람별·날짜별 표로 정리한다', rule: '실명 대신 "직원 A"처럼 쓴다' } },
+        { label: '강의 자료 관리', v: { work: '강의 자료 관리', ctx: '담당 과목의 강의안·문제·참고 자료를 정리하고 고친다', fmt: '고친 곳은 고치기 전·후를 나란히 보여 준다', rule: '법령·기준은 출처를 함께 적는다' } },
+        { label: '부서 행사 준비', v: { work: '부서 행사 준비', ctx: '부서 행사의 준비물·역할·일정을 챙긴다', fmt: '준비물은 담당자별 체크리스트 표로 정리한다', rule: '예산 숫자는 내가 올린 자료에 있는 것만 쓴다' } }
+      ],
+      fields: [
+        { k: 'work', label: '업무 이름 (프로젝트 이름과 같게)' },
+        { k: 'ctx', label: '이 업무에서 내가 하는 일', hint: '맥락' },
+        { k: 'fmt', label: '답은 어떤 모양으로', hint: '형식' },
+        { k: 'rule', label: '꼭 지킬 것', hint: '조건' }
+      ],
+      text: '너는 {{work}} 업무를 돕는 도우미야.\n- 내 업무: {{ctx}}.\n- {{fmt}}.\n- 프로젝트에 올린 파일 내용을 우선 근거로 삼고, 확인되지 않은 숫자·날짜는 [확인 필요]로 표시한다.\n- {{rule}}.\n- 답 끝에 "다음에 할 일" 1~3개를 제안한다.'
+    },
+    'skill': {
+      title: '내 스킬 만들기 프롬프트',
+      presets: [
+        { label: '주간 업무보고', v: { doc: '주간 업무보고', form: '제목 / 1. 이번 주 한 일 / 2. 다음 주 할 일 / 3. 협조·건의 사항', name: 'weekly-report' } },
+        { label: '교육 안내문', v: { doc: '교육 안내문', form: '제목 / 1. 일시·장소 / 2. 대상 / 3. 준비물 / 4. 문의처', name: 'edu-notice' } },
+        { label: '가족 행사 안내', v: { doc: '가족 행사 안내', form: '제목 / 1. 일시·장소 / 2. 오는 방법 / 3. 준비할 것 / 4. 연락', name: 'family-event' } },
+        { label: '주간 식단표', v: { doc: '주간 식단표', form: '제목 / 요일별 표(아침·점심·저녁) / 장 볼 목록', name: 'weekly-menu' } }
+      ],
+      fields: [
+        { k: 'doc', label: '매번 쓰는 문서 이름', hint: '지난달에 두 번 이상 쓴 글' },
+        { k: 'form', label: '내 양식의 칸', hint: '빗금(/)으로 나눠 적기' },
+        { k: 'name', label: '스킬 name', hint: '영문 소문자·숫자·하이픈(-)만' }
+      ],
+      warn: v => (v.name && !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(v.name.trim()) ? '⚠️ name에는 영문 소문자·숫자·하이픈(-)만 씁니다. 예: weekly-report (06-1에서 맞춰 본 규칙)' : ''),
+      text: '내가 매번 같은 양식으로 쓰는 "{{doc}}"을 내 양식으로 써 주는 스킬을 만들어 줘.\n양식: {{form}}\n- name은 {{name}}\n- description에 "언제 쓰는지"를 꼭 넣어 줘\n- 자료에 없는 숫자나 날짜는 [확인 필요]로 표시하게 해 줘\n- 바로 올릴 수 있게 폴더째 ZIP 파일로 만들어 줘'
+    },
+    'mockup': {
+      title: '내 화면 시안 지시문 만들기',
+      presets: [
+        { label: '예시: 여행 준비물', v: { topic: '경주 여행 준비물 체크', sample: '멀미약·아이, 혈압약·할머니, 우산·가족 전체', focus: '덜 챙긴 사람("서둘러요")' } },
+        { label: '교육 장비 대여', v: { topic: '교육 장비 대여·반납 대장', sample: '빔프로젝터·대여 중, 무선마이크·반납, 노트북·반납 늦음', focus: '반납이 늦은 장비' } },
+        { label: '부서 행사 준비', v: { topic: '부서 행사 준비 체크리스트', sample: '현수막·홍보 담당, 다과·총무 담당, 음향·운영 담당', focus: '아직 안 된 준비물' } },
+        { label: '가계부', v: { topic: '우리 집 가계부', sample: '식비 12,000원, 교통 3,500원, 병원 8,000원', focus: '이번 달 항목별 합계' } }
+      ],
+      fields: [
+        { k: 'topic', label: '내 PRD 주제', hint: '첨부할 PRD와 같은 주제' },
+        { k: 'sample', label: '처음 보여 줄 예시 데이터 3개', hint: '실제 이름·연락처 말고 예시로' },
+        { k: 'focus', label: '첫 화면에서 가장 먼저 보고 싶은 것' }
+      ],
+      text: '첨부한 PRD({{topic}})를 읽고, 핵심 기능(필수)만 동작하는 프로토타입 웹 화면을 만들어 줘.\n- HTML 파일 하나로, 설치 없이 브라우저에서 바로 열리게\n- 휴대폰 화면에서도 보기 좋게\n- "범위 밖" 기능은 넣지 마\n- 처음 열었을 때 예시 데이터 3개를 보여 줘 (예: {{sample}})\n- 첫 화면에서 {{focus}}이(가) 가장 먼저 눈에 띄게 해 줘'
     }
   };
 
@@ -719,7 +766,7 @@
       howTo: [
         multi ? '<b>A</b>(내 PRD) 또는 <b>B</b>(공공데이터)를 고릅니다.' : '위의 예시 버튼 중 내 일과 가까운 것을 누르거나, 칸에 직접 씁니다.',
         multi ? '칸을 채웁니다. A는 <b>내 PRD 전체</b>를 붙여넣는 칸이 핵심입니다.' : '칸 이름 아래 작은 글씨(힌트)를 참고해 내 말로 바꿉니다.',
-        '<b>[프롬프트 복사]</b> → ' + (multi ? 'Claude Code' : 'Claude 새 대화') + ' 입력창에 붙여넣습니다.'
+        `<b>[${FILL[ids[0]].copy || '프롬프트 복사'}]</b> → ${FILL[ids[0]].target || (multi ? 'Claude Code 입력창' : 'Claude 새 대화 입력창')}에 붙여넣습니다.`
       ]
     });
     body.innerHTML = `
@@ -728,7 +775,8 @@
       <div class="fill-fields"></div>
       <p class="skill-label">완성된 프롬프트 미리보기</p>
       <div class="fill-preview"></div>
-      <div class="lab-actions"><button type="button" class="btn" data-act="copy">프롬프트 복사</button><button type="button" class="btn ghost" data-act="reset">예시로 되돌리기</button></div>
+      <p class="fill-warn" hidden></p>
+      <div class="lab-actions"><button type="button" class="btn" data-act="copy">${esc(FILL[ids[0]].copy || '프롬프트 복사')}</button><button type="button" class="btn ghost" data-act="reset">예시로 되돌리기</button></div>
       <p class="prompt-status" aria-live="polite"></p>`;
     let id = ids[0];
     const defaults = () => {
@@ -747,6 +795,8 @@
         return `<span class="${v === (base[k] || '').trim() ? 'fill-def' : 'fill-mine'}">${esc(v)}</span>`;
       });
       body.querySelector('.fill-preview').innerHTML = html;
+      const w = t.warn ? t.warn(vals) : '', warn = body.querySelector('.fill-warn');
+      warn.hidden = !w; warn.textContent = w;
     }
     function render() {
       const t = FILL[id];
