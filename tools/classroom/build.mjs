@@ -103,13 +103,14 @@ function wikiTarget(raw) {
   const name = raw.split("/").pop();
   const mod = MODULES.find((m) => m.file === name);
   if (mod) return [`${String(mod.num).padStart(2, "0")} ${mod.short}`, mod.page];
-  if (name === "PRD_경주 여행 준비물") return ["예시 PRD 파일", "files.html#prd"];
-  if (name === "경주 여행 자료_관광지 안내") return ["경주 관광지 안내 파일", "files.html#guide"];
-  if (name === "경주 여행 후기_예시") return ["경주 여행 후기 파일", "files.html#opinions"];
-  if (name === "PRD 템플릿") return ["PRD 템플릿 파일", "files.html#template"];
+  if (name === "PRD_경주 여행 준비물") return ["예시 PRD 파일", "file:prd"];
+  if (name === "경주 여행 자료_관광지 안내") return ["경주 관광지 안내 파일", "file:guide"];
+  if (name === "경주 여행 후기_예시") return ["경주 여행 후기 파일", "file:opinions"];
+  if (name === "PRD 템플릿") return ["PRD 템플릿 파일", "file:template"];
+  if (raw.startsWith("file:") && FILES[raw.slice(5)]) return [FILES[raw.slice(5)][3], raw];
   if (name === "프롬프트 모음") return ["프롬프트 모음", "prompts.html"];
-  if (name === "SKILL") return ["스킬 예시 파일", "files.html#skill"];
-  if (name === "지뢰찾기_화면.png") return ["지뢰찾기 화면 그림", "files.html#mine"];
+  if (name === "SKILL") return ["스킬 예시 파일", "file:skillmd"];
+  if (name === "지뢰찾기_화면.png") return ["지뢰찾기 화면 그림", "file:mine"];
   if (name === "사전 과제 안내") return ["사전 과제 안내", "prework.html"];
   if (name === "과제 안내") return ["과제 안내", "homework.html"];
   if (name === "00_강의 개요") return ["강의 개요", "index.html"];
@@ -118,6 +119,7 @@ function wikiTarget(raw) {
 function wikify(md) {
   const conv = (t) => t.replace(/!?\[\[([^\]]+)\]\]/g, (m, raw) => {
     const [label, href] = wikiTarget(raw);
+    if (href?.startsWith("file:")) return fileInline(href.slice(5), label);
     return href ? `[${label}](${href})` : "강사 안내 자료";
   });
   return md.split(/(```[\s\S]*?```|~~~~[\s\S]*?~~~~)/g)
@@ -135,6 +137,13 @@ function enhance(html) {
     .replace(/<a href="(https?:[^"]+)"/g, '<a href="$1" target="_blank" rel="noopener"')
     .replace(/<input disabled="" type="checkbox"/g, '<input type="checkbox"')
     .replace(/<input checked="" disabled="" type="checkbox"/g, '<input checked type="checkbox"');
+}
+
+// 본문 안 파일 링크: 그 자리에서 바로 내려받기(그림·HTML은 열어 보기도)
+function fileInline(k, label) {
+  const [dest, , dl] = FILES[k]; const href = encodeURI(dest);
+  const open = /\.(html|png)$/.test(href) ? ` <a class="btn ghost" href="${href}" target="_blank" rel="noopener">열어 보기</a>` : "";
+  return `<span class="file-inline">📎 ${esc(label)} <a class="btn" href="${href}" download="${esc(dl)}">내려받기</a>${open}</span>`;
 }
 
 function fileBox(keys) {
@@ -257,7 +266,6 @@ execFileSync("zip", ["-q", "-r", path.join(OUT, FILES.skill[0]), "prd-interview"
 MODULES.forEach((m, i) => {
   const md = fs.readFileSync(path.join(LECTURE, m.file + ".md"), "utf8");
   let html = render(md);
-  if (MODULE_FILES[m.num]) html = html.replace(/(<\/h1>)/, `$1${fileBox(MODULE_FILES[m.num])}`);
   fs.writeFileSync(path.join(OUT, m.page), page(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`, html, pagerFor(i)));
 });
 

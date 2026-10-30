@@ -346,3 +346,4 @@ details.later.later-h4 > summary { font-size: 15px; }
 .ai-diff .del { color: #8a1c12; background: #fde2df; display: inline-block; width: 100%; text-decoration: line-through; }
 .ai-paste, .play-code { height: 200px; }
 .play-note { font-size: 12.5px; color: var(--muted); margin: 4px 0 0; }
+.file-inline { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; } .file-inline .btn { font-size: 12.5px; padding: 3px 10px; }
