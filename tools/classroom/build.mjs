@@ -181,7 +181,7 @@ function page(file, title, body, pager = "") {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(title)} · 생성형 AI 활용능력 향상교육</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
 <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
@@ -506,7 +506,7 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <h1>생성형 AI 활용능력 향상교육</h1>
   <p class="lead"><b>AI 시대, 여행 계획이 달라졌다.</b> <b>내가 생각한 것을 내가 만들어 쓰는 이틀</b>입니다. 우리 집 여행 담당이 되어 경주 2박 3일 가족 여행을 AI와 함께 준비합니다. 일정 짜기, 자료 정리, 여행 일정표 스킬, 준비물 체크 화면을 만들어 가족에게 링크로 보내기까지 한 단계씩 따라 하고, 같은 방법을 내 업무에 옮깁니다.</p>
   <p class="note"><b>11. 6.(금)~7.(토)</b> · 교육훈련관 2층 정보화교육장</p>
-  <h2>사전 과제 · 수업 전에 각자</h2>
+  <h2>사전 강의 · 수업 전에 각자</h2>
   <ol class="mods">${modItems(MODULES.slice(0, 2))}</ol>
   <p><a class="btn" href="prework.html">사전 과제 안내 보기</a> 첫날 전까지 해 올 것과 준비물을 한 장에 정리했습니다.</p>
   <h2>1일차 (1~5교시) · AI에게 일 시키기, PRD, 스킬, 내 화면 시안</h2>
