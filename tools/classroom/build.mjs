@@ -112,7 +112,6 @@ function wikiTarget(raw) {
   if (name === "SKILL") return ["스킬 예시 파일", "file:skillmd"];
   if (name === "지뢰찾기_화면.png") return ["지뢰찾기 화면 그림", "file:mine"];
   if (name === "사전 과제 안내") return ["사전 과제 안내", "prework.html"];
-  if (name === "과제 안내") return ["과제 안내", "homework.html"];
   if (name === "00_강의 개요") return ["강의 개요", "index.html"];
   return [null, null];   // 강사용 자료(정답, QR 등)는 링크하지 않는다
 }
@@ -166,7 +165,7 @@ function nav(current) {
     <p class="note">본 강의 자료는 ${OPEN_DATE}에 열립니다.</p>
   </nav>`;
   return `<nav aria-label="목차">
-    <div class="group">${link("index.html", "처음 화면")}${SIGNUP_PAGE ? link("signup.html", SIGNUP_OPEN ? "교육 신청" : "교육 신청 안내") : ""}${link("prework.html", "사전 과제 안내")}${link("homework.html", "과제 안내")}${link("quiz.html", "오늘의 퀴즈")}</div>
+    <div class="group">${link("index.html", "처음 화면")}${SIGNUP_PAGE ? link("signup.html", SIGNUP_OPEN ? "교육 신청" : "교육 신청 안내") : ""}${link("prework.html", "사전 과제 안내")}</div>
     <div class="group"><h3>사전 강의 (수업 전)</h3>${mods(1, 2)}</div>
     <div class="group"><h3>본 강의</h3>${mods(3, 3)}${mods(5, 8)}</div>
     <div class="group"><h3>심화 · 직접 만들기</h3>${mods(9, 10)}${mods(12, 12)}</div>
@@ -247,11 +246,10 @@ fs.copyFileSync(path.join(import.meta.dirname, "site.css"), path.join(OUT, "asse
 fs.copyFileSync(path.join(import.meta.dirname, "site.js"), path.join(OUT, "assets/site.js"));
 fs.copyFileSync(path.join(import.meta.dirname, "labs.js"), path.join(OUT, "assets/labs.js"));   // 본문 속 "바로 해 보기" 실습
 
-// 오늘의 퀴즈: 문항(정답 제외)은 사이트로, 정답·다시 볼 곳은 서버 함수(api/_lib)로 나눠 만든다
+// 오늘의 퀴즈 페이지는 없앴다(2026-11). 배포 스크립트가 쓰는 서버 정답 파일만 계속 만든다
 const quizData = JSON.parse(fs.readFileSync(path.join(ROOT, "tools/fire-quiz/quiz-data.json"), "utf8"));
 const quizPublic = Object.fromEntries(Object.entries(quizData).map(([id, q]) => [id, { title: q.title, questions: q.questions.map(({ q: text, options }) => ({ q: text, options })) }]));
-fs.writeFileSync(path.join(OUT, "assets/fire-quiz-data.js"), `// tools/fire-quiz/quiz-data.json 에서 만든 파일입니다 (정답 없음).\nwindow.FIRE_QUIZ = ${JSON.stringify(quizPublic)};\n`);
-fs.copyFileSync(path.join(import.meta.dirname, "fire-quiz.js"), path.join(OUT, "assets/fire-quiz.js"));
+if (false) fs.writeFileSync(path.join(OUT, "assets/fire-quiz-data.js"), `// tools/fire-quiz/quiz-data.json 에서 만든 파일입니다 (정답 없음).\nwindow.FIRE_QUIZ = ${JSON.stringify(quizPublic)};\n`);
 fs.mkdirSync(path.join(ROOT, "tools/fire-quiz/api/_lib"), { recursive: true });
 fs.writeFileSync(path.join(ROOT, "tools/fire-quiz/api/_lib/fire-quiz-key.js"),
   `// tools/fire-quiz/quiz-data.json 에서 build.mjs 가 만든 파일입니다. 직접 고치지 말고 quiz-data.json 을 고친 뒤 다시 만드세요.\n` +
@@ -272,18 +270,6 @@ MODULES.forEach((m, i) => {
 
 const preworkMd = fs.readFileSync(path.join(LECTURE, "사전 과제 안내.md"), "utf8");
 fs.writeFileSync(path.join(OUT, "prework.html"), page("prework.html", "사전 과제 안내", render(preworkMd)));
-const homeworkMd = fs.readFileSync(path.join(LECTURE, "과제 안내.md"), "utf8");
-fs.writeFileSync(path.join(OUT, "homework.html"), page("homework.html", "과제 안내", render(homeworkMd)));
-fs.writeFileSync(path.join(OUT, "quiz.html"), page("quiz.html", "오늘의 퀴즈", `
-  <h1>오늘의 퀴즈</h1>
-  <p class="lead">보기에서 하나를 고르는 8문항, 약 4분입니다. 외울 것은 없고, 수업에서 해 본 것을 떠올리면 풀 수 있습니다. <b>1일차 퀴즈는 2일차 첫 시간</b>에, <b>2일차 퀴즈는 마지막 교시</b>에 휴대폰으로 함께 풉니다.</p>
-  <p><a class="btn ghost" href="#day1">1일차 퀴즈</a> <a class="btn ghost" href="#day2">2일차 퀴즈</a> <a class="btn ghost" href="#board">결과 공유판</a></p>
-  <section class="quiz" id="day1" data-quiz="day1"></section>
-  <section class="quiz" id="day2" data-quiz="day2"></section>
-  <section class="quiz board" id="board"><h2>결과 공유판</h2><div data-board></div></section>
-  <noscript><p>퀴즈는 JavaScript가 켜져 있어야 보입니다.</p></noscript>
-  <script src="assets/fire-quiz-data.js"></script>
-  <script src="assets/fire-quiz.js"></script>`));
 
 // 교육 신청 (서버: /api/fire-signup, tools/fire-signup/api)
 fs.copyFileSync(path.join(import.meta.dirname, "fire-signup.js"), path.join(OUT, "assets/fire-signup.js"));
@@ -536,7 +522,7 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <ol class="mods">${modItems(mods3(3, 7))}</ol>
   <h2>2일차 (6~10교시) · 코딩 없이 자동화, 웹에 공개하기, 내 업무 화면 만들기</h2>
   <ol class="mods">${modItems(MODULES.filter((m) => m.num >= 8))}</ol>
-  <p class="note">2일 연속, 총 10시간입니다. <b>1일차 16:00~21:00, 2일차 08:00~13:00</b> (하루 5교시, 1교시 = 50분 수업 + 10분 휴식). 04 옵시디언은 수업 외 선택 자료입니다. 1일차 끝나고 해 볼 것과 과정 뒤 과제는 <a href="homework.html">과제 안내</a>에 있습니다.</p>
+  <p class="note">2일 연속, 총 10시간입니다. <b>1일차 16:00~21:00, 2일차 08:00~13:00</b> (하루 5교시, 1교시 = 50분 수업 + 10분 휴식). 04 옵시디언은 수업 외 선택 자료입니다.</p>
   <h2>바로가기</h2>
   <div class="tiles">${siteLinks}</div>
   <h2>자료</h2>
@@ -545,7 +531,7 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <ul><li><b>사전 과제</b>: 업무용 구글 계정 → ChatGPT·GitHub 가입 → Claude Team 초대 수락 — <a href="prework.html">사전 과제 안내</a></li><li>본인 명의 휴대폰 (문자 인증, 배포한 내 화면 확인용)</li><li>비밀번호를 적어 둘 수첩</li><li>내 업무 중 "AI로 도움받고 싶은 일" 한 가지</li></ul>
   <p class="note">체크박스 표시는 이 PC의 브라우저에만 저장됩니다.</p>`));
 
-// ── 신청 기간 미리보기: 열어 둘 페이지 말고는 모두 "곧 열립니다"로 덮고, 실습 파일·퀴즈는 올리지 않는다 ──
+// ── 신청 기간 미리보기: 열어 둘 페이지 말고는 모두 "곧 열립니다"로 덮고, 실습 파일은 올리지 않는다 ──
 if (PREVIEW) {
   const keep = new Set([...(SURVEY_OPEN ? ["survey.html", "survey-status.html"] : []), ...(SIGNUP_PAGE ? ["signup.html"] : []), "prework.html", ...MODULES.filter((m) => m.num <= 2).map((m) => m.page)]);
   for (const d of ["files", "steps", "prototype"]) fs.rmSync(path.join(OUT, d), { recursive: true, force: true });
