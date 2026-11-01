@@ -158,7 +158,7 @@ function fileBox(keys) {
 function nav(current) {
   const link = (href, label) => `<a href="${href}"${href === current ? ' aria-current="page"' : ""}>${esc(label)}</a>`;
   const mods = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to)
-    .map((m) => link(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`)).join("");
+    .map((m) => `<a href="${m.page}"${m.page === current ? ' aria-current="page"' : ""}><span class="n">${String(m.num).padStart(2, "0")}</span>${esc(m.short)}</a>`).join("");
   if (PREVIEW) return `<nav aria-label="목차">
     <div class="group">${link("index.html", "처음 화면")}${SURVEY_OPEN ? link("survey.html", "사전 수요조사") : ""}${SIGNUP_PAGE ? link("signup.html", SIGNUP_OPEN ? "교육 신청" : "교육 신청 안내") : ""}${link("prework.html", "사전 과제 안내")}</div>
     <div class="group"><h3>사전 강의 (수업 전)</h3>${mods(1, 2)}</div>
@@ -185,13 +185,16 @@ function page(file, title, body, pager = "") {
 <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
+<header class="masthead">
+  <button type="button" id="menu" aria-label="목차 열기">☰</button>
+  <a class="brand" href="index.html"><span class="mark" aria-hidden="true">AI</span><span class="brand-t"><small>소방학교 특별교육</small><strong>생성형 AI 활용능력 향상교육</strong></span></a>
+  <span class="when">11. 6.(금)~7.(토) · 교육훈련관 2층 정보화교육장</span>
+</header>
 <div class="app">
   <aside class="side" id="side">
-    <a class="brand" href="index.html"><small>소방학교 특별교육 · 처음 시작하는 분들을 위한</small><strong>생성형 AI 활용능력 향상교육</strong></a>
     ${nav(file)}
   </aside>
   <main>
-    <div class="topbar"><button type="button" id="menu">☰ 목차</button><span>${esc(title)}</span></div>
     <article>${body}</article>
     ${pager}
   </main>
@@ -201,6 +204,14 @@ ${body.includes('class="lab"') ? '<script src="assets/labs.js"></script>' : ""}
 </body>
 </html>
 `;
+}
+
+// 모듈 머리: 큰 번호 배지 + 어디쯤인지(본 강의 진행 막대)
+function hero(m, title) {
+  const where = m.num <= 2 ? "사전 강의 · 수업 전" : m.num === 4 ? "선택 자료 · 수업 외" : m.num <= 7 ? "1일차" : m.num === 8 ? "2일차" : "2일차 · 심화";
+  const k = SEQ.indexOf(m);
+  const prog = k < 0 ? "" : `<div class="prog" aria-label="전체 ${SEQ.length}개 중 ${k + 1}번째"><span style="width:${((k + 1) / SEQ.length * 100).toFixed(1)}%"></span></div><span class="prog-t">${k + 1} / ${SEQ.length}</span>`;
+  return `<header class="hero"><span class="hero-no">${String(m.num).padStart(2, "0")}</span><div class="hero-body"><p class="eyebrow">${where} · ${esc(m.time)}</p><h1>${title}</h1><div class="hero-prog">${prog}</div></div></header>`;
 }
 
 // 이전/다음은 수업 순서대로. 선택 자료(04)는 순서에서 빼고, 04 페이지에서는 앞뒤 수업(03·05)으로 잇는다
@@ -255,7 +266,7 @@ execFileSync("zip", ["-q", "-r", path.join(OUT, FILES.skill[0]), "prd-interview"
 
 MODULES.forEach((m, i) => {
   const md = fs.readFileSync(path.join(LECTURE, m.file + ".md"), "utf8");
-  let html = render(md);
+  let html = render(md).replace(/<h1>([\s\S]*?)<\/h1>/, (_, t) => hero(m, t.replace(/^모듈\s*\d+\.\s*/, "")));
   fs.writeFileSync(path.join(OUT, m.page), page(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`, html, pagerFor(i)));
 });
 

@@ -9,6 +9,9 @@
   --accent-soft: #fbe9e6;
   --code: #f3f4f6;
   --side: #f7f8fa;
+  --navy: #14213d;
+  --navy-2: #1f2f52;
+  --head-h: 60px;
   --soft: #f7f8fa;
   --font-display: "Black Han Sans", "IBM Plex Sans KR", "Malgun Gothic", sans-serif;
   --font-body: "IBM Plex Sans KR", system-ui, -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
@@ -31,22 +34,39 @@
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.75 var(--font-body); word-break: keep-all; overflow-wrap: break-word; -webkit-font-smoothing: antialiased; }
-.app { display: grid; grid-template-columns: 264px minmax(0, 1fr); min-height: 100%; }
+.app { display: grid; grid-template-columns: 264px minmax(0, 1fr); min-height: calc(100% - var(--head-h)); }
 
 /* 목차 */
-.side { position: sticky; top: 0; height: 100vh; overflow-y: auto; background: var(--side); border-right: 1px solid var(--line); padding-block: 26px 32px; padding-inline: 14px; display: grid; align-content: start; gap: 18px; }
-.brand { display: grid; gap: 4px; color: var(--ink); text-decoration: none; padding-inline: 8px; }
-.brand small { font-size: 11.5px; line-height: 1.4; color: var(--muted); }
-.brand strong { font-weight: 700; font-size: 18px; line-height: 1.35; letter-spacing: -.01em; }
+.side { position: sticky; top: var(--head-h); height: calc(100vh - var(--head-h)); overflow-y: auto; background: var(--side); border-right: 1px solid var(--line); padding-block: 26px 32px; padding-inline: 14px; display: grid; align-content: start; gap: 18px; }
+/* 머리띠 (남색) */
+.masthead { position: sticky; top: 0; z-index: 20; height: var(--head-h); display: flex; align-items: center; gap: 14px; padding-inline: 20px; background: var(--navy); color: #fff; border-bottom: 3px solid var(--accent); }
+.masthead #menu { display: none; font: 700 18px var(--font-body); width: 40px; height: 40px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, .25); background: transparent; color: #fff; cursor: pointer; }
+.brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; min-width: 0; }
+.brand .mark { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 9px; background: var(--accent); color: #fff; font: 800 14px/1 var(--font-body); letter-spacing: .02em; }
+.brand-t { display: grid; line-height: 1.25; min-width: 0; }
+.brand small { font-size: 11.5px; color: #aeb9d0; }
+.brand strong { font-weight: 700; font-size: 16.5px; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.when { margin-left: auto; font-size: 13px; color: #c9d2e3; white-space: nowrap; }
 nav { display: grid; gap: 18px; }
 .group h3 { margin: 0 0 4px; padding-inline: 8px; font-size: 11.5px; font-weight: 700; letter-spacing: .02em; color: var(--muted); }
-.group a { display: block; padding: 6px 8px; border-radius: 8px; color: var(--ink); text-decoration: none; font-size: 14.5px; line-height: 1.45; }
+.group a { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 8px; color: var(--ink); text-decoration: none; font-size: 14.5px; line-height: 1.4; }
+.group a .n { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--line); font: 700 11.5px/1 var(--font-body); color: var(--muted); background: var(--paper); }
+.group a[aria-current="page"] .n { background: var(--accent); border-color: var(--accent); color: #fff; }
 .group a:hover { background: var(--line); }
-.group a[aria-current="page"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.group a[aria-current="page"] { background: var(--paper); color: var(--ink); font-weight: 700; box-shadow: 0 1px 3px rgba(16, 24, 40, .1); }
 
 /* 본문 */
 main { min-width: 0; padding-block: 48px 80px; padding-inline: 48px; }
-.topbar { display: none; }
+/* 모듈 머리 */
+.hero { display: flex; gap: 20px; align-items: flex-start; margin: 0 0 36px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+.hero-no { flex: none; display: grid; place-items: center; width: 76px; height: 76px; border-radius: 18px; background: var(--navy); color: #fff; font: 800 32px/1 var(--font-body); letter-spacing: -.02em; box-shadow: inset 0 -4px 0 var(--accent); }
+.hero-body { min-width: 0; flex: 1; }
+.eyebrow { margin: 2px 0 6px; font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: .02em; }
+article .hero h1 { margin: 0 0 14px; }
+.hero-prog { display: flex; align-items: center; gap: 10px; }
+.prog { flex: 1; max-width: 260px; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.prog span { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
+.prog-t { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
 article { max-width: 760px; margin-inline: auto; }
 article h1 { font-weight: 700; font-size: 32px; line-height: 1.3; letter-spacing: -.02em; margin: 0 0 20px; text-wrap: balance; }
 article h2 { font-size: 23px; line-height: 1.4; letter-spacing: -.01em; margin: 56px 0 14px; text-wrap: balance; }
@@ -88,9 +108,9 @@ li input[type="checkbox"] { width: 17px; height: 17px; margin-right: 6px; vertic
 /* 처음 화면 */
 .mods { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
 .mods li { max-width: none; }
-.mods a { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: baseline; padding: 10px 4px; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none; }
+.mods a { display: grid; grid-template-columns: 34px 1fr auto; gap: 14px; align-items: center; padding: 10px 4px; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none; }
 .mods a:hover { background: var(--soft); }
-.mods .no { font-family: var(--font-code); color: var(--accent); font-weight: 700; }
+.mods .no { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 9px; background: var(--navy); color: #fff; font: 700 13.5px/1 var(--font-body); box-shadow: inset 0 -3px 0 var(--accent); }
 .mods .time { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
 .tile { display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); text-decoration: none; }
@@ -108,12 +128,15 @@ li input[type="checkbox"] { width: 17px; height: 17px; margin-right: 6px; vertic
 
 @media (max-width: 860px) {
   .app { grid-template-columns: minmax(0, 1fr); }
-  .side { position: fixed; inset: 0 auto 0 0; width: min(300px, 86vw); z-index: 10; transform: translateX(-102%); transition: transform .2s; }
+  .side { position: fixed; inset: var(--head-h) auto 0 0; height: auto; width: min(300px, 86vw); z-index: 10; transform: translateX(-102%); transition: transform .2s; }
+  .masthead { padding-inline: 12px; gap: 10px; }
+  .masthead #menu { display: block; }
+  .when { display: none; }
+  .brand .mark { width: 32px; height: 32px; font-size: 12.5px; }
+  .hero { gap: 14px; margin-bottom: 28px; padding-bottom: 22px; }
+  .hero-no { width: 56px; height: 56px; border-radius: 14px; font-size: 24px; }
   .side.open { transform: none; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, .35); }
-  main { padding-inline: 16px; padding-block: 0 56px; }
-  .topbar { display: flex; align-items: center; gap: 10px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); padding-block: 10px; margin-bottom: 8px; border-bottom: 1px solid var(--line); }
-  .topbar button { font: 600 14px var(--font-body); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); }
-  .topbar span { font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  main { padding-inline: 16px; padding-block: 24px 56px; }
   article h1 { font-size: 26px; }
   article h2 { font-size: 20.5px; margin-top: 44px; }
   article hr { margin: 36px 0; }
