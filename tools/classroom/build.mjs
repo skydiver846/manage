@@ -246,15 +246,6 @@ fs.copyFileSync(path.join(import.meta.dirname, "site.css"), path.join(OUT, "asse
 fs.copyFileSync(path.join(import.meta.dirname, "site.js"), path.join(OUT, "assets/site.js"));
 fs.copyFileSync(path.join(import.meta.dirname, "labs.js"), path.join(OUT, "assets/labs.js"));   // 본문 속 "바로 해 보기" 실습
 
-// 오늘의 퀴즈 페이지는 없앴다(2026-11). 배포 스크립트가 쓰는 서버 정답 파일만 계속 만든다
-const quizData = JSON.parse(fs.readFileSync(path.join(ROOT, "tools/fire-quiz/quiz-data.json"), "utf8"));
-const quizPublic = Object.fromEntries(Object.entries(quizData).map(([id, q]) => [id, { title: q.title, questions: q.questions.map(({ q: text, options }) => ({ q: text, options })) }]));
-if (false) fs.writeFileSync(path.join(OUT, "assets/fire-quiz-data.js"), `// tools/fire-quiz/quiz-data.json 에서 만든 파일입니다 (정답 없음).\nwindow.FIRE_QUIZ = ${JSON.stringify(quizPublic)};\n`);
-fs.mkdirSync(path.join(ROOT, "tools/fire-quiz/api/_lib"), { recursive: true });
-fs.writeFileSync(path.join(ROOT, "tools/fire-quiz/api/_lib/fire-quiz-key.js"),
-  `// tools/fire-quiz/quiz-data.json 에서 build.mjs 가 만든 파일입니다. 직접 고치지 말고 quiz-data.json 을 고친 뒤 다시 만드세요.\n` +
-  `module.exports = { keys: ${JSON.stringify(Object.fromEntries(Object.entries(quizData).map(([id, q]) => [id, q.questions.map((x) => x.answer)])))}, ` +
-  `where: ${JSON.stringify(Object.fromEntries(Object.entries(quizData).map(([id, q]) => [id, q.questions.map((x) => x.where)])))} };\n`);
 
 for (const [key, [dest, src]] of Object.entries(FILES)) {
   if (src) fs.copyFileSync(path.join(ROOT, src), path.join(OUT, dest));
@@ -535,7 +526,6 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
 if (PREVIEW) {
   const keep = new Set([...(SURVEY_OPEN ? ["survey.html", "survey-status.html"] : []), ...(SIGNUP_PAGE ? ["signup.html"] : []), "prework.html", ...MODULES.filter((m) => m.num <= 2).map((m) => m.page)]);
   for (const d of ["files", "steps", "prototype"]) fs.rmSync(path.join(OUT, d), { recursive: true, force: true });
-  for (const f of fs.readdirSync(path.join(OUT, "assets"))) if (f.startsWith("fire-quiz")) fs.rmSync(path.join(OUT, "assets", f));
   const soon = `<h1>곧 열립니다</h1>
   <p class="lead">본 강의 자료는 <b>${OPEN_DATE}</b>에 열립니다.</p>
   <p>지금은 ${SIGNUP_OPEN ? '<a href="signup.html">교육 신청</a>과 ' : ''}<a href="prework.html">사전 과제</a>만 볼 수 있습니다. 수업 이틀 전에 이 자리에서 강의 자료를 만나실 수 있습니다.</p>
