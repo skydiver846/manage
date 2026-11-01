@@ -162,12 +162,13 @@ function nav(current) {
     .map((m) => link(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`)).join("");
   if (PREVIEW) return `<nav aria-label="목차">
     <div class="group">${link("index.html", "처음 화면")}${SURVEY_OPEN ? link("survey.html", "사전 수요조사") : ""}${SIGNUP_PAGE ? link("signup.html", SIGNUP_OPEN ? "교육 신청" : "교육 신청 안내") : ""}${link("prework.html", "사전 과제 안내")}</div>
-    <div class="group"><h3>사전 과제</h3>${mods(1, 2)}</div>
+    <div class="group"><h3>사전 강의 (수업 전)</h3>${mods(1, 2)}</div>
     <p class="note">본 강의 자료는 ${OPEN_DATE}에 열립니다.</p>
   </nav>`;
   return `<nav aria-label="목차">
     <div class="group">${link("index.html", "처음 화면")}${SIGNUP_PAGE ? link("signup.html", SIGNUP_OPEN ? "교육 신청" : "교육 신청 안내") : ""}${link("prework.html", "사전 과제 안내")}${link("homework.html", "과제 안내")}${link("quiz.html", "오늘의 퀴즈")}</div>
-    <div class="group"><h3>본 강의</h3>${mods(1, 3)}${mods(5, 8)}</div>
+    <div class="group"><h3>사전 강의 (수업 전)</h3>${mods(1, 2)}</div>
+    <div class="group"><h3>본 강의</h3>${mods(3, 3)}${mods(5, 8)}</div>
     <div class="group"><h3>심화 · 직접 만들기</h3>${mods(9, 10)}${mods(12, 12)}</div>
     <div class="group"><h3>선택 자료 (수업 외)</h3>${mods(4, 4)}</div>
     <div class="group"><h3>자료</h3>${link("prompts.html", "프롬프트 모음")}${link("files.html", "실습 파일 내려받기")}</div>
