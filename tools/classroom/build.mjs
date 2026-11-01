@@ -30,6 +30,7 @@ const MODULES = [
   ["08_AI 브라우저 Aside로 코딩 없이 업무 자동화", "AI 브라우저 Aside", "1교시"],
   ["09_(심화) HTML·CSS·JavaScript로 준비물 화면 뜯어보기", "HTML · CSS · JS 맛보기", "20분"],
   ["10_(심화) 프로토타입 배포", "Netlify 배포", "30분"],
+  ["11_(선택) Firebase로 공용 장부 연결", "Firebase 공용 장부 (선택)", "수업 외"],
   ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code로 내 화면", "2교시"],
 ].map(([file, short, time]) => { const num = parseInt(file, 10); return { file, short, time, num, page: `m${String(num).padStart(2, "0")}.html` }; });
 
@@ -169,7 +170,7 @@ function nav(current) {
     <div class="group"><h3>사전 강의 (수업 전)</h3>${mods(1, 2)}</div>
     <div class="group"><h3>본 강의</h3>${mods(3, 3)}${mods(5, 8)}</div>
     <div class="group"><h3>심화 · 직접 만들기</h3>${mods(9, 10)}${mods(12, 12)}</div>
-    <div class="group"><h3>선택 자료 (수업 외)</h3>${mods(4, 4)}</div>
+    <div class="group"><h3>선택 자료 (수업 외)</h3>${mods(4, 4)}${mods(11, 11)}</div>
     <div class="group"><h3>자료</h3>${link("prompts.html", "프롬프트 모음")}${link("files.html", "실습 파일 내려받기")}</div>
   </nav>`;
 }
@@ -208,17 +209,18 @@ ${body.includes('class="lab"') ? '<script src="assets/labs.js"></script>' : ""}
 
 // 모듈 머리: 큰 번호 배지 + 어디쯤인지(본 강의 진행 막대)
 function hero(m, title) {
-  const where = m.num <= 2 ? "사전 강의 · 수업 전" : m.num === 4 ? "선택 자료 · 수업 외" : m.num <= 7 ? "1일차" : m.num === 8 ? "2일차" : "2일차 · 심화";
+  const where = m.num <= 2 ? "사전 강의 · 수업 전" : OPTIONAL.has(m.num) ? "선택 자료 · 수업 외" : m.num <= 7 ? "1일차" : m.num === 8 ? "2일차" : "2일차 · 심화";
   const k = SEQ.indexOf(m);
   const prog = k < 0 ? "" : `<div class="prog" aria-label="전체 ${SEQ.length}개 중 ${k + 1}번째"><span style="width:${((k + 1) / SEQ.length * 100).toFixed(1)}%"></span></div><span class="prog-t">${k + 1} / ${SEQ.length}</span>`;
-  return `<header class="hero"><span class="hero-no">${String(m.num).padStart(2, "0")}</span><div class="hero-body"><p class="eyebrow">${where} · ${esc(m.time)}</p><h1>${title}</h1><div class="hero-prog">${prog}</div></div></header>`;
+  return `<header class="hero"><span class="hero-no">${String(m.num).padStart(2, "0")}</span><div class="hero-body"><p class="eyebrow">${where}${m.num <= 2 || OPTIONAL.has(m.num) ? "" : " · " + esc(m.time)}</p><h1>${title}</h1><div class="hero-prog">${prog}</div></div></header>`;
 }
 
-// 이전/다음은 수업 순서대로. 선택 자료(04)는 순서에서 빼고, 04 페이지에서는 앞뒤 수업(03·05)으로 잇는다
-const SEQ = MODULES.filter((m) => m.num !== 4);
+// 이전/다음은 수업 순서대로. 선택 자료(04·11)는 순서에서 빼고, 선택 자료 페이지에서는 번호 앞뒤 수업으로 잇는다
+const OPTIONAL = new Set([4, 11]);
+const SEQ = MODULES.filter((m) => !OPTIONAL.has(m.num));
 function pagerFor(i) {
   const cur = MODULES[i];
-  const j = cur.num === 4 ? SEQ.findIndex((m) => m.num === 5) - 0.5 : SEQ.indexOf(cur);
+  const j = OPTIONAL.has(cur.num) ? SEQ.findIndex((m) => m.num > cur.num) - 0.5 : SEQ.indexOf(cur);
   const prev = SEQ[Math.ceil(j) - 1], next = SEQ[Math.floor(j) + 1];
   const a = (m, cls, label) => `<a class="${cls}" href="${m.page}"><span>${label}</span>${String(m.num).padStart(2, "0")} ${esc(m.short)}</a>`;
   return `<div class="pager">${prev ? a(prev, "prev", "← 이전") : '<a class="prev" href="index.html"><span>← 처음</span>처음 화면</a>'}${next ? a(next, "next", "다음 →") : '<a class="next" href="prompts.html"><span>다음 →</span>프롬프트 모음</a>'}</div>`;
@@ -511,7 +513,7 @@ const siteLinks = [
   ["Gemini Notebook", "notebooklm.google.com", "07"], ["GitHub", "github.com", "12"],
   ["Netlify", "app.netlify.com", "10"], ["Claude Code", "claude.ai/code", "12"], ["Aside", "aside.com", "08"],
 ].sort((a, b) => a[2].localeCompare(b[2])).map(([label, host, mod]) => `<a class="tile" href="${SITES[host]}" target="_blank" rel="noopener"><b>${esc(label)}</b><span>${host}</span><small>모듈 ${mod}</small></a>`).join("");
-const mods3 = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to && m.num !== 4);
+const mods3 = (from, to) => MODULES.filter((m) => m.num >= from && m.num <= to && !OPTIONAL.has(m.num));
 const modItems = (list) => list.map((m) => `<li><a href="${m.page}"><span class="no">${String(m.num).padStart(2, "0")}</span><span class="t">${esc(m.short)}</span><span class="time">${m.time}</span></a></li>`).join("");
 fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면", `
   <h1>생성형 AI 활용능력 향상교육</h1>
@@ -523,8 +525,8 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <h2>1일차 (1~5교시) · AI에게 일 시키기, PRD, 스킬, 내 화면 시안</h2>
   <ol class="mods">${modItems(mods3(3, 7))}</ol>
   <h2>2일차 (6~10교시) · 코딩 없이 자동화, 웹에 공개하기, 내 업무 화면 만들기</h2>
-  <ol class="mods">${modItems(MODULES.filter((m) => m.num >= 8))}</ol>
-  <p class="note">2일 연속, 총 10시간입니다. <b>1일차 16:00~21:00, 2일차 08:00~13:00</b> (하루 5교시, 1교시 = 50분 수업 + 10분 휴식). 04 옵시디언은 수업 외 선택 자료입니다.</p>
+  <ol class="mods">${modItems(mods3(8, 12))}</ol>
+  <p class="note">2일 연속, 총 10시간입니다. <b>1일차 16:00~21:00, 2일차 08:00~13:00</b> (하루 5교시, 1교시 = 50분 수업 + 10분 휴식). 04 옵시디언과 11 Firebase 공용 장부는 수업 외 선택 자료입니다.</p>
   <h2>바로가기</h2>
   <div class="tiles">${siteLinks}</div>
   <h2>자료</h2>
