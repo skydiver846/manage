@@ -12,6 +12,7 @@
   --navy: #14213d;
   --navy-2: #1f2f52;
   --head-h: 60px;
+  --col: 900px;   /* 본문 칸 폭. 넓은 화면에서는 아래 미디어 쿼리로 더 넓힌다 */
   --soft: #f7f8fa;
   --font-display: "Black Han Sans", "IBM Plex Sans KR", "Malgun Gothic", sans-serif;
   --font-body: "IBM Plex Sans KR", system-ui, -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
@@ -32,7 +33,8 @@
 }
 
 * { box-sizing: border-box; }
-html, body { height: 100%; }
+html { height: 100%; }
+body { min-height: 100%; }
 body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.75 var(--font-body); word-break: keep-all; overflow-wrap: break-word; -webkit-font-smoothing: antialiased; }
 .app { display: grid; grid-template-columns: 264px minmax(0, 1fr); min-height: calc(100% - var(--head-h)); }
 
@@ -67,11 +69,10 @@ article .hero h1 { margin: 0 0 14px; }
 .prog { flex: 1; max-width: 260px; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
 .prog span { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
 .prog-t { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
-article { max-width: 760px; margin-inline: auto; }
+article { max-width: var(--col); margin-inline: auto; }
 article h1 { font-weight: 700; font-size: 32px; line-height: 1.3; letter-spacing: -.02em; margin: 0 0 20px; text-wrap: balance; }
 article h2 { font-size: 23px; line-height: 1.4; letter-spacing: -.01em; margin: 56px 0 14px; text-wrap: balance; }
 article h3 { font-size: 18.5px; line-height: 1.45; margin: 32px 0 8px; }
-article p, article li { max-width: 70ch; }
 article a { color: var(--accent); }
 article hr { border: 0; border-top: 1px solid var(--line); margin: 48px 0; }
 article hr + h2 { margin-top: 0; }
@@ -118,7 +119,7 @@ li input[type="checkbox"] { width: 17px; height: 17px; margin-right: 6px; vertic
 .tile span { font-family: var(--font-code); font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
 .tile small { font-size: 12px; color: var(--accent); }
 
-.pager { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 56px auto 0; padding-top: 24px; border-top: 1px solid var(--line); max-width: 760px; }
+.pager { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 56px auto 0; padding-top: 24px; border-top: 1px solid var(--line); max-width: var(--col); }
 .pager a { flex: 1 1 220px; display: grid; gap: 2px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; color: var(--ink); text-decoration: none; background: var(--paper); }
 .pager a span { font-size: 12px; color: var(--muted); }
 .pager a.next { text-align: right; }
@@ -377,3 +378,10 @@ details.later.later-h4 > summary { font-size: 15px; }
 .ai-paste, .play-code { height: 200px; }
 .play-note { font-size: 12.5px; color: var(--muted); margin: 4px 0 0; }
 .file-inline { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; } .file-inline .btn { font-size: 12.5px; padding: 3px 10px; }
+
+/* 넓은 화면(전체 화면 모니터): 본문 칸과 글자를 조금 키워 좌우 빈칸을 줄인다 */
+@media (min-width: 1500px) {
+  :root { --col: 1040px; }
+  body { font-size: 17px; }
+  main { padding-inline: 64px; }
+}
