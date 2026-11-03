@@ -11,7 +11,7 @@
   --side: #f7f8fa;
   --navy: #14213d;
   --navy-2: #1f2f52;
-  --head-h: 60px;
+  --head-h: 104px;
   --col: 900px;   /* 본문 칸 폭. 넓은 화면에서는 아래 미디어 쿼리로 더 넓힌다 */
   --soft: #f7f8fa;
   --font-display: "Black Han Sans", "IBM Plex Sans KR", "Malgun Gothic", sans-serif;
@@ -41,14 +41,14 @@ body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.75 v
 /* 목차 */
 .side { position: sticky; top: var(--head-h); height: calc(100vh - var(--head-h)); overflow-y: auto; background: var(--side); border-right: 1px solid var(--line); padding-block: 26px 32px; padding-inline: 14px; display: grid; align-content: start; gap: 18px; }
 /* 머리띠 (남색) */
-.masthead { position: sticky; top: 0; z-index: 20; height: var(--head-h); display: flex; align-items: center; gap: 14px; padding-inline: 20px; background: var(--navy); color: #fff; border-bottom: 3px solid var(--accent); }
+.masthead { position: sticky; top: 0; z-index: 20; height: var(--head-h); display: flex; align-items: center; gap: 20px; padding-inline: 32px; background: var(--navy); color: #fff; border-bottom: 3px solid var(--accent); }
 .masthead #menu { display: none; font: 700 18px var(--font-body); width: 40px; height: 40px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, .25); background: transparent; color: #fff; cursor: pointer; }
-.brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; min-width: 0; }
-.brand .mark { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 9px; background: var(--accent); color: #fff; font: 800 14px/1 var(--font-body); letter-spacing: .02em; }
-.brand-t { display: grid; line-height: 1.25; min-width: 0; }
-.brand small { font-size: 11.5px; color: #aeb9d0; }
-.brand strong { font-weight: 700; font-size: 16.5px; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.when { margin-left: auto; font-size: 13px; color: #c9d2e3; white-space: nowrap; }
+.brand { display: flex; align-items: center; gap: 16px; color: #fff; text-decoration: none; min-width: 0; }
+.brand .mark { flex: none; display: grid; place-items: center; width: 64px; height: 64px; border-radius: 16px; background: var(--accent); color: #fff; font: 800 26px/1 var(--font-body); letter-spacing: .02em; }
+.brand-t { display: grid; gap: 2px; line-height: 1.2; min-width: 0; }
+.brand small { font-size: 20px; color: #aeb9d0; }
+.brand strong { font-weight: 700; font-size: 32px; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.when { margin-left: auto; font-size: 24px; color: #c9d2e3; white-space: nowrap; }
 nav { display: grid; gap: 18px; }
 .group h3 { margin: 0 0 4px; padding-inline: 8px; font-size: 11.5px; font-weight: 700; letter-spacing: .02em; color: var(--muted); }
 .group a { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 8px; color: var(--ink); text-decoration: none; font-size: 14.5px; line-height: 1.4; }
@@ -130,10 +130,15 @@ li input[type="checkbox"] { width: 17px; height: 17px; margin-right: 6px; vertic
 @media (max-width: 860px) {
   .app { grid-template-columns: minmax(0, 1fr); }
   .side { position: fixed; inset: var(--head-h) auto 0 0; height: auto; width: min(300px, 86vw); z-index: 10; transform: translateX(-102%); transition: transform .2s; }
+  :root { --head-h: 76px; }
   .masthead { padding-inline: 12px; gap: 10px; }
+  .masthead #menu { width: 48px; height: 48px; font-size: 22px; }
+  .brand { gap: 10px; }
+  .brand small { font-size: 14px; }
+  .brand strong { font-size: 19px; }
   .masthead #menu { display: block; }
   .when { display: none; }
-  .brand .mark { width: 32px; height: 32px; font-size: 12.5px; }
+  .brand .mark { width: 44px; height: 44px; border-radius: 11px; font-size: 17px; }
   .hero { gap: 14px; margin-bottom: 28px; padding-bottom: 22px; }
   .hero-no { width: 56px; height: 56px; border-radius: 14px; font-size: 24px; }
   .side.open { transform: none; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, .35); }
@@ -378,6 +383,10 @@ details.later.later-h4 > summary { font-size: 15px; }
 .ai-paste, .play-code { height: 200px; }
 .play-note { font-size: 12.5px; color: var(--muted); margin: 4px 0 0; }
 .file-inline { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; } .file-inline .btn { font-size: 12.5px; padding: 3px 10px; }
+
+/* 중간 폭: 머리띠 오른쪽 일정 글자가 제목과 겹치지 않게 */
+@media (max-width: 1280px) { .when { font-size: 18px; } }
+@media (max-width: 1080px) { .when { display: none; } }
 
 /* 넓은 화면(전체 화면 모니터): 본문 칸과 글자를 조금 키워 좌우 빈칸을 줄인다 */
 @media (min-width: 1500px) {
