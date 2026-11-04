@@ -231,12 +231,7 @@
 <li><strong>&quot;내가 빠뜨린 정보가 있으면 먼저 질문해 줘&quot;</strong> ← 가장 유용한 한 문장</li>
 </ul>
 <hr>
-<h2>3-2. 파일 건네기 (30분, 후기 요약 포함)</h2>
-<h3>방법</h3>
-<ul>
-<li>입력창의 <strong>[+]</strong> 버튼(또는 클립 아이콘) → 파일 선택</li>
-<li>또는 파일을 입력창으로 <strong>끌어다 놓기(드래그 앤 드롭)</strong></li>
-</ul>
+<h2>3-2. 파일 건네기 (20분)</h2>
 <h3>어떤 파일이 잘 되나?</h3>
 <div class="table-wrap"><table>
 <thead>
@@ -253,34 +248,19 @@
 <blockquote>
 <p>💡 <strong>MD 파일이 특히 좋은 이유</strong>: 제목·목록·표 구조가 그대로 전달되어 AI가 문서 구조를 정확히 이해합니다. PRD(05)와 스킬(06)을 MD 파일로 주고받는 이유입니다.</p>
 </blockquote>
-<h3>실습 프롬프트 (파일 첨부 후)</h3>
-<pre><code>첨부한 문서를 읽고
-1) 핵심 내용 3줄 요약
-2) 실제로 해야 할 일(To-do) 목록
-3) 문서에서 모호하거나 빠진 부분
-을 표로 정리해 줘. 문서에 없는 내용은 지어내지 마.
-</code></pre>
-<blockquote>
-<p>연습 파일: <span class="file-inline">📎 예시 PRD 파일 <a class="btn" href="files/PRD_%EA%B2%BD%EC%A3%BC%20%EC%97%AC%ED%96%89%20%EC%A4%80%EB%B9%84%EB%AC%BC.md" download="PRD_경주 여행 준비물.md">내려받기</a></span> 을 첨부해 보세요. 우리 가족 여행 준비물을 체크하는 화면을 만들려고 쓴 기획서(PRD) 초안입니다. 사이트의 <strong>[실습 파일 내려받기]</strong> 페이지에서 받아 <strong>다운로드 폴더</strong>에 저장합니다. <code>.md</code> 파일은 더블클릭하지 말고 바로 AI에 올리세요(앱 선택 창이 뜰 수 있습니다).</p>
-</blockquote>
-<ul>
-<li>파일을 올리면 입력창 위에 <strong>파일 이름 카드</strong>가 생깁니다. 카드만 보내지 말고 <strong>파일 + 지시</strong>를 함께 보냅니다.</li>
-</ul>
-<h3>🔍 AI가 찾아 주는 구멍: &quot;누구 것인지 구분이 없는 준비물&quot;</h3>
-<p>요약표의 3번 <strong>&quot;빠진 부분&quot;</strong> 에서 AI는 보통 이 PRD의 구멍을 찾아냅니다. 대표적인 것이 <strong>누구 것인지 구분</strong>입니다. PRD 배경에는 &quot;가족마다 챙길 것이 다르다(할머니 혈압약·무릎 보호대·지팡이, 아이 멀미약·여벌 옷)&quot;고 적혀 있는데, 기능은 준비물을 <strong>한 목록으로만</strong> 셉니다. 그러면 가족 전체로는 8개 중 6개(75%)를 챙겨 <strong>&quot;순조로움&quot;</strong> 으로 나오지만, 아이 것은 3개 중 1개(33%)만 챙긴 상태입니다. 정작 <strong>서둘러야 할 사람이 화면에서 사라집니다.</strong></p>
 <h3>실습: 여행 후기 요약</h3>
-<p>여행 준비에서 시간이 많이 걸리는 일 중 하나가 <strong>후기 읽기</strong>입니다. 블로그·카페 후기를 탭마다 열어 한 줄씩 읽어야 하기 때문입니다. 예시 파일 <span class="file-inline">📎 경주 여행 후기 파일 <a class="btn" href="files/%EA%B2%BD%EC%A3%BC%20%EC%97%AC%ED%96%89%20%ED%9B%84%EA%B8%B0_%EC%98%88%EC%8B%9C.md" download="경주 여행 후기_예시.md">내려받기</a></span> 를 첨부하고 아래처럼 지시합니다.</p>
+<p>여행 준비에서 시간이 많이 걸리는 일 중 하나가 <strong>후기 읽기</strong>입니다. 블로그·카페 후기를 탭마다 열어 한 줄씩 읽어야 하기 때문입니다. 후기를 모은 파일 하나를 AI에게 건네 봅니다.</p>
+<ol>
+<li>예시 파일을 내려받습니다. → <span class="file-inline">📎 경주 여행 후기 파일 <a class="btn" href="files/%EA%B2%BD%EC%A3%BC%20%EC%97%AC%ED%96%89%20%ED%9B%84%EA%B8%B0_%EC%98%88%EC%8B%9C.md" download="경주 여행 후기_예시.md">내려받기</a></span> (다운로드 폴더에 저장됩니다. <code>.md</code> 파일은 더블클릭하지 말고 바로 AI에 올립니다)</li>
+<li>Claude 새 채팅 입력창의 <strong>[+]</strong> → 방금 받은 파일 선택(파일을 입력창으로 끌어다 놓아도 됩니다). 입력창 위에 <strong>파일 이름 카드</strong>가 생깁니다.</li>
+<li>카드만 보내지 말고, 아래 지시를 <strong>함께</strong> 보냅니다.</li>
+</ol>
 <pre><code>첨부한 경주 여행 후기를 장소별로 정리해 줘.
 - 장소마다 &quot;좋았던 점 / 주의할 점&quot;을 1~2줄로 요약
 - 할머니(75세, 무릎 불편)와 아이(초등 3학년)에게 맞는지 ○·△·✕로 표시
 - 후기에 없는 내용은 만들지 말고, 표로 정리해 줘
 </code></pre>
-<p><strong>하나 더 (시간이 남으면): 자료에 없는 정보는 비워 두게 하기</strong></p>
-<p><span class="file-inline">📎 경주 관광지 안내 파일 <a class="btn" href="files/%EA%B2%BD%EC%A3%BC%20%EC%97%AC%ED%96%89%20%EC%9E%90%EB%A3%8C_%EA%B4%80%EA%B4%91%EC%A7%80%20%EC%95%88%EB%82%B4.md" download="경주 여행 자료_관광지 안내.md">내려받기</a></span> 를 첨부하고 아래처럼 지시합니다.</p>
-<pre><code>첨부한 자료에서 장소별 주차·걷기·계단 정보만 표로 정리해 줘.
-자료에 없는 정보(입장료, 운영시간, 주차 요금 등)는 지어내지 말고 [확인 필요]라고 써 줘.
-</code></pre>
-<p>표 곳곳에 <strong>[확인 필요]</strong> 가 보이면 성공입니다. AI가 요금이나 시간을 숫자로 채웠다면 자료에 없는 것을 지어낸 것입니다. 실제 여행 전에는 공식 누리집에서 확인합니다.</p>
+<p>표에 할머니·아이에게 맞는지 ○·△·✕가 붙어 나오면 성공입니다. 탭 20개를 읽을 일을 파일 하나와 지시 몇 줄로 끝냈습니다.</p>
 <blockquote>
 <p>💡 실제 자료(가족 단톡방 대화, 업무 문서 등)를 쓸 때는 <strong>이름·연락처·주소를 지우고</strong> 올립니다. 모듈 2에서 정한 &quot;민감한 정보는 넣지 않는다&quot; 원칙과 같습니다.</p>
 </blockquote>
@@ -346,17 +326,6 @@
 <blockquote>
 <p>💡 이 폴더를 메모 도구 <strong>옵시디언</strong>으로 열면 MD 파일을 더 편하게 보고 고칠 수 있습니다. 수업에서는 다루지 않고, 익숙해진 뒤 써 볼 수 있게 선택 자료로 남겨 두었습니다(<a href="m04.html">04 옵시디언 (선택)</a>).</p>
 </blockquote>
-<details class="later later-h3"><summary><span class="later-tag">과정 뒤에 더 해 보기</span> 혼자 해 보기 (과정 뒤): &quot;우리 가족 여행&quot; 프로젝트 직접 만들기</summary>
-<p>팀 공유 프로젝트와 같은 것을 내 프로젝트로 직접 만들어 봅니다.</p>
-<ol>
-<li>왼쪽 사이드바 <strong>[Projects]</strong> → <strong>[+ 새 프로젝트]</strong></li>
-<li>이름 <code>우리 가족 여행</code>, 설명은 비워도 됨 → [만들기]</li>
-<li>오른쪽 <strong>프로젝트 지식(Project knowledge)</strong> 의 <strong>[+]</strong> → 3-2에서 AI에게 첨부했던 <strong>그 파일</strong> <code>PRD_경주 여행 준비물.md</code> (다운로드 폴더) 추가 (후기 예시·관광지 안내 파일도 받았다면 함께)</li>
-<li><strong>지침(Instructions)</strong> 에 위 &quot;지침 예시&quot;를 복사해 붙여넣기 → 프로젝트 안에서 <code>둘째 날 비 오면?</code> 입력</li>
-</ol>
-<blockquote>
-<p>실습에서는 <strong>3-2에서 첨부했던 파일</strong>을 그대로 넣습니다. 실제 업무 프로젝트라면 교육 일정표, 운영 규정 같은 파일을 넣습니다. AI의 답변을 따로 저장할 필요는 없습니다.</p>
-</blockquote>
 <hr>
 <blockquote>
 <p>💼 <strong>업무에서는?</strong> 같은 6하원칙으로 안내문·공문 초안을 쓰고, 규정·지침 파일을 건네 요약을 받습니다. 자주 하는 업무는 업무 프로젝트 하나에 자료와 지침을 모아 두면 매번 설명하지 않아도 됩니다.</p>
@@ -364,7 +333,7 @@
 <blockquote>
 <p>🪜 <strong>업무 자동화 사다리:</strong> <strong>① 잘 시키기 ✔</strong> → <strong>② 자료 맡기기 ✔</strong> → ③ 방법 맡기기 → ④ 클릭 맡기기 → ⑤ 내 도구 만들기 → ⑥ 저절로 돌아가게</p>
 </blockquote>
-</details><h2>자주 막히는 곳</h2>
+<h2>자주 막히는 곳</h2>
 <div class="table-wrap"><table>
 <thead>
 <tr>
