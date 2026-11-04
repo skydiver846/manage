@@ -287,7 +287,7 @@ function rowHTML(it) {
     <div class="checks steps">${(STEPS[it.id] || []).map(([k, t]) => `<label class="check" id="stp-${it.id}-${k}"><input type="checkbox" data-step-id="${it.id}" data-step-k="${k}"><span>${t}</span></label>`).join("")}</div>
     <div class="notes">
       <label for="issue-${it.id}">막힌 곳과 이유<textarea id="issue-${it.id}" placeholder="예: Aside 설치 때 관리자 권한 창이 뜸"></textarea></label>
-      <label for="text-${it.id}">교재에서 헷갈린 문장<textarea id="text-${it.id}" placeholder="예: 5-3의 '내려받게 해 줘' 설명이 부족"></textarea></label>
+      <label for="text-${it.id}">교재에서 헷갈린 문장<textarea id="text-${it.id}" placeholder="예: 5-2의 '내려받게 해 줘' 설명이 부족"></textarea></label>
     </div>
     <div class="saved" data-saved="${it.id}"></div>
   </article>`;
