@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>04 옵시디언 (선택) · 생성형 AI 활용능력 향상교육</title>
+<title>04 옵시디언: 내 업무 폴더 보기 · 생성형 AI 활용능력 향상교육</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
 <link rel="stylesheet" href="assets/site.css">
 </head>
@@ -18,98 +18,58 @@
     <nav aria-label="목차">
     <div class="group"><a href="index.html">처음 화면</a><a href="prework.html">사전 과제 안내</a></div>
     <div class="group"><h3>사전 강의 (수업 전)</h3><a href="m01.html"><span class="n">01</span>구글 업무 계정 만들기</a><a href="m02.html"><span class="n">02</span>ChatGPT · Claude · GitHub 가입</a></div>
-    <div class="group"><h3>본 강의</h3><a href="m03.html"><span class="n">03</span>프롬프트 · 파일 · 프로젝트</a><a href="m05.html"><span class="n">05</span>PRD 작성하기</a><a href="m06.html"><span class="n">06</span>스킬 만들기</a><a href="m07.html"><span class="n">07</span>PRD로 결과물 만들기</a><a href="m08.html"><span class="n">08</span>AI 브라우저 Aside</a></div>
+    <div class="group"><h3>본 강의</h3><a href="m03.html"><span class="n">03</span>프롬프트 · 파일 · 프로젝트</a><a href="m04.html" aria-current="page"><span class="n">04</span>옵시디언: 내 업무 폴더 보기</a><a href="m05.html"><span class="n">05</span>PRD 작성하기</a><a href="m06.html"><span class="n">06</span>스킬 만들기</a><a href="m07.html"><span class="n">07</span>PRD로 결과물 만들기</a><a href="m08.html"><span class="n">08</span>AI 브라우저 Aside</a></div>
     <div class="group"><h3>심화 · 직접 만들기</h3><a href="m09.html"><span class="n">09</span>HTML · CSS · JS 맛보기</a><a href="m10.html"><span class="n">10</span>Netlify 배포</a><a href="m12.html"><span class="n">12</span>Claude Code로 내 화면</a></div>
-    <div class="group"><h3>선택 자료 (수업 외)</h3><a href="m04.html" aria-current="page"><span class="n">04</span>옵시디언 (선택)</a><a href="m11.html"><span class="n">11</span>Firebase 공용 장부 (선택)</a></div>
+    <div class="group"><h3>선택 자료 (수업 외)</h3><a href="m11.html"><span class="n">11</span>Firebase 공용 장부 (선택)</a></div>
     <div class="group"><h3>자료</h3><a href="prompts.html">프롬프트 모음</a><a href="files.html">실습 파일 내려받기</a></div>
   </nav>
   </aside>
   <main>
-    <article><header class="hero"><span class="hero-no">04</span><div class="hero-body"><p class="eyebrow">선택 자료 · 수업 외</p><h1>선택 자료 04. 옵시디언 설치와 MD 파일 만들기 (수업 외)</h1><div class="hero-prog"></div></div></header>
-<blockquote>
-<p>📌 <strong>수업에서는 다루지 않는 선택 자료입니다.</strong> 과정 뒤, 내 업무 폴더(<code>문서 &gt; AI업무자료</code>)의 MD 파일을 더 편하게 보고 고치고 싶을 때 따라 해 보세요. 옵시디언은 설치가 필요한 프로그램이라, 기관 PC에서는 설치가 허용되는지 먼저 확인합니다.</p>
-</blockquote>
-<h2>옵시디언(Obsidian)이란?</h2>
+    <article><header class="hero"><span class="hero-no">04</span><div class="hero-body"><p class="eyebrow">1일차 · 8분</p><h1>옵시디언: 내 업무 폴더를 보는 창</h1><div class="hero-prog"><div class="prog" aria-label="전체 11개 중 4번째"><span style="width:36.4%"></span></div><span class="prog-t">4 / 11</span></div></div></header>
+<p>방금 3-3에서 만든 <code>AI업무자료</code> 폴더를 <strong>옵시디언</strong>으로 엽니다. 이틀 동안 만드는 PRD와 메모를 여기서 보고 고칩니다.</p>
 <ul>
-<li>내 컴퓨터 폴더 안의 <strong>Markdown(.md) 파일</strong>을 편하게 쓰고 연결하는 <strong>무료 메모 앱</strong></li>
-<li>파일이 <strong>내 컴퓨터에 그대로 저장</strong>됩니다. 앱을 지워도 파일은 남습니다.</li>
-<li>그대로 ChatGPT·Claude·Gemini Notebook에 올릴 수 있어 <strong>AI용 자료 창고</strong>로 좋습니다.</li>
+<li><strong>옵시디언</strong> = 내 컴퓨터 폴더 안의 <strong>MD 파일</strong>(<code>.md</code>)을 보기 좋게 보여 주고 고치게 해 주는 <strong>무료 메모 앱</strong></li>
+<li>파일은 <strong>내 컴퓨터 폴더에 그대로</strong> 있습니다. 옵시디언을 지워도 파일은 남습니다.</li>
+<li>MD 파일은 AI가 가장 잘 읽는 형식이라, 여기서 고친 파일을 그대로 Claude·Gemini에 건넵니다.</li>
 </ul>
-<h3>Markdown(MD)이란?</h3>
-<p>기호 몇 개로 제목·목록·표를 표시하는 <strong>아주 단순한 글쓰기 규칙</strong>입니다. 메모장으로도 열리고, AI가 구조를 정확히 이해합니다.</p>
-<hr>
-<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 5분 · 직접 해 보는 부분</p><h2>4-1. 설치 (Windows, 약 5분)</h2>
+<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 3분 · 직접 해 보는 부분</p><h2>4-1. 설치 (3분)</h2>
 <ol>
-<li>Chrome에서 <a class="site" href="https://obsidian.md/" target="_blank" rel="noopener"><code>obsidian.md</code></a> 접속</li>
-<li><strong>[Download]</strong> → Windows용 설치 파일(.exe) 다운로드</li>
-<li>다운로드한 파일 실행 → 설치가 자동으로 진행됩니다<ul>
-<li>&quot;Windows의 PC 보호&quot; 파란 창이 뜨면 <strong>[추가 정보] → [실행]</strong></li>
-</ul>
-</li>
+<li>Chrome에서 <a class="site" href="https://obsidian.md/" target="_blank" rel="noopener"><code>obsidian.md</code></a> 접속 → <strong>[Download]</strong> → Windows용 설치 파일 다운로드</li>
+<li>받은 파일 실행. &quot;Windows의 PC 보호&quot; 파란 창이 뜨면 <strong>[추가 정보] → [실행]</strong></li>
 <li>설치가 끝나면 옵시디언이 자동으로 열립니다</li>
 </ol>
 <blockquote>
-<p>💡 옵시디언은 가입 없이 바로 쓸 수 있습니다. 동기화(Sync)·게시(Publish)는 유료 부가 기능이며 이 자료에서는 필요 없습니다.</p>
+<p>💡 가입 없이 바로 씁니다. 동기화(Sync)·게시(Publish)는 유료 부가 기능이라 필요 없습니다.</p>
 </blockquote>
-<h3>맛보기: AI가 만든 체크리스트를 옵시디언에서 체크하기 (3분)</h3>
-<p>내 업무 폴더를 열기 전에, 옵시디언이 왜 편한지 먼저 손으로 느껴 봅니다.</p>
-<ol>
-<li>Claude에 입력: <code>내일 할 일 5개를 Markdown 체크리스트로 만들어 줘. 업무용 예시로.</code></li>
-<li>옵시디언 첫 화면의 <strong>새 노트</strong>(Ctrl + N)에 붙여넣기</li>
-<li><strong>읽기 보기</strong>(오른쪽 위 책 아이콘, 또는 Ctrl + E)로 바꾸면 네모 칸이 생깁니다 → <strong>눌러서 체크</strong> ✅</li>
-</ol>
-<p>AI가 쓴 글이 그대로 <strong>쓸 수 있는 문서</strong>가 됩니다. 이것이 MD 파일의 힘입니다. 이 노트는 4-2에서 내 업무 폴더를 연 뒤 옮겨도 되고 지워도 됩니다.</p>
-</section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> · 직접 해 보는 부분</p><h2>4-2. 내 업무 폴더를 보관소(Vault)로 열기</h2>
-<p><strong>보관소 = 옵시디언이 관리하는 폴더 하나</strong>입니다. 수업(모듈 3)에서 만든 <code>문서 &gt; AI업무자료</code> 폴더를 그대로 보관소로 엽니다. 새로 만들지 않습니다.</p>
+</section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 5분 · 직접 해 보는 부분</p><h2>4-2. 내 업무 폴더를 열고 파일 보기 (5분)</h2>
 <ol>
 <li>첫 화면에서 <strong>[Open folder as vault]</strong> (폴더를 보관소로 열기)</li>
-<li><code>문서(Documents)</code> → <strong><code>AI업무자료</code></strong> 폴더 선택 → <strong>[폴더 선택]</strong></li>
-<li>왼쪽에 수업에서 만든 폴더들이 그대로 보이면 완료</li>
+<li><code>문서(Documents)</code> → <strong><code>AI업무자료</code></strong> 선택 → <strong>[폴더 선택]</strong>. 새로 만들지 않고 3-3에서 만든 폴더를 엽니다</li>
+<li>왼쪽에 <code>01_기획(PRD)</code> ~ <code>99_프롬프트</code> 폴더가 보이면 성공</li>
+<li><code>02_참고자료</code> → <strong><code>경주 여행 후기_예시</code></strong> 를 누릅니다. 3-2에서 AI에게 건넨 그 파일입니다</li>
+<li><strong>Ctrl + E</strong> 를 눌러 <strong>읽기 보기 ↔ 편집 보기</strong>를 바꿔 봅니다. 편집 보기에서는 <code>#</code>, <code>-</code> 같은 기호가 보이고, 읽기 보기에서는 제목·목록으로 보입니다</li>
 </ol>
+<p>✅ 파일 탐색기에서 <code>문서 &gt; AI업무자료</code> 를 열어 보면 <strong>똑같은 폴더와 파일</strong>이 있습니다. <strong>옵시디언 = 내 폴더를 보는 창</strong>입니다.</p>
 <blockquote>
-<p>💡 <code>AI업무자료</code> 폴더가 없다면(수업에 참석하지 않았다면) <strong>[Create new vault]</strong> → 이름 <code>AI업무자료</code>, 위치 <code>문서</code> 로 만들고 아래 폴더를 만드세요.</p>
+<p>💡 이 창은 이틀 동안 계속 씁니다. <strong>05</strong> 내 PRD를 <code>01_기획(PRD)</code> 에 저장하고 여기서 열어 고치고, <strong>07</strong> 화면 시안을 보고 바꿀 점을 PRD에 바로 적고, <strong>12</strong> 그 PRD를 Claude Code에 건넵니다.</p>
 </blockquote>
-<h3>한국어로 바꾸기</h3>
-<ul>
-<li>왼쪽 아래 <strong>톱니바퀴(Settings)</strong> → <strong>General(일반)</strong> → <strong>Language</strong> → <strong>한국어</strong> → 앱 다시 시작</li>
-</ul>
-<h3>폴더 확인하기 (모듈 3에서 만든 구조)</h3>
-<pre><code class="language-그림">📁 AI업무자료
- ├─ 📁 01_기획(PRD)
- ├─ 📁 02_참고자료
- ├─ 📁 03_AI결과물
- ├─ 📁 98_스킬
- └─ 📁 99_프롬프트
-</code></pre>
-<blockquote>
-<p>✅ Windows 파일 탐색기에서 <code>문서 &gt; AI업무자료</code> 를 열어 보면 <strong>똑같은 폴더가 실제로 있습니다.</strong> &quot;옵시디언 = 내 폴더를 보는 창&quot;임을 확인해 보세요.</p>
-</blockquote></section>
 <hr>
-<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> · 직접 해 보는 부분</p><h2>4-3. 첫 MD 파일 만들기</h2>
+<details class="later later-h2"><summary><span class="later-tag">과정 뒤에 더 해 보기</span> 더 해 보기 (과정 뒤): 옵시디언 조금 더 쓰기</summary>
+<h3>한국어로 바꾸기</h3>
+<p>왼쪽 아래 <strong>톱니바퀴(Settings)</strong> → <strong>General(일반)</strong> → <strong>Language</strong> → <strong>한국어</strong> → 앱 다시 시작</p>
+<h3>AI가 만든 체크리스트를 체크하기</h3>
 <ol>
-<li><code>99_프롬프트</code> 폴더에서 마우스 오른쪽 → <strong>[새 노트]</strong></li>
-<li>제목: <code>자주 쓰는 프롬프트</code></li>
-<li>아래 내용을 그대로 따라 입력합니다</li>
+<li>Claude에 입력: <code>내일 할 일 5개를 Markdown 체크리스트로 만들어 줘. 업무용 예시로.</code></li>
+<li>옵시디언 <code>03_AI결과물</code> 폴더에서 <strong>새 노트</strong>(Ctrl + N)에 붙여넣기</li>
+<li><strong>읽기 보기</strong>(Ctrl + E)로 바꾸면 네모 칸이 생깁니다 → 눌러서 체크 ✅</li>
 </ol>
-<pre><code class="language-markdown"># 자주 쓰는 프롬프트
-
-## 문서 요약
-- 핵심 3줄 요약
-- 해야 할 일 목록
-- **문서에 없는 내용은 지어내지 말 것**
-
-## 안내문 작성
-| 요소 | 내용 |
-|---|---|
-| 역할 | 교육운영 담당자 |
-| 형식 | 제목 + 5개 항목 |
-
-- [ ] 결과는 원문과 대조하기
-</code></pre>
-<ol start="4">
-<li><strong>Ctrl + E</strong> 를 눌러 <strong>편집 ↔ 읽기 보기</strong>를 전환해 봅니다</li>
+<h3>AI 답을 MD로 저장하기</h3>
+<ol>
+<li>ChatGPT·Claude 답변 아래 <strong>[복사]</strong> 아이콘 클릭 (Markdown 서식째 복사됩니다. 마우스로 드래그해 복사하면 표가 깨질 수 있습니다)</li>
+<li>옵시디언 <code>03_AI결과물</code> 폴더에 새 노트 → <strong>붙여넣기(Ctrl + V)</strong></li>
+<li>제목에 날짜를 붙이면 찾기 쉽습니다. 예: <code>2026-11-07 경주 여행 일정</code></li>
 </ol>
-</section><h2>4-4. Markdown 문법은 3가지만</h2>
+<h3>Markdown 기호는 3가지만</h3>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -134,45 +94,12 @@
 <td>강조</td>
 </tr>
 </tbody></table></div>
-<p>나머지(표, 체크리스트 등)는 외우지 않아도 됩니다. AI에게 &quot;<strong>Markdown으로 정리해 줘</strong>&quot;라고 하면 알아서 씁니다. 우리는 <strong>읽을 줄 알면</strong> 충분합니다.</p>
-<p><strong>옵시디언 전용 기능 하나:</strong> <code>[[파일이름]]</code> 을 쓰면 다른 노트로 가는 <strong>링크</strong>가 됩니다. 이 강의자료도 그렇게 연결되어 있습니다.</p>
-<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> · 직접 해 보는 부분</p><h2>4-5. AI 결과물을 MD로 저장하기</h2>
-<p>ChatGPT·Claude의 답을 옵시디언에 보관하는 방법:</p>
-<ol>
-<li>답변 아래 <strong>[복사]</strong> 아이콘 클릭 (서식이 Markdown으로 복사됩니다)</li>
-<li>옵시디언 <code>03_AI결과물</code> 폴더에 새 노트 → <strong>붙여넣기(Ctrl + V)</strong></li>
-<li>제목에 날짜를 붙이면 찾기 쉽습니다. 예: <code>2026-11-07 경주 여행 일정</code></li>
-</ol>
-<blockquote>
-<p>답변을 마우스로 드래그해 복사하면 표가 깨질 수 있습니다. 반드시 <strong>복사 아이콘</strong>을 쓰세요.</p>
-</blockquote>
-</section><h2>4-6. 수업 파일을 옵시디언에서 열어 보기</h2>
-<p>수업 때 받은 <code>PRD_경주 여행 준비물.md</code> 와 내 PRD가 <code>01_기획(PRD)</code> 에 있으면 옵시디언에서 열어 봅니다. <strong>다운로드</strong> 폴더에 남아 있다면 옮겨 둡니다.</p>
-<ol>
-<li>파일 탐색기 <strong>다운로드</strong> 폴더에서 파일을 잡고 → 옵시디언 왼쪽 <strong><code>01_기획(PRD)</code></strong> 폴더 위에 끌어다 놓기<ul>
-<li>어려우면 탐색기에서 <strong>잘라내기(Ctrl + X)</strong> → <code>문서 &gt; AI업무자료 &gt; 01_기획(PRD)</code> 에 <strong>붙여넣기(Ctrl + V)</strong></li>
-</ul>
-</li>
-<li>옵시디언에서 열어 보면 수업에서 AI에게 건넨 파일이 표와 체크박스로 보입니다</li>
-<li><code>자주 쓰는 프롬프트</code> 노트 맨 아래에 <code>[[PRD_경주 여행 준비물]]</code> 를 입력해 링크 만들기 체험</li>
-<li>수업에서 받은 <code>경주 여행 후기_예시.md</code> 가 있으면 <strong><code>02_참고자료</code></strong> 폴더로 옮기기</li>
-</ol>
-<h3>이 자료를 마친 보관소 모습</h3>
-<pre><code class="language-그림">📁 AI업무자료
- ├─ 📁 01_기획(PRD)
- │   └─ 📄 PRD_경주 여행 준비물
- ├─ 📁 02_참고자료
- │   └─ 📄 경주 여행 후기_예시
- ├─ 📁 03_AI결과물
- │   └─ 📄 2026-11-07 경주 여행 일정
- └─ 📁 99_프롬프트
-     └─ 📄 자주 쓰는 프롬프트
-</code></pre>
+<p>나머지(표, 체크리스트)는 외우지 않아도 됩니다. AI에게 &quot;<strong>Markdown으로 정리해 줘</strong>&quot;라고 하면 알아서 씁니다. <code>[[파일이름]]</code> 을 쓰면 다른 노트로 가는 <strong>링크</strong>가 됩니다.</p>
 <hr>
 <blockquote>
 <p>🪜 <strong>업무 자동화 사다리:</strong> ① 잘 시키기 → <strong>② 자료 맡기기 ✔</strong> → ③ 방법 맡기기 → ④ 클릭 맡기기 → ⑤ 내 도구 만들기 → ⑥ 저절로 돌아가게</p>
 </blockquote>
-<h2>자주 막히는 곳</h2>
+</details></section><h2>자주 막히는 곳</h2>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -185,35 +112,27 @@
 <td>[추가 정보] → [실행]. 공식 사이트(<a class="site" href="https://obsidian.md/" target="_blank" rel="noopener"><code>obsidian.md</code></a>)에서 받은 파일인지 확인</td>
 </tr>
 <tr>
-<td>보관소를 어디 만들었는지 모름</td>
+<td>관리자 권한 창이 뜨거나 설치가 막힘</td>
+<td>짝과 한 화면으로 보고, 내 파일은 <strong>메모장</strong>으로 열어도 됩니다. 기관 PC 설치는 전산 담당에게 확인</td>
+</tr>
+<tr>
+<td><code>AI업무자료</code> 폴더가 없음</td>
+<td>3-3 ③으로 돌아가 만들거나, <strong>[Create new vault]</strong> → 이름 <code>AI업무자료</code>, 위치 <code>문서</code></td>
+</tr>
+<tr>
+<td>후기 파일이 안 보임</td>
+<td>다운로드 폴더에 있는 <code>경주 여행 후기_예시.md</code> 를 <code>02_참고자료</code> 로 옮기기</td>
+</tr>
+<tr>
+<td>보관소를 어디 열었는지 모름</td>
 <td>왼쪽 아래 보관소 이름 클릭 → [보관소 관리] → 경로 확인</td>
-</tr>
-<tr>
-<td>표가 표로 안 보임</td>
-<td>표 위아래에 빈 줄이 있는지, 둘째 줄 <code>|---|---|</code> 가 있는지 확인</td>
-</tr>
-<tr>
-<td><code>#</code> 을 쳤는데 제목이 안 됨</td>
-<td><code>#</code> 뒤에 <strong>띄어쓰기</strong>가 있어야 합니다</td>
-</tr>
-<tr>
-<td><code>|</code> 기호를 못 찾음</td>
-<td><strong>Shift + 원화(₩) 또는 역슬래시(\)</strong> 키</td>
-</tr>
-<tr>
-<td>문법 실습을 복사·붙여넣기로 함</td>
-<td><strong>직접 타이핑</strong>해야 기호가 모양으로 바뀌는 순간을 볼 수 있습니다</td>
-</tr>
-<tr>
-<td>기관 PC라 설치가 막힘</td>
-<td>집 PC에서 하거나 전산 담당자에게 설치 허용 요청. 그동안은 메모장에서 <code>.md</code> 확장자로 저장해도 됩니다</td>
 </tr>
 </tbody></table></div>
 <h2>✅ 확인 질문 (인터뷰)</h2>
 <ol>
-<li>Windows 파일 탐색기에서 <code>문서 &gt; AI업무자료</code> 폴더가 보이나요?</li>
-<li><code>자주 쓰는 프롬프트</code> 노트에서 <strong>Ctrl + E</strong>를 눌렀을 때 표와 체크박스가 보이나요?</li>
-<li>AI 답변 하나를 복사해 <code>03_AI결과물</code> 에 저장해 보셨나요?</li>
+<li>옵시디언 왼쪽에 <code>AI업무자료</code> 의 폴더 다섯 개가 보이나요?</li>
+<li>파일 탐색기의 <code>문서 &gt; AI업무자료</code> 와 옵시디언이 <strong>같은 폴더</strong>라는 것을 확인하셨나요?</li>
+<li><strong>Ctrl + E</strong> 로 읽기 보기와 편집 보기를 바꿔 보셨나요?</li>
 </ol>
 </article>
     <div class="pager"><a class="prev" href="m03.html"><span>← 이전</span>03 프롬프트 · 파일 · 프로젝트</a><a class="next" href="m05.html"><span>다음 →</span>05 PRD 작성하기</a></div>
