@@ -250,7 +250,28 @@ function foldLater(html) {
   }
   return out + html.slice(pos);
 }
-const render = (md) => foldLater(enhance(marked.parse(wikify(studentMarkdown(md)), { gfm: true })));
+// 교안에서 제목 바로 위에 <!-- 실습 --> 를 단 절은 "✋ 실습" 상자로 감싼다. 설명(읽기)과 실습(손으로 하기)을 눈으로 나누려는 것.
+// 그 제목부터 같은 단계 이상의 다음 제목 직전까지. 절 끝의 가로줄은 상자 밖에 둔다.
+function wrapPractice(html) {
+  // 접힌 절(<details>) 바로 뒤의 제목이면 표시가 접힌 상자 안에 들어가 있으므로, 닫는 태그 뒤로 옮겨 읽는다
+  html = html.replace(/<!-- 실습 -->((?:\s*<\/details>)*)\s*<h([2-4])>/g, "$1<h$2 data-do>");
+  const heads = [...html.matchAll(/<h([1-4])( data-do)?>([\s\S]*?)<\/h\1>/g)].map((m) => ({ at: m.index, end: m.index + m[0].length, level: +m[1], doIt: !!m[2], inner: m[3] }));
+  let out = "", pos = 0;
+  for (let i = 0; i < heads.length; i++) {
+    const h = heads[i];
+    if (!h.doIt || h.at < pos) continue;
+    const next = heads.slice(i + 1).find((n) => n.level <= h.level);
+    const stop = next ? next.at : html.length;
+    const body = html.slice(h.end, stop);
+    const hr = body.match(/\s*<hr>\s*$/);
+    const min = (h.inner.replace(/<[^>]+>/g, "").match(/(\d+)\s*분/) || [])[1];
+    const tag = `<p class="do-tag"><span>✋ 실습</span>${min ? ` 약 ${min}분` : ""} · 직접 해 보는 부분</p>`;
+    out += html.slice(pos, h.at) + `<section class="do do-h${h.level}">${tag}<h${h.level}>${h.inner}</h${h.level}>${hr ? body.slice(0, hr.index) : body}</section>${hr ? hr[0] : ""}`;
+    pos = stop;
+  }
+  return (out + html.slice(pos)).replace(/ data-do>/g, ">");
+}
+const render = (md) => wrapPractice(foldLater(enhance(marked.parse(wikify(studentMarkdown(md)), { gfm: true }))));
 
 // ── 만들기 ──
 fs.rmSync(OUT, { recursive: true, force: true });

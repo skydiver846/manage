@@ -400,3 +400,20 @@ details.later.later-h4 > summary { font-size: 15px; }
 /* 다크 모드: 목차 묶음 제목은 남색 대신 밝은 글자 */
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .group h3 { color: var(--ink); } }
 :root[data-theme="dark"] .group h3 { color: var(--ink); }
+
+/* ✋ 실습 상자: 교안에서 <!-- 실습 --> 를 단 절. 읽는 설명과 손으로 하는 실습을 눈으로 나눈다 */
+:root { --do-bg: #f1f9f4; --do-line: #2e8b57; --do-ink: #1d6b3f; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --do-bg: #15241c; --do-line: #3fae6e; --do-ink: #7fd6a3; } }
+:root[data-theme="dark"] { --do-bg: #15241c; --do-line: #3fae6e; --do-ink: #7fd6a3; }
+section.do { margin: 28px 0; padding: 14px 22px 8px; background: var(--do-bg); border: 1px solid color-mix(in srgb, var(--do-line) 30%, transparent); border-left: 6px solid var(--do-line); border-radius: 12px; }
+section.do > h2, section.do > h3 { margin-top: 6px; }
+.do-tag { margin: 0; font-size: 13px; color: var(--do-ink); font-weight: 600; }
+.do-tag span { display: inline-block; margin-right: 6px; padding: 2px 10px; border-radius: 999px; background: var(--do-line); color: #fff; font-weight: 800; }
+section.do pre, section.do .table-wrap, section.do blockquote { background: var(--paper); }
+
+/* 모듈 안 "지금 여기" 단계 표시 (site.js 가 만든다) */
+.steps-bar { position: sticky; top: var(--head-h); z-index: 6; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: thin; margin: -12px 0 28px; padding: 10px 0; background: var(--paper); border-bottom: 1px solid var(--line); }
+.steps-bar a { flex: none; display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); color: var(--muted); font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+.steps-bar a.is-do { border-color: color-mix(in srgb, var(--do-line) 45%, transparent); color: var(--do-ink); }
+.steps-bar a[aria-current="step"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+article h2 { scroll-margin-top: calc(var(--head-h) + 70px); }

@@ -94,7 +94,7 @@
 <li>흐름(PRD → 화면 → 장부 규칙 → 배포)은 어떤 클라우드를 쓰든 같습니다.</li>
 </ul>
 <hr>
-<h2>1단계: Firebase 프로젝트 만들기 (5분)</h2>
+<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 5분 · 직접 해 보는 부분</p><h2>1단계: Firebase 프로젝트 만들기 (5분)</h2>
 <ol>
 <li>업무 Chrome 프로필에서 <code>console.firebase.google.com</code> (구글 서비스라 따로 가입하지 않음)</li>
 <li><strong>[프로젝트 만들기]</strong> → 이름 <code>trip-checklist</code> → 약관 동의 → <strong>[계속]</strong></li>
@@ -105,7 +105,7 @@
 <blockquote>
 <p>💡 애널리틱스를 끄는 이유: 지금 필요 없는 기능은 끕니다. PRD의 &quot;범위 밖&quot;과 같은 원칙입니다.</p>
 </blockquote>
-<h2>2단계: 공용 장부(Firestore) 만들기 (5분)</h2>
+</section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 5분 · 직접 해 보는 부분</p><h2>2단계: 공용 장부(Firestore) 만들기 (5분)</h2>
 <ol>
 <li>왼쪽 메뉴 <strong>빌드(Build)</strong> → <strong>Firestore Database</strong> → <strong>[데이터베이스 만들기]</strong></li>
 <li>에디션 선택이 나오면 <strong>Standard</strong></li>
@@ -115,7 +115,7 @@
 <blockquote>
 <p>💡 프로덕션 모드는 처음에 <strong>아무도 장부를 못 쓰게 잠근</strong> 상태입니다. 다음 단계에서 정한 규칙대로만 열어 줍니다. <strong>테스트 모드</strong>는 당장은 편하지만 <strong>30일 뒤 자동으로 잠기고</strong>, 그동안 누구나 장부를 지울 수 있습니다.</p>
 </blockquote>
-<h2>3단계: 장부 사용 규칙 정하기 (10분)</h2>
+</section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 10분 · 직접 해 보는 부분</p><h2>3단계: 장부 사용 규칙 정하기 (10분)</h2>
 <p>Firestore 화면 위쪽 <strong>규칙(Rules)</strong> 탭 → 내용을 모두 지우고 아래를 붙여넣기 → <strong>[게시(Publish)]</strong></p>
 <pre><code>rules_version = &#39;2&#39;;
 service cloud.firestore {
@@ -150,7 +150,7 @@ service cloud.firestore {
 <p>💡 체크는 화면(JavaScript)에서도 검사하지만, 화면 코드는 누구나 고칠 수 있습니다. <strong>마지막 문지기는 장부 규칙</strong>입니다.</p>
 <p>⚠️ 이 규칙은 <strong>연습용</strong>입니다. 로그인이 없어서 <strong>주소를 아는 사람은 누구나</strong> 목록을 보고 체크하고 지울 수 있습니다. 주소는 가족 단톡방에만 보내고, 실제 서비스라면 로그인(Authentication)과 사람별 규칙을 더합니다.</p>
 </blockquote>
-<h2>4단계: 화면과 장부를 잇는 설정값 받기 (5분)</h2>
+</section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 5분 · 직접 해 보는 부분</p><h2>4단계: 화면과 장부를 잇는 설정값 받기 (5분)</h2>
 <ol>
 <li>왼쪽 위 <strong>프로젝트 개요</strong> → 가운데 <strong><code>&lt;/&gt;</code> (웹)</strong> 아이콘</li>
 <li>앱 닉네임 <code>준비물</code> → <strong>Firebase Hosting은 체크하지 않기</strong> (배포는 Netlify가 함) → <strong>[앱 등록]</strong></li>
@@ -168,7 +168,7 @@ service cloud.firestore {
 <p>💡 <code>apiKey</code> 라는 이름 때문에 비밀번호 같지만, <strong>웹 앱 설정값은 비밀이 아닙니다.</strong> 화면 코드에 그대로 들어가 누구나 볼 수 있습니다. 장부를 지키는 것은 3단계의 <strong>규칙</strong>입니다.
 나중에 다시 찾을 때: <strong>⚙ 프로젝트 설정 → 일반 → 내 앱 → SDK 설정 및 구성 → 구성(Config)</strong></p>
 </blockquote>
-<h2>5단계: PRD 고치기 → Claude로 화면 고치기 (15분)</h2>
+</section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 15분 · 직접 해 보는 부분</p><h2>5단계: PRD 고치기 → Claude로 화면 고치기 (15분)</h2>
 <p><strong>① PRD를 먼저 고칩니다</strong> (기준 문서는 언제나 PRD).</p>
 <ul>
 <li>6번 범위 밖에서 <strong>&quot;여러 기기 간 데이터 공유&quot;를 지우기</strong> → 이제 범위 안</li>
@@ -194,14 +194,14 @@ service cloud.firestore {
 <p>💡 이 지시문은 모듈 3의 <strong>맥락 + 조건</strong>을 그대로 쓴 것입니다. &quot;필드는 이것만&quot;, &quot;done 하나만 바꾸기&quot;가 3단계 규칙과 <strong>정확히 맞아야</strong> 저장됩니다. 규칙과 코드가 어긋나면 [추가]를 눌러도 아무 일이 없습니다. &quot;계산은 화면에서&quot; 조건이 없으면 장부 쪽에서 묶고 정렬하려다 <strong>색인(index)을 만들라는 오류</strong>가 날 수 있습니다.</p>
 </blockquote>
 <p><strong>③ 내 컴퓨터에서 먼저 확인</strong>: 받은 <code>index.html</code> 을 <code>여행준비</code> 폴더에 덮어쓰기 → 더블클릭 → 준비물 하나 추가 → Firebase 콘솔 <strong>Firestore → 데이터</strong> 탭에 <code>items</code> 아래 기록이 생기면 성공</p>
-<h2>6단계: Netlify에 다시 올리기 (3분)</h2>
+</section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 3분 · 직접 해 보는 부분</p><h2>6단계: Netlify에 다시 올리기 (3분)</h2>
 <p>모듈 10의 <strong>다시 올리기</strong>와 같습니다.</p>
 <ol>
 <li><a class="site" href="https://app.netlify.com/" target="_blank" rel="noopener"><code>app.netlify.com</code></a> → 내 사이트 → <strong>Deploys</strong></li>
 <li><code>여행준비</code> 폴더를 <strong>폴더째</strong> 아래쪽 끌어다 놓는 칸에 놓기</li>
 <li>1~2분 뒤 <strong>같은 주소</strong>로 새 화면이 열립니다</li>
 </ol>
-<h2>7단계: 두 휴대폰으로 같은 목록 확인 (5분)</h2>
+</section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 5분 · 직접 해 보는 부분</p><h2>7단계: 두 휴대폰으로 같은 목록 확인 (5분)</h2>
 <ol>
 <li>가족(또는 동료)과 <strong>같은 주소</strong>를 각자 휴대폰으로 열기</li>
 <li>한 사람이 준비물을 체크 → <strong>다른 사람 화면이 새로고침 없이</strong> 바뀌는지 확인</li>
@@ -217,7 +217,7 @@ service cloud.firestore {
 <blockquote>
 <p>💼 <strong>업무에서는?</strong> 행사 준비물·당직 점검표처럼 <strong>여러 사람이 함께 체크하는 목록</strong>에 같은 방법을 씁니다. 다만 업무 자료는 기관 규정을 먼저 확인하고, 간단히 모으기만 할 때는 네이버 폼이 더 쉽습니다.</p>
 </blockquote>
-<h2>자주 막히는 곳</h2>
+</section><h2>자주 막히는 곳</h2>
 <div class="table-wrap"><table>
 <thead>
 <tr>
