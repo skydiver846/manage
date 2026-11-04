@@ -417,3 +417,8 @@ section.do pre, section.do .table-wrap, section.do blockquote { background: var(
 .steps-bar a.is-do { border-color: color-mix(in srgb, var(--do-line) 45%, transparent); color: var(--do-ink); }
 .steps-bar a[aria-current="step"] { background: var(--accent); border-color: var(--accent); color: #fff; }
 article h2 { scroll-margin-top: calc(var(--head-h) + 70px); }
+
+/* 그림 상자(```그림): 복사하는 프롬프트와 다르게 보이도록 테두리를 점선으로, [복사] 자리 여백 없이 */
+article pre.figure { padding-right: 18px; background: transparent; border: 1px dashed var(--line); }
+article pre.figure::before { content: "그림"; display: block; margin: -4px 0 6px; font: 700 11.5px var(--font-body); letter-spacing: .04em; color: var(--muted); }
+article pre.figure code { white-space: pre; word-break: normal; }

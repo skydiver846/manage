@@ -201,7 +201,7 @@ marked.use({ tokenizer: { del(src) { const m = /^~~(?=\S)([\s\S]*?\S)~~/.exec(sr
 
   function enhance(root, doc) {
     root.querySelectorAll("table").forEach((t) => { const w = document.createElement("div"); w.className = "table-wrap"; t.replaceWith(w); w.append(t); });
-    root.querySelectorAll("pre").forEach(addCopy);
+    root.querySelectorAll("pre").forEach((pre) => { if (!pre.querySelector('code[class*="language-그림"]')) addCopy(pre); });
     root.querySelectorAll("blockquote").forEach((b) => { if (/🧑‍🏫|강사/.test(b.textContent)) b.classList.add("teacher"); });
     root.querySelectorAll('li input[type="checkbox"]').forEach((c, i) => {
       const key = "lv-check-" + doc.id + "-" + i;

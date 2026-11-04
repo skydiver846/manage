@@ -30,7 +30,7 @@
 <p>📌 <strong>수업에서는 다루지 않는 선택 자료입니다.</strong> 모듈 10 마무리에서 본 &quot;장부는 공유되지 않는다&quot;를 직접 풀어 보고 싶을 때, 과정 뒤에 혼자 따라 해 보세요. 행정망 PC에서는 Firebase 저장이 막힐 수 있으니 <strong>집 PC나 휴대폰 데이터(LTE)</strong> 로 확인합니다.</p>
 </blockquote>
 <p>모듈 10에서 배포한 <strong>여행 준비물 화면</strong>은 화면은 가족 모두가 열 수 있지만, 체크한 기록은 <strong>각자 휴대폰(브라우저)에만</strong> 남았습니다. 여기서는 모두가 함께 쓰는 장부(데이터베이스)를 붙여, <strong>배우자가 체크하면 내 휴대폰 화면에도 바로 체크되게</strong> 합니다.</p>
-<pre><code> 모듈 10:   [내 휴대폰 장부]   [배우자 휴대폰 장부]      ← 따로따로
+<pre><code class="language-그림"> 모듈 10:   [내 휴대폰 장부]   [배우자 휴대폰 장부]      ← 따로따로
  여기서:    [내 휴대폰]   ─┐
            [배우자 휴대폰] ┼──▶  Firebase (공용 장부)   ← 모두가 같은 체크 목록
            [아이 휴대폰]  ─┘
@@ -157,7 +157,7 @@ service cloud.firestore {
 <li>화면의 코드 중 <strong><code>const firebaseConfig = { ... };</code></strong> 부분만 복사 → 메모장에 붙여 내 업무 폴더 <code>02_참고자료</code> 에 <code>Firebase 설정값.txt</code> 로 저장</li>
 <li><strong>[콘솔로 이동]</strong></li>
 </ol>
-<pre><code class="language-js">const firebaseConfig = {
+<pre><code class="language-그림">const firebaseConfig = {
   apiKey: &quot;AIza…&quot;,
   authDomain: &quot;trip-checklist-a1b2c.firebaseapp.com&quot;,
   projectId: &quot;trip-checklist-a1b2c&quot;,
@@ -208,7 +208,7 @@ service cloud.firestore {
 <li>다른 사람이 준비물을 하나 추가 → 내 화면에도 생기는지 확인</li>
 <li>Firebase 콘솔 <strong>데이터</strong> 탭에서 기록이 쌓이는 모습 보기</li>
 </ol>
-<pre><code> 모듈 10:  배우자가 체크 → 내 휴대폰 ✗
+<pre><code class="language-그림"> 모듈 10:  배우자가 체크 → 내 휴대폰 ✗
  여기서:   배우자가 체크 → 내 휴대폰 ✓  (공용 장부)
 </code></pre>
 <blockquote>

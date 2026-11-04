@@ -7,6 +7,8 @@
 
   // 코드·프롬프트 상자마다 [복사] 버튼
   document.querySelectorAll("article pre").forEach(function (pre) {
+    // ```그림 으로 쓴 상자는 복사할 프롬프트가 아니라 그림(구조도·체크리스트)이라 [복사] 버튼을 달지 않는다
+    if (pre.querySelector('code[class*="language-그림"]')) { pre.classList.add("figure"); return; }
     var btn = document.createElement("button");
     btn.type = "button"; btn.className = "copy"; btn.textContent = "복사";
     btn.addEventListener("click", function () {
