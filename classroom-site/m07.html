@@ -53,7 +53,7 @@
 <section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 15분 · 직접 해 보는 부분</p><h2>7-1. Gemini Notebook (약 15분: 넣고, 누르고, 기다리지 않기)</h2>
 <blockquote>
 <p>⏱️ 이 교시의 주인공은 7-3 <strong>내 화면 시안</strong>입니다. 수업에서는 Gemini Notebook으로 <strong>세 가지만</strong> 합니다: ① 소스 3개 넣기 → ② 오디오 개요·슬라이드 <strong>[생성]</strong> 누르기 → ③ 채팅 질문 1개. 오디오·슬라이드는 만들어지는 데 몇 분씩 걸리니, 기다리지 말고 7-2로 넘어갑니다. 결과는 교시 끝이나 <strong>과정 뒤에</strong> 열어 봅니다.</p>
-<p>제목에 <strong>(과정 뒤)</strong> 가 붙은 마인드맵·인포그래픽·PRD 검토(불일치 찾기, v0.3)는 과정 뒤에 해 봅니다.</p>
+<p>제목에 <strong>(과정 뒤)</strong> 가 붙은 마인드맵·인포그래픽은 과정 뒤에 해 봅니다.</p>
 </blockquote>
 <blockquote>
 <p>💡 <strong>이름이 바뀌었습니다.</strong> 2026년 7월부터 <strong>NotebookLM</strong> 의 새 이름이 <strong>Gemini Notebook</strong> 입니다. 기능과 만들어 둔 노트북은 그대로입니다. 인터넷 검색이나 예전 자료에서는 NotebookLM이라는 이름도 계속 보입니다.</p>
@@ -196,23 +196,9 @@
 </code></pre>
 <blockquote>
 <p>💡 Gemini Notebook은 <strong>자료에 없는 것을 잘 지어내지 않습니다.</strong> 요금을 물으면 &quot;자료에 없다&quot;고 답하는지 보세요.</p>
-</blockquote>
-<details class="later later-h3"><summary><span class="later-tag">과정 뒤에 더 해 보기</span> PRD 검토 · 불일치 찾기 → v0.3 (과정 뒤)</summary>
-<p>&quot;서로 맞는지·빠진 것 찾기&quot;를 시키면 Gemini Notebook을 <strong>PRD 검토 도구</strong>로 쓸 수 있습니다.</p>
-<pre><code>PRD의 배경, 핵심 기능, 화면·흐름, 성공 기준이 서로 맞는지 비교해 줘.
-배경에 적힌 내용 중 기능에 빠진 것이 있으면 알려 줘.
-</code></pre>
-<p><strong>볼 것: 불일치 찾기</strong></p>
-<p>PRD v0.1 그대로라면 1번 배경(&quot;가족마다 챙길 것이 다르다&quot;)과 4번 기능(준비물을 한 목록으로만 셈)이 어긋납니다. 모듈 5에서 4번 칸만 &quot;누구 것 + 가족별 집계&quot;로 고쳤다면, 5번 화면 흐름은 아직 &quot;준비물 [____] [추가]&quot;만 있고 누구 것을 고르는 칸이 없습니다. 7번 성공 기준에도 &quot;가족 전체로는 순조로워도 덜 챙긴 사람은 따로 &#39;서둘러요&#39;&quot; 같은 문장이 없습니다. Gemini Notebook이 이 불일치를 짚어 주면 Claude에게 5·7번 칸을 고치게 하고 <strong>v0.3</strong> 으로 올립니다.</p>
-<pre><code class="language-그림"> PRD 파일 수정 ─▶ Gemini Notebook에 다시 넣어 검토 ─▶ 불일치 발견 ─▶ 다시 수정
-</code></pre>
-<blockquote>
-<p>⚠️ Gemini Notebook에 올린 파일은 <strong>복사본</strong>입니다. 내 PC에서 PRD를 고쳐도 Gemini Notebook 안의 파일은 바뀌지 않으니, 다시 검토하려면 <strong>기존 소스를 지우고 새로 업로드</strong>합니다. 가장 많이 헷갈리는 부분입니다.</p>
-<p>AI가 불일치를 못 찾으면 &quot;4번과 5번 칸의 입력 항목이 서로 같은지 비교해 줘&quot;처럼 <strong>구체적으로</strong> 다시 물어보세요.</p>
-</blockquote>
+</blockquote></section>
 <hr>
-
-</details></section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 10분 · 직접 해 보는 부분</p><h2>7-2. Claude로 가족 단톡방용 여행 안내 한 장 만들기 (약 10분)</h2>
+<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 10분 · 직접 해 보는 부분</p><h2>7-2. Claude로 가족 단톡방용 여행 안내 한 장 만들기 (약 10분)</h2>
 <p><code>경주 여행 자료_관광지 안내.md</code> 와 <code>경주 여행 후기_예시.md</code> 를 첨부(또는 모듈 3에서 만든 &quot;우리 가족 여행&quot; 프로젝트에 넣고 그 안에서 대화)한 뒤:</p>
 <p><strong>① 단톡방용 여행 안내 한 장</strong></p>
 <pre><code>첨부한 관광지 안내와 후기를 바탕으로 가족 단톡방에 올릴 경주 2박 3일 여행 안내를 한 장으로 써 줘.
@@ -255,12 +241,12 @@
 <p>🔓 3교시에 <strong>말로 정리한 내 아이디어가 지금 화면</strong>이 됐습니다. 처음에 물은 <strong>③ &quot;나는 컴퓨터를 잘 못해서 어렵다&quot;</strong> 는 어떤가요? 필요한 것은 코딩 실력이 아니라 <strong>무엇이 필요한지 아는 사람</strong>, 바로 여러분입니다.</p>
 </blockquote>
 <ul>
-<li><strong>내 PRD가 아직 덜 됐다면</strong> 예시 <span class="file-inline">📎 예시 PRD 파일 <a class="btn" href="files/PRD_%EA%B2%BD%EC%A3%BC%20%EC%97%AC%ED%96%89%20%EC%A4%80%EB%B9%84%EB%AC%BC.md" download="PRD_경주 여행 준비물.md">내려받기</a></span> (모듈 5에서 누구 것 구분을 넣어 고친 파일)로 같은 실습을 합니다(아래 성공 기준 표가 이 준비물 화면 기준입니다).</li>
+<li><strong>내 PRD가 아직 덜 됐다면</strong> 예시 <span class="file-inline">📎 예시 PRD 파일 <a class="btn" href="files/PRD_%EA%B2%BD%EC%A3%BC%20%EC%97%AC%ED%96%89%20%EC%A4%80%EB%B9%84%EB%AC%BC.md" download="PRD_경주 여행 준비물.md">내려받기</a></span> 로 같은 실습을 합니다(아래 성공 기준 표가 이 준비물 화면 기준입니다).</li>
 <li>미리보기 창이 <strong>빈 화면</strong>이면: 미리보기는 <code>claudeusercontent.com</code> 이라는 별도 주소에서 그려지는데, 행정망에서 이 주소가 막혔을 수 있습니다. 코드를 복사해 메모장에 <code>index.html</code>(UTF-8)로 저장하고 Chrome에서 열면 똑같이 동작합니다.</li>
 <li>답이 중간에 끊기면 <strong>&quot;계속해 줘&quot;</strong> 라고 입력합니다. 사용량 한도 안내가 뜨면 ChatGPT에 같은 지시를 넣어 진행합니다(ChatGPT는 캔버스에서 미리보기).</li>
 </ul>
 <blockquote>
-<p>예시 결과물: 실습 파일의 <strong>준비물 체크 화면</strong>(<code>index.html</code>, 모듈 09·10에서 씁니다)이 예시 PRD를 고친 v0.3으로 만든 화면입니다. 생성이 늦어지면 이 화면을 먼저 보며 따라 합니다.</p>
+<p>예시 결과물: 실습 파일의 <strong>준비물 체크 화면</strong>(<code>index.html</code>, 모듈 09·10에서 씁니다)이 예시 PRD로 만든 화면입니다. 생성이 늦어지면 이 화면을 먼저 보며 따라 합니다.</p>
 </blockquote>
 <h3>PRD의 성공 기준으로 검사하기</h3>
 <p>미리보기 화면에서 PRD 7번 칸을 그대로 시험해 봅니다. <strong>내 PRD</strong>로 했다면 내 7번 문장을 하나씩, <strong>예시 PRD</strong>로 했다면 아래 표대로 해 봅니다.</p>

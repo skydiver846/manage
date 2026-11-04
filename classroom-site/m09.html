@@ -298,7 +298,7 @@ button {
 <tr>
 <td>④ <code>draw()</code></td>
 <td><strong>누구 것</strong>이 같은 준비물끼리 묶어 전체·챙김·챙김률 계산, 목록과 체크 상자 그리기</td>
-<td>&quot;가족별 집계&quot; (v0.3)</td>
+<td>&quot;가족별 집계&quot;</td>
 </tr>
 <tr>
 <td>⑤ 버튼·체크를 누르면</td>
@@ -308,7 +308,7 @@ button {
 </tbody></table></div>
 <blockquote>
 <p>💡 ③번을 보세요. PRD에 한국어로 쓴 규칙 &quot;챙김률 50% 미만이면 서둘러요&quot;가 코드에서는 <code>rate &lt; 50</code> 한 줄입니다. <strong>PRD를 코드로 옮기는 것</strong>, 그게 프로그래밍입니다.</p>
-<p>④번의 <code>const key = it.who;</code> 가 모듈 5에서 고친 구멍입니다. 누구 것(<code>who</code>) 구분을 빼면 모든 준비물이 <strong>가족 전체 한 줄로만</strong> 세어집니다. 예시처럼 할머니 3개(다 챙김)·아이 3개(1개 챙김)·가족 공용 2개(다 챙김)를 넣으면 &quot;8개 중 6개, 75%, 순조로움&quot;이 되고, <strong>아이의 &quot;서둘러요&quot;가 화면에서 사라집니다.</strong> Claude에게 &quot;<strong>누구 것 구분(<code>who</code>)을 빼면</strong> 어떻게 되는지 미리보기로 보여 줘&quot;라고 해 보면 PRD 한 줄의 무게가 실감 납니다.</p>
+<p>④번의 <code>const key = it.who;</code> 가 PRD 4번 기능의 &quot;가족별 집계&quot;입니다. 누구 것(<code>who</code>) 구분을 빼면 모든 준비물이 <strong>가족 전체 한 줄로만</strong> 세어집니다. 예시처럼 할머니 3개(다 챙김)·아이 3개(1개 챙김)·가족 공용 2개(다 챙김)를 넣으면 &quot;8개 중 6개, 75%, 순조로움&quot;이 되고, <strong>아이의 &quot;서둘러요&quot;가 화면에서 사라집니다.</strong> Claude에게 &quot;<strong>누구 것 구분(<code>who</code>)을 빼면</strong> 어떻게 되는지 미리보기로 보여 줘&quot;라고 해 보면 PRD 한 줄의 무게가 실감 납니다.</p>
 </blockquote>
 
 </details></section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 4분 · 직접 해 보는 부분</p><h2>4단계: 완성본 = 기억과 편의 (함께 보기, 4분)</h2>

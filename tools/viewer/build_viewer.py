@@ -30,8 +30,7 @@ add("심화", L + "10_(심화) 프로토타입 배포.md", "10 Netlify 배포")
 add("심화", L + "12_(심화) Claude Code로 한 번에 만들고 배포하기.md", "12 Claude Code")
 add("선택 자료", L + "04_옵시디언 설치와 MD 파일 만들기.md", "04 옵시디언과 MD (수업 외)")
 add("선택 자료", L + "11_(선택) Firebase로 공용 장부 연결.md", "11 Firebase 공용 장부 (수업 외)")
-add("실습자료", L + "실습자료/PRD_경주 여행 준비물.md", "PRD 여행 준비물 v0.1")
-add("실습자료", L + "실습자료/PRD_경주 여행 준비물 (v0.3 완성본).md", "PRD 여행 준비물 v0.3 (정답)")
+add("실습자료", L + "실습자료/PRD_경주 여행 준비물.md", "PRD 여행 준비물 (예시)")
 add("실습자료", L + "실습자료/경주 여행 자료_관광지 안내.md", "경주 관광지 안내")
 add("실습자료", L + "실습자료/경주 여행 후기_예시.md", "경주 여행 후기")
 add("실습자료", L + "실습자료/PRD 템플릿.md", "PRD 템플릿")
@@ -47,8 +46,8 @@ def addfile(file, short, note, preview=True):
 
 addfile("prototype-demo/steps/1-html.html", "1단계 HTML (뼈대)", "모듈 09 1단계. 색과 동작 없이 화면 구조만 있습니다.")
 addfile("prototype-demo/steps/2-css.html", "2단계 CSS (옷)", "모듈 09 2단계. HTML은 그대로, 모양만 더했습니다.")
-addfile("prototype-demo/steps/3-js.html", "3단계 JS (움직임)", "모듈 09 3단계. 평가를 내면 과목·교관별 평균이 계산됩니다. 새로고침하면 사라집니다.")
-addfile("prototype-demo/index.html", "4단계 완성본 (v0.3)", "모듈 07·09의 완성본. 과목·교관별 집계, 3.5 미만 개선 필요, 브라우저 저장, 결과 내려받기.")
+addfile("prototype-demo/steps/3-js.html", "3단계 JS (움직임)", "모듈 09 3단계. 준비물을 추가하면 누구 것별 챙김률이 계산됩니다. 새로고침하면 사라집니다.")
+addfile("prototype-demo/index.html", "4단계 완성본", "모듈 07·09·10의 여행 준비물 체크 화면. 누구 것별 집계, 50% 미만 서둘러요, 브라우저 저장, 목록 내려받기.")
 addfile("prototype-demo/network-check.html", "강의장 접속 점검 (코드)", "강의장 PC의 Chrome에서 열어야 정확합니다. 이 열람 페이지 안에서는 다른 사이트 접속이 막혀 있어 코드만 보여 줍니다.", preview=False)
 
 qr = None
