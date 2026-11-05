@@ -129,14 +129,14 @@ const PLAN = [
   // id는 예전 기록이 같은 칸에 그대로 보이게 유지
   { round: "1일차", sub: "16:00~21:00 · 1~5교시 · 고정관념 세 문장 → 요청·파일·프로젝트 → PRD → 스킬 → 내 화면 시안", items: [
     { id: "p01", label: "1교시", title: "고정관념 · 말로 만든 계산기 · 6하원칙 프롬프트", mods: "00 · 03 시작하며 · 3-0 · 3-1", plan: 50 },
-    { id: "p02", label: "2교시", title: "파일 건네기 · 개인정보 지우기 · 프로젝트", mods: "3-2 · 3-3 · 내 업무 폴더", plan: 50 },
-    { id: "p04", label: "3교시", title: "PRD 구멍 찾기 · 내 PRD 인터뷰", mods: "05", plan: 50 },
+    { id: "p02", label: "2교시", title: "파일 건네기 · 프로젝트 · 내 업무 폴더 · 옵시디언", mods: "3-2 · 3-3 · 04", plan: 50 },
+    { id: "p04", label: "3교시", title: "PRD 맛보기 · 7가지 구성 · 내 PRD 인터뷰", mods: "05", plan: 50 },
     { id: "p05", label: "4교시", title: "스킬로 업무 방법 맡기기", mods: "(PRD 마무리 10분) · 06", plan: 50 },
     { id: "p06", label: "5교시", title: "PRD로 결과물 · 내 화면 시안", mods: "07 · 출구 카드(말로)", plan: 50 } ] },
   { round: "2일차", sub: "08:00~13:00 · 6~10교시 · 코딩 없이 자동화 → 화면 뜯어보기·웹 공개 → 내 화면 → 처음 질문, 다시", items: [
-    { id: "p07", label: "6교시", title: "AI 브라우저로 업무 자동화", mods: "출석 3분 · 08 Aside 42분 · 여유 5분", plan: 50 },
+    { id: "p07", label: "6교시", title: "AI 브라우저로 업무 자동화", mods: "출석 3분 · 08 Aside 47분(설치 10분 포함)", plan: 50 },
     { id: "p0910", label: "7교시", title: "화면 뜯어보기와 웹에 공개", mods: "09 1~4단계 17분 · 10 Netlify 32분", plan: 50 },
-    { id: "p10", label: "8~9교시", title: "Claude Code로 내 화면 만들고 배포", mods: "10-7 연결 · 12 (A 내 PRD / B 공공데이터)", plan: 100 },
+    { id: "p10", label: "8~9교시", title: "Claude Code로 내 화면 만들고 배포", mods: "12 (0단계 연결 · A 내 PRD / B 공공데이터)", plan: 100 },
     { id: "p12", label: "10교시", title: "처음 질문, 다시 · 결과 공유 · 의견 나누기", mods: "12 끝 · Team 저장 안내 · 오프라인 의견", plan: 50 } ] },
   { round: "과정 뒤 (선택)", sub: "시간 날 때. 교육생이 집에서 이어서 할 것들이 되는지만 확인", items: [
     { id: "after", label: "과정 뒤", title: "09 이어서 해 보기 · 과제 안내", mods: "09 ①~④ · 과제 안내", plan: 30 } ] },
@@ -160,15 +160,15 @@ const STEPS = {
     ["goodbad", "나쁜 예 vs 좋은 예 (Claude 새 채팅 2개) · 같은 지시 ChatGPT에도"],
   ],
   p02: [
-    ["file", "3-2 파일 첨부 요약 · 구멍 찾기 · 후기 요약"],
+    ["file", "3-2 후기 파일 내려받기 → [+] 첨부 → 후기 요약 표"],
     ["lab-mask", "교안 실습: 개인정보 지우고 건네기"],
-    ["team-proj", "3-3 팀 공유 프로젝트 \"우리 가족 여행 실습\" 효과 보기"],
+    ["team-proj", "3-3 내 \"우리 가족 여행\" 프로젝트 만들기 → 파일·지침 넣기 → \"둘째 날 비 오면?\""],
     ["fill-project", "빈칸 채우기: 내 업무 프로젝트 지침 → [지침 복사] → 지침 칸"],
-    ["folder", "내 업무 폴더 만들기"],
+    ["folder", "내 업무 폴더 만들기 → 후기 파일을 02_참고자료로"],
+    ["obsidian", "04 옵시디언 설치 → 폴더를 보관소로 열기 → 후기 파일 Ctrl+E (8분)"],
   ],
   p04: [
-    ["taste", "5-0 한 줄로 시키면?"],
-    ["lab-gap", "교안 실습: PRD 구멍 찾기 (한 목록 vs 누구 것별, A·B·C)"],
+    ["taste", "5-0 \"여행 준비물 앱 만들어 줘\" 한 줄 → 세 칸 확인"],
     ["fill-prd", "빈칸 채우기: PRD 인터뷰 프롬프트 → 인터뷰 → PRD.md 내려받기"],
   ],
   p05: [
@@ -184,7 +184,7 @@ const STEPS = {
     ["exit", "바꿀 점 3가지 메모 · 출구 카드 말로 한 줄"],
   ],
   p07: [
-    ["aside", "Aside 로그인 (설치 여부 확인)"],
+    ["aside", "Aside 설치 → 업무 계정 로그인 (함께, 10분)"],
     ["aside-1", "실습 1: 준비물 화면 조작 맡기기 (아이 33% 서둘러요)"],
     ["aside-2", "실습 2: 경주 축제·박물관 안내 표 · 루틴 저장"],
     ["lab-del", "교안 실습: AI에게 맡길 일 나누기"],
@@ -198,7 +198,7 @@ const STEPS = {
     ["lab-ledger", "교안 실습: 각자 수첩 vs 공용 장부"],
   ],
   p10: [
-    ["repo", "10-7 my-tool 저장소(README 체크) + Claude Code 연결 (Only select repositories)"],
+    ["repo", "12 0단계 my-tool 저장소(README 체크) + Claude Code 연결 (Only select repositories)"],
     ["fill-cc", "빈칸 채우기: Claude Code 지시문 (A 내 PRD / B 공공데이터)"],
     ["csv", "(B) 공공데이터 CSV 내려받기 → data.csv 업로드"],
     ["work", "Claude Code 작업·허락 화면·연습장(브랜치)"],
@@ -210,7 +210,6 @@ const STEPS = {
     ["share", "결과 공유: \"나는 ○○를 만들어 ○○에 쓴다\" 한 줄"],
     ["save", "Team 사용 기간·저장 안내 (12 끝)"],
     ["talk", "의견 나누기 (질문지)"],
-    ["hw", "과정 뒤 과제 · Team 사용 기간 안내"],
   ],
   after: [
     ["ai-edit", "09 ① AI에게 고쳐 달라고 하고, 받은 코드로 실행 (바뀐 줄 표시)"],
@@ -225,12 +224,13 @@ const CHECKS = [
   ["cable", "노트북 연결 단자(HDMI · USB-C 젠더)와 전원"],
   ["net", "노트북 인터넷 (기관 와이파이, 예비로 휴대폰 핫스팟)"],
   ["team", "노트북 Claude가 Team 화면인지(왼쪽 아래 Team 이름), 크롬 확대 125~150%"],
-  ["admin", "Team 관리자 설정: 스킬 · 코드 실행·파일 만들기 · Claude Code 허용, 팀 공유 프로젝트 \"우리 가족 여행 실습\" 준비"],
+  ["admin", "Team 관리자 설정: 스킬 · 코드 실행·파일 만들기 · Claude Code 허용"],
   ["pages", "강의장 PC에 강사용 열람 페이지와 이 기록 페이지 열기"],
   ["netcheck", "교육생 PC 한 대에서 접속 점검 페이지 확인 (Claude 3개는 주소를 눌러 직접 확인)"],
   ["google", "교육생 PC에서 accounts.google.com 로그인 → claude.ai Team 화면"],
   ["copy", "교육생 PC에서 교안 실습의 [복사] 버튼이 되는지 (클립보드)"],
   ["html", "(1일차) 교육생 PC 한 대로 HTML 파일 내려받기 → 바탕화면 더블클릭 실행 확인"],
+  ["install-obs", "(1일차) 옵시디언 설치가 교육생 PC 한 대로 되는지 (관리자 권한 창 여부)"],
   ["install", "(2일차) Aside 설치·로그인이 교육생 PC 한 대로 되는지"],
   ["ghnet", "(2일차) 교육생 PC에서 github.com 로그인 → claude.ai/code에 GitHub 연결(my-tool 하나만)까지 되는지. 막히면 12를 'Claude 채팅 → HTML 내려받기 → Netlify 다시 끌어다 놓기'로 대신"],
   ["paper", "피드백 질문지 출력, 고정관념 세 문장 띄울 화면"],
@@ -288,7 +288,7 @@ function rowHTML(it) {
     <div class="checks steps">${(STEPS[it.id] || []).map(([k, t]) => `<label class="check" id="stp-${it.id}-${k}"><input type="checkbox" data-step-id="${it.id}" data-step-k="${k}"><span>${t}</span></label>`).join("")}</div>
     <div class="notes">
       <label for="issue-${it.id}">막힌 곳과 이유<textarea id="issue-${it.id}" placeholder="예: Aside 설치 때 관리자 권한 창이 뜸"></textarea></label>
-      <label for="text-${it.id}">교재에서 헷갈린 문장<textarea id="text-${it.id}" placeholder="예: 5-3의 '내려받게 해 줘' 설명이 부족"></textarea></label>
+      <label for="text-${it.id}">교재에서 헷갈린 문장<textarea id="text-${it.id}" placeholder="예: 5-2의 '내려받게 해 줘' 설명이 부족"></textarea></label>
     </div>
     <div class="saved" data-saved="${it.id}"></div>
   </article>`;

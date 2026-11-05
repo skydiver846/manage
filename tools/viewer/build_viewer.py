@@ -21,6 +21,7 @@ add("강의 개요", L + "피드백 문항.md", "피드백 문항 (출구 카드
 add("사전 강의", L + "01_구글 업무 계정 만들기.md", "01 구글 업무 계정")
 add("사전 강의", L + "02_ChatGPT와 Claude 가입.md", "02 ChatGPT · Claude · GitHub 가입")
 add("본 강의", L + "03_프롬프트·파일·폴더 활용.md", "03 프롬프트 · 파일 · 폴더")
+add("본 강의", L + "04_옵시디언 설치와 MD 파일 만들기.md", "04 옵시디언: 내 업무 폴더 보기")
 add("본 강의", L + "05_PRD 작성하기.md", "05 PRD 작성")
 add("본 강의", L + "06_스킬 만들기.md", "06 스킬 만들기")
 add("본 강의", L + "07_PRD로 결과물 만들기 (NotebookLM·생성형 AI).md", "07 PRD로 결과물 만들기")
@@ -28,10 +29,8 @@ add("본 강의", L + "08_AI 브라우저 Aside로 코딩 없이 업무 자동�
 add("심화", L + "09_(심화) HTML·CSS·JavaScript로 준비물 화면 뜯어보기.md", "09 HTML · CSS · JS")
 add("심화", L + "10_(심화) 프로토타입 배포.md", "10 Netlify 배포")
 add("심화", L + "12_(심화) Claude Code로 한 번에 만들고 배포하기.md", "12 Claude Code")
-add("선택 자료", L + "04_옵시디언 설치와 MD 파일 만들기.md", "04 옵시디언과 MD (수업 외)")
 add("선택 자료", L + "11_(선택) Firebase로 공용 장부 연결.md", "11 Firebase 공용 장부 (수업 외)")
-add("실습자료", L + "실습자료/PRD_경주 여행 준비물.md", "PRD 여행 준비물 v0.1")
-add("실습자료", L + "실습자료/PRD_경주 여행 준비물 (v0.3 완성본).md", "PRD 여행 준비물 v0.3 (정답)")
+add("실습자료", L + "실습자료/PRD_경주 여행 준비물.md", "PRD 여행 준비물 (예시)")
 add("실습자료", L + "실습자료/경주 여행 자료_관광지 안내.md", "경주 관광지 안내")
 add("실습자료", L + "실습자료/경주 여행 후기_예시.md", "경주 여행 후기")
 add("실습자료", L + "실습자료/PRD 템플릿.md", "PRD 템플릿")
@@ -47,8 +46,8 @@ def addfile(file, short, note, preview=True):
 
 addfile("prototype-demo/steps/1-html.html", "1단계 HTML (뼈대)", "모듈 09 1단계. 색과 동작 없이 화면 구조만 있습니다.")
 addfile("prototype-demo/steps/2-css.html", "2단계 CSS (옷)", "모듈 09 2단계. HTML은 그대로, 모양만 더했습니다.")
-addfile("prototype-demo/steps/3-js.html", "3단계 JS (움직임)", "모듈 09 3단계. 평가를 내면 과목·교관별 평균이 계산됩니다. 새로고침하면 사라집니다.")
-addfile("prototype-demo/index.html", "4단계 완성본 (v0.3)", "모듈 07·09의 완성본. 과목·교관별 집계, 3.5 미만 개선 필요, 브라우저 저장, 결과 내려받기.")
+addfile("prototype-demo/steps/3-js.html", "3단계 JS (움직임)", "모듈 09 3단계. 준비물을 추가하면 누구 것별 챙김률이 계산됩니다. 새로고침하면 사라집니다.")
+addfile("prototype-demo/index.html", "4단계 완성본", "모듈 07·09·10의 여행 준비물 체크 화면. 누구 것별 집계, 50% 미만 서둘러요, 브라우저 저장, 목록 내려받기.")
 addfile("prototype-demo/network-check.html", "강의장 접속 점검 (코드)", "강의장 PC의 Chrome에서 열어야 정확합니다. 이 열람 페이지 안에서는 다른 사이트 접속이 막혀 있어 코드만 보여 줍니다.", preview=False)
 
 qr = None

@@ -18,32 +18,35 @@
     <nav aria-label="목차">
     <div class="group"><a href="index.html">처음 화면</a><a href="prework.html">사전 과제 안내</a></div>
     <div class="group"><h3>사전 강의 (수업 전)</h3><a href="m01.html"><span class="n">01</span>구글 업무 계정 만들기</a><a href="m02.html"><span class="n">02</span>ChatGPT · Claude · GitHub 가입</a></div>
-    <div class="group"><h3>본 강의</h3><a href="m03.html"><span class="n">03</span>프롬프트 · 파일 · 프로젝트</a><a href="m05.html" aria-current="page"><span class="n">05</span>PRD 작성하기</a><a href="m06.html"><span class="n">06</span>스킬 만들기</a><a href="m07.html"><span class="n">07</span>PRD로 결과물 만들기</a><a href="m08.html"><span class="n">08</span>AI 브라우저 Aside</a></div>
+    <div class="group"><h3>본 강의</h3><a href="m03.html"><span class="n">03</span>프롬프트 · 파일 · 프로젝트</a><a href="m04.html"><span class="n">04</span>옵시디언: 내 업무 폴더 보기</a><a href="m05.html" aria-current="page"><span class="n">05</span>PRD 작성하기</a><a href="m06.html"><span class="n">06</span>스킬 만들기</a><a href="m07.html"><span class="n">07</span>PRD로 결과물 만들기</a><a href="m08.html"><span class="n">08</span>AI 브라우저 Aside</a></div>
     <div class="group"><h3>심화 · 직접 만들기</h3><a href="m09.html"><span class="n">09</span>HTML · CSS · JS 맛보기</a><a href="m10.html"><span class="n">10</span>Netlify 배포</a><a href="m12.html"><span class="n">12</span>Claude Code로 내 화면</a></div>
-    <div class="group"><h3>선택 자료 (수업 외)</h3><a href="m04.html"><span class="n">04</span>옵시디언 (선택)</a><a href="m11.html"><span class="n">11</span>Firebase 공용 장부 (선택)</a></div>
+    <div class="group"><h3>선택 자료 (수업 외)</h3><a href="m11.html"><span class="n">11</span>Firebase 공용 장부 (선택)</a></div>
     <div class="group"><h3>자료</h3><a href="prompts.html">프롬프트 모음</a><a href="files.html">실습 파일 내려받기</a></div>
   </nav>
   </aside>
   <main>
-    <article><header class="hero"><span class="hero-no">05</span><div class="hero-body"><p class="eyebrow">1일차 · 1교시</p><h1>PRD 작성하기</h1><div class="hero-prog"><div class="prog" aria-label="전체 10개 중 4번째"><span style="width:40.0%"></span></div><span class="prog-t">4 / 10</span></div></div></header>
-<h2>5-0. 맛보기: 한 줄로 시키면? (3분)</h2>
-<p><strong>먼저 보기:</strong> 앞 화면에서 일정 플래너 예시와 준비물 화면을 함께 봅니다(30초). 이번 과정이 끝나면 이런 <strong>나만의 화면</strong>을 만들어 휴대폰으로 엽니다.</p>
-<p>이제 Claude 새 대화에 <strong>딱 한 줄만</strong> 넣어 봅니다.</p>
-<pre><code>출석 관리 화면 만들어 줘
+    <article><header class="hero"><span class="hero-no">05</span><div class="hero-body"><p class="eyebrow">1일차 · 1교시</p><h1>PRD 작성하기</h1><div class="hero-prog"><div class="prog" aria-label="전체 11개 중 5번째"><span style="width:45.5%"></span></div><span class="prog-t">5 / 11</span></div></div></header>
+<p><strong>이번 시간 목표: 내가 쓰고 싶은 도구의 기획서(PRD) 한 장.</strong> 오늘 저녁 07에서 <strong>화면 시안</strong>이 되고, 내일 12에서 <strong>휴대폰으로 여는 진짜 화면</strong>이 됩니다.</p>
+<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 3분 · 직접 해 보는 부분</p><h2>5-0. 맛보기: 한 줄로 시키면? (3분)</h2>
+<p>Claude 새 대화에 <strong>딱 한 줄만</strong> 넣어 봅니다.</p>
+<pre><code>여행 준비물 앱 만들어 줘
 </code></pre>
+<p>나온 화면을 보고 확인합니다.</p>
 <ul>
-<li>미리보기에 그럴듯한 화면이 나옵니다. 그런데 <strong>우리 기관의 출석 방식</strong>(교시별? 외출·조퇴는? 누가 보는지?)과 맞나요?</li>
-<li>AI는 모르는 것을 <strong>마음대로 상상해서</strong> 채웁니다. 내 업무에 맞는 화면을 받으려면 &quot;무엇을, 누구를 위해, 어디까지&quot;를 먼저 정리해서 건네야 합니다. 그 정리가 <strong>PRD</strong>입니다.</li>
-<li>오늘 쓰는 <strong>내 PRD</strong>는 오늘 마지막 교시(모듈 07)에 <strong>내 화면 시안</strong>이 되고, 내일 오전(모듈 12)에 <strong>웹 주소가 있는 진짜 화면</strong>이 됩니다.</li>
+<li><input type="checkbox"> 할머니 것·아이 것이 <strong>나뉘어</strong> 있나요?</li>
+<li><input type="checkbox"> <strong>덜 챙긴 사람</strong>이 눈에 띄나요?</li>
+<li><input type="checkbox"> 새로고침해도 <strong>체크가 남나요?</strong></li>
 </ul>
-<h2>PRD란?</h2>
+<p>대부분 하나 이상 비어 있습니다. AI는 모르는 것을 <strong>마음대로 상상해서</strong> 채웠기 때문입니다.</p>
+<p>3-1에서 글은 6하원칙 몇 줄로 충분했습니다. 하지만 <strong>화면(프로그램)은 정할 것이 훨씬 많습니다.</strong> 누가 쓰는지, 어떤 기능이 꼭 필요한지, 무엇은 만들지 않을지. 이것을 <strong>한 장에 정리한 것이 PRD</strong>입니다.</p>
+</section><h2>PRD란?</h2>
 <p><strong>PRD (Product Requirements Document, 제품 요구사항 문서)</strong>
 = &quot;<strong>무엇을, 누구를 위해, 왜, 어디까지</strong> 만들 것인가&quot;를 한 장에 정리한 기획서</p>
 <blockquote>
 <p>비유: 집을 짓기 전 <strong>설계 요청서</strong>. 목수(개발자, 또는 AI)가 이것만 보고도 무엇을 지을지 알 수 있어야 합니다.</p>
 </blockquote>
 <h3>왜 AI 시대에 PRD가 중요한가?</h3>
-<pre><code> &quot;여행 준비물 앱 만들어 줘&quot;     →  AI가 마음대로 상상해서 만듦  →  내 의도와 다름
+<pre><code class="language-그림"> &quot;여행 준비물 앱 만들어 줘&quot;     →  AI가 마음대로 상상해서 만듦  →  내 의도와 다름
  PRD.md 를 첨부하고 &quot;만들어 줘&quot;  →  AI가 요구사항대로 만듦       →  한 번에 가까운 결과
 </code></pre>
 <p>PRD는 <strong>한 번 잘 써 두면 여러 도구에 재사용</strong>됩니다.</p>
@@ -55,7 +58,7 @@
 <blockquote>
 <p>💡 <strong>MD 파일이 뭔가요?</strong> 제목·목록 같은 구조를 <code>#</code>, <code>-</code> 같은 간단한 기호로 적은 글 파일(<code>.md</code>)입니다. 사람도 읽기 쉽고 <strong>AI가 가장 잘 읽는</strong> 형식이라, PRD와 스킬을 이 형식으로 주고받습니다. 메모장으로도 열 수 있습니다.</p>
 </blockquote>
-<h2>5-1. PRD의 7가지 구성 (5-2와 함께 7분)</h2>
+<h2>5-1. PRD의 7가지 구성 (7분)</h2>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -111,57 +114,7 @@
 <blockquote>
 <p>💡 <strong>6번 &quot;범위 밖&quot;이 가장 중요합니다.</strong> 이것이 없으면 AI도 사람도 일을 끝없이 키웁니다.</p>
 </blockquote>
-<h2>5-2. 예시 보기 (5-1과 함께 7분)</h2>
-<p>예시 PRD (v0.1 초안, 일부러 구멍이 있음): <span class="file-inline">📎 예시 PRD 파일 <a class="btn" href="files/PRD_%EA%B2%BD%EC%A3%BC%20%EC%97%AC%ED%96%89%20%EC%A4%80%EB%B9%84%EB%AC%BC.md" download="PRD_경주 여행 준비물.md">내려받기</a></span> (우리 가족 여행 준비물 체크)</p>
-<p>7개 항목을 하나씩 보되, <strong>6번 범위 밖</strong>과 <strong>7번 성공 기준</strong>을 특히 눈여겨보세요. 혼자 쓸 때 가장 많이 비워 두는 칸입니다.</p>
-<h2>5-2-1. 구멍 메우기 실습: 누구 것인지 구분이 없는 준비물 (10분)</h2>
-<p>모듈 3에서 AI가 찾아 준 구멍을 직접 고칩니다. 관련된 줄은 1번 배경과 4번 핵심 기능입니다.</p>
-<pre><code>- 가족마다 챙길 것이 다르다. 할머니는 혈압약·무릎 보호대·지팡이, 아이는 멀미약·여벌 옷이 꼭 필요하다.   ← 1번 배경
-| 필수 | 챙김률과 상태 | 전체 준비물 중 챙긴 비율(%)을 보여 주고, 50% 미만이면 &quot;서둘러요&quot; ... |   ← 4번 기능
-</code></pre>
-<p>배경에는 &quot;가족마다 다르다&quot;고 적었는데, 기능은 준비물을 <strong>한 목록으로만</strong> 셉니다. 숫자로 보면 바로 보입니다.</p>
-<pre><code>할머니 것: 혈압약 ✔ 무릎 보호대 ✔ 지팡이 ✔        → 3개 중 3개 100%
-아이 것:   멀미약 ✘ 여벌 옷 ✘ 체험학습 보고서 ✔   → 3개 중 1개  33%  ← 서둘러야 함
-가족 공용: 충전기 ✔ 우산 ✔                        → 2개 중 2개 100%
-한 목록으로만 세면: 8개 중 6개 75% → &quot;순조로움&quot;   ← 아이 것이 안 보임
-</code></pre>
-<div class="lab" data-lab="prdgap"></div>
-
-<p><strong>기획자가 되어</strong> 하나를 골라 보세요 (손들기).</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>방법</th>
-<th>고친 문장</th>
-<th>장점</th>
-<th>단점</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>A. 누구 것 고르기</strong></td>
-<td>준비물마다 <strong>누구 것</strong>(가족 전체 / 나 / 배우자 / 아이 / 할머니)을 고르고, 누구 것이 같은 준비물끼리 집계</td>
-<td>덜 챙긴 사람이 보임</td>
-<td>입력이 하나 늘어남</td>
-</tr>
-<tr>
-<td><strong>B. 표시만</strong></td>
-<td>한 목록으로 집계하되, 약·옷처럼 사람마다 다른 준비물에 &quot;사람별 확인 필요&quot; 표시</td>
-<td>입력 간단</td>
-<td>누가 덜 챙겼는지는 모름</td>
-</tr>
-<tr>
-<td><strong>C. 범위 밖으로</strong></td>
-<td>이번에는 누구 것 구분을 하지 않음을 6번 칸에 명시</td>
-<td>가장 빠름</td>
-<td>실제 짐 싸기에선 문제</td>
-</tr>
-</tbody></table></div>
-<ul>
-<li>정답은 없습니다. <strong>어느 쪽이든 PRD에 적는 것</strong>이 핵심입니다. C도 훌륭한 답입니다. &quot;알고 있지만 안 한다&quot;와 &quot;몰라서 빠뜨림&quot;은 다릅니다.</li>
-<li>이후 실습은 <strong>A</strong> 기준으로 진행합니다.</li>
-<li>고친 뒤 버전을 <strong>v0.1 → v0.2</strong>로 올립니다.</li>
-</ul>
-<h2>5-3. 내 PRD 쓰기 — AI와 함께 (인터뷰 방식, 30분)</h2>
+<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 40분 · 직접 해 보는 부분</p><h2>5-2. 내 PRD 쓰기 — AI와 함께 (인터뷰 방식, 40분)</h2>
 <p>빈 양식을 혼자 채우기 어렵다면 <strong>AI가 나를 인터뷰하게</strong> 합니다.</p>
 <ol>
 <li>Claude 새 대화에 <strong>인터뷰 프롬프트</strong>를 붙여넣습니다. 아래 [바로 해 보기]에서 예시를 고르거나 칸을 내 말로 바꾼 뒤 <strong>[프롬프트 복사]</strong> 합니다.</li>
@@ -181,7 +134,7 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 </blockquote>
 <ol start="2">
 <li>AI 질문에 답하기 → 마지막에 이어서 입력: <code>이 PRD를 &quot;PRD_내 도구.md&quot; 파일로 내려받게 해 줘</code> → 내려받은 파일을 내 업무 폴더 <code>01_기획(PRD)</code> 에 옮기기</li>
-<li><strong>[확인 필요]</strong> 부분을 직접 채우고(<strong>Ctrl + F</strong> 로 검색), 틀린 내용을 고칩니다. <strong>최종 책임자는 나</strong>입니다.</li>
+<li><strong>옵시디언</strong>(04)에서 <code>01_기획(PRD)</code> → 내 PRD를 엽니다. <strong>[확인 필요]</strong> 부분을 직접 채우고(<strong>Ctrl + F</strong> 로 검색), 틀린 내용을 고칩니다. 옵시디언에서 고치면 바로 저장됩니다. <strong>최종 책임자는 나</strong>입니다.</li>
 </ol>
 <h3>주제 고르는 기준 (2일차까지 이어 씁니다)</h3>
 <p>여기서 쓰는 <strong>내 PRD</strong>는 06 스킬, 07 화면 시안을 거쳐 2일차 모듈 12에서 <strong>내 화면</strong>으로 만들어집니다. 그래서 주제를 처음에 잘 고르는 것이 중요합니다.</p>
@@ -257,10 +210,10 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 <td>주간 식단표</td>
 <td>교육생 출결·외출 관리 화면</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div></section>
 <hr>
 <h2>좋은 PRD 체크리스트</h2>
-<pre><code>□ 처음 보는 사람이 읽어도 무엇을 만드는지 1분 안에 이해된다
+<pre><code class="language-그림">□ 처음 보는 사람이 읽어도 무엇을 만드는지 1분 안에 이해된다
 □ 핵심 기능에 우선순위(필수/있으면 좋음)가 있다
 □ &quot;범위 밖&quot; 항목이 최소 2개 있다
 □ 성공 기준이 체크 가능한 문장이다 (&quot;빠르게&quot; ✗ → &quot;3초 안에&quot; ✓)
@@ -279,7 +232,7 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 <li>[확인 필요] 표시를 모두 직접 채우셨나요?</li>
 </ol>
 </article>
-    <div class="pager"><a class="prev" href="m03.html"><span>← 이전</span>03 프롬프트 · 파일 · 프로젝트</a><a class="next" href="m06.html"><span>다음 →</span>06 스킬 만들기</a></div>
+    <div class="pager"><a class="prev" href="m04.html"><span>← 이전</span>04 옵시디언: 내 업무 폴더 보기</a><a class="next" href="m06.html"><span>다음 →</span>06 스킬 만들기</a></div>
   </main>
 </div>
 <script src="assets/site.js"></script>

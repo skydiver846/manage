@@ -23,7 +23,7 @@ const MODULES = [
   ["01_구글 업무 계정 만들기", "구글 업무 계정 만들기", "사전 과제"],
   ["02_ChatGPT와 Claude 가입", "ChatGPT · Claude · GitHub 가입", "사전 과제"],
   ["03_프롬프트·파일·폴더 활용", "프롬프트 · 파일 · 프로젝트", "2교시"],
-  ["04_옵시디언 설치와 MD 파일 만들기", "옵시디언 (선택)", "수업 외"],
+  ["04_옵시디언 설치와 MD 파일 만들기", "옵시디언: 내 업무 폴더 보기", "8분"],
   ["05_PRD 작성하기", "PRD 작성하기", "1교시"],
   ["06_스킬 만들기", "스킬 만들기", "1교시"],
   ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "1교시"],
@@ -168,9 +168,9 @@ function nav(current) {
   return `<nav aria-label="목차">
     <div class="group">${link("index.html", "처음 화면")}${SIGNUP_PAGE ? link("signup.html", SIGNUP_OPEN ? "교육 신청" : "교육 신청 안내") : ""}${link("prework.html", "사전 과제 안내")}</div>
     <div class="group"><h3>사전 강의 (수업 전)</h3>${mods(1, 2)}</div>
-    <div class="group"><h3>본 강의</h3>${mods(3, 3)}${mods(5, 8)}</div>
+    <div class="group"><h3>본 강의</h3>${mods(3, 8)}</div>
     <div class="group"><h3>심화 · 직접 만들기</h3>${mods(9, 10)}${mods(12, 12)}</div>
-    <div class="group"><h3>선택 자료 (수업 외)</h3>${mods(4, 4)}${mods(11, 11)}</div>
+    <div class="group"><h3>선택 자료 (수업 외)</h3>${mods(11, 11)}</div>
     <div class="group"><h3>자료</h3>${link("prompts.html", "프롬프트 모음")}${link("files.html", "실습 파일 내려받기")}</div>
   </nav>`;
 }
@@ -215,8 +215,8 @@ function hero(m, title) {
   return `<header class="hero"><span class="hero-no">${String(m.num).padStart(2, "0")}</span><div class="hero-body"><p class="eyebrow">${where}${m.num <= 2 || OPTIONAL.has(m.num) ? "" : " · " + esc(m.time)}</p><h1>${title}</h1><div class="hero-prog">${prog}</div></div></header>`;
 }
 
-// 이전/다음은 수업 순서대로. 선택 자료(04·11)는 순서에서 빼고, 선택 자료 페이지에서는 번호 앞뒤 수업으로 잇는다
-const OPTIONAL = new Set([4, 11]);
+// 이전/다음은 수업 순서대로. 선택 자료(11)는 순서에서 빼고, 선택 자료 페이지에서는 번호 앞뒤 수업으로 잇는다
+const OPTIONAL = new Set([11]);
 const SEQ = MODULES.filter((m) => !OPTIONAL.has(m.num));
 function pagerFor(i) {
   const cur = MODULES[i];
@@ -250,7 +250,28 @@ function foldLater(html) {
   }
   return out + html.slice(pos);
 }
-const render = (md) => foldLater(enhance(marked.parse(wikify(studentMarkdown(md)), { gfm: true })));
+// 교안에서 제목 바로 위에 <!-- 실습 --> 를 단 절은 "✋ 실습" 상자로 감싼다. 설명(읽기)과 실습(손으로 하기)을 눈으로 나누려는 것.
+// 그 제목부터 같은 단계 이상의 다음 제목 직전까지. 절 끝의 가로줄은 상자 밖에 둔다.
+function wrapPractice(html) {
+  // 접힌 절(<details>) 바로 뒤의 제목이면 표시가 접힌 상자 안에 들어가 있으므로, 닫는 태그 뒤로 옮겨 읽는다
+  html = html.replace(/<!-- 실습 -->((?:\s*<\/details>)*)\s*<h([2-4])>/g, "$1<h$2 data-do>");
+  const heads = [...html.matchAll(/<h([1-4])( data-do)?>([\s\S]*?)<\/h\1>/g)].map((m) => ({ at: m.index, end: m.index + m[0].length, level: +m[1], doIt: !!m[2], inner: m[3] }));
+  let out = "", pos = 0;
+  for (let i = 0; i < heads.length; i++) {
+    const h = heads[i];
+    if (!h.doIt || h.at < pos) continue;
+    const next = heads.slice(i + 1).find((n) => n.level <= h.level);
+    const stop = next ? next.at : html.length;
+    const body = html.slice(h.end, stop);
+    const hr = body.match(/\s*<hr>\s*$/);
+    const min = (h.inner.replace(/<[^>]+>/g, "").match(/(\d+)\s*분/) || [])[1];
+    const tag = `<p class="do-tag"><span>✋ 실습</span>${min ? ` 약 ${min}분` : ""} · 직접 해 보는 부분</p>`;
+    out += html.slice(pos, h.at) + `<section class="do do-h${h.level}">${tag}<h${h.level}>${h.inner}</h${h.level}>${hr ? body.slice(0, hr.index) : body}</section>${hr ? hr[0] : ""}`;
+    pos = stop;
+  }
+  return (out + html.slice(pos)).replace(/ data-do>/g, ">");
+}
+const render = (md) => wrapPractice(foldLater(enhance(marked.parse(wikify(studentMarkdown(md)), { gfm: true }))));
 
 // ── 만들기 ──
 fs.rmSync(OUT, { recursive: true, force: true });
@@ -268,7 +289,7 @@ execFileSync("zip", ["-q", "-r", path.join(OUT, FILES.skill[0]), "prd-interview"
 
 MODULES.forEach((m, i) => {
   const md = fs.readFileSync(path.join(LECTURE, m.file + ".md"), "utf8");
-  let html = render(md).replace(/<h1>([\s\S]*?)<\/h1>/, (_, t) => hero(m, t.replace(/^모듈\s*\d+\.\s*/, "")));
+  let html = render(md).replace(/<h1>([\s\S]*?)<\/h1>/, (_, t) => hero(m, t.replace(/^(모듈|선택 자료)\s*\d+\s*(\([^)]*\))?\.\s*/, "")));
   fs.writeFileSync(path.join(OUT, m.page), page(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`, html, pagerFor(i)));
 });
 
@@ -526,7 +547,7 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <ol class="mods">${modItems(mods3(3, 7))}</ol>
   <h2>2일차 (6~10교시) · 코딩 없이 자동화, 웹에 공개하기, 내 업무 화면 만들기</h2>
   <ol class="mods">${modItems(mods3(8, 12))}</ol>
-  <p class="note">2일 연속, 총 10시간입니다. <b>1일차 16:00~21:00, 2일차 08:00~13:00</b> (하루 5교시, 1교시 = 50분 수업 + 10분 휴식). 04 옵시디언과 11 Firebase 공용 장부는 수업 외 선택 자료입니다.</p>
+  <p class="note">2일 연속, 총 10시간입니다. <b>1일차 16:00~21:00, 2일차 08:00~13:00</b> (하루 5교시, 1교시 = 50분 수업 + 10분 휴식). 11 Firebase 공용 장부는 수업 외 선택 자료입니다.</p>
   <h2>바로가기</h2>
   <div class="tiles">${siteLinks}</div>
   <h2>자료</h2>
