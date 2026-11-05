@@ -289,7 +289,7 @@ execFileSync("zip", ["-q", "-r", path.join(OUT, FILES.skill[0]), "prd-interview"
 
 MODULES.forEach((m, i) => {
   const md = fs.readFileSync(path.join(LECTURE, m.file + ".md"), "utf8");
-  let html = render(md).replace(/<h1>([\s\S]*?)<\/h1>/, (_, t) => hero(m, t.replace(/^모듈\s*\d+\.\s*/, "")));
+  let html = render(md).replace(/<h1>([\s\S]*?)<\/h1>/, (_, t) => hero(m, t.replace(/^(모듈|선택 자료)\s*\d+\s*(\([^)]*\))?\.\s*/, "")));
   fs.writeFileSync(path.join(OUT, m.page), page(m.page, `${String(m.num).padStart(2, "0")} ${m.short}`, html, pagerFor(i)));
 });
 

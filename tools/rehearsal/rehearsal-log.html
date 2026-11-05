@@ -136,7 +136,7 @@ const PLAN = [
   { round: "2일차", sub: "08:00~13:00 · 6~10교시 · 코딩 없이 자동화 → 화면 뜯어보기·웹 공개 → 내 화면 → 처음 질문, 다시", items: [
     { id: "p07", label: "6교시", title: "AI 브라우저로 업무 자동화", mods: "출석 3분 · 08 Aside 47분(설치 10분 포함)", plan: 50 },
     { id: "p0910", label: "7교시", title: "화면 뜯어보기와 웹에 공개", mods: "09 1~4단계 17분 · 10 Netlify 32분", plan: 50 },
-    { id: "p10", label: "8~9교시", title: "Claude Code로 내 화면 만들고 배포", mods: "10-7 연결 · 12 (A 내 PRD / B 공공데이터)", plan: 100 },
+    { id: "p10", label: "8~9교시", title: "Claude Code로 내 화면 만들고 배포", mods: "12 (0단계 연결 · A 내 PRD / B 공공데이터)", plan: 100 },
     { id: "p12", label: "10교시", title: "처음 질문, 다시 · 결과 공유 · 의견 나누기", mods: "12 끝 · Team 저장 안내 · 오프라인 의견", plan: 50 } ] },
   { round: "과정 뒤 (선택)", sub: "시간 날 때. 교육생이 집에서 이어서 할 것들이 되는지만 확인", items: [
     { id: "after", label: "과정 뒤", title: "09 이어서 해 보기 · 과제 안내", mods: "09 ①~④ · 과제 안내", plan: 30 } ] },
@@ -198,7 +198,7 @@ const STEPS = {
     ["lab-ledger", "교안 실습: 각자 수첩 vs 공용 장부"],
   ],
   p10: [
-    ["repo", "10-7 my-tool 저장소(README 체크) + Claude Code 연결 (Only select repositories)"],
+    ["repo", "12 0단계 my-tool 저장소(README 체크) + Claude Code 연결 (Only select repositories)"],
     ["fill-cc", "빈칸 채우기: Claude Code 지시문 (A 내 PRD / B 공공데이터)"],
     ["csv", "(B) 공공데이터 CSV 내려받기 → data.csv 업로드"],
     ["work", "Claude Code 작업·허락 화면·연습장(브랜치)"],
@@ -210,7 +210,6 @@ const STEPS = {
     ["share", "결과 공유: \"나는 ○○를 만들어 ○○에 쓴다\" 한 줄"],
     ["save", "Team 사용 기간·저장 안내 (12 끝)"],
     ["talk", "의견 나누기 (질문지)"],
-    ["hw", "과정 뒤 과제 · Team 사용 기간 안내"],
   ],
   after: [
     ["ai-edit", "09 ① AI에게 고쳐 달라고 하고, 받은 코드로 실행 (바뀐 줄 표시)"],

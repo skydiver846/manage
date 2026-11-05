@@ -25,7 +25,7 @@
   </nav>
   </aside>
   <main>
-    <article><header class="hero"><span class="hero-no">12</span><div class="hero-body"><p class="eyebrow">2일차 · 심화 · 2교시</p><h1>모듈 12 (심화 3). Claude Code로 내 PRD 화면 만들고 배포하기</h1><div class="hero-prog"><div class="prog" aria-label="전체 11개 중 11번째"><span style="width:100.0%"></span></div><span class="prog-t">11 / 11</span></div></div></header>
+    <article><header class="hero"><span class="hero-no">12</span><div class="hero-body"><p class="eyebrow">2일차 · 심화 · 2교시</p><h1>Claude Code로 내 PRD 화면 만들고 배포하기</h1><div class="hero-prog"><div class="prog" aria-label="전체 11개 중 11번째"><span style="width:100.0%"></span></div><span class="prog-t">11 / 11</span></div></div></header>
 <p>📌 <strong>이 과정의 Claude Team 계정에는 Claude Code가 포함되어 있어 모두 직접 실습합니다.</strong></p>
 <p>모듈 10에서는 준비물 화면을 <strong>손으로</strong> 끌어다 놓아 배포했습니다. 이번에는 어제 쓰고 다듬은 <strong>내 PRD</strong>를 <strong>AI 에이전트(Claude Code)</strong> 에게 건네, 어제 시안으로 본 <strong>내 화면을 제대로 만들어 웹에 공개</strong>합니다. 말로 지시하면 Claude가 저장소에 파일을 만들고, 시험하고, 커밋·푸시까지 합니다. 사람은 검토하고 승인한 뒤 배포합니다.</p>
 <p>과정의 마지막 장면은 <strong>각자 자기 PRD로 만든 화면을 휴대폰으로 여는 것</strong>입니다. 여행 준비물 화면을 따라 만들었던 그 흐름을, 이번엔 내 주제로 합니다.</p>
@@ -57,13 +57,28 @@
 </tr>
 </tbody></table></div>
 <hr>
-<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 2분 · 직접 해 보는 부분</p><h2>0단계: 준비 확인 (2분)</h2>
-<p>모듈 10의 <strong>7번</strong>에서 <code>my-tool</code> 저장소를 만들고 Claude Code에 연결해 두었습니다.</p>
+<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 5분 · 직접 해 보는 부분</p><h2>0단계: GitHub 저장소 만들고 Claude Code 연결하기 (8교시 시작, 5분)</h2>
+<p>GitHub은 <strong>파일과 고친 기록을 보관하는 창고</strong>입니다(가입은 사전 과제). 고칠 때마다 남기는 기록(<strong>커밋</strong>)은 게임의 <strong>세이브 포인트</strong>와 같아서, 화면이 망가져도 그 시점으로 돌아갈 수 있습니다. 창고는 <strong>공유 클라우드 폴더</strong>처럼 다른 서비스(Netlify)가 지켜볼 수 있습니다. 이번에는 Claude Code가 이 창고에 코드를 쓰고, Netlify가 창고를 지켜보다가 바뀌면 <strong>저절로 다시 배포</strong>합니다. 10에서 손으로 끌어다 놓은 일을 AI와 Netlify가 대신하는 셈입니다.</p>
+<p><strong>① 내 화면용 저장소 만들기</strong></p>
 <ol>
-<li>업무 Chrome 프로필에서 <a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a> 접속</li>
-<li>작업할 저장소로 <code>my-tool</code> 선택</li>
+<li><a class="site" href="https://github.com/" target="_blank" rel="noopener"><code>github.com</code></a> 로그인 → 오른쪽 위 <strong>[+]</strong> → <strong>[New repository]</strong></li>
+<li><strong>Repository name</strong>: <code>my-tool</code></li>
+<li><strong>Private</strong> 선택 — 내 업무 내용이 담기므로 이번에는 <strong>비공개</strong></li>
+<li><strong>Add a README file</strong> ✅ 체크 (빈 저장소면 Claude Code가 작업을 시작하지 못합니다)</li>
+<li><strong>[Create repository]</strong></li>
 </ol>
-<p><strong>아직 안 했다면</strong> 모듈 10의 7번(①저장소 만들기, ②Claude Code 연결)을 지금 합니다(약 10분). 저장소는 <strong>Private</strong>, README 체크, GitHub 앱은 <strong>Only select repositories → <code>my-tool</code> 하나만</strong>입니다.</p>
+<p><strong>② Claude Code 연결</strong></p>
+<ol>
+<li>업무 Chrome 프로필에서 <a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a> 접속 (Claude Code <strong>웹 버전</strong>. 프로그램 설치가 필요 없어 행정망 PC에 적합)</li>
+<li><strong>GitHub 연결</strong>: 안내에 따라 Claude GitHub 앱을 설치<ul>
+<li>저장소 선택에서 <strong>Only select repositories</strong> → <code>my-tool</code> <strong>하나만</strong> 선택</li>
+</ul>
+</li>
+<li>작업할 저장소로 <code>my-tool</code> 을 고릅니다. 목록에 보이면 준비 완료입니다.</li>
+</ol>
+<blockquote>
+<p>💡 <strong>왜 저장소 하나만 고를까?</strong> 로그인은 &quot;누구인지 확인&quot;하는 <strong>사원증</strong>, 저장소를 고르는 것은 &quot;어느 방에 들어갈 수 있는지&quot; 정하는 <strong>출입 권한</strong>입니다. 사원증이 있어도 서버실에 아무나 들어가지 않듯, AI에게도 <strong>필요한 방(저장소) 하나만</strong> 열어 줍니다.</p>
+</blockquote>
 </section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 5분 · 직접 해 보는 부분</p><h2>1단계: 내 PRD 다듬기 (5분)</h2>
 <p><strong>옵시디언</strong>에서 <code>01_기획(PRD)</code> 의 <strong>내 PRD</strong>를 열어, 어제 07-3에서 맨 아래 <code>## 바꿀 점</code> 에 적어 둔 3가지를 본문에 반영하고 아래 세 가지를 확인합니다.</p>
 <div class="table-wrap"><table>

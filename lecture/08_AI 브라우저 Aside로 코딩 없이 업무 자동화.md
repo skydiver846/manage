@@ -1,4 +1,4 @@
-# 모듈 08. AI 브라우저 Aside로 코딩 없이 업무 자동화
+# 모듈 8. AI 브라우저 Aside로 코딩 없이 업무 자동화
 
 ← [[07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)]] | 다음 → [[09_(심화) HTML·CSS·JavaScript로 준비물 화면 뜯어보기]]
 

@@ -25,10 +25,10 @@
   </nav>
   </aside>
   <main>
-    <article><header class="hero"><span class="hero-no">10</span><div class="hero-body"><p class="eyebrow">2일차 · 심화 · 30분</p><h1>모듈 10 (심화 2). 프로토타입을 웹에 공개하기 (Netlify)</h1><div class="hero-prog"><div class="prog" aria-label="전체 11개 중 10번째"><span style="width:90.9%"></span></div><span class="prog-t">10 / 11</span></div></div></header>
+    <article><header class="hero"><span class="hero-no">10</span><div class="hero-body"><p class="eyebrow">2일차 · 심화 · 30분</p><h1>프로토타입을 웹에 공개하기 (Netlify)</h1><div class="hero-prog"><div class="prog" aria-label="전체 11개 중 10번째"><span style="width:90.9%"></span></div><span class="prog-t">10 / 11</span></div></div></header>
 <p>모듈 7·9의 여행 준비물 화면을 <strong>누구나 휴대폰으로 여는 웹 주소</strong>로 공개합니다. 폴더를 <strong>끌어다 놓기만 하면</strong> 주소가 생깁니다. 설치 없이 웹 브라우저만으로, 비용 0원입니다. 모든 작업은 <strong>파란 &quot;업무&quot; Chrome 프로필 창</strong>에서 합니다.</p>
 <blockquote>
-<p>⏱ <strong>수업에서는 약 30분입니다</strong> (2일차 7교시 뒷부분, 09 맛보기 바로 다음). 도입 2분 뒤 0~6단계를 합니다. 7단계(GitHub 연결)는 8교시 시작 5분에 함께 합니다.</p>
+<p>⏱ <strong>수업에서는 약 30분입니다</strong> (2일차 7교시 뒷부분, 09 맛보기 바로 다음). 도입 2분 뒤 0~6번을 합니다.</p>
 </blockquote>
 <h2>왜 올려야 할까: 내 PC는 &quot;우리 집&quot; (2분)</h2>
 <p>09에서 연 화면의 주소창을 보면 <code>file:///C:/Users/…</code> 처럼 <strong>내 PC 안의 위치</strong>가 적혀 있습니다. 이 주소를 가족 단톡방에 보내면 어떻게 될까요? 가족의 휴대폰은 <strong>자기 휴대폰 안에서</strong> 그 위치를 찾다가 &quot;열 수 없음&quot;이 됩니다. 친구에게 &quot;우리 집 냉장고에 있어&quot;라고 하면, 친구는 <strong>친구 자신의 집</strong> 냉장고를 여는 것과 같습니다.</p>
@@ -213,56 +213,6 @@
 <p>💡 이 교육자료 사이트도 처음엔 ①이었습니다. 수요조사 응답을 한곳에 모으려고 작은 서버 기능을 붙여 <strong>②로 한 칸</strong> 올렸습니다. 실무에서 여러 사람의 회신을 모을 때는 <strong>네이버 폼</strong>(또는 구글 설문·시트)으로 받고, 내려받은 결과를 AI에게 맡겨 정리하면 됩니다(모듈 3·6에서 한 방법).</p>
 </blockquote>
 <p>화면을 공개하는 길도 여러 가지입니다. 오늘은 Netlify에 폴더를 끌어다 놓았지만, 예를 들어 03 여는 이야기의 <strong>여행길 도우미</strong>는 ChatGPT에서 만든 화면을 ChatGPT에서 바로 공개한 것입니다.</p>
-<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 5분 · 직접 해 보는 부분</p><h2>7. 다음 실습 준비: Claude Code에 GitHub 연결하기 (8교시 시작, 5분)</h2>
-<p>2일차 8~9교시(모듈 12)에 <strong>내 PRD 화면</strong>을 만들 저장소와 Claude Code 연결을 지금 미리 해 둡니다. 처음 연결할 때는 권한 승인 화면이 여러 번 나와 시간이 걸리기 때문입니다.</p>
-<p>GitHub은 <strong>파일과 고친 기록을 보관하는 창고</strong>입니다(가입은 사전 과제). 고칠 때마다 남기는 기록(<strong>커밋</strong>)은 게임의 <strong>세이브 포인트</strong>와 같아서, 화면이 망가져도 그 시점으로 돌아갈 수 있습니다. 창고는 <strong>공유 클라우드 폴더</strong>처럼 다른 서비스(Netlify)가 지켜볼 수 있습니다. 모듈 12에서는 Claude Code가 이 창고에 코드를 쓰고, Netlify가 창고를 지켜보다가 바뀌면 <strong>저절로 다시 배포</strong>합니다. 오늘 손으로 끌어다 놓은 일을 AI와 Netlify가 대신하는 셈입니다.</p>
-<p><strong>① 내 화면용 저장소 만들기</strong></p>
-<ol>
-<li><a class="site" href="https://github.com/" target="_blank" rel="noopener"><code>github.com</code></a> 로그인 → 오른쪽 위 <strong>[+]</strong> → <strong>[New repository]</strong></li>
-<li><strong>Repository name</strong>: <code>my-tool</code></li>
-<li><strong>Private</strong> 선택 — 내 업무 내용이 담기므로 이번에는 <strong>비공개</strong></li>
-<li><strong>Add a README file</strong> ✅ 체크 (빈 저장소면 Claude Code가 작업을 시작하지 못합니다)</li>
-<li><strong>[Create repository]</strong></li>
-</ol>
-<p><strong>② Claude Code 연결</strong></p>
-<ol>
-<li>업무 Chrome 프로필에서 <a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a> 접속 (Claude Code <strong>웹 버전</strong>. 프로그램 설치가 필요 없어 행정망 PC에 적합)</li>
-<li><strong>GitHub 연결</strong>: 안내에 따라 Claude GitHub 앱을 설치<ul>
-<li>저장소 선택에서 <strong>Only select repositories</strong> → <code>my-tool</code> <strong>하나만</strong> 선택</li>
-</ul>
-</li>
-<li>작업할 저장소 목록에 <code>my-tool</code> 이 보이면 완료. <strong>아직 아무것도 시키지 않습니다.</strong></li>
-</ol>
-<blockquote>
-<p>💡 <strong>왜 저장소 하나만 고를까?</strong> 로그인은 &quot;누구인지 확인&quot;하는 <strong>사원증</strong>, 저장소를 고르는 것은 &quot;어느 방에 들어갈 수 있는지&quot; 정하는 <strong>출입 권한</strong>입니다. 사원증이 있어도 서버실에 아무나 들어가지 않듯, AI에게도 <strong>필요한 방(저장소) 하나만</strong> 열어 줍니다.</p>
-</blockquote></section>
-<hr>
-<h2>더 알아보기: 손으로 끌어다 놓기 vs 자동 배포</h2>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th></th>
-<th>오늘 (끌어다 놓기)</th>
-<th>모듈 12 (자동 배포)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>고치는 곳</td>
-<td>내 컴퓨터 파일</td>
-<td>GitHub 창고 (Claude Code가 고침)</td>
-</tr>
-<tr>
-<td>다시 배포</td>
-<td>내가 폴더를 다시 끌어다 놓음</td>
-<td>Netlify가 창고를 지켜보다 <strong>저절로</strong></td>
-</tr>
-<tr>
-<td>어울리는 경우</td>
-<td>화면 한 장, 가끔 고침</td>
-<td>자주 고치거나 AI에게 맡길 때</td>
-</tr>
-</tbody></table></div>
-<hr>
 <blockquote>
 <p>💼 <strong>업무에서는?</strong> 부서 안내 페이지나 행사 신청 안내를 같은 방법으로 공개하고, 링크(또는 QR)로 공유할 수 있습니다. 여러 사람의 회신을 모아야 하면 폼이나 공용 장부가 필요합니다.</p>
 </blockquote>
@@ -305,17 +255,12 @@
 <td>화면이 깨짐</td>
 <td><strong>Deploys</strong> 에서 이전 배포 → <strong>[Publish deploy]</strong> 로 되돌리기</td>
 </tr>
-<tr>
-<td><a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a> 에서 <code>my-tool</code> 이 안 보임</td>
-<td>GitHub 앱 설치 때 <strong>Only select repositories</strong> 에서 <code>my-tool</code> 을 골랐는지 확인</td>
-</tr>
 </tbody></table></div>
 <h2>✅ 확인 질문 (인터뷰)</h2>
 <ol>
 <li>내 준비물 화면의 <strong>netlify.app 주소</strong>를 휴대폰으로 열어 준비물을 체크해 보셨나요?</li>
 <li>제목을 고쳐 다시 끌어다 놓은 뒤 <strong>같은 주소</strong>에서 바뀐 것을 확인하셨나요?</li>
 <li>짝꿍 휴대폰에서 한 체크가 내 휴대폰에 안 보이는 이유는?</li>
-<li><a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a> 에서 작업할 저장소로 <code>my-tool</code> 이 보이나요?</li>
 </ol>
 </article>
     <div class="pager"><a class="prev" href="m09.html"><span>← 이전</span>09 HTML · CSS · JS 맛보기</a><a class="next" href="m12.html"><span>다음 →</span>12 Claude Code로 내 화면</a></div>
