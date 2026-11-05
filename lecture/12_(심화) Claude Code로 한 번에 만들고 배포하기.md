@@ -50,8 +50,10 @@ GitHub은 **파일과 고친 기록을 보관하는 창고**입니다(가입은 
 
 **② Claude Code 연결**
 1. 업무 Chrome 프로필에서 `claude.ai/code` 접속 (Claude Code **웹 버전**. 프로그램 설치가 필요 없어 행정망 PC에 적합)
-2. **GitHub 연결**: 안내에 따라 Claude GitHub 앱을 설치
-   - 저장소 선택에서 **Only select repositories** → `my-tool` **하나만** 선택
+2. **GitHub 연결** (PC에 프로그램을 까는 것이 아니라, 브라우저에서 **Claude에게 내 GitHub 출입 권한을 주는** 과정입니다)
+   - 화면의 **[GitHub 연결]**(Connect GitHub) 버튼 → GitHub 로그인(사전 과제에서 만든 계정)
+   - **Install Claude** 권한 화면이 나오면 **Only select repositories** → `my-tool` **하나만** 고르고 → **[Install]** (영어 버튼 이름이 Install이라 "설치"라고 부릅니다)
+   - 다시 `claude.ai/code` 화면으로 돌아옵니다
 3. 작업할 저장소로 `my-tool` 을 고릅니다. 목록에 보이면 준비 완료입니다.
 
 > 💡 **왜 저장소 하나만 고를까?** 로그인은 "누구인지 확인"하는 **사원증**, 저장소를 고르는 것은 "어느 방에 들어갈 수 있는지" 정하는 **출입 권한**입니다. 사원증이 있어도 서버실에 아무나 들어가지 않듯, AI에게도 **필요한 방(저장소) 하나만** 열어 줍니다.
@@ -168,7 +170,7 @@ GitHub은 **파일과 고친 기록을 보관하는 창고**입니다(가입은 
 1. **합치기 (버튼 두 번):** Claude Code 화면의 **[PR 만들기]**(Create PR) → 열린 GitHub 화면에서 초록 버튼 **[Merge pull request]** → **[Confirm merge]**
    - PR(풀 리퀘스트)은 "연습장의 내용을 원본에 합쳐도 될까요?"라는 **결재 요청서**입니다. 합치기를 누르는 것이 **결재**입니다.
 2. Netlify에서 **[Add new site] → [Import an existing project]** → **GitHub** 선택
-   - 처음이면 Netlify GitHub 앱 설치 화면이 나옵니다 → **Only select repositories** → `my-tool` **하나만** 선택
+   - 처음이면 GitHub에서 **Netlify에게 출입 권한을 주는** 화면(Install Netlify)이 나옵니다 → **Only select repositories** → `my-tool` **하나만** 선택 → **[Install]**. 이것도 PC에 까는 것이 아닙니다
 3. 목록에서 `my-tool` → 설정은 **비워 둔 채로** (Build command 비움, Publish directory 비움) → **[Deploy]**
 4. 주소 이름 바꾸기 (모듈 10의 3번): 예) `my-tool-hong` → `https://my-tool-hong.netlify.app`
 5. 그 주소를 QR로 만들어 **내 휴대폰**으로 열기 (모듈 10의 4번)
