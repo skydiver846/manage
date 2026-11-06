@@ -389,7 +389,7 @@
 </thead>
 <tbody><tr>
 <td><strong>[Create PR]</strong></td>
-<td>Claude Code 화면</td>
+<td>Claude Code <strong>채팅 옆 패널의 Changes(변경 사항) 카드</strong></td>
 <td>결재 요청서를 <strong>올리기</strong> (상신)</td>
 </tr>
 <tr>
@@ -399,11 +399,12 @@
 </tr>
 </tbody></table></div>
 <ol>
-<li><strong>결재 올리기:</strong> Claude Code 화면의 <strong>[Create PR]</strong> 를 누릅니다. (한국어 화면이면 &quot;PR 만들기&quot;)<ul>
-<li>버튼이 안 보이면: GitHub <code>my-tool</code> 저장소 첫 화면 위쪽의 노란 띠 <strong>[Compare &amp; pull request]</strong> 를 눌러도 됩니다.</li>
+<li><strong>결재 올리기:</strong> Claude Code 화면에서 <strong>채팅 옆 패널</strong>에 있는 <strong>Changes</strong>(변경 사항) 카드를 찾습니다. <code>+120 -0</code> 처럼 바뀐 줄 수가 적힌 카드입니다. 그 카드의 <strong>[Create PR]</strong> 을 누르면 결재 요청서(PR)가 제목·설명까지 채워져 바로 만들어집니다.<ul>
+<li><strong>채팅 옆 패널이 안 보이면:</strong> 화면 맨 위 세션 제목 줄의 <strong>패널 보기 아이콘</strong>(Show session rail) 또는 <strong>⋮</strong> 메뉴에서 켭니다.</li>
+<li><strong>그래도 못 찾겠으면:</strong> 채팅창에 <code>결재 요청서(PR)를 만들어 주고 주소를 알려 줘</code> 라고 보내도 됩니다.</li>
 </ul>
 </li>
-<li>GitHub 화면이 열리고 초록 버튼 <strong>[Create pull request]</strong> 가 보이면 누릅니다. (Claude가 이미 만들어 둔 경우는 이 단계가 없습니다)</li>
+<li>Changes 카드에 생긴 결재 요청서(PR) 제목이나, Claude가 알려 준 주소를 누르면 GitHub 화면이 열립니다.</li>
 <li>아래로 내려 초록 버튼 <strong>[Merge pull request]</strong> → <strong>[Confirm merge]</strong></li>
 <li>보라색 <strong>Merged</strong> 표시가 보이면 끝입니다. 옆의 <strong>[Delete branch]</strong> 는 눌러도 되고 안 눌러도 됩니다(다 쓴 연습장 지우기).</li>
 </ol>
@@ -455,7 +456,7 @@
 <div class="lab" data-lab="fill" data-tpl="cc-fix"></div>
 
 <ol start="2">
-<li><strong>결재 올리기:</strong> Claude Code 화면에서 <strong>[Create PR]</strong> → 열린 GitHub의 결재 요청서(PR) 화면 아래쪽 확인 목록이나 댓글에 Netlify가 남긴 <strong>Deploy Preview</strong> 링크가 나타날 때까지 1~2분 기다립니다.</li>
+<li><strong>결재 올리기:</strong> 채팅 옆 패널 Changes 카드의 <strong>[Create PR]</strong> → 카드에 생긴 결재 요청서(PR)를 눌러 GitHub 화면을 열고, 아래쪽 확인 목록이나 댓글에 Netlify가 남긴 <strong>Deploy Preview</strong> 링크가 나타날 때까지 1~2분 기다립니다.</li>
 <li>미리보기 주소를 휴대폰으로 열어 고친 점 3가지를 확인합니다. <strong>운영 주소는 아직 그대로</strong>인지도 봅니다.</li>
 <li>괜찮으면 <strong>[Merge pull request] → [Confirm merge]</strong> → 1~2분 뒤 운영 주소에 반영됩니다.</li>
 </ol>

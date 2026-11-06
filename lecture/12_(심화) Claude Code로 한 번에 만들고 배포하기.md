@@ -243,12 +243,13 @@ Claude가 PRD를 저장하고 계획을 쓰는 동안(1~3분) 쉬는 시간입�
 
 | 버튼 | 어디에 | 뜻 |
 |---|---|---|
-| **[Create PR]** | Claude Code 화면 | 결재 요청서를 **올리기** (상신) |
+| **[Create PR]** | Claude Code **채팅 옆 패널의 Changes(변경 사항) 카드** | 결재 요청서를 **올리기** (상신) |
 | **[Merge pull request]** | GitHub 화면 | 결재하기 (원본에 합치기) |
 
-1. **결재 올리기:** Claude Code 화면의 **[Create PR]** 를 누릅니다. (한국어 화면이면 "PR 만들기")
-   - 버튼이 안 보이면: GitHub `my-tool` 저장소 첫 화면 위쪽의 노란 띠 **[Compare & pull request]** 를 눌러도 됩니다.
-2. GitHub 화면이 열리고 초록 버튼 **[Create pull request]** 가 보이면 누릅니다. (Claude가 이미 만들어 둔 경우는 이 단계가 없습니다)
+1. **결재 올리기:** Claude Code 화면에서 **채팅 옆 패널**에 있는 **Changes**(변경 사항) 카드를 찾습니다. `+120 -0` 처럼 바뀐 줄 수가 적힌 카드입니다. 그 카드의 **[Create PR]** 을 누르면 결재 요청서(PR)가 제목·설명까지 채워져 바로 만들어집니다.
+   - **채팅 옆 패널이 안 보이면:** 화면 맨 위 세션 제목 줄의 **패널 보기 아이콘**(Show session rail) 또는 **⋮** 메뉴에서 켭니다.
+   - **그래도 못 찾겠으면:** 채팅창에 `결재 요청서(PR)를 만들어 주고 주소를 알려 줘` 라고 보내도 됩니다.
+2. Changes 카드에 생긴 결재 요청서(PR) 제목이나, Claude가 알려 준 주소를 누르면 GitHub 화면이 열립니다.
 3. 아래로 내려 초록 버튼 **[Merge pull request]** → **[Confirm merge]**
 4. 보라색 **Merged** 표시가 보이면 끝입니다. 옆의 **[Delete branch]** 는 눌러도 되고 안 눌러도 됩니다(다 쓴 연습장 지우기).
 
@@ -304,7 +305,7 @@ Claude가 PRD를 저장하고 계획을 쓰는 동안(1~3분) 쉬는 시간입�
 
 <div class="lab" data-lab="fill" data-tpl="cc-fix"></div>
 
-2. **결재 올리기:** Claude Code 화면에서 **[Create PR]** → 열린 GitHub의 결재 요청서(PR) 화면 아래쪽 확인 목록이나 댓글에 Netlify가 남긴 **Deploy Preview** 링크가 나타날 때까지 1~2분 기다립니다.
+2. **결재 올리기:** 채팅 옆 패널 Changes 카드의 **[Create PR]** → 카드에 생긴 결재 요청서(PR)를 눌러 GitHub 화면을 열고, 아래쪽 확인 목록이나 댓글에 Netlify가 남긴 **Deploy Preview** 링크가 나타날 때까지 1~2분 기다립니다.
 3. 미리보기 주소를 휴대폰으로 열어 고친 점 3가지를 확인합니다. **운영 주소는 아직 그대로**인지도 봅니다.
 4. 괜찮으면 **[Merge pull request] → [Confirm merge]** → 1~2분 뒤 운영 주소에 반영됩니다.
 
