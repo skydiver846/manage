@@ -563,68 +563,144 @@
 <p>💡 공공데이터는 누구나 쓸 수 있게 공개된 자료라 배포해도 됩니다. 대신 화면 아래에 <strong>출처(공공데이터포털, 제공기관, 기준일)</strong> 를 꼭 적습니다. 숫자가 맞는지는 ⑥에서 Claude에게, ⑧에서 엑셀로 연 원본과 <strong>직접 하나 이상</strong> 대조합니다.</p>
 </blockquote>
 <h2>자주 막히는 곳</h2>
+<p>단계 순서대로 정리했습니다. 막히면 먼저 <strong>옆 사람</strong>에게, 그다음 손을 들어 주세요.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
+<th>단계</th>
 <th>상황</th>
 <th>해결</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a> 에 들어가지지 않음</td>
-<td>Team 화면이 맞는지 확인(왼쪽 아래 Team 이름). 맞으면 관리자 설정에서 Claude Code 허용 여부 확인</td>
+<td>①</td>
+<td><a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a> 에서 &quot;Claude Code isn&#39;t available&quot;</td>
+<td>왼쪽 아래가 <strong>Team</strong> 계정인지 확인. 개인 계정이면 <strong>Switch organization</strong> 으로 Team으로 바꿉니다</td>
 </tr>
 <tr>
+<td>①</td>
+<td>&quot;GitHub access is required…&quot;만 보이고 연결 버튼이 없음</td>
+<td>강사(관리자)가 <strong>조직 설정 → Connectors</strong> 에서 GitHub 연결을 켜야 합니다. 손을 들어 주세요</td>
+</tr>
+<tr>
+<td>①</td>
+<td>처음 들어갔더니 <strong>Create your first cloud environment</strong> 화면</td>
+<td>이름과 설정을 <strong>그대로 두고</strong> <strong>[Create &amp; finish]</strong></td>
+</tr>
+<tr>
+<td>①</td>
+<td>GitHub 로그인 때 <strong>인증 코드</strong>를 물음</td>
+<td>새 PC라서 그렇습니다. 휴대폰 메일 앱에서 GitHub가 보낸 코드를 확인해 입력</td>
+</tr>
+<tr>
+<td>①</td>
 <td>저장소 목록에 <code>my-tool</code> 이 없음</td>
-<td>GitHub 앱 설정에서 해당 저장소 접근 허용 추가</td>
+<td>Claude에게 출입 권한을 안 준 것입니다. <code>github.com/settings/installations</code> → <strong>Claude</strong> 옆 <strong>[Configure]</strong> → <strong>Repository access</strong> 에 <code>my-tool</code> 추가 → <strong>[Save]</strong></td>
 </tr>
 <tr>
+<td>①</td>
 <td>Claude가 저장소가 비었다고 함</td>
-<td>저장소를 만들 때 <strong>Add a README file</strong> 을 체크하지 않은 것. GitHub에서 README를 하나 만들고 다시</td>
+<td>저장소를 만들 때 <strong>Add a README file</strong> 을 체크하지 않은 것. GitHub 저장소 화면의 <strong>[Add a README]</strong> 로 하나 만들고 다시</td>
 </tr>
 <tr>
+<td>②</td>
+<td>인터뷰가 끝나지 않음</td>
+<td>&quot;지금까지 답한 것으로 PRD 정리해 줘&quot;</td>
+</tr>
+<tr>
+<td>③</td>
 <td>Claude가 PRD.md를 저장하지 않고 계획만 씀</td>
 <td>&quot;아까 붙여넣은 PRD를 PRD.md로 저장하고 커밋해 줘&quot;</td>
 </tr>
 <tr>
+<td>③</td>
 <td>붙여넣은 PRD가 잘림</td>
-<td>PRD를 두 번에 나눠 보내거나, GitHub <code>my-tool</code> → <strong>[Add file] → [Upload files]</strong> 로 <code>PRD.md</code> 를 직접 올린 뒤 &quot;PRD.md를 읽고 계획을 알려 줘&quot;</td>
+<td>두 번에 나눠 보내거나, GitHub <code>my-tool</code> → <strong>[Add file] → [Upload files]</strong> 로 <code>PRD.md</code> 를 직접 올린 뒤 &quot;PRD.md를 읽고 계획을 알려 줘&quot;</td>
 </tr>
 <tr>
+<td>④</td>
 <td>계획 없이 바로 만들어 버림</td>
-<td>괜찮습니다. ⑥에서 똑같이 검토합니다. 다음부터 &quot;아직 코드는 쓰지 마&quot;를 맨 앞에</td>
+<td>괜찮습니다. ⑥에서 똑같이 검토합니다</td>
 </tr>
 <tr>
+<td>⑤</td>
+<td>오래 멈춘 것 같음</td>
+<td>5분은 기다립니다. 그래도 그대로면 &quot;어디까지 했는지 알려 주고 계속해 줘&quot;</td>
+</tr>
+<tr>
+<td>⑤</td>
+<td>사용량 한도 안내가 뜸</td>
+<td>여럿이 동시에 쓰면 생깁니다. 안내된 시간만큼 쉬었다가 &quot;계속해 줘&quot;</td>
+</tr>
+<tr>
+<td>⑤</td>
 <td>여러 파일을 만들었음</td>
-<td>&quot;index.html 하나로&quot; 조건 확인. 원치 않으면 합치지 않고 &quot;index.html 하나로 다시 만들어 줘&quot;</td>
+<td>결재하지 말고 &quot;index.html 하나로 다시 만들어 줘&quot;</td>
 </tr>
 <tr>
+<td>⑥</td>
 <td>화면이 PRD와 다름</td>
-<td>PRD.md의 성공 기준을 구체적으로 고쳐 커밋한 뒤 &quot;PRD.md를 다시 읽고 맞춰 줘&quot;</td>
+<td>&quot;PRD.md의 성공 기준 ○번을 &#39;○○&#39;로 고치고, 그에 맞게 화면도 고쳐 줘&quot;</td>
 </tr>
 <tr>
+<td>⑦</td>
+<td><strong>[Create PR]</strong> 이 안 보임</td>
+<td>채팅 옆 패널을 켭니다(세션 제목 줄의 패널 아이콘 또는 ⋮). 그래도 없으면 &quot;결재 요청서(PR)를 만들어 주고 주소를 알려 줘&quot;</td>
+</tr>
+<tr>
+<td>⑦</td>
 <td>Netlify 목록에 <code>my-tool</code> 이 없음</td>
-<td>Netlify GitHub 앱 설정(<strong>Configure the Netlify app on GitHub</strong>)에서 <code>my-tool</code> 접근 추가</td>
+<td>Netlify에 출입 권한을 안 준 것입니다. 목록 아래 <strong>Configure the Netlify app on GitHub</strong> → <code>my-tool</code> 추가</td>
 </tr>
 <tr>
-<td>합쳤는데 운영 주소가 그대로</td>
-<td>1~2분 기다린 뒤 새로고침. Netlify <strong>Deploys</strong> 에서 배포가 끝났는지 확인</td>
+<td>⑦</td>
+<td>배포 주소를 열면 <strong>Page not found</strong></td>
+<td><code>index.html</code> 이 저장소 <strong>맨 위</strong>에 있지 않은 것. &quot;index.html을 저장소 맨 위로 옮겨 줘&quot; → 결재</td>
 </tr>
 <tr>
+<td>⑦</td>
+<td>주소 이름이 이미 있다고 함</td>
+<td>뒤에 숫자나 이니셜을 붙입니다. 예) <code>run-log-hong2</code></td>
+</tr>
+<tr>
+<td>⑦</td>
+<td>Drop으로 올린 화면이 사라짐</td>
+<td>로그인하지 않고 올리면 1시간 뒤 사라집니다. Netlify에 <strong>로그인한 뒤</strong> 다시 끌어다 놓기</td>
+</tr>
+<tr>
+<td>⑧</td>
+<td>QR 메뉴가 안 보임</td>
+<td>주소를 휴대폰 브라우저에 직접 입력하거나, PC 메신저로 내게 보내 휴대폰에서 엽니다</td>
+</tr>
+<tr>
+<td>⑧⑨</td>
+<td>결재했는데 운영 주소가 그대로</td>
+<td>1~2분 뒤 휴대폰에서 <strong>새로고침</strong>. 그래도 그대로면 Netlify <strong>Deploys</strong> 에서 배포가 끝났는지(초록 Published) 확인</td>
+</tr>
+<tr>
+<td>⑨</td>
 <td>미리보기 주소가 안 보임</td>
-<td>결재 요청서(PR) 화면 아래 확인 목록이 끝날 때까지 1~2분. Netlify <strong>Deploys</strong> 에도 &quot;Deploy Preview&quot;로 보임</td>
+<td>결재 요청서 화면 아래 확인 목록이 끝날 때까지 1~2분. Netlify <strong>Deploys</strong> 에도 &quot;Deploy Preview&quot;로 보임</td>
 </tr>
 <tr>
+<td>⑨</td>
 <td>고쳤더니 휴대폰 기록이 사라짐</td>
-<td>&quot;v0.1에서 저장한 기록이 사라졌어. 저장 이름(키)을 바꾸지 말고 고쳐 줘&quot;</td>
+<td>&quot;v0.1에서 저장한 기록이 사라졌어. 저장 이름을 바꾸지 말고 고쳐 줘&quot;</td>
 </tr>
 <tr>
-<td>잘못 합쳤음</td>
-<td>Netlify <strong>Deploys</strong> → 이전 배포 → <strong>[Publish deploy]</strong> 로 즉시 되돌리고, GitHub에서 되돌리기(Revert)</td>
+<td>⑨</td>
+<td>잘못 결재했음</td>
+<td>급하면 Netlify <strong>Deploys</strong> → 이전 배포 → <strong>[Publish deploy]</strong> 로 즉시 되돌립니다. 그다음 GitHub의 그 결재 요청서 화면에서 <strong>[Revert]</strong> → 새로 생긴 요청서를 결재</td>
 </tr>
 <tr>
-<td>(부록) 한글이 깨짐</td>
+<td>부록</td>
+<td>한글이 깨짐</td>
 <td>&quot;data.csv가 EUC-KR이야. 한글이 깨지지 않게 다시 읽어 줘&quot;</td>
+</tr>
+<tr>
+<td>부록</td>
+<td>화면에 데이터가 안 나옴</td>
+<td><code>data.csv</code> 가 <code>index.html</code> 과 같은 곳(저장소 맨 위)에 있는지, 파일 이름이 정확히 <code>data.csv</code> 인지 확인</td>
 </tr>
 </tbody></table></div>
 <hr>
