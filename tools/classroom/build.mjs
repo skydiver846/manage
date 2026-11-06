@@ -43,6 +43,7 @@ const FILES = {
   opinions: ["files/경주 여행 후기_예시.md", "lecture/실습자료/경주 여행 후기_예시.md", "경주 여행 후기_예시.md", "경주 여행 후기 모음 (후기 요약 실습용)"],
   template: ["files/PRD 템플릿.md", "lecture/실습자료/PRD 템플릿.md", "PRD 템플릿.md", "빈 PRD 양식"],
   prompts: ["files/프롬프트 모음.md", "lecture/실습자료/프롬프트 모음.md", "프롬프트 모음.md", "프롬프트 모음 파일 (내 업무 폴더 99_프롬프트 보관용)"],
+  flow: ["files/흐름도.html", "lecture/실습자료/흐름도_내 화면이 웹 주소가 되기까지.html", "흐름도.html", "흐름도: 내 화면이 웹 주소가 되기까지 (발표용)"],
   skill: ["files/prd-interview.zip", null, "prd-interview.zip", "PRD 인터뷰 스킬 (Claude에 바로 올리는 ZIP)"],
   skillmd: ["files/SKILL.md", "lecture/실습자료/스킬/prd-interview/SKILL.md", "SKILL.md", "PRD 인터뷰 스킬 원본 SKILL.md"],
   step1: ["steps/1-html.html", "prototype-demo/steps/1-html.html", "1-html.html", "1단계 HTML (뼈대)"],
@@ -53,7 +54,7 @@ const FILES = {
   js10: ["files/JavaScript 10가지 (예시).html", "prototype-demo/examples/js10.html", "JavaScript 10가지 (예시).html", "JavaScript가 할 수 있는 일 10가지 예시"],
   final: ["prototype/index.html", "prototype-demo/index.html", "index.html", "여행 준비물 체크 완성본 (배포 실습용 index.html)"],
 };
-const MODULE_FILES = { 3: ["mine", "prd", "guide", "opinions"], 5: ["template", "prd"], 6: ["skill", "skillmd"], 7: ["prd", "guide", "opinions"], 9: ["step1", "step2", "step3", "final", "js10", "planner", "room3d"], 10: ["final"] };
+const MODULE_FILES = { 3: ["mine", "prd", "guide", "opinions"], 5: ["template", "prd"], 6: ["skill", "skillmd"], 7: ["prd", "guide", "opinions"], 9: ["step1", "step2", "step3", "final", "js10", "planner", "room3d"], 10: ["final"], 12: ["flow"] };
 
 const SITES = {
   "accounts.google.com/signup": "https://accounts.google.com/signup", "google.com": "https://www.google.com/",
