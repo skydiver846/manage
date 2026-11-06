@@ -31,7 +31,7 @@ const MODULES = [
   ["09_(심화) HTML·CSS·JavaScript로 준비물 화면 뜯어보기", "HTML · CSS · JS 맛보기", "과정 뒤"],
   ["10_(심화) 프로토타입 배포", "Netlify 배포", "과정 뒤"],
   ["11_(선택) Firebase로 공용 장부 연결", "Firebase 공용 장부 (선택)", "수업 외"],
-  ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "관심사 PRD → Claude Code로 내 화면", "3교시"],
+  ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "관심사 PRD → Claude Code로 내 화면", "7~9교시"],
 ].map(([file, short, time]) => { const num = parseInt(file, 10); return { file, short, time, num, page: `m${String(num).padStart(2, "0")}.html` }; });
 
 // 교육생이 내려받는 파일: [사이트 안 경로, 원본, 내려받을 때 이름, 설명]
@@ -212,7 +212,7 @@ ${body.includes('class="lab"') ? '<script src="assets/labs.js"></script>' : ""}
 // 모듈 머리: 큰 번호 배지 + 어디쯤인지(본 강의 진행 막대)
 function hero(m, title) {
   const later = m.num === 9 || m.num === 10;   // 1차 교육부터 과정 뒤 복습으로 돌림
-  const where = m.num <= 2 ? "사전 강의 · 수업 전" : OPTIONAL.has(m.num) ? "선택 자료 · 수업 외" : later ? "심화 · 과정 뒤 복습" : m.num <= 7 ? "1일차" : m.num === 8 ? "2일차" : "2일차 · 7~9교시";
+  const where = m.num <= 2 ? "사전 강의 · 수업 전" : OPTIONAL.has(m.num) ? "선택 자료 · 수업 외" : later ? "심화 · 과정 뒤 복습" : m.num <= 7 ? "1일차" : m.num === 8 ? "2일차" : "2일차";
   const k = SEQ.indexOf(m);
   const prog = k < 0 ? "" : `<div class="prog" aria-label="전체 ${SEQ.length}개 중 ${k + 1}번째"><span style="width:${((k + 1) / SEQ.length * 100).toFixed(1)}%"></span></div><span class="prog-t">${k + 1} / ${SEQ.length}</span>`;
   return `<header class="hero"><span class="hero-no">${String(m.num).padStart(2, "0")}</span><div class="hero-body"><p class="eyebrow">${where}${m.num <= 2 || OPTIONAL.has(m.num) || later ? "" : " · " + esc(m.time)}</p><h1>${title}</h1><div class="hero-prog">${prog}</div></div></header>`;
