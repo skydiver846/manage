@@ -487,19 +487,44 @@
 <p>⚠️ <strong>⑦에서 끌어다 놓기(Drop)로 올린 경우:</strong> 미리보기가 생기지 않습니다. 3~4번은 건너뛰고, 결재(5번)까지 한 뒤 GitHub에서 새 <code>index.html</code> 을 내려받아 Netlify에 다시 끌어다 놓습니다.</p>
 </blockquote>
 </section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 10분 · 직접 해 보는 부분</p><h2>⑩ 사용 설명과 PRD 정리 (9교시, 10분)</h2>
-<p>만든 것을 다른 사람에게 건넬 수 있게 정리합니다. 나중의 나도 &quot;다른 사람&quot;입니다.</p>
-<pre><code>이 저장소의 README.md를 이 화면의 사용 설명서로 바꿔 줘.
-- 이 화면이 무엇이고 누구를 위한 것인지 2줄
-- 배포 주소
-- 쓰는 방법 3단계
-- 기록이 어디에 저장되는지와 주의할 점(브라우저 기록을 지우면 사라짐)
-- PRD.md와 변경 기록 위치
-커밋 메시지는 &quot;사용 설명 추가&quot;. 결재 요청서(PR)까지 올려 줘.
-</code></pre>
-<ul>
-<li>GitHub에서 그 결재 요청서를 <strong>[Merge pull request]</strong> 로 합칩니다(README만 바뀌므로 화면은 그대로).</li>
-<li>저장소에 <strong>PRD.md(설계도) · index.html(화면) · README.md(설명서)</strong> 세 가지가 남았는지 확인합니다. 이 셋이 있으면 언제든 같은 방법으로 v0.3을 만들 수 있습니다.</li>
-</ul></section>
+<p>만든 것을 다른 사람에게 건넬 수 있게 정리합니다. 몇 달 뒤의 나도 &quot;다른 사람&quot;입니다. 끝나면 저장소에 세 가지가 남습니다.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>파일</th>
+<th>무엇</th>
+<th>업무로 치면</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>PRD.md</code></td>
+<td>무엇을 왜 만들었나 + 변경 기록 + 다음에 할 것</td>
+<td>기획서와 개정 이력</td>
+</tr>
+<tr>
+<td><code>index.html</code></td>
+<td>화면 그 자체</td>
+<td>결과물</td>
+</tr>
+<tr>
+<td><code>README.md</code></td>
+<td>쓰는 법</td>
+<td>사용 설명서</td>
+</tr>
+</tbody></table></div>
+<p>이 셋이 있으면 언제든 같은 방법으로 v0.3을 만들 수 있습니다.</p>
+<p><strong>1. 설명서와 PRD 정리 지시 (3분)</strong>: Claude Code의 같은 대화에 보냅니다. 배포 주소는 Claude가 모르므로 직접 적어 줍니다.</p>
+<div class="lab" data-lab="fill" data-tpl="cc-readme"></div>
+
+<p><strong>2. 결재 (3분)</strong>: 채팅 옆 패널 Changes 카드의 <strong>[Create PR]</strong> → GitHub에서 <strong>[Merge pull request] → [Confirm merge]</strong>. 문서만 바뀌므로 화면은 그대로입니다.</p>
+<p><strong>3. 확인 (2분)</strong>: GitHub <code>my-tool</code> 저장소 첫 화면을 엽니다. 파일 목록 아래에 <strong>README가 사용 설명서로 펼쳐져</strong> 보이면 완료입니다. <code>PRD.md</code> 를 눌러 맨 아래 <strong>변경 기록</strong>(v0.2)과 <strong>다음에 할 것</strong>도 봅니다.</p>
+<p><strong>4. 발표 한 줄 준비 (2분)</strong>: 10교시 결과 공유에서 말할 한 줄을 적어 둡니다.</p>
+<blockquote>
+<p>&quot;나는 <strong>(무엇)</strong> 을 만들어 <strong>(어디에)</strong> 쓴다. 업무에서는 <strong>(무엇)</strong> 에 같은 방법을 쓰겠다.&quot;</p>
+</blockquote>
+<blockquote>
+<p>💡 GitHub 저장소와 Netlify 주소는 <strong>내 개인 계정</strong>이라 Team 사용 기간이 끝나도 남습니다. 내 업무 폴더에도 보관하려면 저장소 첫 화면의 초록 <strong>[Code] → [Download ZIP]</strong> 으로 세 파일을 한꺼번에 내려받습니다.</p>
+</blockquote></section>
 <hr>
 <h2>부록: 공공데이터로 하기 (관심사가 없을 때)</h2>
 <p>관심사를 정하지 못했거나 PRD가 잘 안 나오면 공공데이터 파일로 현황 화면을 만듭니다. ②·③을 아래로 바꾸고, ④부터는 같습니다. CSV 파일은 붙여넣기에 크므로 GitHub 화면에서 직접 올립니다.</p>
