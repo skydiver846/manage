@@ -374,17 +374,37 @@
 
 </section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 15분 · 직접 해 보는 부분</p><h2>⑦ 합치고 배포하기 (8교시, 15분)</h2>
 <p>두 가지를 합니다. <strong>(가) 합치기</strong>로 연습장(브랜치)의 화면을 원본(<code>main</code>)에 넣고, <strong>(나) Netlify 연결</strong>로 원본을 웹 주소로 공개합니다. Netlify 연결은 <strong>처음 한 번만</strong> 하면, 그다음부터는 합칠 때마다 저절로 다시 배포됩니다.</p>
-<pre><code class="language-그림"> Claude Code ──[PR 만들기]──▶ GitHub: 결재 요청서(PR) ──[Merge]──▶ main ──(저절로)──▶ Netlify ──▶ 🌐 내 주소
+<pre><code class="language-그림"> Claude Code ──[Create PR] 결재 올리기──▶ GitHub: 결재 요청서(PR) ──[Merge] 결재──▶ main ──(저절로)──▶ Netlify ──▶ 🌐 내 주소
                                (가) 합치기 = 결재                              (나) 처음 한 번 연결
 </code></pre>
 <h3>(가) 합치기 = 결재 (5분)</h3>
-<p>PR(풀 리퀘스트)은 &quot;연습장의 내용을 원본에 합쳐도 될까요?&quot;라는 <strong>결재 요청서</strong>입니다. <strong>[Merge]</strong> 를 누르는 것이 <strong>결재</strong>입니다.</p>
+<p><strong>PR</strong>(풀 리퀘스트)은 &quot;연습장의 내용을 원본에 합쳐도 될까요?&quot;라는 <strong>결재 요청서</strong>입니다. 영어 버튼 두 개만 기억하면 됩니다.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>버튼</th>
+<th>어디에</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>[Create PR]</strong></td>
+<td>Claude Code <strong>채팅 옆 패널의 Changes(변경 사항) 카드</strong></td>
+<td>결재 요청서를 <strong>올리기</strong> (상신)</td>
+</tr>
+<tr>
+<td><strong>[Merge pull request]</strong></td>
+<td>GitHub 화면</td>
+<td>결재하기 (원본에 합치기)</td>
+</tr>
+</tbody></table></div>
 <ol>
-<li>Claude Code 화면의 <strong>[PR 만들기]</strong>(Create PR)를 누릅니다.<ul>
-<li>버튼이 안 보이면: GitHub <code>my-tool</code> 저장소 첫 화면 위쪽의 노란 띠 <strong>[Compare &amp; pull request]</strong> 를 눌러도 됩니다.</li>
+<li><strong>결재 올리기:</strong> Claude Code 화면에서 <strong>채팅 옆 패널</strong>에 있는 <strong>Changes</strong>(변경 사항) 카드를 찾습니다. <code>+120 -0</code> 처럼 바뀐 줄 수가 적힌 카드입니다. 그 카드의 <strong>[Create PR]</strong> 을 누르면 결재 요청서(PR)가 제목·설명까지 채워져 바로 만들어집니다.<ul>
+<li><strong>채팅 옆 패널이 안 보이면:</strong> 화면 맨 위 세션 제목 줄의 <strong>패널 보기 아이콘</strong>(Show session rail) 또는 <strong>⋮</strong> 메뉴에서 켭니다.</li>
+<li><strong>그래도 못 찾겠으면:</strong> 채팅창에 <code>결재 요청서(PR)를 만들어 주고 주소를 알려 줘</code> 라고 보내도 됩니다.</li>
 </ul>
 </li>
-<li>GitHub 화면이 열리고 초록 버튼 <strong>[Create pull request]</strong> 가 보이면 누릅니다. (Claude가 이미 만들어 둔 경우는 이 단계가 없습니다)</li>
+<li>Changes 카드에 생긴 결재 요청서(PR) 제목이나, Claude가 알려 준 주소를 누르면 GitHub 화면이 열립니다.</li>
 <li>아래로 내려 초록 버튼 <strong>[Merge pull request]</strong> → <strong>[Confirm merge]</strong></li>
 <li>보라색 <strong>Merged</strong> 표시가 보이면 끝입니다. 옆의 <strong>[Delete branch]</strong> 는 눌러도 되고 안 눌러도 됩니다(다 쓴 연습장 지우기).</li>
 </ol>
@@ -436,7 +456,7 @@
 <div class="lab" data-lab="fill" data-tpl="cc-fix"></div>
 
 <ol start="2">
-<li>Claude Code 화면에서 <strong>[PR 만들기]</strong> → GitHub의 PR 화면 아래쪽 확인 목록이나 댓글에 Netlify가 남긴 <strong>Deploy Preview</strong> 링크가 나타날 때까지 1~2분 기다립니다.</li>
+<li><strong>결재 올리기:</strong> 채팅 옆 패널 Changes 카드의 <strong>[Create PR]</strong> → 카드에 생긴 결재 요청서(PR)를 눌러 GitHub 화면을 열고, 아래쪽 확인 목록이나 댓글에 Netlify가 남긴 <strong>Deploy Preview</strong> 링크가 나타날 때까지 1~2분 기다립니다.</li>
 <li>미리보기 주소를 휴대폰으로 열어 고친 점 3가지를 확인합니다. <strong>운영 주소는 아직 그대로</strong>인지도 봅니다.</li>
 <li>괜찮으면 <strong>[Merge pull request] → [Confirm merge]</strong> → 1~2분 뒤 운영 주소에 반영됩니다.</li>
 </ol>
@@ -467,10 +487,10 @@
 - 쓰는 방법 3단계
 - 기록이 어디에 저장되는지와 주의할 점(브라우저 기록을 지우면 사라짐)
 - PRD.md와 변경 기록 위치
-커밋 메시지는 &quot;사용 설명 추가&quot;. PR까지 만들어 줘.
+커밋 메시지는 &quot;사용 설명 추가&quot;. 결재 요청서(PR)까지 올려 줘.
 </code></pre>
 <ul>
-<li>PR을 합칩니다(README만 바뀌므로 화면은 그대로).</li>
+<li>GitHub에서 그 결재 요청서를 <strong>[Merge pull request]</strong> 로 합칩니다(README만 바뀌므로 화면은 그대로).</li>
 <li>저장소에 <strong>PRD.md(설계도) · index.html(화면) · README.md(설명서)</strong> 세 가지가 남았는지 확인합니다. 이 셋이 있으면 언제든 같은 방법으로 v0.3을 만들 수 있습니다.</li>
 </ul></section>
 <hr>
@@ -553,7 +573,7 @@
 </tr>
 <tr>
 <td>미리보기 주소가 안 보임</td>
-<td>PR 화면 아래 확인 목록이 끝날 때까지 1~2분. Netlify <strong>Deploys</strong> 에도 &quot;Deploy Preview&quot;로 보임</td>
+<td>결재 요청서(PR) 화면 아래 확인 목록이 끝날 때까지 1~2분. Netlify <strong>Deploys</strong> 에도 &quot;Deploy Preview&quot;로 보임</td>
 </tr>
 <tr>
 <td>고쳤더니 휴대폰 기록이 사라짐</td>
@@ -675,7 +695,7 @@
 <li>PRD를 대화로 건네고 끝내지 않고 <strong>저장소에 파일로</strong> 남기게 한 이유는?</li>
 <li>바로 만들게 하지 않고 <strong>계획을 먼저</strong> 받은 이유는?</li>
 <li>Claude가 준 성공 기준 표에 모두 &quot;통과&quot;라고 적혀 있으면 끝인가?</li>
-<li>PR(합치기)이 결재와 닮은 점은?</li>
+<li>PR이 결재 요청서와 닮은 점은?</li>
 <li>저장소가 비공개인데 배포 화면에 실제 연락처를 넣으면 안 되는 이유는?</li>
 <li>미리보기 주소와 운영 주소의 차이는?</li>
 </ol>
