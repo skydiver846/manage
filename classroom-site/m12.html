@@ -31,8 +31,8 @@
 <p>⏱ <strong>2일차 7~9교시, 세 교시(150분)를 이 모듈 하나로 진행합니다.</strong> 각자 준비해 온 <strong>개인 관심사 한 가지</strong>로 PRD를 쓰고, 그 PRD를 Claude Code에 건네 화면을 만들고, 검토해서 웹에 공개한 뒤, 휴대폰으로 써 보고 한 번 더 고칩니다. 09(화면 구조)와 10(손으로 배포)은 과정 뒤 복습 자료로 돌립니다.</p>
 </blockquote>
 <p>여행 준비물 화면으로 배운 흐름을, 이번에는 <strong>내가 좋아하는 일</strong>로 처음부터 끝까지 해 봅니다.</p>
-<pre><code class="language-그림"> 7교시   ① 저장소·Claude Code 연결 → ② 관심사 PRD 인터뷰 → ③ PRD를 저장소에 올리기
- 8교시   ④ 계획 먼저 받기(승인) → ⑤ 만들기 v0.1 → ⑥ 검토 → ⑦ 합치고 배포
+<pre><code class="language-그림"> 7교시   ① 저장소·Claude Code 연결 → ② 관심사 PRD 인터뷰 → ③ PRD 건네고 계획 요청
+ 8교시   ④ 계획 확인·승인 → ⑤ 만들기 v0.1 → ⑥ 검토 → ⑦ 합치고 배포
  9교시   ⑧ 휴대폰으로 시험 → ⑨ 고치기 v0.2 (미리보기로 확인 후 합치기) → ⑩ 사용 설명·PRD 정리
 </code></pre>
 <p>이 모듈의 핵심은 &quot;AI가 해 준다&quot;가 아니라 아래 순서를 지키는 것입니다.</p>
@@ -207,25 +207,30 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 <ol start="4">
 <li>PRD를 내려받아 <strong>옵시디언</strong>의 <code>01_기획(PRD)</code> 폴더에 <code>PRD.md</code>로 저장합니다 (다운로드 폴더에서 옮기기).</li>
 </ol>
-</section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 5분 · 직접 해 보는 부분</p><h2>③ PRD를 저장소에 올리기 (7교시, 5분)</h2>
-<p>PRD를 채팅창에 붙여넣는 대신 <strong>저장소에 파일로</strong> 올려 둡니다. 그러면 Claude Code가 언제든 다시 읽을 수 있고, PRD를 고친 기록도 남습니다. 설계도를 공사 현장 사무실 벽에 붙여 두는 것과 같습니다.</p>
+</section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 5분 · 직접 해 보는 부분</p><h2>③ PRD 건네고 계획 먼저 받기 (7교시 끝, 5분)</h2>
+<p>GitHub 연결은 Claude Code에게 저장소 <strong>출입 권한</strong>을 준 것일 뿐, 내 PC(옵시디언)에 있는 PRD는 아직 Claude가 볼 수 없습니다. 그래서 PRD를 <strong>Claude Code 입력창에 붙여넣고</strong>, Claude가 직접 저장소에 <code>PRD.md</code> 파일로 저장하게 합니다. GitHub 화면에서 파일을 올릴 필요가 없습니다.</p>
+<p>PRD가 저장소에 파일로 남으면 Claude Code가 언제든 다시 읽을 수 있고, 고친 기록(⑨의 변경 기록)도 쌓입니다. 설계도를 공사 현장 사무실 벽에 붙여 두는 것과 같습니다.</p>
+<p>그리고 바로 만들라고 하지 않고 <strong>계획부터</strong> 받습니다. 공사 전에 시공 계획서를 받아 보는 것과 같습니다. 계획 단계에서 잘못을 찾으면 1분이면 고치지만, 다 만든 뒤에 찾으면 10분이 걸립니다.</p>
 <ol>
-<li>GitHub <code>my-tool</code> 저장소 → <strong>[Add file] → [Upload files]</strong></li>
-<li>옵시디언 폴더의 <code>PRD.md</code> 를 끌어다 놓기</li>
-<li>아래 칸에 <code>내 관심사 PRD v1</code> 이라고 쓰고 <strong>[Commit changes]</strong></li>
-<li>저장소 첫 화면에 <code>PRD.md</code> 가 보이면 완료. 눌러 보면 표와 제목이 보기 좋게 나옵니다.</li>
-</ol></section>
-<hr>
-<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 10분 · 직접 해 보는 부분</p><h2>④ 계획 먼저 받기 (8교시 시작, 10분)</h2>
-<p>바로 만들라고 하지 않고 <strong>계획부터</strong> 받습니다. 공사 전에 시공 계획서를 받아 보는 것과 같습니다. 계획 단계에서 잘못을 찾으면 고치는 데 1분이면 되지만, 다 만든 뒤에 찾으면 10분이 걸립니다.</p>
-<p><a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a> 에서 <code>my-tool</code> 을 고르고, 아래 [바로 해 보기]로 만든 지시문을 붙여넣습니다.</p>
-<pre><code>이 저장소의 PRD.md를 읽고, 이 PRD대로 휴대폰 화면을 만들 계획을 먼저 알려 줘. 아직 코드는 쓰지 마.
+<li><a class="site" href="https://claude.ai/code" target="_blank" rel="noopener"><code>claude.ai/code</code></a> 에서 저장소 <code>my-tool</code> 을 고릅니다.</li>
+<li>옵시디언에서 <code>PRD.md</code> 를 열어 전체 복사합니다 (Ctrl + A → Ctrl + C).</li>
+<li>아래 [바로 해 보기]의 칸에 붙여넣고 <strong>[프롬프트 복사]</strong> → Claude Code 입력창에 붙여넣어 보냅니다.</li>
+</ol>
+<div class="lab" data-lab="fill" data-tpl="cc-plan"></div>
+
+<pre><code>아래 PRD를 이 저장소에 PRD.md 파일로 저장하고 커밋해 줘. 커밋 메시지는 &quot;내 관심사 PRD v1&quot;.
+그다음 이 PRD대로 휴대폰 화면을 만들 계획을 먼저 알려 줘. 아직 코드는 쓰지 마.
 
 - 화면에 무엇이 위에서 아래로 놓이는지 그림처럼 적어 줘
 - PRD의 핵심 기능 3개를 각각 어떻게 만들지 한 줄씩
 - PRD에서 정하지 않아 네가 짐작해야 하는 것이 있으면 질문으로 3개까지
 - 만들 파일은 index.html 하나, 기록은 이 브라우저(localStorage)에만, 외부 서버·외부 프로그램(라이브러리) 없이
+
+(여기에 PRD.md 전체를 붙여넣기)
 </code></pre>
+<p>Claude가 PRD를 저장하고 계획을 쓰는 동안(1~3분) 쉬는 시간입니다.</p></section>
+<hr>
+<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 10분 · 직접 해 보는 부분</p><h2>④ 계획 확인하고 승인하기 (8교시 시작, 10분)</h2>
 <ol>
 <li>Claude가 내놓은 <strong>화면 그림</strong>과 <strong>기능 3줄</strong>을 PRD와 비교합니다. PRD에 없는 기능이 끼어 있으면 &quot;○○는 빼 줘&quot;라고 합니다.</li>
 <li>Claude의 <strong>질문</strong>에 답합니다. 답한 내용 중 중요한 것은 &quot;이 답을 PRD.md에도 반영해 줘&quot;라고 덧붙입니다.</li>
@@ -392,7 +397,7 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 </ul></section>
 <hr>
 <h2>부록: 공공데이터로 하기 (관심사가 없을 때)</h2>
-<p>관심사를 정하지 못했거나 PRD가 잘 안 나오면 공공데이터 파일로 현황 화면을 만듭니다. ②를 아래로 바꾸고, ④부터는 같습니다(지시문의 &quot;PRD.md&quot; 자리를 &quot;data.csv&quot;로 읽게 됩니다).</p>
+<p>관심사를 정하지 못했거나 PRD가 잘 안 나오면 공공데이터 파일로 현황 화면을 만듭니다. ②·③을 아래로 바꾸고, ④부터는 같습니다. CSV 파일은 붙여넣기에 크므로 GitHub 화면에서 직접 올립니다.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -441,8 +446,12 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 <td>저장소를 만들 때 <strong>Add a README file</strong> 을 체크하지 않은 것. GitHub에서 README를 하나 만들고 다시</td>
 </tr>
 <tr>
-<td>Claude가 PRD.md를 못 찾음</td>
-<td>③에서 커밋까지 눌렀는지, 파일 이름이 <code>PRD.md</code> 인지(대소문자 포함) 확인</td>
+<td>Claude가 PRD.md를 저장하지 않고 계획만 씀</td>
+<td>&quot;아까 붙여넣은 PRD를 PRD.md로 저장하고 커밋해 줘&quot;</td>
+</tr>
+<tr>
+<td>붙여넣은 PRD가 잘림</td>
+<td>PRD를 두 번에 나눠 보내거나, GitHub <code>my-tool</code> → <strong>[Add file] → [Upload files]</strong> 로 <code>PRD.md</code> 를 직접 올린 뒤 &quot;PRD.md를 읽고 계획을 알려 줘&quot;</td>
 </tr>
 <tr>
 <td>계획 없이 바로 만들어 버림</td>
@@ -549,11 +558,11 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 <td>업무 도구 기획서, 개선 제안서</td>
 </tr>
 <tr>
-<td>PRD를 저장소에 올림 (③)</td>
+<td>PRD를 Claude가 저장소에 파일로 남김 (③)</td>
 <td>기획서를 한곳에 두고 고친 기록 남기기</td>
 </tr>
 <tr>
-<td>계획 먼저 받기 (④)</td>
+<td>계획 먼저 받기 (③④)</td>
 <td>기안 전 방향 보고</td>
 </tr>
 <tr>
@@ -585,7 +594,7 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 </ul>
 <h2>✅ 확인 질문 (인터뷰)</h2>
 <ol>
-<li>PRD를 채팅창에 붙여넣지 않고 <strong>저장소에 파일로</strong> 올린 이유는?</li>
+<li>PRD를 대화로 건네고 끝내지 않고 <strong>저장소에 파일로</strong> 남기게 한 이유는?</li>
 <li>바로 만들게 하지 않고 <strong>계획을 먼저</strong> 받은 이유는?</li>
 <li>Claude가 준 성공 기준 표에 모두 &quot;통과&quot;라고 적혀 있으면 끝인가?</li>
 <li>PR(합치기)이 결재와 닮은 점은?</li>
