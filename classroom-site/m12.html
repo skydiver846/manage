@@ -373,28 +373,38 @@
 <div class="lab" data-lab="review"></div>
 
 </section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 15분 · 직접 해 보는 부분</p><h2>⑦ 합치고 배포하기 (8교시, 15분)</h2>
-<p><strong>합치기 = 결재</strong></p>
+<p>두 가지를 합니다. <strong>(가) 합치기</strong>로 연습장(브랜치)의 화면을 원본(<code>main</code>)에 넣고, <strong>(나) Netlify 연결</strong>로 원본을 웹 주소로 공개합니다. Netlify 연결은 <strong>처음 한 번만</strong> 하면, 그다음부터는 합칠 때마다 저절로 다시 배포됩니다.</p>
+<pre><code class="language-그림"> Claude Code ──[PR 만들기]──▶ GitHub: 결재 요청서(PR) ──[Merge]──▶ main ──(저절로)──▶ Netlify ──▶ 🌐 내 주소
+                               (가) 합치기 = 결재                              (나) 처음 한 번 연결
+</code></pre>
+<h3>(가) 합치기 = 결재 (5분)</h3>
+<p>PR(풀 리퀘스트)은 &quot;연습장의 내용을 원본에 합쳐도 될까요?&quot;라는 <strong>결재 요청서</strong>입니다. <strong>[Merge]</strong> 를 누르는 것이 <strong>결재</strong>입니다.</p>
 <ol>
-<li>Claude Code 화면의 <strong>[PR 만들기]</strong>(Create PR)를 누릅니다.</li>
-<li>GitHub 화면이 열리면 초록 버튼 <strong>[Create pull request]</strong> 가 보일 때 누릅니다 (이미 만들어진 경우는 건너뜀).</li>
-<li>초록 버튼 <strong>[Merge pull request]</strong> → <strong>[Confirm merge]</strong><ul>
-<li>PR(풀 리퀘스트)은 &quot;연습장의 내용을 원본에 합쳐도 될까요?&quot;라는 <strong>결재 요청서</strong>입니다. 합치기를 누르는 것이 <strong>결재</strong>입니다.</li>
+<li>Claude Code 화면의 <strong>[PR 만들기]</strong>(Create PR)를 누릅니다.<ul>
+<li>버튼이 안 보이면: GitHub <code>my-tool</code> 저장소 첫 화면 위쪽의 노란 띠 <strong>[Compare &amp; pull request]</strong> 를 눌러도 됩니다.</li>
 </ul>
 </li>
+<li>GitHub 화면이 열리고 초록 버튼 <strong>[Create pull request]</strong> 가 보이면 누릅니다. (Claude가 이미 만들어 둔 경우는 이 단계가 없습니다)</li>
+<li>아래로 내려 초록 버튼 <strong>[Merge pull request]</strong> → <strong>[Confirm merge]</strong></li>
+<li>보라색 <strong>Merged</strong> 표시가 보이면 끝입니다. 옆의 <strong>[Delete branch]</strong> 는 눌러도 되고 안 눌러도 됩니다(다 쓴 연습장 지우기).</li>
 </ol>
-<p><strong>Netlify에 연결 (처음 한 번)</strong></p>
+<h3>(나) Netlify에 연결하기 (처음 한 번, 10분)</h3>
 <ol>
-<li><a class="site" href="https://app.netlify.com/" target="_blank" rel="noopener"><code>app.netlify.com</code></a> → <strong>GitHub로 가입·로그인</strong> (이미 GitHub에 로그인돼 있어 가장 빠릅니다)</li>
+<li><a class="site" href="https://app.netlify.com/" target="_blank" rel="noopener"><code>app.netlify.com</code></a> → <strong>[Sign up]</strong> → <strong>GitHub</strong> 로 가입합니다. (이미 GitHub에 로그인돼 있어 가장 빠릅니다)<ul>
+<li>가입 질문(무엇에 쓸지, 팀 이름 등)이 나오면 아무거나 고르거나 <strong>Skip</strong> 합니다. 요금제를 물으면 <strong>Free</strong>(무료). 카드는 넣지 않습니다.</li>
+</ul>
+</li>
 <li><strong>[Add new project]</strong>(또는 Add new site) → <strong>[Import an existing project]</strong> → <strong>GitHub</strong></li>
-<li>처음이면 GitHub에서 <strong>Netlify에게 출입 권한을 주는</strong> 화면(Install Netlify)이 나옵니다 → <strong>Only select repositories</strong> → <code>my-tool</code> <strong>하나만</strong> 선택 → <strong>[Install]</strong>. 이것도 PC에 까는 것이 아닙니다</li>
-<li>목록에서 <code>my-tool</code> → 설정은 <strong>비워 둔 채</strong> (Build command·Publish directory 모두 비움) → <strong>[Deploy]</strong></li>
-<li><strong>Project configuration → Change project name</strong> 에서 주소 이름 바꾸기: 예) <code>run-log-hong</code> → <code>https://run-log-hong.netlify.app</code></li>
+<li>GitHub에서 <strong>Netlify에게 출입 권한을 주는</strong> 화면(Install Netlify)이 나옵니다 → <strong>Only select repositories</strong> → <code>my-tool</code> <strong>하나만</strong> 선택 → <strong>[Install]</strong>. 이것도 PC에 까는 것이 아닙니다.</li>
+<li>목록에서 <code>my-tool</code> 을 고르고, 설정은 <strong>아무것도 바꾸지 않은 채</strong> 맨 아래 <strong>[Deploy my-tool]</strong>(또는 Deploy) 를 누릅니다.</li>
+<li>1분쯤 지나 초록색 <strong>Published</strong> 가 보이면, 위쪽의 <code>○○○.netlify.app</code> 주소를 눌러 PC에서 내 화면이 열리는지 봅니다.</li>
+<li>주소 이름 바꾸기: <strong>Project configuration</strong>(또는 Site configuration) → <strong>Change project name</strong> → 예) <code>run-log-hong</code> → <code>https://run-log-hong.netlify.app</code> (이미 있는 이름이면 뒤에 숫자를 붙입니다)</li>
 </ol>
 <blockquote>
 <p>⚠️ <strong>배포한 주소는 누구나 열 수 있습니다.</strong> 저장소가 비공개여도 마찬가지입니다. 화면에 실제 이름·연락처·내부 자료가 없는지 한 번 더 봅니다.</p>
 </blockquote>
 <blockquote>
-<p>⚠️ <strong>Netlify 연결이 막히면:</strong> GitHub <code>my-tool</code> 저장소에서 <code>index.html</code> 을 내려받아 <code>my-tool</code> 폴더에 넣고, <a class="site" href="https://app.netlify.com/drop" target="_blank" rel="noopener"><code>app.netlify.com/drop</code></a> 에 폴더째 끌어다 놓습니다. 주소는 바로 생기지만, ⑨부터는 고칠 때마다 다시 끌어다 놓아야 합니다.</p>
+<p>⚠️ <strong>Netlify 연결이 막히면:</strong> GitHub <code>my-tool</code> 저장소에서 <code>index.html</code> 을 눌러 <strong>[Download raw file]</strong>(⬇ 아이콘)로 내려받아 <code>my-tool</code> 폴더에 넣고, Netlify에 <strong>로그인한 상태에서</strong> <a class="site" href="https://app.netlify.com/drop" target="_blank" rel="noopener"><code>app.netlify.com/drop</code></a> 에 폴더째 끌어다 놓습니다. 로그인하지 않고 올리면 1시간 뒤 사라집니다. 이 방법은 ⑨부터 고칠 때마다 다시 끌어다 놓아야 합니다.</p>
 </blockquote></section>
 <hr>
 <section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 10분 · 직접 해 보는 부분</p><h2>⑧ 휴대폰으로 시험하기 (9교시 시작, 10분)</h2>
