@@ -72,8 +72,10 @@ GitHub은 **파일과 고친 기록을 보관하는 창고**입니다(가입은 
 
 **Claude Code 연결**
 1. 업무 Chrome 프로필에서 `claude.ai/code` 접속 (웹 버전이라 설치가 필요 없습니다)
-2. **GitHub 연결**: 안내에 따라 Claude GitHub 앱을 설치합니다
-   - 저장소 선택에서 **Only select repositories** → `my-tool` **하나만** 선택
+2. **GitHub 연결** (PC에 프로그램을 까는 것이 아니라, 브라우저에서 **Claude에게 내 GitHub 출입 권한을 주는** 과정입니다)
+   - 화면의 **[GitHub 연결]**(Connect GitHub) 버튼 → GitHub 로그인(사전 과제에서 만든 계정)
+   - **Install Claude** 권한 화면이 나오면 **Only select repositories** → `my-tool` **하나만** 고르고 → **[Install]** (영어 버튼 이름이 Install이라 "설치"라고 부릅니다)
+   - 다시 `claude.ai/code` 화면으로 돌아옵니다
 3. 작업할 저장소로 `my-tool` 을 고릅니다. 목록에 보이면 준비 완료입니다.
 
 > 💡 **왜 저장소 하나만 열어 줄까?** 로그인은 "누구인지 확인"하는 **사원증**, 저장소 선택은 "어느 방에 들어갈 수 있는지" 정하는 **출입 권한**입니다. AI에게도 **필요한 방 하나만** 열어 줍니다.
@@ -216,7 +218,7 @@ PRD를 채팅창에 붙여넣는 대신 **저장소에 파일로** 올려 둡니
 **Netlify에 연결 (처음 한 번)**
 1. `app.netlify.com` → **GitHub로 가입·로그인** (이미 GitHub에 로그인돼 있어 가장 빠릅니다)
 2. **[Add new project]**(또는 Add new site) → **[Import an existing project]** → **GitHub**
-3. Netlify GitHub 앱 설치 화면 → **Only select repositories** → `my-tool` **하나만**
+3. 처음이면 GitHub에서 **Netlify에게 출입 권한을 주는** 화면(Install Netlify)이 나옵니다 → **Only select repositories** → `my-tool` **하나만** 선택 → **[Install]**. 이것도 PC에 까는 것이 아닙니다
 4. 목록에서 `my-tool` → 설정은 **비워 둔 채** (Build command·Publish directory 모두 비움) → **[Deploy]**
 5. **Project configuration → Change project name** 에서 주소 이름 바꾸기: 예) `run-log-hong` → `https://run-log-hong.netlify.app`
 
