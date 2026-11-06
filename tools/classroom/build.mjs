@@ -31,7 +31,7 @@ const MODULES = [
   ["09_(심화) HTML·CSS·JavaScript로 준비물 화면 뜯어보기", "HTML · CSS · JS 맛보기", "과정 뒤"],
   ["10_(심화) 프로토타입 배포", "Netlify 배포", "과정 뒤"],
   ["11_(선택) Firebase로 공용 장부 연결", "Firebase 공용 장부 (선택)", "수업 외"],
-  ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "관심사 PRD → Claude Code로 내 화면", "3교시"],
+  ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "관심사 PRD → Claude Code로 내 화면", "7~9교시"],
 ].map(([file, short, time]) => { const num = parseInt(file, 10); return { file, short, time, num, page: `m${String(num).padStart(2, "0")}.html` }; });
 
 // 교육생이 내려받는 파일: [사이트 안 경로, 원본, 내려받을 때 이름, 설명]
@@ -211,10 +211,11 @@ ${body.includes('class="lab"') ? '<script src="assets/labs.js"></script>' : ""}
 
 // 모듈 머리: 큰 번호 배지 + 어디쯤인지(본 강의 진행 막대)
 function hero(m, title) {
-  const where = m.num <= 2 ? "사전 강의 · 수업 전" : OPTIONAL.has(m.num) ? "선택 자료 · 수업 외" : m.num <= 7 ? "1일차" : m.num === 8 ? "2일차" : "2일차 · 심화";
+  const later = m.num === 9 || m.num === 10;   // 1차 교육부터 과정 뒤 복습으로 돌림
+  const where = m.num <= 2 ? "사전 강의 · 수업 전" : OPTIONAL.has(m.num) ? "선택 자료 · 수업 외" : later ? "심화 · 과정 뒤 복습" : m.num <= 7 ? "1일차" : m.num === 8 ? "2일차" : "2일차";
   const k = SEQ.indexOf(m);
   const prog = k < 0 ? "" : `<div class="prog" aria-label="전체 ${SEQ.length}개 중 ${k + 1}번째"><span style="width:${((k + 1) / SEQ.length * 100).toFixed(1)}%"></span></div><span class="prog-t">${k + 1} / ${SEQ.length}</span>`;
-  return `<header class="hero"><span class="hero-no">${String(m.num).padStart(2, "0")}</span><div class="hero-body"><p class="eyebrow">${where}${m.num <= 2 || OPTIONAL.has(m.num) ? "" : " · " + esc(m.time)}</p><h1>${title}</h1><div class="hero-prog">${prog}</div></div></header>`;
+  return `<header class="hero"><span class="hero-no">${String(m.num).padStart(2, "0")}</span><div class="hero-body"><p class="eyebrow">${where}${m.num <= 2 || OPTIONAL.has(m.num) || later ? "" : " · " + esc(m.time)}</p><h1>${title}</h1><div class="hero-prog">${prog}</div></div></header>`;
 }
 
 // 이전/다음은 수업 순서대로. 선택 자료(11)는 순서에서 빼고, 선택 자료 페이지에서는 번호 앞뒤 수업으로 잇는다
@@ -558,9 +559,11 @@ fs.writeFileSync(path.join(OUT, "index.html"), page("index.html", "처음 화면
   <p><a class="btn" href="prework.html">사전 과제 안내 보기</a> 첫날 전까지 해 올 것과 준비물을 한 장에 정리했습니다.</p>
   <h2>1일차 (1~5교시) · AI에게 일 시키기, PRD, 스킬, 내 화면 시안</h2>
   <ol class="mods">${modItems(mods3(3, 7))}</ol>
-  <h2>2일차 (6~10교시) · 코딩 없이 자동화, 웹에 공개하기, 내 업무 화면 만들기</h2>
-  <ol class="mods">${modItems(mods3(8, 12))}</ol>
-  <p class="note">2일 연속, 총 10시간입니다. <b>1일차 16:00~21:00, 2일차 08:00~13:00</b> (하루 5교시, 1교시 = 50분 수업 + 10분 휴식). 11 Firebase 공용 장부는 수업 외 선택 자료입니다.</p>
+  <h2>2일차 (6~10교시) · 코딩 없이 자동화, 내 관심사로 화면 만들고 배포하기</h2>
+  <ol class="mods">${modItems(mods3(8, 8))}<li><a href="flow.html"><span class="no">▶</span><span class="t">흐름도: 내 화면이 웹 주소가 되기까지</span><span class="time">7교시 전 5분</span></a></li>${modItems(mods3(12, 12))}</ol>
+  <h2>과정 뒤 복습 · 선택 자료</h2>
+  <ol class="mods">${modItems(MODULES.filter((m) => [9, 10, 11].includes(m.num)))}</ol>
+  <p class="note">2일 연속, 총 10시간입니다. <b>1일차 16:00~21:00, 2일차 08:00~13:00</b> (하루 5교시, 1교시 = 50분 수업 + 10분 휴식). 2일차 7~9교시는 모듈 12 하나로 진행하고, 09 화면 구조 · 10 손으로 배포는 과정 뒤 복습, 11 Firebase 공용 장부는 수업 외 선택 자료입니다.</p>
   <h2>바로가기</h2>
   <div class="tiles">${siteLinks}</div>
   <h2>자료</h2>
