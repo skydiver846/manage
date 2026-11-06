@@ -527,7 +527,7 @@
 </blockquote></section>
 <hr>
 <h2>부록: 공공데이터로 하기 (관심사가 없을 때)</h2>
-<p>관심사를 정하지 못했거나 PRD가 잘 안 나오면 공공데이터 파일로 현황 화면을 만듭니다. ②·③을 아래로 바꾸고, ④부터는 같습니다. CSV 파일은 붙여넣기에 크므로 GitHub 화면에서 직접 올립니다.</p>
+<p>관심사를 정하지 못했거나 PRD 인터뷰가 잘 안 풀리면, 공개된 <strong>소방 통계 파일</strong>로 한눈에 보는 현황 화면을 만듭니다. <strong>②·③만 아래로 바꾸고, ④(계획 확인)부터는 똑같이</strong> 합니다. PRD는 Claude가 자료를 보고 초안을 써 줍니다.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -547,14 +547,21 @@
 <td>연도·장소별 건수, 많은 장소 순위</td>
 </tr>
 </tbody></table></div>
+<p><strong>② 대신: 자료 받아 저장소에 올리기 (10분)</strong></p>
 <ol>
-<li><code>data.go.kr</code> 에서 파일 이름으로 검색 → <strong>파일데이터</strong> → <strong>[다운로드]</strong></li>
-<li>받은 파일 이름을 <code>data.csv</code> 로 바꾸기 (탐색기 <strong>보기 → 파일 확장명</strong> 을 켜 두어야 <code>data.csv.csv</code> 가 되지 않습니다)</li>
-<li>GitHub <code>my-tool</code> → <strong>[Add file] → [Upload files]</strong> → <code>data.csv</code> → <strong>[Commit changes]</strong></li>
-<li>Claude Code에 아래 [바로 해 보기]의 지시문을 붙여넣습니다.</li>
+<li><code>data.go.kr</code> 에서 위 파일 이름으로 검색 → <strong>파일데이터</strong> 탭 → 파일을 눌러 <strong>[다운로드]</strong>. 목록 화면에 적힌 <strong>수정일(기준일)</strong> 을 메모해 둡니다.<ul>
+<li>검색해도 안 나오면 &quot;소방청 화재&quot;로 검색해 비슷한 파일을 고릅니다. 로그인을 요구하면 강사가 받아 둔 파일을 씁니다.</li>
+</ul>
+</li>
+<li>받은 파일 이름을 <code>data.csv</code> 로 바꿉니다. 탐색기 <strong>보기 → 표시 → 파일 확장명</strong>(Windows 10은 <strong>보기 → 파일 확장명</strong>)을 켜 두어야 <code>data.csv.csv</code> 가 되지 않습니다.</li>
+<li>GitHub <code>my-tool</code> 저장소 → <strong>[Add file] → [Upload files]</strong> → <code>data.csv</code> 를 끌어다 놓기 → <strong>[Commit changes]</strong>. CSV는 채팅창에 붙여넣기에 커서 이 방법으로 올립니다.</li>
 </ol>
+<p><strong>③ 대신: 자료 보고 PRD 초안과 계획 받기 (5분)</strong>: 아래 지시문을 Claude Code에 보냅니다. Claude가 자료를 살펴보고 <strong>PRD.md 초안</strong>(성공 기준 3개 포함)을 저장한 뒤, 계획만 알려 주고 멈춥니다. 그다음은 ④부터 같습니다. 단, ⑤의 만들기 지시문에서 <strong>&quot;예시 기록&quot; 줄과 &quot;기록은 이 브라우저에만&quot; 줄은 지우고</strong> 보냅니다(이 화면은 기록을 받지 않고 data.csv를 보여 주기만 하므로).</p>
 <div class="lab" data-lab="fill" data-tpl="cc-data"></div>
 
+<blockquote>
+<p>💡 공공데이터는 누구나 쓸 수 있게 공개된 자료라 배포해도 됩니다. 대신 화면 아래에 <strong>출처(공공데이터포털, 제공기관, 기준일)</strong> 를 꼭 적습니다. 숫자가 맞는지는 ⑥에서 Claude에게, ⑧에서 엑셀로 연 원본과 <strong>직접 하나 이상</strong> 대조합니다.</p>
+</blockquote>
 <h2>자주 막히는 곳</h2>
 <div class="table-wrap"><table>
 <thead>
