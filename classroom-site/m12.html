@@ -321,24 +321,57 @@
 <li>기다리는 동안(3~10분) 옆 사람의 계획과 내 계획을 비교해 봅니다.</li>
 </ul>
 </section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 10분 · 직접 해 보는 부분</p><h2>⑥ AI가 한 일 검토하기 (8교시, 10분) ⭐</h2>
-<p>코드를 한 줄씩 읽지 않아도 됩니다. <strong>연습 → 표 → 질문</strong> 순서로 확인합니다.</p>
-<p><strong>연습 (3분):</strong> 남이 만든 보고서에서 이상한 곳을 먼저 찾아봅니다.</p>
+<p><strong>결재하기 전에 기안문을 훑어보는 것</strong>과 같습니다. 코드는 읽지 않습니다. 아래 <strong>네 가지만</strong> 확인합니다.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>확인할 것</th>
+<th>왜</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>시키지 않은 기능</strong>을 넣었나?</td>
+<td>좋아 보여도 PRD에 없는 기능은 고장과 혼란의 원인</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>다른 사이트로 연결</strong>되는 것이 있나?</td>
+<td>내 화면을 연 사람의 정보가 밖으로 나갈 수 있음</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>실제 이름·전화번호</strong> 같은 것이 들어갔나?</td>
+<td>배포 주소는 누구나 열 수 있음</td>
+</tr>
+<tr>
+<td>4</td>
+<td>&quot;확인했다&quot;는 것이 <strong>진짜 시험한 것</strong>인가?</td>
+<td>AI가 스스로 매긴 점수일 뿐. 진짜 확인은 ⑧에서 내 휴대폰으로</td>
+</tr>
+</tbody></table></div>
+<p><strong>먼저, Claude에게 직접 물어보기 (3분)</strong>: 아래를 그대로 복사해 Claude Code에 보냅니다.</p>
+<pre><code>방금 만든 것을 결재하기 전에 확인하려고 해. 코딩을 모르는 사람에게 설명하듯 아래 표로 답해 줘.
+
+| 확인할 것 | 예/아니요 | 있다면 무엇인지 |
+|---|---|---|
+| PRD에 없는 기능을 넣은 것이 있나? | | |
+| 다른 사이트(외부 주소)에서 불러오거나 보내는 것이 있나? | | |
+| 실제 사람 이름·전화번호·주소처럼 보이는 것이 있나? | | |
+| 성공 기준 중 실제로 시험하지 않고 통과라고 한 것이 있나? | | |
+
+그리고 화면에 무엇이 있고 어떻게 쓰는지 3줄로, 내가 휴대폰에서 꼭 눌러 봐야 할 곳 3군데를 알려 줘.
+</code></pre>
+<p><strong>그다음, 답 보고 고치기 (5분)</strong></p>
+<ul>
+<li>표에 <strong>&quot;예&quot;가 하나도 없으면</strong> → ⑦ 합치기로 갑니다.</li>
+<li><strong>&quot;예&quot;가 있으면</strong> → 그 줄을 그대로 옮겨 고쳐 달라고 합니다. 예) &quot;카카오톡 공유 버튼은 PRD에 없으니 빼 줘&quot;, &quot;예시 데이터에서 전화번호는 빼 줘&quot;, &quot;새로고침해도 기록이 남는지 실제로 시험해 줘&quot;</li>
+<li>고친 뒤에는 같은 질문을 <strong>한 번 더</strong> 보내 &quot;예&quot;가 없어졌는지 확인합니다.</li>
+</ul>
+<p><strong>빨리 끝난 분 (선택, 4분)</strong>: 아래는 다른 사람이 <strong>여행 준비물 화면</strong>을 만들었을 때 Claude가 남긴 보고서라고 가정한 연습입니다. 위 네 가지에 걸리는 줄을 찾아보세요.</p>
 <div class="lab" data-lab="review"></div>
 
-<p><strong>내 것 검토 (7분)</strong></p>
-<ol>
-<li><strong>표 보기:</strong> Claude가 마지막에 보여 준 성공 기준 표를 내 PRD의 성공 기준과 한 줄씩 비교합니다. &quot;통과&quot;라고 적혀 있어도 <strong>AI가 스스로 매긴 점수</strong>입니다. 진짜 확인은 ⑧에서 내 휴대폰으로 합니다.</li>
-<li><strong>물어보기:</strong> 이어서 입력합니다.</li>
-</ol>
-<pre><code>방금 만든 것을 코딩을 모르는 사람에게 설명하듯 알려 줘.
-- 화면에 무엇이 있고 어떻게 쓰는지 3줄로
-- PRD 범위 밖 기능을 넣은 것이 있는지
-- 외부 주소(다른 사이트에서 불러오는 것)나 실제 개인정보가 들어간 것이 있는지
-- 내가 휴대폰에서 꼭 눌러 봐야 할 곳 3군데
-</code></pre>
-<ol start="3">
-<li>이상한 점이 있으면 &quot;○○는 빼 줘&quot;, &quot;○○가 PRD와 달라, 고쳐 줘&quot;로 이어서 지시합니다.</li>
-</ol>
 </section><section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 15분 · 직접 해 보는 부분</p><h2>⑦ 합치고 배포하기 (8교시, 15분)</h2>
 <p><strong>합치기 = 결재</strong></p>
 <ol>
