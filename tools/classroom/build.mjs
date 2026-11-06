@@ -28,10 +28,10 @@ const MODULES = [
   ["06_스킬 만들기", "스킬 만들기", "1교시"],
   ["07_PRD로 결과물 만들기 (NotebookLM·생성형 AI)", "PRD로 결과물 만들기", "1교시"],
   ["08_AI 브라우저 Aside로 코딩 없이 업무 자동화", "AI 브라우저 Aside", "1교시"],
-  ["09_(심화) HTML·CSS·JavaScript로 준비물 화면 뜯어보기", "HTML · CSS · JS 맛보기", "20분"],
-  ["10_(심화) 프로토타입 배포", "Netlify 배포", "30분"],
+  ["09_(심화) HTML·CSS·JavaScript로 준비물 화면 뜯어보기", "HTML · CSS · JS 맛보기", "과정 뒤"],
+  ["10_(심화) 프로토타입 배포", "Netlify 배포", "과정 뒤"],
   ["11_(선택) Firebase로 공용 장부 연결", "Firebase 공용 장부 (선택)", "수업 외"],
-  ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "Claude Code로 내 화면", "2교시"],
+  ["12_(심화) Claude Code로 한 번에 만들고 배포하기", "관심사 PRD → Claude Code로 내 화면", "3교시"],
 ].map(([file, short, time]) => { const num = parseInt(file, 10); return { file, short, time, num, page: `m${String(num).padStart(2, "0")}.html` }; });
 
 // 교육생이 내려받는 파일: [사이트 안 경로, 원본, 내려받을 때 이름, 설명]
