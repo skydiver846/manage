@@ -111,6 +111,7 @@ function wikiTarget(raw) {
   if (name === "PRD 템플릿") return ["PRD 템플릿 파일", "file:template"];
   if (raw.startsWith("file:") && FILES[raw.slice(5)]) return [FILES[raw.slice(5)][3], raw];
   if (name === "프롬프트 모음") return ["프롬프트 모음", "prompts.html"];
+  if (name === "흐름도: 내 화면이 웹 주소가 되기까지") return ["흐름도: 내 화면이 웹 주소가 되기까지", "flow.html"];
   if (name === "SKILL") return ["스킬 예시 파일", "file:skillmd"];
   if (name === "지뢰찾기_화면.png") return ["지뢰찾기 화면 그림", "file:mine"];
   if (name === "사전 과제 안내") return ["사전 과제 안내", "prework.html"];
@@ -170,7 +171,7 @@ function nav(current) {
     <div class="group">${link("index.html", "처음 화면")}${SIGNUP_PAGE ? link("signup.html", SIGNUP_OPEN ? "교육 신청" : "교육 신청 안내") : ""}${link("prework.html", "사전 과제 안내")}</div>
     <div class="group"><h3>사전 강의 (수업 전)</h3>${mods(1, 2)}</div>
     <div class="group"><h3>본 강의</h3>${mods(3, 8)}</div>
-    <div class="group"><h3>심화 · 직접 만들기</h3>${mods(9, 10)}${mods(12, 12)}</div>
+    <div class="group"><h3>심화 · 직접 만들기</h3><a href="flow.html"${current === "flow.html" ? ' aria-current="page"' : ""}><span class="n">▶</span>흐름도: 웹 주소가 되기까지</a>${mods(9, 10)}${mods(12, 12)}</div>
     <div class="group"><h3>선택 자료 (수업 외)</h3>${mods(11, 11)}</div>
     <div class="group"><h3>자료</h3>${link("prompts.html", "프롬프트 모음")}${link("files.html", "실습 파일 내려받기")}</div>
   </nav>`;
@@ -515,6 +516,17 @@ fs.writeFileSync(path.join(OUT, "survey-status.html"), page("survey-status.html"
 }
 
 const promptsMd = fs.readFileSync(path.join(ROOT, FILES.prompts[1]), "utf8").replace(/^←.*\n/m, "");
+// 심화 묶음(09·10·12) 앞의 흐름도: 내 화면이 웹 주소가 되기까지
+{
+  const href = encodeURI(FILES.flow[0]);
+  fs.writeFileSync(path.join(OUT, "flow.html"), page("flow.html", "흐름도: 내 화면이 웹 주소가 되기까지",
+    `<h1>흐름도: 내 화면이 웹 주소가 되기까지</h1>
+  <p class="lead">심화 · 직접 만들기(09 · 10 · 12)를 시작하기 전에 전체 흐름을 한 장으로 봅니다. 화면 파일을 만들고(Claude Code), 창고에 보관·결재하고(GitHub), 주소를 붙여 공개하고(Netlify), 휴대폰에서 쓰기까지 아홉 단계입니다. <b>[다음 ▶]</b> 을 누르면 한 단계씩 볼 수 있습니다.</p>
+  <iframe class="flow-embed" src="${href}" title="흐름도: 내 화면이 웹 주소가 되기까지" style="width:100%;height:min(80vh,900px);border:1px solid #d9dde6;border-radius:12px;background:#f4f5f8"></iframe>
+  <p><a class="btn" href="${href}" target="_blank" rel="noopener">새 탭에서 크게 보기</a></p>
+  <p>이어서 보기: <a href="${MODULES.find((m) => m.num === 9).page}">09 화면 구조</a> · <a href="${MODULES.find((m) => m.num === 10).page}">10 손으로 배포</a> · <a href="${MODULES.find((m) => m.num === 12).page}">12 Claude Code로 처음부터 끝까지</a></p>`,
+    `<div class="pager"><a class="prev" href="${MODULES.find((m) => m.num === 8).page}"><span>← 이전</span>08 ${esc(MODULES.find((m) => m.num === 8).short)}</a><a class="next" href="${MODULES.find((m) => m.num === 9).page}"><span>다음 →</span>09 ${esc(MODULES.find((m) => m.num === 9).short)}</a></div>`));
+}
 fs.writeFileSync(path.join(OUT, "prompts.html"), page("prompts.html", "프롬프트 모음",
   `<p class="lead">수업에서 쓰는 프롬프트를 모았습니다. 상자 오른쪽 위 <b>[복사]</b>를 누르고 ChatGPT·Claude 입력창에 붙여넣으세요. </p><p class="lead"><a class="btn" href="${encodeURI(FILES.prompts[0])}" download="${FILES.prompts[2]}">프롬프트 모음 파일(.md) 내려받기</a> 내 업무 폴더(<code>문서 &gt; AI업무자료 &gt; 99_프롬프트</code>)에 넣어 두면 수업 뒤에도 쓸 수 있습니다.</p>` + render(promptsMd)));
 
