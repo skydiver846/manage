@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>화면이 주소가 되기까지</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@500&family=Do+Hyeon&display=swap">
+<style>
+/* Layout: 네 구역(만드는 곳 → 보관·결재 → 공개 → 쓰는 곳)을 왼쪽에서 오른쪽으로, 좁으면 위에서 아래로. 단계 번호는 실제 순서. */
+:root {
+  --bg: #f4f5f8;
+  --panel: #ffffff;
+  --ink: #16203a;
+  --muted: #5b6478;
+  --line: #d9dde6;
+  --navy: #1b2a4e;
+  --fire: #c8361f;
+  --fire-soft: #fbe9e5;
+  --lane-a: #eef3ff;
+  --lane-b: #f1f0fa;
+  --lane-c: #ecf7f3;
+  --lane-d: #fff6e8;
+  --chip: #eceff5;
+  --display: "Do Hyeon", "IBM Plex Sans KR", "Malgun Gothic", sans-serif;
+  --body: "IBM Plex Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  --mono: "IBM Plex Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1422; --panel: #171e30; --ink: #e8ebf3; --muted: #a2aac0; --line: #2c3550;
+    --navy: #9fb4ea; --fire: #ff7a5c; --fire-soft: #3a1f1a;
+    --lane-a: #172240; --lane-b: #1e1d38; --lane-c: #142c26; --lane-d: #2e2615; --chip: #232c45;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1422; --panel: #171e30; --ink: #e8ebf3; --muted: #a2aac0; --line: #2c3550;
+  --navy: #9fb4ea; --fire: #ff7a5c; --fire-soft: #3a1f1a;
+  --lane-a: #172240; --lane-b: #1e1d38; --lane-c: #142c26; --lane-d: #2e2615; --chip: #232c45;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 48px;
+}
+.wrap { max-width: 1240px; margin: 0 auto; display: grid; gap: 28px; }
+header { display: grid; gap: 6px; }
+.eyebrow { font-size: 13px; letter-spacing: .08em; color: var(--fire); font-weight: 700; }
+h1 { font-family: var(--display); font-weight: 400; font-size: clamp(30px, 4.4vw, 48px); line-height: 1.15; margin: 0; color: var(--navy); text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); max-width: 68ch; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.controls button {
+  font: inherit; font-weight: 700; border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+  padding: 8px 14px; border-radius: 8px; cursor: pointer;
+}
+.controls button.primary { background: var(--fire); border-color: var(--fire); color: #fff; }
+.controls button:focus-visible { outline: 3px solid var(--fire); outline-offset: 2px; }
+.controls .status { color: var(--muted); font-size: 14px; }
+
+.flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; position: relative; }
+.lane { border-radius: 14px; padding: 14px; display: grid; gap: 12px; align-content: start; min-width: 0; position: relative; }
+.lane.a { background: var(--lane-a); } .lane.b { background: var(--lane-b); }
+.lane.c { background: var(--lane-c); } .lane.d { background: var(--lane-d); }
+.lane-head { display: grid; gap: 2px; }
+.lane-head b { font-family: var(--display); font-weight: 400; font-size: 22px; color: var(--navy); }
+.lane-head span { font-size: 13px; color: var(--muted); }
+.lane:not(:last-child)::after {
+  content: "▶"; position: absolute; right: -13px; top: 22px; width: 24px; height: 24px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 11px; background: var(--fire); color: #fff; z-index: 2;
+}
+
+.step {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 12px 12px 12px;
+  display: grid; gap: 6px; transition: opacity .25s, transform .25s, box-shadow .25s; min-width: 0;
+}
+.step .top { display: flex; gap: 8px; align-items: baseline; }
+.num { font-family: var(--mono); font-size: 13px; color: #fff; background: var(--navy); border-radius: 6px; padding: 0 7px; flex: none; }
+:root[data-theme="dark"] .num { color: var(--bg); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .num { color: var(--bg); } }
+.step h3 { margin: 0; font-size: 16px; line-height: 1.35; }
+.step p { margin: 0; font-size: 14px; color: var(--muted); }
+.step .like { font-size: 13px; color: var(--ink); }
+.step .like::before { content: "비유 · "; color: var(--fire); font-weight: 700; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-family: var(--mono); font-size: 12px; background: var(--chip); border-radius: 6px; padding: 1px 7px; overflow-wrap: anywhere; }
+.where { font-size: 12px; color: var(--muted); }
+.down { text-align: center; color: var(--fire); font-size: 14px; line-height: 1; }
+
+.flow.focus .step { opacity: .28; }
+.flow.focus .step.on { opacity: 1; box-shadow: 0 0 0 3px var(--fire); transform: translateY(-2px); }
+
+.loop {
+  display: flex; gap: 12px; align-items: center; background: var(--fire-soft); border: 1px dashed var(--fire);
+  border-radius: 12px; padding: 12px 16px; flex-wrap: wrap;
+}
+.loop b { color: var(--fire); }
+
+.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.box { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 8px; min-width: 0; }
+.box h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 24px; color: var(--navy); }
+.box ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+.box .pill { justify-self: start; font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 99px; background: var(--fire); color: #fff; }
+.box .pill.later { background: var(--chip); color: var(--muted); }
+
+.terms { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 560px; background: var(--panel); border-radius: 12px; overflow: hidden; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 13px; color: var(--muted); font-weight: 700; background: var(--chip); }
+td:first-child { font-weight: 700; white-space: nowrap; }
+td code { font-family: var(--mono); font-size: 13px; }
+h2.sec { margin: 0; font-family: var(--display); font-weight: 400; font-size: 24px; color: var(--navy); }
+
+@media (max-width: 900px) {
+  .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lane:nth-child(2)::after { display: none; }
+}
+@media (max-width: 620px) {
+  .flow, .split { grid-template-columns: minmax(0, 1fr); }
+  .lane:not(:last-child)::after { content: "▼"; right: auto; left: 50%; top: auto; bottom: -13px; transform: translateX(-50%); display: grid; }
+}
+@media (prefers-reduced-motion: reduce) { .step { transition: none; } .flow.focus .step.on { transform: none; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">생성형 AI 활용능력 향상교육 · 2일차 시작 전</div>
+    <h1>내 화면이 웹 주소가 되기까지</h1>
+    <p class="lede">오늘 할 일은 네 곳을 차례로 지나갑니다. <b>만드는 곳</b>에서 화면 파일을 만들고, <b>창고</b>에 보관·결재하고, <b>공개하는 곳</b>이 주소를 붙이면, <b>휴대폰</b>에서 씁니다. 번호는 실제로 하는 순서이고, 괄호 속 ①~⑩은 모듈 12의 단계입니다.</p>
+  </header>
+
+  <div class="controls" aria-label="발표 단계 넘기기">
+    <button type="button" id="prev">◀ 이전</button>
+    <button type="button" id="next" class="primary">다음 ▶</button>
+    <button type="button" id="all">전체 보기</button>
+    <span class="status" id="status" aria-live="polite">전체 보기 · 키보드 ← → 로 넘깁니다</span>
+  </div>
+
+  <section class="flow" id="flow">
+    <div class="lane a">
+      <div class="lane-head"><b>만드는 곳</b><span>사람 + Claude Code</span></div>
+      <article class="step" data-n="1">
+        <div class="top"><span class="num">1</span><h3>기획서 쓰기</h3></div>
+        <p>무엇을, 누구를 위해, 어디까지 만들지 정합니다. 성공 기준 3개가 핵심.</p>
+        <div class="like">공사 전 설계도</div>
+        <div class="tags"><span class="tag">PRD.md</span></div>
+        <div class="where">사람이 · ② 인터뷰, ③ 저장</div>
+      </article>
+      <div class="down" aria-hidden="true">▼</div>
+      <article class="step" data-n="2">
+        <div class="top"><span class="num">2</span><h3>화면 만들기 (프론트엔드)</h3></div>
+        <p>눈에 보이는 화면을 파일 하나로 만듭니다. 계획을 먼저 받아 승인한 뒤 만들게 합니다.</p>
+        <div class="like">HTML 뼈대 · CSS 옷 · JS 근육</div>
+        <div class="tags"><span class="tag">index.html</span></div>
+        <div class="where">Claude Code가 · ③④ 계획, ⑤ 만들기</div>
+      </article>
+      <div class="down" aria-hidden="true">▼</div>
+      <article class="step" data-n="3">
+        <div class="top"><span class="num">3</span><h3>연습장에 저장</h3></div>
+        <p>만든 것을 원본이 아닌 연습장에 저장합니다. 이때까지 실제 주소는 그대로입니다.</p>
+        <div class="like">게임의 세이브 포인트 · 새 슬롯</div>
+        <div class="tags"><span class="tag">커밋</span><span class="tag">브랜치</span></div>
+        <div class="where">Claude Code가 · ⑤</div>
+      </article>
+    </div>
+
+    <div class="lane b">
+      <div class="lane-head"><b>창고 · 결재</b><span>GitHub</span></div>
+      <article class="step" data-n="4">
+        <div class="top"><span class="num">4</span><h3>검토하고 결재 올리기</h3></div>
+        <p>네 가지(시키지 않은 기능, 다른 사이트 연결, 실제 개인정보, 진짜 시험했나)를 확인한 뒤 요청서를 올립니다.</p>
+        <div class="like">결재 요청서 상신</div>
+        <div class="tags"><span class="tag">[Create PR]</span><span class="tag">PR</span></div>
+        <div class="where">사람이 · ⑥ 검토, ⑦ (가)</div>
+      </article>
+      <div class="down" aria-hidden="true">▼</div>
+      <article class="step" data-n="5">
+        <div class="top"><span class="num">5</span><h3>결재하기 = 원본에 합치기</h3></div>
+        <p>연습장의 내용이 원본이 됩니다. 이 순간부터 공개 준비가 저절로 시작됩니다.</p>
+        <div class="like">결재 도장</div>
+        <div class="tags"><span class="tag">[Merge pull request]</span><span class="tag">main</span></div>
+        <div class="where">사람이 · ⑦ (가)</div>
+      </article>
+    </div>
+
+    <div class="lane c">
+      <div class="lane-head"><b>공개하는 곳</b><span>Netlify</span></div>
+      <article class="step" data-n="6">
+        <div class="top"><span class="num">6</span><h3>저절로 배포</h3></div>
+        <p>창고의 원본이 바뀌면 1~2분 안에 같은 주소로 다시 올립니다. 연결은 처음 한 번만.</p>
+        <div class="like">창고를 지켜보는 게시판 담당자</div>
+        <div class="tags"><span class="tag">○○.netlify.app</span></div>
+        <div class="where">Netlify가 · ⑦ (나)</div>
+      </article>
+      <div class="down" aria-hidden="true">▼</div>
+      <article class="step" data-n="7">
+        <div class="top"><span class="num">7</span><h3>합치기 전 미리보기 (v0.2부터)</h3></div>
+        <p>Netlify를 한 번 연결한 뒤에는, 4번 결재 요청서만 올려도 확인용 주소가 따로 생깁니다. 여기서 확인하고 5번 결재를 누릅니다.</p>
+        <div class="like">결재 전 시안 출력</div>
+        <div class="tags"><span class="tag">Deploy Preview</span></div>
+        <div class="where">Netlify가 · ⑨</div>
+      </article>
+    </div>
+
+    <div class="lane d">
+      <div class="lane-head"><b>쓰는 곳</b><span>휴대폰 브라우저</span></div>
+      <article class="step" data-n="8">
+        <div class="top"><span class="num">8</span><h3>주소 열기</h3></div>
+        <p>휴대폰이 주소에서 화면 파일을 받아 그립니다. 누구나 열 수 있으니 실제 개인정보는 넣지 않습니다.</p>
+        <div class="like">게시판에 붙은 안내문을 보는 것</div>
+        <div class="tags"><span class="tag">QR</span><span class="tag">https://</span></div>
+        <div class="where">사람이 · ⑧</div>
+      </article>
+      <div class="down" aria-hidden="true">▼</div>
+      <article class="step" data-n="9">
+        <div class="top"><span class="num">9</span><h3>기록은 이 휴대폰에만</h3></div>
+        <p>입력한 기록은 서버가 아니라 내 휴대폰 브라우저에 남습니다. 짝의 휴대폰에는 보이지 않습니다.</p>
+        <div class="like">각자의 수첩</div>
+        <div class="tags"><span class="tag">localStorage</span></div>
+        <div class="where">⑧ 짝과 바꿔 보기</div>
+      </article>
+    </div>
+  </section>
+
+  <div class="loop">
+    <b>↺ 다시 2번으로</b>
+    <span>휴대폰으로 써 보고 고칠 점 3가지를 정해 Claude Code에 지시하면, 같은 길(2 → 9)을 한 번 더 지나 <b>v0.2</b>가 같은 주소에 올라갑니다. (⑨ 고치기, ⑩ 사용 설명)</span>
+  </div>
+
+  <section class="split" aria-label="프론트엔드와 백엔드">
+    <div class="box">
+      <span class="pill">오늘 만드는 것</span>
+      <h2>프론트엔드</h2>
+      <ul>
+        <li>눈에 보이는 <b>화면</b>과 버튼, 계산</li>
+        <li>파일 하나(<code>index.html</code>)로 휴대폰 안에서 동작</li>
+        <li>기록은 <b>각자의 휴대폰</b>에만 저장</li>
+        <li>예: 운동 기록, 독서 목록, 캠핑 준비물 체크</li>
+      </ul>
+    </div>
+    <div class="box">
+      <span class="pill later">다음 단계 (과정 뒤 · 모듈 11)</span>
+      <h2>백엔드</h2>
+      <ul>
+        <li>화면 뒤에서 일하는 <b>서버</b>와 <b>공용 장부(데이터베이스)</b></li>
+        <li>여러 사람이 <b>같은 기록</b>을 보고, 로그인으로 사람을 구분</li>
+        <li>예: 부서 회신 취합, 장비 대여 대장을 모두가 함께 보기</li>
+        <li>오늘의 9번(기록은 이 휴대폰에만)이 이 단계가 필요한 이유</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="terms" aria-labelledby="t">
+    <h2 class="sec" id="t" style="margin-bottom:10px">오늘 나오는 말, 한 줄로</h2>
+    <table>
+      <thead><tr><th>말</th><th>뜻</th><th>업무로 치면</th></tr></thead>
+      <tbody>
+        <tr><td>저장소 (GitHub)</td><td>파일과 고친 기록을 보관하는 창고</td><td>문서 보관함</td></tr>
+        <tr><td>커밋</td><td>지금 상태를 저장한 세이브 포인트. 잘못돼도 되돌릴 수 있음</td><td>문서 버전 기록</td></tr>
+        <tr><td>브랜치</td><td>원본은 두고 따로 고치는 연습장</td><td>초안</td></tr>
+        <tr><td>PR · [Create PR]</td><td>연습장을 원본에 합쳐도 되는지 묻는 요청서를 올리기</td><td>결재 상신</td></tr>
+        <tr><td>Merge</td><td>요청서를 승인해 원본(<code>main</code>)에 합치기</td><td>결재</td></tr>
+        <tr><td>배포</td><td>원본을 누구나 여는 웹 주소로 공개하기</td><td>게시판 게시</td></tr>
+        <tr><td>미리보기 (Deploy Preview)</td><td>합치기 전에 결과만 따로 보는 확인용 주소</td><td>결재 전 시안</td></tr>
+        <tr><td>localStorage</td><td>휴대폰 브라우저 안의 작은 저장 공간</td><td>개인 수첩</td></tr>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<script>
+(() => {
+  const flow = document.getElementById('flow');
+  const steps = [...flow.querySelectorAll('.step')];
+  const status = document.getElementById('status');
+  const titles = steps.map(s => s.querySelector('h3').textContent);
+  let n = 0; // 0 = 전체 보기
+  function show() {
+    flow.classList.toggle('focus', n > 0);
+    steps.forEach(s => s.classList.toggle('on', Number(s.dataset.n) === n));
+    status.textContent = n ? `${n} / ${steps.length} · ${titles[n - 1]}` : '전체 보기 · 키보드 ← → 로 넘깁니다';
+    if (n) steps[n - 1].scrollIntoView({ block: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }
+  const go = d => { n = Math.max(0, Math.min(steps.length, n + d)); show(); };
+  document.getElementById('next').addEventListener('click', () => go(1));
+  document.getElementById('prev').addEventListener('click', () => go(-1));
+  document.getElementById('all').addEventListener('click', () => { n = 0; show(); });
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input,textarea')) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { go(1); e.preventDefault(); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { go(-1); e.preventDefault(); }
+    if (e.key === 'Escape') { n = 0; show(); }
+  });
+  steps.forEach(s => s.addEventListener('click', () => { n = Number(s.dataset.n); show(); }));
+})();
+</script>
+</body>
+</html>
