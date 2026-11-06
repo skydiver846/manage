@@ -391,22 +391,36 @@ Claude가 고치는 동안(3~10분) 짝의 v0.1 화면을 한 번 더 써 봅니
 
 ## 자주 막히는 곳
 
-| 상황 | 해결 |
-|---|---|
-| `claude.ai/code` 에 들어가지지 않음 | Team 화면이 맞는지 확인(왼쪽 아래 Team 이름). 맞으면 관리자 설정에서 Claude Code 허용 여부 확인 |
-| 저장소 목록에 `my-tool` 이 없음 | GitHub 앱 설정에서 해당 저장소 접근 허용 추가 |
-| Claude가 저장소가 비었다고 함 | 저장소를 만들 때 **Add a README file** 을 체크하지 않은 것. GitHub에서 README를 하나 만들고 다시 |
-| Claude가 PRD.md를 저장하지 않고 계획만 씀 | "아까 붙여넣은 PRD를 PRD.md로 저장하고 커밋해 줘" |
-| 붙여넣은 PRD가 잘림 | PRD를 두 번에 나눠 보내거나, GitHub `my-tool` → **[Add file] → [Upload files]** 로 `PRD.md` 를 직접 올린 뒤 "PRD.md를 읽고 계획을 알려 줘" |
-| 계획 없이 바로 만들어 버림 | 괜찮습니다. ⑥에서 똑같이 검토합니다. 다음부터 "아직 코드는 쓰지 마"를 맨 앞에 |
-| 여러 파일을 만들었음 | "index.html 하나로" 조건 확인. 원치 않으면 합치지 않고 "index.html 하나로 다시 만들어 줘" |
-| 화면이 PRD와 다름 | PRD.md의 성공 기준을 구체적으로 고쳐 커밋한 뒤 "PRD.md를 다시 읽고 맞춰 줘" |
-| Netlify 목록에 `my-tool` 이 없음 | Netlify GitHub 앱 설정(**Configure the Netlify app on GitHub**)에서 `my-tool` 접근 추가 |
-| 합쳤는데 운영 주소가 그대로 | 1~2분 기다린 뒤 새로고침. Netlify **Deploys** 에서 배포가 끝났는지 확인 |
-| 미리보기 주소가 안 보임 | 결재 요청서(PR) 화면 아래 확인 목록이 끝날 때까지 1~2분. Netlify **Deploys** 에도 "Deploy Preview"로 보임 |
-| 고쳤더니 휴대폰 기록이 사라짐 | "v0.1에서 저장한 기록이 사라졌어. 저장 이름(키)을 바꾸지 말고 고쳐 줘" |
-| 잘못 합쳤음 | Netlify **Deploys** → 이전 배포 → **[Publish deploy]** 로 즉시 되돌리고, GitHub에서 되돌리기(Revert) |
-| (부록) 한글이 깨짐 | "data.csv가 EUC-KR이야. 한글이 깨지지 않게 다시 읽어 줘" |
+단계 순서대로 정리했습니다. 막히면 먼저 **옆 사람**에게, 그다음 손을 들어 주세요.
+
+| 단계 | 상황 | 해결 |
+|---|---|---|
+| ① | `claude.ai/code` 에서 "Claude Code isn't available" | 왼쪽 아래가 **Team** 계정인지 확인. 개인 계정이면 **Switch organization** 으로 Team으로 바꿉니다 |
+| ① | "GitHub access is required…"만 보이고 연결 버튼이 없음 | 강사(관리자)가 **조직 설정 → Connectors** 에서 GitHub 연결을 켜야 합니다. 손을 들어 주세요 |
+| ① | 처음 들어갔더니 **Create your first cloud environment** 화면 | 이름과 설정을 **그대로 두고** **[Create & finish]** |
+| ① | GitHub 로그인 때 **인증 코드**를 물음 | 새 PC라서 그렇습니다. 휴대폰 메일 앱에서 GitHub가 보낸 코드를 확인해 입력 |
+| ① | 저장소 목록에 `my-tool` 이 없음 | Claude에게 출입 권한을 안 준 것입니다. `github.com/settings/installations` → **Claude** 옆 **[Configure]** → **Repository access** 에 `my-tool` 추가 → **[Save]** |
+| ① | Claude가 저장소가 비었다고 함 | 저장소를 만들 때 **Add a README file** 을 체크하지 않은 것. GitHub 저장소 화면의 **[Add a README]** 로 하나 만들고 다시 |
+| ② | 인터뷰가 끝나지 않음 | "지금까지 답한 것으로 PRD 정리해 줘" |
+| ③ | Claude가 PRD.md를 저장하지 않고 계획만 씀 | "아까 붙여넣은 PRD를 PRD.md로 저장하고 커밋해 줘" |
+| ③ | 붙여넣은 PRD가 잘림 | 두 번에 나눠 보내거나, GitHub `my-tool` → **[Add file] → [Upload files]** 로 `PRD.md` 를 직접 올린 뒤 "PRD.md를 읽고 계획을 알려 줘" |
+| ④ | 계획 없이 바로 만들어 버림 | 괜찮습니다. ⑥에서 똑같이 검토합니다 |
+| ⑤ | 오래 멈춘 것 같음 | 5분은 기다립니다. 그래도 그대로면 "어디까지 했는지 알려 주고 계속해 줘" |
+| ⑤ | 사용량 한도 안내가 뜸 | 여럿이 동시에 쓰면 생깁니다. 안내된 시간만큼 쉬었다가 "계속해 줘" |
+| ⑤ | 여러 파일을 만들었음 | 결재하지 말고 "index.html 하나로 다시 만들어 줘" |
+| ⑥ | 화면이 PRD와 다름 | "PRD.md의 성공 기준 ○번을 '○○'로 고치고, 그에 맞게 화면도 고쳐 줘" |
+| ⑦ | **[Create PR]** 이 안 보임 | 채팅 옆 패널을 켭니다(세션 제목 줄의 패널 아이콘 또는 ⋮). 그래도 없으면 "결재 요청서(PR)를 만들어 주고 주소를 알려 줘" |
+| ⑦ | Netlify 목록에 `my-tool` 이 없음 | Netlify에 출입 권한을 안 준 것입니다. 목록 아래 **Configure the Netlify app on GitHub** → `my-tool` 추가 |
+| ⑦ | 배포 주소를 열면 **Page not found** | `index.html` 이 저장소 **맨 위**에 있지 않은 것. "index.html을 저장소 맨 위로 옮겨 줘" → 결재 |
+| ⑦ | 주소 이름이 이미 있다고 함 | 뒤에 숫자나 이니셜을 붙입니다. 예) `run-log-hong2` |
+| ⑦ | Drop으로 올린 화면이 사라짐 | 로그인하지 않고 올리면 1시간 뒤 사라집니다. Netlify에 **로그인한 뒤** 다시 끌어다 놓기 |
+| ⑧ | QR 메뉴가 안 보임 | 주소를 휴대폰 브라우저에 직접 입력하거나, PC 메신저로 내게 보내 휴대폰에서 엽니다 |
+| ⑧⑨ | 결재했는데 운영 주소가 그대로 | 1~2분 뒤 휴대폰에서 **새로고침**. 그래도 그대로면 Netlify **Deploys** 에서 배포가 끝났는지(초록 Published) 확인 |
+| ⑨ | 미리보기 주소가 안 보임 | 결재 요청서 화면 아래 확인 목록이 끝날 때까지 1~2분. Netlify **Deploys** 에도 "Deploy Preview"로 보임 |
+| ⑨ | 고쳤더니 휴대폰 기록이 사라짐 | "v0.1에서 저장한 기록이 사라졌어. 저장 이름을 바꾸지 말고 고쳐 줘" |
+| ⑨ | 잘못 결재했음 | 급하면 Netlify **Deploys** → 이전 배포 → **[Publish deploy]** 로 즉시 되돌립니다. 그다음 GitHub의 그 결재 요청서 화면에서 **[Revert]** → 새로 생긴 요청서를 결재 |
+| 부록 | 한글이 깨짐 | "data.csv가 EUC-KR이야. 한글이 깨지지 않게 다시 읽어 줘" |
+| 부록 | 화면에 데이터가 안 나옴 | `data.csv` 가 `index.html` 과 같은 곳(저장소 맨 위)에 있는지, 파일 이름이 정확히 `data.csv` 인지 확인 |
 
 ---
 
