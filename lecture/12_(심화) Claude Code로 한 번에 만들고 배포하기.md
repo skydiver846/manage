@@ -230,22 +230,38 @@ Claude가 PRD를 저장하고 계획을 쓰는 동안(1~3분) 쉬는 시간입�
 <!-- 실습 -->
 ## ⑦ 합치고 배포하기 (8교시, 15분)
 
-**합치기 = 결재**
-1. Claude Code 화면의 **[PR 만들기]**(Create PR)를 누릅니다.
-2. GitHub 화면이 열리면 초록 버튼 **[Create pull request]** 가 보일 때 누릅니다 (이미 만들어진 경우는 건너뜀).
-3. 초록 버튼 **[Merge pull request]** → **[Confirm merge]**
-   - PR(풀 리퀘스트)은 "연습장의 내용을 원본에 합쳐도 될까요?"라는 **결재 요청서**입니다. 합치기를 누르는 것이 **결재**입니다.
+두 가지를 합니다. **(가) 합치기**로 연습장(브랜치)의 화면을 원본(`main`)에 넣고, **(나) Netlify 연결**로 원본을 웹 주소로 공개합니다. Netlify 연결은 **처음 한 번만** 하면, 그다음부터는 합칠 때마다 저절로 다시 배포됩니다.
 
-**Netlify에 연결 (처음 한 번)**
-1. `app.netlify.com` → **GitHub로 가입·로그인** (이미 GitHub에 로그인돼 있어 가장 빠릅니다)
+```그림
+ Claude Code ──[PR 만들기]──▶ GitHub: 결재 요청서(PR) ──[Merge]──▶ main ──(저절로)──▶ Netlify ──▶ 🌐 내 주소
+                               (가) 합치기 = 결재                              (나) 처음 한 번 연결
+```
+
+### (가) 합치기 = 결재 (5분)
+
+PR(풀 리퀘스트)은 "연습장의 내용을 원본에 합쳐도 될까요?"라는 **결재 요청서**입니다. **[Merge]** 를 누르는 것이 **결재**입니다.
+
+1. Claude Code 화면의 **[PR 만들기]**(Create PR)를 누릅니다.
+   - 버튼이 안 보이면: GitHub `my-tool` 저장소 첫 화면 위쪽의 노란 띠 **[Compare & pull request]** 를 눌러도 됩니다.
+2. GitHub 화면이 열리고 초록 버튼 **[Create pull request]** 가 보이면 누릅니다. (Claude가 이미 만들어 둔 경우는 이 단계가 없습니다)
+3. 아래로 내려 초록 버튼 **[Merge pull request]** → **[Confirm merge]**
+4. 보라색 **Merged** 표시가 보이면 끝입니다. 옆의 **[Delete branch]** 는 눌러도 되고 안 눌러도 됩니다(다 쓴 연습장 지우기).
+
+### (나) Netlify에 연결하기 (처음 한 번, 10분)
+
+1. `app.netlify.com` → **[Sign up]** → **GitHub** 로 가입합니다. (이미 GitHub에 로그인돼 있어 가장 빠릅니다)
+   - 가입 질문(무엇에 쓸지, 팀 이름 등)이 나오면 아무거나 고르거나 **Skip** 합니다. 요금제를 물으면 **Free**(무료). 카드는 넣지 않습니다.
 2. **[Add new project]**(또는 Add new site) → **[Import an existing project]** → **GitHub**
-3. 처음이면 GitHub에서 **Netlify에게 출입 권한을 주는** 화면(Install Netlify)이 나옵니다 → **Only select repositories** → `my-tool` **하나만** 선택 → **[Install]**. 이것도 PC에 까는 것이 아닙니다
-4. 목록에서 `my-tool` → 설정은 **비워 둔 채** (Build command·Publish directory 모두 비움) → **[Deploy]**
-5. **Project configuration → Change project name** 에서 주소 이름 바꾸기: 예) `run-log-hong` → `https://run-log-hong.netlify.app`
+3. GitHub에서 **Netlify에게 출입 권한을 주는** 화면(Install Netlify)이 나옵니다 → **Only select repositories** → `my-tool` **하나만** 선택 → **[Install]**. 이것도 PC에 까는 것이 아닙니다.
+4. 목록에서 `my-tool` 을 고르고, 설정은 **아무것도 바꾸지 않은 채** 맨 아래 **[Deploy my-tool]**(또는 Deploy) 를 누릅니다.
+5. 1분쯤 지나 초록색 **Published** 가 보이면, 위쪽의 `○○○.netlify.app` 주소를 눌러 PC에서 내 화면이 열리는지 봅니다.
+6. 주소 이름 바꾸기: **Project configuration**(또는 Site configuration) → **Change project name** → 예) `run-log-hong` → `https://run-log-hong.netlify.app` (이미 있는 이름이면 뒤에 숫자를 붙입니다)
 
 > ⚠️ **배포한 주소는 누구나 열 수 있습니다.** 저장소가 비공개여도 마찬가지입니다. 화면에 실제 이름·연락처·내부 자료가 없는지 한 번 더 봅니다.
 
-> ⚠️ **Netlify 연결이 막히면:** GitHub `my-tool` 저장소에서 `index.html` 을 내려받아 `my-tool` 폴더에 넣고, `app.netlify.com/drop` 에 폴더째 끌어다 놓습니다. 주소는 바로 생기지만, ⑨부터는 고칠 때마다 다시 끌어다 놓아야 합니다.
+> ⚠️ **Netlify 연결이 막히면:** GitHub `my-tool` 저장소에서 `index.html` 을 눌러 **[Download raw file]**(⬇ 아이콘)로 내려받아 `my-tool` 폴더에 넣고, Netlify에 **로그인한 상태에서** `app.netlify.com/drop` 에 폴더째 끌어다 놓습니다. 로그인하지 않고 올리면 1시간 뒤 사라집니다. 이 방법은 ⑨부터 고칠 때마다 다시 끌어다 놓아야 합니다.
+
+> 🧑‍🏫 영어 버튼이 이어지는 구간이라 강사 화면으로 한 단계씩 같이 합니다. 가장 많이 막히는 곳은 (나)의 3번(권한 화면)과 4번(목록에 `my-tool` 이 없음 → "자주 막히는 곳" 표)입니다. 먼저 끝난 사람이 옆 사람을 돕게 하세요.
 
 ---
 
