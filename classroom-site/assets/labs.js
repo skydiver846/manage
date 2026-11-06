@@ -454,28 +454,30 @@
 
   /* ───────── 12-4: 합치기 전 확인 (AI 작업 보고서에서 이상한 곳 찾기) ───────── */
   const REVIEW = [
-    { sec: '성공 기준 (PRD 7번)', text: '휴대폰 화면(폭 400px)에서 가로 스크롤 없음 — ✅ 시험함', bad: false },
-    { sec: '성공 기준 (PRD 7번)', text: '준비물과 누구 것을 골라 버튼 한 번으로 추가 — ✅ 시험함', bad: false },
-    { sec: '성공 기준 (PRD 7번)', text: '챙김률 50% 미만이면 "서둘러요" — ✅ 시험함 (아이 1/3 → 서둘러요)', bad: false },
-    { sec: '성공 기준 (PRD 7번)', text: '새로고침해도 기록이 남음 — ✅ (시험은 생략)', bad: true,
-      why: '✅ 표시인데 실제로는 <b>시험하지 않았습니다.</b> 확인하지 않은 기준을 통과로 적으면 안 됩니다.', fix: '"새로고침해도 기록이 남는지 실제로 시험하고 결과를 알려 줘"' },
-    { sec: '더 넣은 기능', text: '목록 내려받기(CSV) 버튼', bad: false },
-    { sec: '더 넣은 기능', text: '가족 단톡방으로 바로 공유하는 버튼 (카카오톡 연결)', bad: true,
-      why: 'PRD에 없는 기능이고(<b>범위 밖</b>), 외부 서비스와 연결됩니다. 좋아 보여도 PRD를 고치기 전에는 넣지 않습니다.', fix: '"카카오톡 공유 버튼은 PRD 범위 밖이니 빼 줘"' },
-    { sec: '더 넣은 기능', text: '방문 통계를 보려고 analytics.example.com 스크립트 추가', bad: true,
-      why: '내 화면을 연 사람의 정보가 <b>외부 주소</b>로 나갈 수 있습니다. 묻지 않은 외부 연결은 빼야 합니다.', fix: '"외부 주소로 보내는 스크립트는 모두 빼 줘"' },
+    { sec: '성공 기준 시험', text: '휴대폰 화면(폭 400px)에서 가로 스크롤 없음 — ✅ 시험함', bad: false },
+    { sec: '성공 기준 시험', text: '준비물과 누구 것을 골라 버튼 한 번으로 추가 — ✅ 시험함', bad: false },
+    { sec: '성공 기준 시험', text: '챙김률 50% 미만이면 "서둘러요" — ✅ 시험함 (아이 1/3 → 서둘러요)', bad: false },
+    { sec: '성공 기준 시험', text: '새로고침해도 기록이 남음 — ✅ (시험은 생략)', bad: true,
+      why: '<b>④ 시험하지 않았는데 ✅</b>: 실제로는 시험하지 않았습니다. 확인하지 않은 것을 통과로 적으면 안 됩니다.', fix: '"새로고침해도 기록이 남는지 실제로 시험하고 결과를 알려 줘"' },
+    { sec: '만든 기능', text: '목록 내려받기(CSV) 버튼', bad: false,
+      ok: '목록 내려받기는 위 PRD 요약에 있는 기능이라 문제없습니다.' },
+    { sec: '만든 기능', text: '가족 단톡방으로 바로 공유하는 버튼 (카카오톡 연결)', bad: true,
+      why: '<b>① 시키지 않은 기능</b>이면서 <b>② 다른 사이트로 연결</b>됩니다. PRD에 없는 기능은 좋아 보여도 PRD를 고치기 전에는 넣지 않습니다.', fix: '"카카오톡 공유 버튼은 PRD에 없으니 빼 줘"' },
+    { sec: '만든 기능', text: '방문 통계를 보려고 analytics.example.com 스크립트 추가', bad: true,
+      why: '<b>② 다른 사이트로 연결</b>: 내 화면을 연 사람의 정보가 다른 사이트로 나갈 수 있습니다. 묻지 않은 외부 연결은 뺍니다.', fix: '"다른 사이트로 보내는 스크립트는 모두 빼 줘"' },
     { sec: '예시 데이터', text: '(예시) 할머니 혈압약 — 연락처 010-2345-6789', bad: true,
-      why: '예시에 <b>실제처럼 보이는 전화번호</b>가 들어갔습니다. 예시 데이터에도 개인정보는 넣지 않습니다.', fix: '"예시 데이터에서 전화번호는 빼 줘"' },
-    { sec: '저장', text: '연습장(브랜치)에 커밋 "준비물 화면 v0.1" — 원본(main)은 아직 그대로', bad: false }
+      why: '<b>③ 실제 이름·전화번호</b>: 예시에 실제처럼 보이는 전화번호가 들어갔습니다. 배포 주소는 누구나 열 수 있습니다.', fix: '"예시 데이터에서 전화번호는 빼 줘"' },
+    { sec: '저장', text: '연습장(브랜치)에 저장함 — 실제 화면(main)은 아직 그대로', bad: false,
+      ok: '합치기(결재) 전까지 실제 화면이 바뀌지 않는다는 뜻이라 문제없습니다.' }
   ];
 
   function reviewLab(host) {
     const body = shell(host, {
       time: '약 4분',
       title: '연습: 결재 전에 이상한 줄 찾기',
-      goal: '누군가 <b>여행 준비물 체크 화면</b>을 Claude Code로 만들었고, Claude가 아래처럼 "다 했습니다" 보고서를 남겼다고 해 봅시다. 이대로 합쳐도(결재해도) 될까요?',
+      goal: '누군가 <b>여행 준비물 체크 화면</b>을 Claude Code로 만들었고, Claude가 아래처럼 "다 했습니다" 보고서를 남겼습니다. 이대로 합쳐도(결재해도) 될까요?<br><b>이 화면의 PRD 요약</b>: 준비물 추가 · 챙김 체크 · 가족별 챙김률("서둘러요" 표시) · 목록 내려받기(CSV). 기록은 이 브라우저에만 저장.',
       howTo: [
-        '한 줄씩 읽고, 아래 <b>네 가지</b> 중 하나에 걸리는 줄에 <b>⚠️ 이상함</b>을 체크합니다.<br>① 시키지 않은 기능 ② 다른 사이트로 연결 ③ 실제 이름·전화번호 ④ 시험하지 않았는데 ✅',
+        '한 줄씩 읽고, ⑥의 <b>네 가지</b>(① 시키지 않은 기능 ② 다른 사이트로 연결 ③ 실제 이름·전화번호 ④ 시험하지 않았는데 ✅) 중 하나에 걸리는 줄에 <b>⚠️ 이상함</b>을 체크합니다. 걸리는 줄은 4개입니다.',
         '<b>[확인하기]</b>를 누르면 맞힌 줄·놓친 줄과, Claude에게 보낼 <b>고쳐 달라는 말</b>이 나옵니다.'
       ]
     });
@@ -497,7 +499,7 @@
         why.hidden = true;
         if (r.bad && flagged) { found += 1; row.classList.add('right'); why.hidden = false; why.innerHTML = `✅ 찾았습니다. ${r.why}`; fixes.push(r.fix); }
         else if (r.bad) { row.classList.add('missed'); why.hidden = false; why.innerHTML = `👀 놓쳤습니다. ${r.why}`; fixes.push(r.fix); }
-        else if (flagged) { wrong += 1; row.classList.add('wrong'); why.hidden = false; why.textContent = '이 줄은 PRD대로이고 문제가 없습니다.'; }
+        else if (flagged) { wrong += 1; row.classList.add('wrong'); why.hidden = false; why.textContent = r.ok || '이 줄은 PRD대로이고 문제가 없습니다.'; }
       });
       const total = REVIEW.filter(r => r.bad).length;
       body.querySelector('.review-result').innerHTML = `
